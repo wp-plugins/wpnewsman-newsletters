@@ -12,15 +12,17 @@ Create and send beautiful newsletters directly from your WordPress site
 
 == Description ==
 
+= IMPORTANT: PHP 5.3 or higher required! =
+
 Simple yet powerful newsletter solution for WordPress. Create and send beautiful newsletters directly from your WordPress site. Import and manage your lists. Add double opt-in subscription forms in widgets, articles and pages. Free yourself from paying for expensive email campaigns. You get complete freedom and a lower cost compared to Email Service Providers. WPNewsman plugin updated regularly with new features. Please see the <a href="http://wpnewsman.com/whats-new/" title="Newsletter Plugin for WordPress history">VERSION HISTORY</a> for what's new and current bugfixes.
 
 = WPNewsman Pro =
 
 *WPNewsman Pro* is a **significant upgrade** to *WPNewsman Lite* that allows you to embed forms on external sites, create multiple subscribers' lists using different opt-in forms and send newsletters to an unlimited number of subscribers. You can learn more about *WPNewsman Pro* here:
 
-[Features](http://wpnewsman.com/review-newsletter-plugin-wordpress/ "Features") | [Upgrade to WPNewsman Pro](http://wpnewsman.com/premium-newsletter-plugin-wordpress/ "Upgrade to WPNewsman Pro")
+[Home](http://wpnewsman.com/ "Home") | [Features](http://wpnewsman.com/review-newsletter-plugin-wordpress/ "Features") | [Upgrade to WPNewsman Pro](http://wpnewsman.com/premium-newsletter-plugin-wordpress/ "Upgrade to WPNewsman Pro")
 
-= WPNewsman Features=
+= WPNewsman Features =
 
 * Put an opt-in form on your WordPress blog and collect subscribers using the double opt-in method
 * Customize the signup form as you like (add fields, remove fields, re-order fields)
@@ -54,11 +56,29 @@ Translations are included in the plugin. Join the translation teams on [our Tran
 
 == Installation ==
 
-1. Upload 'wpnewsman' folder to the '/wp-content/plugins/' directory
+= 1. Install through WordPress Add menu =
+1. In your Admin, go to menu Plugins > Add
+1. Search for 'WPNewsman'
+1. Click to install
+1. Activate the plugin
+1. A new menu 'WPNewsman Lite' will appear in your Admin
+
+= 2. Install through WordPress Upload menu =
+1. Download the plugin (.zip file) on the right column of this page
+1. In your Admin, go to menu Plugins > Add
+1. Select the tab "Upload"
+1. Upload the .zip file you just downloaded
+1. Activate the plugin
+1. A new menu 'WPNewsman Lite' will appear in your Admin
+
+= 3. Install through FTP =
+1. Download the plugin (.zip file) on the right column of this page
+1. Unzip wpnewsman-newsletters.zip to temp folder
+1. Upload 'wpnewsman-newsletters' folder to the '/wp-content/plugins/' directory
 1. Activate the plugin through the 'Plugins' menu in WordPress
 1. A new menu 'WPNewsman Lite' will appear in your Admin
-1. Go to Appearance -> Widgets and add the new WPNewsman Subscription form to the sidebar.
-1. Click Save Changes.
+
+Go to *Appearance* -> *Widgets* and add the new WPNewsman Subscription form to the sidebar.
 
 To put the signup form at any place on your post or page, use this shortcode:
 
@@ -79,6 +99,10 @@ Our [support site](http://support.glocksoft.net/) has plenty of articles and a t
 = Submit your feature request =
 
 We got a User Feedback page where you can [add or vote for new features](http://support.glocksoft.net/feedback).
+
+= WPNewsman Home =
+
+[WPNewsman.com](http://wpnewsman.com/)
 
 == Screenshots ==
 
