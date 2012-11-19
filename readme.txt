@@ -1,4 +1,4 @@
-=== WPNewsman Newsletters ===
+=== WPNewsman Lite ===
 Contributors: Alex Ladyga, G-Lock Software
 Donate Link: http://wpnewsman.com/price-ordering/
 Tags: wpnewsman, newsletter, newsletters, newsletter signup, newsletter widget, subscribers, post notification, email subscription, email marketing, email, emailing, subscription
