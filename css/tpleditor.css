@@ -1,0 +1,79 @@
+/* TEMPLATE EDITOR STYLES */
+
+.highlight-gsedit [gsedit] {
+	border: 1px dashed transparent;
+	min-width: 10px;
+	min-height: 10px;
+}
+
+.highlight-gsedit:hover [gsedit] {
+	border: 1px dashed gray;
+}
+
+/*.outlet:hover .outlet-buttons {
+	visibility: visible;
+}
+
+.has-content {
+	min-height: 0;
+	background: transparent;
+}
+.has-content:after {
+	display: none;			
+}
+.outlet-handle {
+	display: none;
+}
+
+.container .outlet-handle {
+	display: block;
+}*/
+
+.outlet-buttons,
+.outlet-handle {
+	list-style: none;   
+
+	font-size: 11px;
+	line-height: 14px;
+	font-weight: bold !important;  
+	font-family:"Helvetica Neue",Helvetica,Arial,Verdana,sans-serif !important;
+
+/*	padding: 3px;
+	position: absolute;
+	top: 2px;
+	right: 2px;*/
+
+	background: rgba(80,80,80,0.3);
+	border-radius: 3px;         
+	margin: 0;   
+	color: black !important;
+	z-index: 1000;
+}
+
+.outlet-buttons {
+	position: absolute;	
+	min-height: 20px;		
+	min-width: 20px;
+
+	margin: 0;
+	padding: 3px;
+}
+
+.outlet-buttons li {
+	margin-left: 3px;
+	margin-bottom: 2px;
+}
+.outlet-buttons li:first-child {
+	margin-left: 0;
+}
+
+.outlet-buttons li {
+	display: inline-block;
+	background: rgba(255,255,255,0.8);
+	border-radius: 3px;
+	padding: 2px 4px;           
+	cursor: pointer;
+}
+.outlet-buttons li:hover {
+	background: white;
+}

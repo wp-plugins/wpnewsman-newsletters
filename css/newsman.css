@@ -1,0 +1,57 @@
+.form-container {
+/*	max-width: 320px;
+	margin: 30px auto;*/
+	/*padding: 0 10px;*/
+}
+
+.error-msg {
+	padding: 8px 35px 8px 14px;
+	margin-bottom: 18px;		
+	color: #B94A48;
+	background-color: #F2DEDE;
+	border: 1px solid #EED3D7;	
+}
+
+ul.newsman-form {
+	margin: 0;
+	list-style: none;
+}
+
+ul.newsman-form li {
+	list-style: none;
+}
+
+.newsman-form-item {
+	margin-bottom: 1em;
+	padding: 0 !important;
+}
+
+.newsman-form-item label {
+	display: block;
+}
+
+.newsman-form-item.newsman-required > label:after {
+	content: ' *';
+	color: #B94A48;
+}
+
+
+.newsman-form-item.error > label {
+    color: #B94A48;
+}
+
+.newsman-form-item.error input[type="text"] {
+	border: 1px solid #EED3D7;
+}
+
+.newsman-radio-options {
+	margin-bottom: 9px;
+}
+
+
+/*
+.newsman-form label.checkbox,
+.newsman-form label.radio {
+	min-height: 18px;
+	padding-left: 18px;
+}*/

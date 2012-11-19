@@ -1,0 +1,10 @@
+[newsman wp="url"] Subscription Email Address Updated
+--- plain ---
+Thank you! Your email address was changed to [newsman sub="email"]. 
+
+You can modify your subscription via the link below:
+[newsman link="update-subscription"]
+--- html ---
+<p>Thank you! Your email address was changed to [newsman sub="email"].</p>
+
+<p>You can <a href="[newsman link='update-subscription']">unsubscribe or change your email</a>.</p>

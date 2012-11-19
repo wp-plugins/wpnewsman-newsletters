@@ -1,0 +1,97 @@
+	
+	.form-compose-email {
+		margin-top: 1em;
+	}
+
+	.form-compose-email .control-group .control-label {
+		width: 50px;
+	}
+
+	.form-compose-email .control-group .controls {
+		margin-left: 60px;
+	}
+
+	.form-compose-email textarea.wp-editor-area {
+		border: none;
+		-ms-box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		-webkit-box-sizing: border-box;
+		-o-box-sizing: border-box;
+		box-sizing: border-box	
+	}
+
+	.input-append .add-on:last-child,
+	.input-append .btn:last-child {
+		-webkit-border-radius: 0 3px 3px 0;
+		-moz-border-radius: 0 3px 3px 0;
+		border-radius: 0 3px 3px 0;
+	}	
+
+	.ui-widget-overlay {
+		background: black !important;
+	}
+
+	.dialog-bar {
+		overflow: hidden;
+		padding: 10px 5px;
+	}
+	.dialog-bar button {
+		float: right;
+	}	
+
+	.tpl-controls {
+		margin-bottom: 2em;
+		margin-left: 12px;
+	}
+
+	.tpl-controls li {
+		padding-bottom: 15px;
+	}
+
+	.tpl-controls .style-control {
+		float: left;
+		margin-right: 1em;
+	}
+
+	.tpl-controls .style-control label {
+		font-weight: bold;
+	}
+
+	.tpl-controls .m {
+		margin-top: 5px;
+	}
+
+	.tpl-controls .mb {
+		margin-top: 5px;
+	}
+
+	.tpl-controls .group {
+		margin: 5px 0;
+	}
+
+	.tpl-controls .color-selector {
+		width: 60px;
+		font-size: 12px;
+	}
+
+	input.input-micro {
+		width: 20px !important;
+	}
+
+	#style-tabs,
+	.nav-tabs-sl {
+		margin-bottom: 0 !important;
+	}
+
+	.nav-tabs-sl {
+		border-bottom: none !important;
+	}
+
+	.nav-tabs-sl li a {
+		border: none !important;
+	}
+
+	.nav-tabs-sl li a:hover {
+		background-color: transparent !important;
+
+	}	

@@ -1,0 +1,79 @@
+.multis {
+	display: inline-block;
+	position: relative;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: 13px;
+}
+
+.multis ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+ul.multis-items {
+	border: 1px solid #DFDFDF;
+	padding: 3px 3px 0 3px;
+	box-sizing: border-box;
+	width: 100%;
+}
+
+.multis-items > li {
+	display: inline-block;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	border-radius: 6px;
+	border: 1px solid #CAD8F3;
+	background: #DEE7F8;
+	padding: 2px 3px;   
+	margin: 0 3px 3px 0;
+}
+
+.multis-items > li > a.closebutton {
+	margin-left: 0.5em;
+	text-decoration: none;
+	color: #969696;
+	font-weight: bold;
+	line-height: 10px;
+}
+
+.multis-items > li > a.closebutton:hover {
+	font-weight: bold; color: #245385;
+}
+
+li.multis-input,
+li.multis-input input,
+li.multis-input input:focus {
+	background: none;   
+	border: none;
+	box-shadow: none;
+	margin: 0;
+}
+
+li.multis-input input {
+	outline: none;
+}
+
+ul.multis-options {				
+	width: 100%;
+	display: none;
+	position: absolute;
+	border: 1px solid #bababa;
+	background: #fafafa;
+	box-sizing: border-box;
+	z-index: 1001;
+}
+
+ul.multis-options li {
+	padding: 5px;
+	border-top: 1px solid #ddd;
+	cursor: pointer;
+}
+
+ul.multis-options li:hover {
+	background: #DEE7F8;
+}
+
+ul.multis-options li:first-child {
+	border-top: none;
+}

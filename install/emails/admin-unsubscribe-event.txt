@@ -1,0 +1,19 @@
+A contact has unsubscribed from your mailing list at [newsman wp="url"]
+--- plain ---
+A contact has unsubscribed from your mailing list. The contact's details are listed below:
+
+[newsman sub="*"]
+
+Reason: 
+$u_reason
+
+--
+[newsman wp="url"]/wp-admin/ -> Settings -> G-Lock Double Opt-In Manager
+--- html ---
+<p>A contact has unsubscribed from your mailing list. The contact's details are listed below:</p>
+<ul>[newsman sub="*" tag="li"]</ul>
+<p>Reason:</p>
+<p>$u_reason</p>
+&nbsp;
+<p>--</p>
+<p><a href="[newsman wp='url']/wp-admin/">[newsman wp="url"]/wp-admin/</a> -> GLock Newsletter -> Settings</p>

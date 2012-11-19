@@ -1,0 +1,57 @@
+Thank you for confirming your subscription at [newsman wp="url"]
+--- plain ---
+Hi,
+
+Thank you for your subscription. You are now signed up to my newsletter, and will get great tips, tricks, and strategies a few times a month.  Hope you get some value out of it!  It's where ALL of my best posts go!
+
+We will keep your personal information private and secure. We will not share your email address with any third parties. 
+
+To ensure you receive future subscribers-only great tips, tricks, and offers, please add [newsman me="email"] to your e-mail address book or safe senders list.
+
+Sincerely,
+[newsman me="name"]
+[newsman me="email"]
+[newsman wp="url"]
+
+--
+You are receiving this email because on [newsman sub="ts"] at [newsman wp="url"] you subscribed to receive our e-newsletters.
+						 
+You can modify your subscription via the link below:
+[newsman link="update-subscription"]
+--- html ---
+<p>Hi,</p>
+<p>Thank you for your subscription. You are now signed up to my newsletter, and will get great tips, tricks, and strategies a few times a month.  Hope you get some value out of it!  It's where ALL of my best posts go!</p>
+<p>We will keep your personal information private and secure. We will not share your email address with any third parties.</p>
+<p>To ensure you receive future subscribers-only great tips, tricks, and offers, please add [newsman me="email"] to your e-mail address book or safe senders list.</p>
+<p>&nbsp;</p>
+
+<p>Sincerely,<br />
+[newsman me="name"]<br />
+[newsman me="email"]<br />
+<a href="[newsman wp='url']">[newsman wp="url"]</a></p>
+<p>&nbsp;<p>
+<table bgcolor="#eeeeee" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #eeeeee; background-position: top; background-repeat: repeat-x; border-top-color: #dddddd; border-top-style: solid; border-top-width: 1px;"> 
+ <tbody> 
+	<tr> 
+	 <td colspan="4" style="height: 28px; white-space : nowrap;">&nbsp;</td> 
+	</tr> 
+	<tr> 
+	 <td style="width: 25px;"></td> 
+	 <td width="10"></td> 
+	 <td style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 11px; line-height: 17px; color: #777; text-shadow: 0 1px 0 #ffffff;"> 
+		<div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 11px; line-height: 17px; color: #666; text-shadow: 0 1px 0 #ffffff;">
+			You subscribed on [newsman sub="ts"] at <a href="[newsman wp='url']" style="border: none; color: #0084b4; text-decoration: none;">[newsman wp="blogname"]</a> from IP: [newsman sub="ip"]
+		</div> 
+		<div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 11px; line-height: 17px; color: #666; text-shadow: 0 1px 0 #ffffff;">
+		 You can also 
+		 <a href="[newsman link='update-subscription']" style="border: none; color: #0084b4; text-decoration: none;">change your subscription email or unsubscribe here</a>.</div> 
+		<div>
+		 <a href="#" style="border: none; color: #0084b4; text-decoration: none; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; text-decoration: none; font-size: 11px; line-height: 17px; color: #999999; text-shadow: 0 1px 0 #ffffff;">Copyright (C) [newsman wp="blogname"]. <span style="white-space: nowrap;">All rights reserved.</span></a>
+		</div> </td> 
+	 <td style="width: 75px;"></td> 
+	</tr> 
+	<tr> 
+	 <td colspan="3" height="25"></td> 
+	</tr> 
+ </tbody> 
+</table>

@@ -1,0 +1,8 @@
+#toplevel_page_newsman-mailbox .wp-menu-image {
+	background: url(../img/logo-icon-gray.png) no-repeat 7px 7px;
+}
+
+#toplevel_page_newsman-mailbox:hover .wp-menu-image,
+#toplevel_page_newsman-mailbox.wp-menu-open .wp-menu-image {
+	background: url(../img/logo-icon-color.png) no-repeat 7px 7px;
+}
