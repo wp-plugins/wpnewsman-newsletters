@@ -3,7 +3,7 @@
 Plugin Name: G-Lock WPNewsman Lite
 Plugin URI: http://wpnewsman.com
 Description: You get simple yet powerful newsletter solution for WordPress. Now you can easily add double optin subscription forms in widgets, articles and pages, import and manage your lists, create and send beautiful newsletters directly from your WordPress site. You get complete freedom and a lower cost compared to Email Service Providers. Free yourself from paying for expensive email campaigns. WPNewsman plugin updated regularly with new features.
-Version: 1.0.0
+Version: 1.0.1
 Author: Alex Ladyga - G-Lock Software
 Author URI: http://www.glocksoft.com
 */
@@ -1342,11 +1342,27 @@ class newsman {
 			unset($_GET['activate']); // to disable "Plugin activated" message			
 		}
 
-		if ( substr(phpversion(),0,1) < 5 && substr(phpversion(),1,1) < 2  ) {
-			echo '<div class="error"><p>'.sprintf( __('Error: G-Lock WPNewsman requires PHP version > 5.2 and cannot be activated. You have PHP %s installed.', NEWSMAN) , phpversion()).'</p></div>';
+		$v = explode('.', phpversion());
+		for ($i=0; $i < count($v); $i++) { 
+			$v[$i] = intval($v[$i]);
+		}
+
+		if ( $v[0] < 5 && $v[1] < 3  ) {
+			echo '<div class="error"><p>'.sprintf( __('Error: G-Lock WPNewsman requires PHP version > 5.3 and cannot be activated. You have PHP %s installed.', NEWSMAN) , phpversion()).'</p></div>';
 			deactivate_plugins(NEWSMAN_PLUGIN_PATHNAME);
 			unset($_GET['activate']); // to disable "Plugin activated" message
 		}
+	}
+
+	public function ensureUploadDir() {
+		$dirs = wp_upload_dir();
+		$ud = $dirs['basedir'].'/wpnewsman';
+
+		if ( !is_dir($ud) ) {
+			mkdir($ud);
+		}
+
+		return $ud;
 	}
 
 	public function onActivate() {
@@ -1456,38 +1472,34 @@ class newsman {
 
 		// Action Pages
 
-		if ( current_user_can( 'newsman_wpNewsman' ) || $activation ) {
+		$labels = array(
+			'name' => _x('Action Pages', 'Action Page', NEWSMAN),
+			'singular_name' => _x('Action Page', 'Action Page', NEWSMAN),
+			'add_new' => _x('Add New', 'Action Page', NEWSMAN),
+			'add_new_item' => _x('Add New Action Page', 'Action Page', NEWSMAN),
+			'edit_item' => _x('Edit Action Page', 'Action Page', NEWSMAN),
+			'new_item' => _x('New Action Page', 'Action Page', NEWSMAN),
+			'view_item' => _x('View Action Page', 'Action Page', NEWSMAN),
+			'search_items' => _x('Search Action Pages', 'Action Page', NEWSMAN),
+			'not_found' =>  __('Nothing found', 'Action Page', NEWSMAN),
+			'not_found_in_trash' => __('Nothing found in the Trash', NEWSMAN),
+			'parent_item_colon' => ''
+		);
 
-			$labels = array(
-				'name' => _x('Action Pages', 'Action Page', NEWSMAN),
-				'singular_name' => _x('Action Page', 'Action Page', NEWSMAN),
-				'add_new' => _x('Add New', 'Action Page', NEWSMAN),
-				'add_new_item' => _x('Add New Action Page', 'Action Page', NEWSMAN),
-				'edit_item' => _x('Edit Action Page', 'Action Page', NEWSMAN),
-				'new_item' => _x('New Action Page', 'Action Page', NEWSMAN),
-				'view_item' => _x('View Action Page', 'Action Page', NEWSMAN),
-				'search_items' => _x('Search Action Pages', 'Action Page', NEWSMAN),
-				'not_found' =>  __('Nothing found', 'Action Page', NEWSMAN),
-				'not_found_in_trash' => __('Nothing found in the Trash', NEWSMAN),
-				'parent_item_colon' => ''
-			);
-
-			register_post_type('newsman_ap', array(
-				'labels' => $labels,
-				'public' => true,
-				'show_ui' => true, // UI in admin panel
-				'show_in_menu' => 'newsman-mailbox',
-				// '_builtin' => false, // It's a custom post type, not built in
-				// '_edit_link' => 'post.php?post=%d',
-				'capability_type' => 'page',
-				'hierarchical' => false,
-				'rewrite' => array("slug" => "subscription"), // Permalinks
-				'query_var' => "subscription", // This goes to the WP_Query schema
-				'supports' => array('title', 'excerpt', 'editor' /*,'custom-fields'*/), // Let's use custom fields for debugging purposes only
-				'register_meta_box_cb' => array($this, 'add_shortcode_metabox')
-			));	
-
-		}
+		register_post_type('newsman_ap', array(
+			'labels' => $labels,
+			'public' => true,
+			'show_ui' => true, // UI in admin panel
+			'show_in_menu' => 'newsman-mailbox',
+			// '_builtin' => false, // It's a custom post type, not built in
+			// '_edit_link' => 'post.php?post=%d',
+			'capability_type' => 'page',
+			'hierarchical' => false,
+			'rewrite' => array("slug" => "subscription"), // Permalinks
+			'query_var' => "subscription", // This goes to the WP_Query schema
+			'supports' => array('title', 'excerpt', 'editor' /*,'custom-fields'*/), // Let's use custom fields for debugging purposes only
+			'register_meta_box_cb' => array($this, 'add_shortcode_metabox')
+		));	
 
 		// these line should stay last 
 		$this->loadScrtipsAndStyles();

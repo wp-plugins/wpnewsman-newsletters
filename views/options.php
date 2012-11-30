@@ -10,7 +10,7 @@
 	<form name="newsman_form_g" id="newsman_form_g" method="POST" action="">
 		
 		<ul class="nav nav-tabs" id="myTab">
-		  <li class="active"><a data-toggle="tab" href="#general">Genereal</a></li>
+		  <li class="active"><a data-toggle="tab" href="#general">General</a></li>
 		  <li><a data-toggle="tab" href="#emailsettings">Email Settings</a></li>
 		  <li><a data-toggle="tab" href="#delivery">Delivery Settings</a></li>
 		  <li><a data-toggle="tab" href="#uninstall">Uninstallation</a></li>

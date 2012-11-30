@@ -1,5 +1,7 @@
 <?php
 
+require_once ('../../../wp-config.php');
+
 /**
  * Handles file uploaded with XMLHttpRequest
  */
@@ -134,6 +136,7 @@ class nuUploadProcessor {
 		
 		if ($this->file->save($uploadDirectory . $filename . '.' . $ext)){
 			return array(
+				'x' => $uploadDirectory . $filename . '.' . $ext,
 				'success' => true,
 				'actualFileName' => $filename.'.'.$ext
 			);
@@ -151,6 +154,14 @@ $allowedExtensions = array();
 $sizeLimit = 10 * 1024 * 1024;
 
 $uploader = new nuUploadProcessor($allowedExtensions, $sizeLimit);
-$result = $uploader->handleUpload('uploads/');
+
+$n = newsman::getInstance();
+$upath = $n->ensureUploadDir();
+$upath .= DIRECTORY_SEPARATOR;
+
+
+
+$result = $uploader->handleUpload($upath);
+
 // to pass data through iframe you will need to encode all html tags
 echo htmlspecialchars(json_encode($result), ENT_NOQUOTES);

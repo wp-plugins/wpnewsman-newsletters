@@ -1138,7 +1138,11 @@
 
 		private function getUploadedFiles() {
 			$files = array();
-			if ($handle = opendir(NEWSMAN_PLUGIN_PATH.'/uploads')) {
+
+			$n = newsman::getInstance();
+			$upath = $n->ensureUploadDir();
+
+			if ( $handle = opendir($upath) ) {
 
 			    /* This is the correct way to loop over the directory. */
 			    while (false !== ($entry = readdir($handle))) {
@@ -1194,9 +1198,9 @@
 				$importParams['listId'] = '1';
 			} 
 
-			$base = NEWSMAN_PLUGIN_PATH.'/uploads/';
+			$n = newsman::getInstance();
 
-			$filePath = $base.$importParams['fileName'];
+			$filePath = $n->ensureUploadDir().DIRECTORY_SEPARATOR.$importParams['fileName'];
 
 			$imported = 0;
 
@@ -1264,7 +1268,10 @@
 
 		public function ajGetCSVFields() {
 			$filename	= $this->param('filename');
-			$path = NEWSMAN_PLUGIN_PATH.'/uploads/'.$filename;
+
+			$n = newsman::getInstance();			
+			$path = $n->ensureUploadDir().DIRECTORY_SEPARATOR.$filename;
+
 			$maxLines = 3; 
 			$count = 0;
 			$lines = array();
@@ -1680,7 +1687,9 @@
 		public function ajRemoveImportedFile() {
 			$fileName = $this->param('fileName');
 
-			$filePath = NEWSMAN_PLUGIN_PATH.'/uploads/'.$fileName;
+			$n = newsman::getInstance();
+
+			$filePath = $n->ensureUploadDir().DIRECTORY_SEPARATOR.$fileName;
 
 			if ( file_exists($filePath) ) {
 				unlink($filePath);

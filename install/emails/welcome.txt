@@ -1,10 +1,10 @@
-Thank you for confirming your subscription at [newsman wp="url"]
+Welcome from [newsman me="name"]
 --- plain ---
 Hi,
 
 Thank you for your subscription. You are now signed up to my newsletter, and will get great tips, tricks, and strategies a few times a month.  Hope you get some value out of it!  It's where ALL of my best posts go!
 
-We will keep your personal information private and secure. We will not share your email address with any third parties. 
+We will not share your email address with any third parties and will keep your personal information private and secure. 
 
 To ensure you receive future subscribers-only great tips, tricks, and offers, please add [newsman me="email"] to your e-mail address book or safe senders list.
 
@@ -21,7 +21,7 @@ You can modify your subscription via the link below:
 --- html ---
 <p>Hi,</p>
 <p>Thank you for your subscription. You are now signed up to my newsletter, and will get great tips, tricks, and strategies a few times a month.  Hope you get some value out of it!  It's where ALL of my best posts go!</p>
-<p>We will keep your personal information private and secure. We will not share your email address with any third parties.</p>
+<p>We will not share your email address with any third parties and will keep your personal information private and secure.</p>
 <p>To ensure you receive future subscribers-only great tips, tricks, and offers, please add [newsman me="email"] to your e-mail address book or safe senders list.</p>
 <p>&nbsp;</p>
 
@@ -30,7 +30,7 @@ You can modify your subscription via the link below:
 [newsman me="email"]<br />
 <a href="[newsman wp='url']">[newsman wp="url"]</a></p>
 <p>&nbsp;<p>
-<table bgcolor="#eeeeee" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #eeeeee; background-position: top; background-repeat: repeat-x; border-top-color: #dddddd; border-top-style: solid; border-top-width: 1px;"> 
+<table bgcolor="#eeeeee" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #eeeeee; background-position: top; background-repeat: repeat-x; border-top-color: #dddddd; border-top-style: solid; border-top-width: 2px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px;"> 
  <tbody> 
 	<tr> 
 	 <td colspan="4" style="height: 28px; white-space : nowrap;">&nbsp;</td> 
