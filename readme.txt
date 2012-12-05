@@ -1,10 +1,10 @@
 === WPNewsman Lite ===
 Contributors: Alex Ladyga, G-Lock Software
-Donate Link: http://wpnewsman.com/price-ordering/
+Donate Link: http://wpnewsman.com/premium-newsletter-plugin-wordpress/
 Tags: wpnewsman, newsletter, newsletters, newsletter signup, newsletter widget, subscribers, post notification, email subscription, email marketing, email, emailing, subscription
 Requires at least: 3.4
 Tested up to: 3.5
-Stable tag: 1.0.1
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -20,7 +20,7 @@ Check it out! Download right now and free yourself from paying for expensive ema
 
 = WPNewsman Pro =
 
-*WPNewsman Pro* is a **significant upgrade** to *WPNewsman Lite* that allows you to embed forms on external sites, create multiple subscribers' lists using different opt-in forms and send newsletters to an unlimited number of subscribers. You get **complete freedom and lower cost** compared to Email Service Providers' rigid requirements. You can learn more about *WPNewsman Pro* here:
+*WPNewsman Pro* is a **significant upgrade** to *WPNewsman Lite* that allows you to embed forms on external sites, create multiple subscribers' lists using different opt-in forms, send newsletters to an unlimited number of subscribers and keep your mailing lists verified and clean. You get **complete freedom and lower cost** compared to Email Service Providers' rigid requirements. You can learn more about *WPNewsman Pro* here:
 
 [Home](http://wpnewsman.com/ "Home") | [Review](http://wpnewsman.com/review-newsletter-plugin-wordpress/ "Review") | [Upgrade to WPNewsman Pro](http://wpnewsman.com/premium-newsletter-plugin-wordpress/ "Upgrade to WPNewsman Pro")
 
@@ -38,6 +38,7 @@ http://www.youtube.com/watch?v=5loJxnWaOzM
 * Ability to quickly re-send a confirmation request
 * Full control and freedom over email newsletter design
 * Multiple sending options
+* Keep your mailing lists verified and clean — the bounce handler is included into the Pro version
 * Confirmation when the user unsubscribes
 * Send emails via Amazon SES and enjoy high deliverability rate like big Email Service Providers
 
@@ -116,6 +117,16 @@ We got a User Feedback page where you can [add or vote for new features](http://
 
 == Changelog ==
 
+= 1.1.0 =
+* updated CKEditor to v4
+* added html editor dialog move and resize
+* added bounced handler into Pro version
+* added compatibility check before activation
+* fixed T_STATIC fail on PHP version < 5.3
+* removed duplicated definition in core
+* clean up the plugin code
+* lots of internal improvements and fixes
+
 = 1.0.1 =
 * changed upload dir to wp-content/uploads/ 
 * removed unused ckeditor skins
@@ -123,9 +134,15 @@ We got a User Feedback page where you can [add or vote for new features](http://
 * fixed bug that prevents action pages to show up if the user is not logged in
 
 = 1.0 =
-* First public release. 
+* First public release. Hello World! 
 
 == Upgrade Notice ==
+
+= 1.1.0 =
+* updated CKEditor to v4
+* added compatibility check before activation
+* clean up the plugin code
+* lots of internal improvements and fixes
 
 = 1.0.1 =
 * fixed bug that prevents action pages to show up if the user is not logged in

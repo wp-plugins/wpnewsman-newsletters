@@ -1,7 +1,7 @@
 <div class="row-fluid common-footer">
 	<div class="span12">
 		<div class="newsman-links">
-			<a href="http://wpnewsman.com/configuration/">Support &amp; documentation</a> | <a href="http://support.glocksoft.net/feedback">Request feature</a> | <a href="http://wpnewsman.com/terms-conditions/">
+			<a href="http://wpnewsman.com/documentation/">Support &amp; documentation</a> | <a href="http://support.glocksoft.net/feedback">Request feature</a> | <a href="http://wpnewsman.com/terms-conditions/">
 Terms and Conditions</a> | <span>WPNewsman Version: <?php echo nwsmn_get_prop('version'); ?></span>
 		</div>
 		<div class="buttons">

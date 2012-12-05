@@ -10,11 +10,13 @@
 	<form name="newsman_form_g" id="newsman_form_g" method="POST" action="">
 		
 		<ul class="nav nav-tabs" id="myTab">
-		  <li class="active"><a data-toggle="tab" href="#general">General</a></li>
-		  <li><a data-toggle="tab" href="#emailsettings">Email Settings</a></li>
-		  <li><a data-toggle="tab" href="#delivery">Delivery Settings</a></li>
-		  <li><a data-toggle="tab" href="#uninstall">Uninstallation</a></li>
-		</ul>
+			<?php newsmanOutputTabs(array(
+				array( 'title' => 'General', 'id' => 'general' ),
+				array( 'title' => 'Email Settings', 'id' => 'emailsettings' ),
+				array( 'title' => 'Delivery Settings', 'id' => 'delivery' ),
+				array( 'title' => 'Uninstallation', 'id' => 'uninstall' )
+			)); ?> 		
+	 	</ul>
 		 
 		<div class="tab-content">
 			<div class="tab-pane active" id="general">
@@ -129,7 +131,7 @@
 							<div class="alert alert-info" style="margin-top: 10px;">
 								<strong><?php _e('Test your settings:', NEWSMAN); ?></strong>
 								<div class="control-group">
-									<input value="<? echo get_option("admin_email"); ?>" class="newsman-edit-small" type="text" id="newsman_smtp_test_email" />
+									<input value="<?php echo get_option("admin_email"); ?>" class="newsman-edit-small" type="text" id="newsman_smtp_test_email" />
 									<button type="button" class="btn btn-info" id="smtp-btn-test-ph"><?php _e('Send Test Email', NEWSMAN); ?></button>
 								</div>
 								<div id="newsman-test-email-status"></div>
@@ -165,6 +167,7 @@
 				</div>
 				<!--												/Uninstall	 	 							-->
 			</div>
+			<?php do_action('newsman_options_tabpanes'); ?>
 		</div>
 
 

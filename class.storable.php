@@ -4,6 +4,8 @@ require_once('class.utils.php');
 
 global $wpdb;
 
+if ( !defined('NEWSMAN_COLUMN_POS_FIRST') ) { define('NEWSMAN_COLUMN_POS_FIRST', 1); }
+
 class newsmanStorable {
 
 	static $table = 'newsman_table';
@@ -26,23 +28,26 @@ class newsmanStorable {
 
 	static $quotedTypes = array('string', 'text', 'date', 'time', 'datetime', 'timestamp');
 
-	static function getNativeType($type) {
+	static function getNativeType($type, $short = false) {
 		$native = '';
 		switch ( $type ) {
 			case 'int':
-				$native = 'int(10) unsigned NOT NULL';
+				$native = 'int(10) unsigned';
+				if ( !$short ) { $native .= ' NOT NULL'; }
 				break;
 			case 'autoinc':
-				$native = 'int(10) unsigned NOT NULL auto_increment';
+				$native = 'int(10) unsigned';
+				if ( !$short ) { $native .= ' NOT NULL auto_increment'; }
 				break;
 			case 'boolean':
 			case 'bool':
-				$native = 'TINYINT(1) unsigned NOT NULL DEFAULT 0';
+				$native = 'TINYINT(1) unsigned';
+				if ( !$short ) { $native .= ' NOT NULL DEFAULT 0'; }
 				break;
 			case 'string':
-				$native = "varchar(255) NOT NULL DEFAULT \"\"";
+				$native = "varchar(255)";
+				if ( !$short ) { $native .= ' NOT NULL DEFAULT ""'; }
 				break;
-
 			case 'date':
 				$native = 'DATE';
 				break;
@@ -53,7 +58,8 @@ class newsmanStorable {
 				$native = 'DATETIME';
 				break;
 			case 'bigtimestamp':
-				$native = 'BIGINT unsigned NOT NULL DEFAULT 0';
+				$native = 'BIGINT unsigned';
+				if ( !$short ) { $native .= ' NOT NULL DEFAULT 0'; }
 				break;
 			case 'timestamp':
 				$native = 'timestamp';
@@ -61,22 +67,25 @@ class newsmanStorable {
 			case 'year':
 				$native = 'YEAR';
 				break;
-
 			case 'text':
 			default:
-				$native = 'TEXT';
+				$native = 'TEXT NOT NULL DEFAULT ""';
 				break;
 		}
-		return $native;
+		return strtolower($native);
 	}
 
 	static function getColumns() {
 		$cols = ''; $del = '';
-		foreach (static::$props as $name => $type) {
-			if ( $type === 'autoinc' ) {
+
+		$props = static::getProps();
+
+		foreach ($props as $prop) {
+			if ( $prop['type'] === 'autoinc' ) {
 				continue;
 			}
-			$cols .= "$del`$name`";
+			$n = $prop['name'];
+			$cols .= "$del`$n`";
 			$del = ', ';
 		}
 		return "($cols)";
@@ -84,10 +93,12 @@ class newsmanStorable {
 
 	static function getValuesPlacehoders() {
 		$valsPhs = ''; $del = '';
-		foreach (static::$props as $name => $type) {
-			if ( $type === 'autoinc' ) { continue; }
+		$props = static::getProps();
 
-			$ph = in_array($type, static::$quotedTypes) ? '"%s"' : '%d';
+		foreach ($props as $prop) {
+			if ( $prop['type'] === 'autoinc' ) { continue; }
+
+			$ph = in_array($prop['type'], static::$quotedTypes) ? '"%s"' : '%d';
 			$valsPhs .= $del.$ph;
 			$del = ', ';
 		}
@@ -95,9 +106,10 @@ class newsmanStorable {
 	}
 
 	private function getAutoincName() {
-		foreach (static::$props as $name => $type) {
-			if ( $type === 'autoinc' ) {
-				return $name;
+		$props = static::getProps();
+		foreach ($props as $prop) {
+			if ( $prop['type'] === 'autoinc' ) {
+				return $prop['name'];
 			}
 		}
 		return null;
@@ -111,9 +123,11 @@ class newsmanStorable {
 	static function getUpdater() {
 		$u = '';
 		$del = '';
-		foreach (static::$props as $name => $type) {
-			if ( $type === 'autoinc' ) { continue; }
-			$ph = in_array($type, static::$quotedTypes) ? '"%s"' : '%d';
+		$props = static::getProps();
+		foreach ($props as $prop) {
+			$name = $prop['name'];
+			if ( $prop['type'] === 'autoinc' ) { continue; }
+			$ph = in_array($prop['type'], static::$quotedTypes) ? '"%s"' : '%d';
 			$u .= $del."`$name`=".$ph;
 			$del = ', ';
 		}
@@ -123,9 +137,14 @@ class newsmanStorable {
 	private function getValues() {
 		$vals = array();
 		$autoincval = null;
-		foreach (static::$props as $name => $type) {
+		$props = static::getProps();
+
+		foreach ($props as $prop) {
+			$name = $prop['name'];
+			$type = $prop['type'];
+
 			if ( $type === 'autoinc' ) {
-				$autoincval = $this->$name;
+				$autoincval = isset($this->$name) ? $this->$name : NULL;
 			} else {
 				if ( !isset($this->$name) ) {
 					$vals[] = '';
@@ -173,7 +192,9 @@ class newsmanStorable {
 
 		array_unshift($args, $sql);
 
-		$sql = call_user_method_array('prepare', $wpdb, $args);
+		if ( count($args) > 1 ) {
+			$sql = call_user_func_array(array($wpdb, 'prepare'), $args);
+		}
 
 		$res = $wpdb->query($sql);
 		if ( $res !== false ) {
@@ -224,7 +245,9 @@ class newsmanStorable {
 
 		array_unshift($args, $sql);
 
-		$sql = call_user_method_array('prepare', $wpdb, $args);
+		if ( count($args) > 1 ) {
+			$sql = call_user_func_array(array($wpdb, 'prepare'), $args);
+		}
 
 		$res = $wpdb->query($sql);
 		if ( $res !== false ) {
@@ -237,17 +260,21 @@ class newsmanStorable {
 
 	function toJSON() {
 		$arr = array();
-		foreach (static::$props as $name => $type) {
+		$props = static::getProps();
+		foreach ( $props as $prop ) {
+			$name = $prop['name'];
+			$type = $prop['type'];
+
 			switch ( $type ) {
 				case 'bool':
 				case 'boolean':
-					$arr[$name] = (boolean)intval($this->$name);					
+					$arr[$name] = isset($this->$name) ? (boolean)intval($this->$name) : NULL;
 					break;
 				case 'int':
-					$arr[$name] = intval($this->$name);
+					$arr[$name] = isset($this->$name) ? intval($this->$name) : NULL;
 					break;
 				default: 
-					$arr[$name] = $this->$name;
+					$arr[$name] = isset($this->$name) ? $this->$name : NULL;
 					break;
 			}			
 		}
@@ -260,38 +287,7 @@ class newsmanStorable {
 
 		if ( preg_match("/^(i|s|a|o|d):(.*);/si",$val) != false) { return true; } 
 		return false; 
-	} 	
-
-	// static function load($id) {
-	// 	global $wpdb;
-	// 	$bean = R::load($wpdb->prefix.static::$table, $id);
-	// 	$camp = new static();
-
-	// 	$beanData = $bean->export();
-
-	// 	foreach ( $beanData as $key => $value ) {
-	// 		$camp->$key = static::is_serialized($value) ? unserialize($value) : $value;
-	// 	}
-
-	// 	return $camp;
-	// }
-
-	// static function loadBean($bean) {
-
-	// 	if ( $bean ) {
-	// 		return false;
-	// 	}
-
-	// 	$camp = new static();
-
-	// 	$beanData = $bean->export();
-
-	// 	foreach ( $beanData as $key => $value ) {
-	// 		$camp->$key = call_user_func(array('newsmanStorable', 'is_serialized'), $value) ? unserialize($value) : $value;
-	// 	}
-
-	// 	return $camp;		
-	// }
+	}
 
 	static function tableExists() {
 		global $wpdb;
@@ -309,10 +305,13 @@ class newsmanStorable {
 
 		$sql = "\nCREATE TABLE $tbl (\n";
 
-		foreach (static::$props as $name => $type) {
-			$sql .= "\t`$name` ".static::getNativeType($type).", \n";
-			if ( $type === 'autoinc' ) {
-				$prKey = $name;
+		$props = static::getProps();
+
+		foreach ($props as $prop) {
+			$name = $prop['name'];
+			$sql .= "\t`$name` ".static::getNativeType($prop['type']).", \n";
+			if ( $prop['type'] === 'autoinc' ) {
+				$prKey = $prop['name'];
 			}
 		}
 		$sql .= "PRIMARY KEY  (`$prKey`)\n) CHARSET=utf8";
@@ -343,7 +342,9 @@ class newsmanStorable {
 
 		array_unshift($args, $sql);
 
-		$sql = call_user_method_array('prepare', $wpdb, $args);
+		if ( count($args) > 1 ) {
+			$sql = call_user_func_array( array($wpdb, 'prepare'), $args );
+		}
 
 		$storables = array();
 
@@ -388,7 +389,9 @@ class newsmanStorable {
 
 		array_unshift($args, $sql);
 
-		$sql = call_user_method_array('prepare', $wpdb, $args);
+		if ( count($args) > 1 ) {
+			$sql = call_user_func_array( array($wpdb, 'prepare'), $args );	
+		}
 
 		$storables = array();
 
@@ -428,7 +431,9 @@ class newsmanStorable {
 
 		array_unshift($args, $sql);
 
-		$sql = call_user_method_array('prepare', $wpdb, $args);
+		if ( count($args) > 1 ) {
+			$sql = call_user_func_array(array($wpdb, 'prepare'), $args);
+		}
 
 		$row = $wpdb->get_row($sql);
 
@@ -449,6 +454,120 @@ class newsmanStorable {
 		} else {
 			return false;
 		}
+	}
+
+	static function ensureDefinition() {
+		$tblDefs = static::getDefinition();
+		$modDefs = static::getProps();
+
+		$tblCols = static::getColumnsFromDefs($tblDefs);
+		$modCols = static::getColumnsFromDefs($modDefs);
+
+		$prevColum = null;
+
+		foreach ($tblDefs as $td) {
+			if ( !in_array($td['name'], $modCols) ) {
+				static::dropColumn($td['name']);
+			}
+		}	
+
+		foreach ($modDefs as $i => $md) {
+			$afterCol = ($prevColum === null) ? NEWSMAN_COLUMN_POS_FIRST : $prevColum;
+
+			if ( !in_array($md['name'], $tblCols) ) { // new column
+				static::addColumn($md['name'], $md['type'], $afterCol);
+			} elseif ( $modDefs[$i]['name'] !== $tblDefs[$i]['name'] ) { // order changed
+				static::modColumn($md['name'], $md['type'], $afterCol);
+			}
+			$prevColum = $md['name'];
+		}
+	}
+
+	static function addColumn($name, $type, $posAfter = null) {
+		global $wpdb;
+		$tbl = $wpdb->prefix.static::$table;
+
+		$nativeType = static::getNativeType($type);
+
+		$sql = "ALTER TABLE $tbl ADD COLUMN `$name` $nativeType";
+
+		if ( $posAfter  === NEWSMAN_COLUMN_POS_FIRST ) {
+			$sql .= ' FIRST';
+		} else if ( $posAfter !== null ) {
+			$sql .= " AFTER `$posAfter`";
+		}
+
+		return $wpdb->query($sql);
+	}
+
+	static function dropColumn($name) {
+		global $wpdb;
+		$tbl = $wpdb->prefix.static::$table;
+
+		$sql = "ALTER TABLE $tbl DROP COLUMN `$name`";
+
+		return $wpdb->query($sql);
+	}
+
+	static function modColumn($name, $type, $posAfter = null ) {
+		global $wpdb;
+		$tbl = $wpdb->prefix.static::$table;
+
+		$nativeType = static::getNativeType($type);
+
+		$sql = "ALTER TABLE $tbl MODIFY COLUMN `$name` $nativeType";
+
+		if ( $posAfter  === NEWSMAN_COLUMN_POS_FIRST ) {
+			$sql .= ' FIRST';
+		} else if ( $posAfter !== null ) {
+			$sql .= " AFTER `$posAfter`";
+		}
+
+		return $wpdb->query($sql);
+	}
+
+	static function getDefinition() {
+		static::ensureTable();
+		global $wpdb;
+		$tbl = $wpdb->prefix.static::$table;
+
+		$def = array();
+		$res = $wpdb->get_results("DESCRIBE $tbl", ARRAY_A);
+
+		foreach ( $res as $fld ) {
+			$def[] = array( 'name' => $fld['Field'], 'type' => $fld['Type'] );
+		}
+
+		return $def;
+	}
+
+	/**
+	 * Returns the names of the fields in table definition 
+	 * @param $def Array the array returnd from the getDefinition() function
+	 * @return Array Array of columns names
+	 */
+	static function getColumnsFromDefs($def) {
+		$fields = array();
+		foreach ($def as $prop) {
+			$fields[] = $prop['name'];
+		}
+		return $fields;
+	} 
+
+	static function getProps() {
+		$props = array();
+		$hasAutoinc = false;
+		foreach (static::$props as $name => $type) {
+			if ( $type === 'autoinc' ) {
+				$hasAutoinc = true;
+			}
+			$props[] = array( 'name' => $name, 'type' => $type, 'nativeType' => static::getNativeType($type) );
+		}
+
+		if ( !$hasAutoinc ) {
+			$props = array_unshift($props, array( 'name' => 'id', 'type' => 'autoinc' ) );
+		}
+		return $props;
 	}
 		
 }

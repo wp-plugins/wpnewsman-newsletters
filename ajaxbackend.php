@@ -50,9 +50,9 @@
 				return;
 			}			
 
-		    if ( !ob_start("ob_gzhandler") ) { 
-		        ob_start(); 			
-		    }
+		    // if ( !ob_start("ob_gzhandler") ) { 
+		    //     ob_start(); 			
+		    // }
 			
 			if ( !$state ) {
 				header("HTTP/1.0 400 Bad Request");
@@ -71,9 +71,9 @@
 			//header('Connection: close');    
 
 			// flush all output 
-			ob_end_flush(); 
-			ob_flush(); 
-			flush();  			
+			// ob_end_flush(); 
+			// ob_flush(); 
+			// flush();
 			   
 			if ($db) $db->close();  
 			exit();
@@ -284,11 +284,12 @@
 			$ids = $this->param('ids');
 			$all = ( $this->param('all', '0') === '1' );
 			$listId = $this->param('listId', '1');
+			$type = $this->param('type');
 
 			$list = newsmanList::findOne('id = %d', array($listId));
 
 			if ( $all ) {
-				$r = $list->deleteAll();
+				$r = $list->deleteAll($type);
 			} else {
 				$ids = preg_split('/[\s*,]+/', $ids);
 
@@ -302,7 +303,7 @@
 			if ( $r !== true ) {
 				$this->respond(false, $r);				
 			} else {
-				$this->respond(true, __('success', NEWSMAN) );
+				$this->respond(true, __('Successfully deleted selected subscribers.', NEWSMAN) );
 			}
 		}		
 
@@ -326,7 +327,8 @@
 				$this->respond(false, __('Error: options parameter was empty or not defined.', NEWSMAN));
 			} else {
 				$opts = json_decode($opts, true);
-				$o->load($opts);
+				$o->load($opts, 'PRESERVE_OLD_VALUES');
+				do_action('newsman_options_updated');
 				$this->respond(true, __('Options where successfully saved.', NEWSMAN) );
 			}
 		}	
@@ -417,18 +419,15 @@
 			$cats = json_decode('['.$cats.']');
 
 			$includePrivate = $this->param('includePrivate', 0);
-
 			$includePrivate = intval($includePrivate) ? true : false;
 			
-			$i = 1;                                     
+			$i = 1;
 			$posts = array();
 			
 			$df = get_option('date_format');
 			$tf = get_option('time_format');       
 			
 			$show_full_post = get_option('newsman_show_full_posts') == '1' ? true : false;
-
-
 
 			//$exlen = get_option('newsman_rss_excerpt_length');
 			
@@ -447,23 +446,17 @@
 		    	orderby=title
 		    	order=ASC
 		    	
-		    *  hour= - hour (from 0 to 23)
-		    * minute= - minute (from 0 to 60)
-		    * second= - second (0 to 60)
-		    * day= - day of the month (from 1 to 31)
-		    * monthnum= - month number (from 1 to 12)
-		    * year= - 4 digit year (e.g. 2009)
-		    * w= - week of the year (from 0 to 53) and uses the MySQL WEEK command Mode=1.     	
-		    
-		    
+				*  hour= - hour (from 0 to 23)
+				* minute= - minute (from 0 to 60)
+				* second= - second (0 to 60)
+				* day= - day of the month (from 1 to 31)
+				* monthnum= - month number (from 1 to 12)
+				* year= - 4 digit year (e.g. 2009)
+				* w= - week of the year (from 0 to 53) and uses the MySQL WEEK command Mode=1.     	
 		    */
-
-
 
 			//$newsman_ajresponse['limit'] = $limit;
 
-			//$selTime = mktime(0, 0, 0, $monthnum, $day, $year);
-			$selTime = strtotime($mysqldate);
 			$u = newsmanUtils::getInstance();
 
 			$args = array(		
@@ -504,16 +497,14 @@
 				$content = $u->fancyExcerpt($post->post_content, 50);
 
 				//if ('publish' == $post->post_status) {
-					if ( $pt > $selTime ) {
-						$posts[] =	array(
-							'id' => $post->ID,
-							'date' => date($df.' '.$tf, $pt),
-							'title' => $post->post_title,
-							'description' => $content,
-							'link' => get_permalink($post->ID),
-							'number' => $i
-						);
-					}
+					$posts[] =	array(
+						'id' => $post->ID,
+						'date' => date($df.' '.$tf, $pt),
+						'title' => $post->post_title,
+						'description' => $content,
+						'link' => get_permalink($post->ID),
+						'number' => $i
+					);
 					$i++;
 				//}
 			}
@@ -613,8 +604,6 @@
 			}		
 
 			$r = $email->save();
-
-			$email->clearStopFlag();
 
 			if ( $r ) {
 				$this->respond(true, __('Your email was successfully queued for sending.', NEWSMAN), array(
@@ -974,7 +963,7 @@
 				}
 				$s .= ')';
 
-				$r = newsmanEmail::removeAll('`id` in '.$s);
+				$r = newsmanEmail::removeAll('status <> "inprogress" AND `id` in '.$s);
 			}
 
 			if ( !$r ) {
@@ -1062,7 +1051,6 @@
 					} else {
 						$eml->status = 'pending';
 					}
-					$eml->clearStopFlag();
 					
 					$eml->save();
 
@@ -1251,12 +1239,12 @@
 		}
 
 		public function ajImportFiles() {
+			$imported = 0;
+
 			$files = $this->getUploadedFiles();
 
 			$importParams = $this->param('params');
-
 			$importParams = json_decode($importParams, true);
-
 			$imported += $this->importFile($importParams);
 
 			$msg = sprintf( _n( 'Imported %d subscriber. Make sure you send him confrmation email.', 'Imported %d subscribers. Make sure you send them confrmation email.', $imported, NEWSMAN), $imported);
@@ -1320,7 +1308,7 @@
 			$emails = newsmanEmail::findAll('id in '.$set);
 
 			foreach ($emails as $email) {
-				file_put_contents('/tmp/newsman-stop-email-'.$email->id, 'STOP');
+				newsmanWorker::stop($email->workerPid);
 				$email->status = 'stopped';
 				$email->save();								
 			}
@@ -1338,7 +1326,6 @@
 			foreach ($emails as $email) {
 				$email->status = 'pending';
 				$email->save();
-				$email->clearStopFlag();
 			}
 
 			$g = newsman::getInstance();
@@ -1533,7 +1520,7 @@
 		public function ajGetListSettings() {
 			$id = $this->param('id');
 
-			$list = newsmanList::findOne('id = %d', array($id));
+			$list = newsmanList::findOne('`id` = %d', array($id));
 			if ( !$list ) {
 				$this->errListNotFound($id);
 			} else {
@@ -1628,7 +1615,7 @@
 			$r = $u->mail($msg, array( 'to' => $toEmail) );
 
 			if ( $r === true ) {
-				$this->respond(true, __('success', NEWSMAN) );
+				$this->respond(true, sprintf(__('Test email was sent to %s.', NEWSMAN), $toEmail) );
 			} else {
 				$this->respond(false, $r);
 			}			

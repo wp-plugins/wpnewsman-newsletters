@@ -35,7 +35,7 @@
 				<li><a id="newsman-btn-chToConfirmed">Change to Confirmed</a></li>
 			</ul>
 		</div>				 -->
-		<button id="newsman-btn-delete" style="margin: 0 3px;" type="button" class="btn btn-danger"><?php _e('Delete', GSOm); ?></button>
+		<button id="newsman-btn-delete" style="margin: 0 3px;" type="button" class="btn btn-danger"><?php _e('Delete', NEWSMAN); ?></button>
 		<button id="newsman-btn-reconfirm" style="margin: 0 3px 0 2em; display: none;" type="button" class="btn"><?php _e('Resend Confirmation Request', NEWSMAN); ?></button>
 	</div>
 

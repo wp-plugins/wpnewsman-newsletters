@@ -1,5 +1,5 @@
 <script>
-	window.NEWSMAN_LIST_ID = '<?php echo $_REQUEST['id']; ?>';
+	window.NEWSMAN_LIST_ID = '<?php echo $id; ?>';
 </script>
 <div class="wrap wp_bootstrap" id="newsman-page-list">
 
@@ -57,7 +57,7 @@
 				<div class="row">
 					<div class="span5">
 						<?php
-							$frm = new newsmanForm($_REQUEST['id'], true);
+							$frm = new newsmanForm($id, true);
 							$frm->renderForm();
 						?>
 					</div>

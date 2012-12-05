@@ -138,10 +138,6 @@
 			<div class="tab-content">
 				<div class="tab-pane active" id="my-tpls">
 					<table id="dlg-templates-tbl" class="table table-striped table-bordered">
-						<tr><td>tpl 1 </td></tr>
-						<tr><td>tpl 2 </td></tr>
-						<tr><td>tpl 3 </td></tr>
-						<tr><td>tpl 4 </td></tr>
 					</table>					
 				</div>
 				<div class="tab-pane" id="basic-tpls">
@@ -149,7 +145,7 @@
 						<table>
 							<tr>
 								<td>
-									<div class="tpl-btn" tplname="basic">
+									<div mr="ok" class="tpl-btn" tplname="basic">
 										<i class="simple"></i>
 										<div>
 											<h3><?php _e('Simple', NEWSMAN); ?></h3>
@@ -157,7 +153,7 @@
 									</div>							
 								</td>
 								<td>
-									<div class="tpl-btn" tplname="2cols">
+									<div mr="ok" class="tpl-btn" tplname="2cols">
 										<i class="col2"></i>
 										<div>
 											<h3><?php _e('2 columns', NEWSMAN); ?></h3>
@@ -167,7 +163,7 @@
 							</tr>
 							<tr>
 								<td>
-									<div class="tpl-btn" tplname="3cols">
+									<div mr="ok" class="tpl-btn" tplname="3cols">
 										<i class="col3"></i>
 										<div>
 											<h3><?php _e('3 columns', NEWSMAN); ?></h3>
@@ -175,7 +171,7 @@
 									</div>
 								</td>
 								<td>
-									<div class="tpl-btn" tplname="gallery">
+									<div mr="ok" class="tpl-btn" tplname="gallery">
 										<i class="gallery"></i>
 										<div>
 											<h3><?php _e('Gallery', NEWSMAN); ?></h3>
@@ -185,7 +181,7 @@
 							</tr>
 							<tr>
 								<td>
-									<div class="tpl-btn" tplname="mobile">
+									<div mr="ok" class="tpl-btn" tplname="mobile">
 										<i class="simple"></i>
 										<div>
 											<h3><?php _e('Mobile', NEWSMAN); ?></h3>
@@ -193,7 +189,7 @@
 									</div>
 								</td>
 								<td>
-									<div class="tpl-btn" tplname="digest">
+									<div mr="ok" class="tpl-btn" tplname="digest">
 										<i class="simple"></i>
 										<div>
 											<h3><?php _e('Digest', NEWSMAN); ?></h3>

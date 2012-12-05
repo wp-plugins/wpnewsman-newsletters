@@ -6,6 +6,11 @@ class newsmanOptions {
 
 	var $opts;
 
+	var $encryptedParams = array(
+		'mailer.smtp.pass',
+		'bounced.password'
+	);
+
 	// singleton instance 
 	private static $instance; 
 
@@ -23,10 +28,12 @@ class newsmanOptions {
 		if ( $sopts ) {
 			$o = unserialize($sopts);
 
-			$pass = $this->get('mailer.smtp.pass', $o);
-			if ( $pass !== null ) {
-				$pass = $u->decrypt_pwd($pass);
-				$this->set('mailer.smtp.pass', $pass, false, $o);
+			foreach ($this->encryptedParams as $path) {
+				$data = $this->get($path, $o);
+				if ( $data !== null ) {
+					$data = $u->decrypt_pwd($data);
+					$this->set($path, $data, false, $o);
+				}
 			}
 
 			$this->opts = $o;
@@ -40,24 +47,31 @@ class newsmanOptions {
 		return empty($this->opts);
 	}
 
-	public function load($options) {
+	public function load($options, $preserveOldValues = false) {
 		if ( is_string($options) ) {
 			$o = unserialize($options);	
 		} elseif ( is_array($options) ) {
 			$o = $options;
-		}		
+		}
 
-		$this->opts = $this->mergeArrays($this->opts, $o);		
+		if ( $preserveOldValues ) {
+			$this->opts = $this->mergeArrays($o, $this->opts);
+		} else {
+			$this->opts = $this->mergeArrays($this->opts, $o);
+		}
+		
 		$this->save();
 	}
 
-	private function mergeArrays($Arr1, $Arr2) {
+	private function mergeArrays($Arr1, $Arr2, $overwrite = false) {
 		foreach($Arr2 as $key => $Value) {
 
 			if ( array_key_exists($key, $Arr1) && is_array($Value) ) {
-				$Arr1[$key] = $this->mergeArrays($Arr1[$key], $Arr2[$key]);	
+				$Arr1[$key] = $this->mergeArrays($Arr1[$key], $Arr2[$key], $overwrite);	
 			} else {
-				$Arr1[$key] = $Value;	
+				if ( !isset($Arr1[$key]) || $overwrite ) {
+					$Arr1[$key] = $Value;
+				}				
 			}
 
 		}
@@ -69,11 +83,14 @@ class newsmanOptions {
 		$o = $this->opts;
 		$u = newsmanUtils::getInstance();
 
-		$pass = $this->get('mailer.smtp.pass', $o);
-		if ( $pass !== null ) {
-			$pass = $u->encrypt_pwd($pass);
-			$this->set('mailer.smtp.pass', $pass, false, $o);
+		foreach ($this->encryptedParams as $path) {
+			$data = $this->get($path, $o);
+			if ( $data !== null ) {
+				$data = $u->encrypt_pwd($data);
+				$this->set($path, $data, false, $o);
+			}
 		}
+
 
 		$str = serialize($o);
 		update_option('newsman_options', $str);
@@ -105,7 +122,7 @@ class newsmanOptions {
 
 		for ($i=0; $i < $c; $i++) { 
 			$s = $path[$i];
-			$last = ($i === $c-1);						
+			$last = ($i === $c-1);
 			if ( isset($v[$s]) ) {
 				if ( $last ) {
 					$v[$s] = $value;
@@ -114,7 +131,13 @@ class newsmanOptions {
 					$v = &$v[$s];
 				}
 			} else {
-				return false;
+				if ( $last ) {
+					$v[$s] = $value;
+					return true;
+				} else {
+					$v[$s] = array();
+					$v = &$v[$s];
+				}				
 			}
 		}
 	}	
@@ -123,7 +146,7 @@ class newsmanOptions {
 		if ( !$name ) {
 			return ($origin === null) ? $this->opts : $origin;
 		} else {
-			$path = split('\.', $name);
+			$path = preg_split('/\./', $name);
 			return $this->walk($path, $origin);
 		}
 	}
@@ -136,7 +159,7 @@ class newsmanOptions {
 			}
 		} else {
 			$u = newsmanUtils::getInstance();			
-			$path = split('\.', $name);
+			$path = preg_split('/\./', $name);
 			$r = $this->walkAndSet($path, $value, $origin);
 		}
 

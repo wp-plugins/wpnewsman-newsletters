@@ -155,6 +155,7 @@ jQuery(function($){
 						$('input[value="'+o[name]+'"]').attr('checked', 'checked');
 					} else {
 						$('input[name="'+name+'"], textarea[name="'+name+'"], select[name="'+name+'"]').not('[type="radio"]').val(o[name]);
+						$('input[name="'+name+'"]').filter('[type="hidden"]').change();
 					}
 					
 				}
@@ -244,7 +245,7 @@ jQuery(function($){
 		$(id).modal({ show: true, keyboard: true });
 	}
 
-	$('.modal.dlg .btn').click(function(e){		
+	$('.modal.dlg .btn, .modal.dlg .tpl-btn').click(function(e){		
 
 		var mr = $(this).attr('mr');
 
@@ -256,6 +257,23 @@ jQuery(function($){
 			$('.modal.dlg').modal('hide');
 		}
 	});
+
+	function statusToText(st, bounceStatus) {
+
+		if ( bounceStatus ) {
+			bounceStatus = '<div><span class="label label-important">'+bounceStatus+'</span></div>';
+		} else {
+			bounceStatus = '';
+		}
+
+		st += '';
+		switch ( st ) {
+			case '0': return '<span class="newsmanColorUNC">'+newsmanL10n.unconfirmed+'</span>';
+			case '1': return '<span class="newsmanColorCON">'+newsmanL10n.confirmed+'</span>';
+			case '2': return '<span class="newsmanColorUNS">'+newsmanL10n.unsubscribed+'</span>'+bounceStatus;
+			default: return 'UNKNOWN';
+		}
+	}
 
 	/*******	  Post selector iframe 	**********/
 
@@ -495,7 +513,6 @@ jQuery(function($){
 			this.info.html(this.options.messages[type] || 'Error');
 		},
 		_fileSelected: function(fileName) {
-			console.log('file Selected: '+fileName);
 			this.selectedFile = fileName;
 			this.showInfo('loading');
 			this.loadFile(fileName);
@@ -833,7 +850,7 @@ jQuery(function($){
 		});
 
 		$('#newsman-btn-export').click(function(){
-			window.location = NEWSMAN_PLUGIN_URL+'/export_list.php?listId=' + ($('#newsman-lists').val() || '1');
+			window.location = NEWSMAN_PLUGIN_URL+'/export_list.php?listId=' + ($('#newsman-lists').val() || '1')+'&type='+pageState.show;
 		});
 
 		$('#newsman-btn-import').click(function(){
@@ -1016,6 +1033,8 @@ jQuery(function($){
 				showModal('#newsman-modal-delete', function(mr){
 					if ( mr === 'ok' || mr === 'all' ) {
 
+						var type = pageState.show;
+
 						$.ajax({
 							type: 'POST',
 							url: ajaxurl,
@@ -1023,6 +1042,7 @@ jQuery(function($){
 								ids: ids+'',
 								all: ( mr === 'all' ) ? 1 : 0,
 								listId: $('#newsman-lists').val() || '1', 
+								type: type,
 								action: 'newsmanAjDeleteSubscribers'
 							}
 						}).done(function(data){
@@ -1164,6 +1184,8 @@ jQuery(function($){
 	 		q.action = 'newsmanAjGetSubscribers';
 	 		q.listId = $('#newsman-lists').val() || '1';
 
+	 		$('#newsman-checkall').removeAttr('checked');
+
 	 		var x32 = '1ug';
 
 	 		showLoading();
@@ -1237,17 +1259,6 @@ jQuery(function($){
 	 			}
 	 		}
 
-	 		function statusToText(st) {
-	 			st += '';
-	 			switch ( st ) {
-	 				case'0': return '<span class="newsmanColorUNC">'+newsmanL10n.unconfirmed+'</span>';
-	 				case '1': return '<span class="newsmanColorCON">'+newsmanL10n.confirmed+'</span>';
-	 				case '2': return '<span class="newsmanColorUNS">'+newsmanL10n.unsubscribed+'</span>';
-	 				default: return 'UNKNOWN';
-	 			}
-	 		}
-
-
 	 		function renderPagination(cntData) {
 	 			var cnt =  cntData[pageState.show],
 	 				pages = Math.ceil( cnt / pageState.ipp ),
@@ -1280,7 +1291,7 @@ jQuery(function($){
 								'<td>'+r.email+'</td>',
 								'<td>'+r.ts+'</td>',
 								'<td>'+r.ip+'</td>',
-								'<td>'+statusToText(r.status)+'</td>',
+								'<td>'+statusToText(r.status, r.status == 2 ? r.bounceStatus : '')+'</td>',
 								'<td>'+fieldsToHTML(r.fields)+'</td>',
 							'</tr>'].join('')).appendTo(tbody);
 					});	 				
@@ -1593,7 +1604,6 @@ jQuery(function($){
 	if ( $('#newsman-page-compose').get(0) ) {
 
 		var editor = CKEDITOR.replace( 'content', {
-			resize_enabled: false,
 			width: 'auto',
 			height: 300
 		});
@@ -1620,7 +1630,11 @@ jQuery(function($){
 					changed();
 				}, 500);
 			});
-		});		
+		});
+
+		editor.on('mode', function(){
+			changed();
+		});
 
 		$('#newsman-email-subj').change(function(){
 			changed();
@@ -1650,8 +1664,8 @@ jQuery(function($){
 
 		}
 
-		function saveEmail() {
-	
+		function saveEmail(done) {
+			done = done || function(){};
 			$.ajax({
 				type: 'POST',
 				url: ajaxurl,
@@ -1660,7 +1674,7 @@ jQuery(function($){
 					action: 'newsmanAjSavePlainEmail',
 					to: $('#eml-to').multis('getItems')+'',
 					subj: $('#newsman-email-subj').val(),
-					plain: editor.document.getBody().$.innerText,
+					plain: editor.document ? editor.document.getBody().$.innerText : '',
 					html: editor.getData(),
 					send: $('input[name="newsman-send"]:checked').val(),
 					ts: Math.round( $('#newsman-send-datepicker').datetimepicker('getDate') / 1000 )					
@@ -1669,6 +1683,7 @@ jQuery(function($){
 				if ( data.id ) {
 					NEWSMAN_ENTITY_ID = data.id;
 				}
+				done();
 			}).fail(function(t, status, message) {
 				var data = JSON.parse(t.responseText);
 				showMessage(data.msg, 'error');
@@ -1686,7 +1701,10 @@ jQuery(function($){
 
 		$('#newsman-send-datepicker').datetimepicker('setDate', startDate);		
 
-		$('#newsman-send').click(sendEmail);
+		$('#newsman-send').click(function(){
+			editor.setMode('wysiwyg');
+			sendEmail();
+		});
 	}
 
 	/*******	 Manage Mailbox 	**********/
@@ -2117,7 +2135,9 @@ jQuery(function($){
 			$('#btn-compose').click(function(e){
 				e.preventDefault();
 
-				var tbody = $('#dlg-templates-tbl tbody').empty();
+				var tbody = $('#dlg-templates-tbl').empty();
+
+				$('<tr><td class="blank-row"><img src="'+NEWSMAN_PLUGIN_URL+'/img/ajax-loader.gif"> Loading...</td></tr>').appendTo(tbody);
 
 				$.ajax({
 					type: 'POST',
@@ -2128,6 +2148,7 @@ jQuery(function($){
 					}
 				}).done(function(data){
 
+					tbody.empty();
 					if ( data.rows.length ) {
 						$(data.rows).each(function(i, row){
 							var url = NEWSMAN_BLOG_ADMIN_URL+'/admin.php?page=newsman-mailbox&action=compose-from-tpl&id='+row.id;
@@ -2401,17 +2422,6 @@ jQuery(function($){
 						$('<li><a href="#/'+pageState.show+'/'+(current+1)+'">»</a></li>').appendTo(el);
 					}
 				}
-
-				function statusToText(st) {
-					st += '';
-					switch ( st ) {
-						case'0': return '<span class="newsmanColorUNC">'+newsmanL10n.unconfirmed+'</span>';
-						case '1': return '<span class="newsmanColorCON">'+newsmanL10n.confirmed+'</span>';
-						case '2': return '<span class="newsmanColorUNS">'+newsmanL10n.unsubscribed+'</span>';
-						default: return 'UNKNOWN';
-					}
-				}
-
 
 				function renderPagination(cntData) {
 					var cnt =  cntData[pageState.show],
@@ -2765,6 +2775,11 @@ jQuery(function($){
 		width: null,
 		getData: function(enteredText, done) {
 
+			if ( typeof NEWSMAN_LISTS !== 'undefined' ) {
+				done(NEWSMAN_LISTS);
+				return;
+			}
+
 			$.ajax({
 				type: 'POST',
 				url: ajaxurl,
@@ -2815,6 +2830,9 @@ jQuery(function($){
 
 
 	$('#btn-send-test-email').click(function(){
+		if ( editor ) {
+			editor.setMode('wysiwyg');
+		}
 		showModal('#newsman-modal-send-test', function(mr){
 			var that = this;
 			if ( mr == 'ok' ) {

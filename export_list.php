@@ -16,6 +16,15 @@ function export_newsman_list() {
 
 	$listId = intval($_GET['listId']);
 
+	if ( isset($_GET['type']) ) {
+		$type = strtolower($_GET['type']);
+		if ( !in_array($type, array('all', 'confirmed', 'unconfirmed', 'unsubscribed')) ) {
+			$type = 'all';
+		}
+	} else {
+		$type = 'all';
+	}
+
 	if ( !$listId ) {
 		wp_die( __('Please, provide correct "listId" parameter.', NEWSMAN) , 'Bad request', array( 'response' => 400 ));
 	}
@@ -31,7 +40,7 @@ function export_newsman_list() {
 	$fileName = $u->sanitizeFileName($fileName).'.csv';
 
 
-	$list->exportToCSV($fileName);
+	$list->exportToCSV($fileName, $type);
 
 	// header("Content-disposition: attachment; filename=$fileName.zip");
 	// header('Content-type: application/zip');

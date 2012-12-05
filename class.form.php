@@ -59,6 +59,7 @@ class newsmanForm {
 	}
 
 	private function getText($item) {
+
 		$req = isset($item['required']) && $item['required'] ? 'newsman-required' : '';
 		$type = $this->adminMode ? 'gstype="text"' : '';
 		$it = $item['type'];
@@ -179,7 +180,7 @@ class newsmanForm {
 			$method = 'get'.ucfirst($item['type']);			
 			$renderedItem = '';
 			if ( method_exists($this, $method) ) {
-				$renderedItem = call_user_method($method, $this, $item);
+				$renderedItem = call_user_func( array($this, $method), $item);
 			}
 			$formHtml .= $renderedItem;
 		}
@@ -203,7 +204,9 @@ class newsmanForm {
 	public function getFields() {
 		$fields = array();
 		foreach ($this->decodedForm as $item) {
-			$fields[$item['name']] = $item['label'];
+			if ( isset($item['name']) ) {
+				$fields[$item['name']] = $item['label'];	
+			}			
 		}
 		return $fields;
 	}

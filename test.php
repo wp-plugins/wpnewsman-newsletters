@@ -1,1 +1,1 @@
-<? echo 'NEWSMAN_TEST_OK';
+<?php echo 'NEWSMAN_TEST_OK';

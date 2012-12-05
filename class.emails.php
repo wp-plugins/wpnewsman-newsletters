@@ -55,31 +55,12 @@ class newsmanEmail extends newsmanStorable {
 		return parent::save();
 	}
 
-	function isStopped() {
-
-		$fn = '/tmp/newsman-stop-email-'.$this->id;
-
-		if ( file_exists($fn) ) { // && file_get_contents($fn) === 'STOP' ) 
-			return true;
-		}
-
-		return false;
-	}
-
 	public function incSent($n = 1) {
 		global $wpdb;
 		$tbl = $this->getTableName();
 		$sql = "UPDATE $tbl SET `sent`=`sent`+%d where id = %d";
 		$this->sent += 1;
 		return $wpdb->query($wpdb->prepare($sql, $n, $this->id));
-	}
-
-	public function clearStopFlag() {
-		$fn = '/tmp/newsman-stop-email-'.$this->id;
-
-		if ( file_exists($fn) ) {
-			unlink($fn);
-		}		
 	}
 
 	public function embedStyles() {
@@ -90,7 +71,7 @@ class newsmanEmail extends newsmanStorable {
 		} else {
 			$emo = new Emogrifier($this->html);
 
-			if ( !$this->editor ) {
+			if ( !isset($this->editor) || !$this->editor ) {
 				$this->editor = 'html';
 			}
 

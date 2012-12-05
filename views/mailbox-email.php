@@ -33,15 +33,16 @@
 </style>
 
 <script>
-	var NEWSMAN_ENTITY_ID = '<?php echo isset($email) ? $email->id : ""; ?>' || 0;
-	var NEWSMAN_ENT_STATUS = '<?php echo isset($email) ? $email->status : ""; ?>';	
-	var NEWSMAN_ENT_TYPE = 'email';
+	window.NEWSMAN_ENTITY_ID = '<?php echo isset($email) ? $email->id : ""; ?>' || 0;
+	window.NEWSMAN_ENT_STATUS = '<?php echo isset($email) ? $email->status : ""; ?>';	
+	window.NEWSMAN_ENT_TYPE = 'email';
+	window.NEWSMAN_LISTS = <?php $g = newsman::getInstance(); echo $g->listNamesAsJSArr(); ?>;
 </script>
 
 <div id="newsman-page-compose" class="wrap wp_bootstrap">
 
 	<div class="row">
-		<div class="span11">
+		<div class="span12">
 			<div style="border-bottom: 1px solid #DADADA; overflow: hidden;">
 				<h2><?php _e('Compose email', NEWSMAN); ?></h2>
 			</div>			
@@ -74,11 +75,11 @@
 				<!--	Content	 -->
 				<div id="poststuff">
 
-					<textarea name="content" id="content" cols="30" rows="10"><?php echo isset($email) ? $email->html : ''; ?></textarea>
+					<textarea name="content" class="nsmn-type-simple" id="content" cols="30" rows="10"><?php echo isset($email) ? $email->html : ''; ?></textarea>
 				</div>				
 			</div>
 
-			<div class="span3">
+			<div class="span4">
 				<h3><?php _e('Sending', NEWSMAN); ?></h3>
 				<label for="newsman-send-now" class="radio"><input type="radio" name="newsman-send" value="now" checked="checked" id="newsman-send-now"> <?php echo ( isset($email) && $email->status == 'stopped' ) ? __('Resume', NEWSMAN) : __('Send immediately', NEWSMAN); ?></label>
 				<label for="newsman-schedule" class="radio"><input <?php if ( isset($email) && $email->status === 'scheduled' ) { echo 'checked="checked"'; } ?> type="radio" name="newsman-send" value="schedule" id="newsman-schedule"> <?php _e('Schedule sending on', NEWSMAN); ?></label>

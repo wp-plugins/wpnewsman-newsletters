@@ -77,7 +77,7 @@ class newsmanList extends newsmanStorable {
 	private function assignTable() {
 		global $wpdb;
 		$u = newsmanUtils::getInstance();
-		if ( !$this->tblSubscribers ) {
+		if ( !isset($this->tblSubscribers) || !$this->tblSubscribers ) {
 			$this->tblSubscribers = $wpdb->prefix.'newsman_lst_'.$u->sanitizeDBFieldName( $this->name );
 		}		
 	}
@@ -91,10 +91,11 @@ class newsmanList extends newsmanStorable {
 					`ts` datetime NOT NULL,
 					`ip` varchar(50) NOT NULL,
 					`email` varchar(255) NOT NULL,
-					`status` tinyint(3) unsigned NOT NULL default 0,
+					`status` tinyint(3) unsigned NOT NULL default 0,					
 					`ucode` varchar(255) NOT NULL,
 					`fields` TEXT,
 					`emails` TEXT,
+					`bounceStatus` TEXT,
 					UNIQUE (`email`),
 					PRIMARY KEY  (`id`)
 					) CHARSET=utf8";
@@ -222,10 +223,28 @@ class newsmanList extends newsmanStorable {
 		return true;
 	}
 
-	public function deleteAll() {
+	public function deleteAll($type = null) {
 		global $wpdb;
 
 		$sql = "DELETE FROM $this->tblSubscribers";
+
+		if ( $type ) {
+
+			switch ($type) {
+				case 'confirmed':
+					$sql .= " WHERE status = ".NEWSMAN_SS_CONFIRMED;
+					break;
+
+				case 'unconfirmed':
+					$sql .= " WHERE status = ".NEWSMAN_SS_UNCONFIRMED;
+					break;
+
+				case 'unsubscribed':
+					$sql .= " WHERE status = ".NEWSMAN_SS_UNSUBSCRIBED;
+					break;
+			}
+
+		}
 
 		$r = $wpdb->query($sql);
 
@@ -298,6 +317,22 @@ class newsmanList extends newsmanStorable {
 		$sel = '';
 
 		if ( $type !== 'all' ) {
+			if ( is_string($type) ) {
+				switch ($type) {
+					case 'confirmed':
+						$type = NEWSMAN_SS_CONFIRMED;						
+						break;
+					case 'unconfirmed': 
+						$type = NEWSMAN_SS_UNCONFIRMED;
+						break;
+					case 'unsubscribed':
+						$type = NEWSMAN_SS_UNSUBSCRIBED;
+						break;
+					default:
+						return null;
+						break;
+				}
+			}
 			$sel = ' WHERE status = '.$type;
 		}
 
@@ -319,7 +354,7 @@ class newsmanList extends newsmanStorable {
 		$res = array();
 
 		foreach ( $rows as $row ) {
-			$s = new newsmanSub($this->tableName);
+			$s = new newsmanSub($this->tblSubscribers);
 			$s->fromDBRow($row);
 			$res[] = $s;
 		}
@@ -521,11 +556,11 @@ class newsmanList extends newsmanStorable {
 	/**
 	 * Fetches subscribers in batches and conver them to csv rows
 	 */
-	private function subsToCSV($file, $fields) {
+	private function subsToCSV($file, $fields, $type = 'all') {
 		$p = 1;
 		$done = false;
 		do {
-			$res = $this->getPage($p, 500);
+			$res = $this->getPage($p, 500, $type);
 			if ( is_array($res) && !empty($res)  ) {
 				foreach ($res as $sub) {
 					fputs($file, $this->subToCSVRow($sub, $fields)."\n");
@@ -537,7 +572,7 @@ class newsmanList extends newsmanStorable {
 		} while ( !$done );
 	}
 
-	public function exportToCSV($filename) {
+	public function exportToCSV($filename, $type = 'all') {
 		header( 'Content-Type: text/csv' );
 		header( 'Content-Disposition: attachment;filename='.$filename);
 
@@ -545,9 +580,36 @@ class newsmanList extends newsmanStorable {
 		if ( $out ) {
 			$fields = $this->getAllFields();
 			fputcsv($out, $fields, ',', '"');
-			$this->subsToCSV($out, $fields);
-			fclose($file);			
+			$this->subsToCSV($out, $fields, $type);
+			@fclose($out);			
 		}
+	}
+
+
+	// UNF
+	public function unsubscribe($email, $statusStr) {
+		global $wpdb;
+		$c = 0;
+
+		if ( preg_match_all('/\b[a-z0-9]+(?:[-\._]?[a-z0-9]+)*@(?:[a-z0-9]+(?:-?[a-z0-9]+)*\.)+[a-z]+\b/i', $emailsList, $matches) ) {
+
+			$set = '(';
+			$del = '';
+
+			foreach ($matches[0] as $email) {
+				$email = strtolower($email);
+				$set .= $del.'"'.mysql_real_escape_string($email).'"';
+				$del = ', ';
+				$c += 1;
+			}		
+
+			$set .= ')';
+		}
+
+		$sql = "UPDATE $this->tblSubscribers SET status = %d, bounceStatus = %s where email = %s";
+		$sql = $wpdb->prepare($sql, NEWSMAN_SS_UNSUBSCRIBED, $statusStr, $email);
+
+		return $wpdb->query($sql) == false;
 	}
 
 }

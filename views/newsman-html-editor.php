@@ -1,5 +1,9 @@
 <!-- proto-->
 
+<script>
+	window.NEWSMAN_LISTS = <?php $g = newsman::getInstance(); echo $g->listNamesAsJSArr(); ?>;
+</script>
+
 <div id="newsman-html-editor" class="wrap wp_bootstrap">
 
 	<div class="row">
@@ -11,7 +15,7 @@
 					$s_ed =  sprintf( __('Edit %s', NEWSMAN), $e_name );
 					$s_new = sprintf( __('New %s', NEWSMAN), $e_name );
 
-					$title = isset($_REQUEST['id']) ? $s_ed : $s_new ;
+					$title = $id ? $s_ed : $s_new ;
 				?>
 				<h2><?php echo $title ?></h2>				
 			</div>			
@@ -69,23 +73,23 @@
 			<div class="span9">
 				<script type="text/javascript">
 					var NEWSMAN_PLUGIN_URL = '<?php echo NEWSMAN_PLUGIN_URL; ?>';
-					var NEWSMAN_ENTITY_ID = '<?php echo $_REQUEST["id"]; ?>';
-					var NEWSMAN_ENT_TYPE = '<?php echo ( $_REQUEST["page"] == "newsman-templates" && $_REQUEST["action"] == "edit" ) ? "template" : "email"  ?>';
+					var NEWSMAN_ENTITY_ID = '<?php echo $id; ?>';
+					var NEWSMAN_ENT_TYPE = '<?php echo ( $page == "newsman-templates" && $action == "edit" ) ? "template" : "email"  ?>';
 					var NEWSMAN_ENT_ASSETS = '';
 					var NEWSMAN_ENT_STATUS = '<?php echo isset($email) ? $email->status : ""; ?>';
 					</script>
 				<?php
 					if ( defined('NEWSMAN_EDIT_ENTITY') ) {
 						if ( NEWSMAN_EDIT_ENTITY == 'template' ) {
-							$url = get_bloginfo('wpurl').'/wp-admin/admin.php?page=newsman-templates&action=source&id='.$_REQUEST['id'];
+							$url = get_bloginfo('wpurl').'/wp-admin/admin.php?page=newsman-templates&action=source&id='.$id;
 						} elseif ( NEWSMAN_EDIT_ENTITY == 'email' ) {
-							$url = get_bloginfo('wpurl').'/wp-admin/admin.php?page=newsman-mailbox&action=source&id='.$_REQUEST['id'];
+							$url = get_bloginfo('wpurl').'/wp-admin/admin.php?page=newsman-mailbox&action=source&id='.$id;
 						}
 					}
 				?>
 				<iframe id="tpl-frame" width="700" height="1000" src="<?php echo $url; ?>" frameborder="0"></iframe>
 			</div>
-			<div class="span3 tpl-actions">
+			<div class="span4 tpl-actions">
 
 			<?php if ( NEWSMAN_EDIT_ENTITY == 'email' ): ?>
 				<div class="form-vertical" id="newsman-send-form">
@@ -93,7 +97,7 @@
 					<input type="hidden" name="page" value="newsman-mailbox">
 					<input type="hidden" name="action" value="send">
 
-					<label for="newsman-send-now" class="radio"><input type="radio" name="newsman-send" value="now" checked="checked" id="newsman-send-now"> <?php echo ( isset($email) && $email->status == 'stopped' ) ? __('Resume', NEWSMAN) : __('Send immediately', NEWSMAN); ?></label>
+					<label for="newsman-send-now" class="radio"><input type="radio" name="newsman-send" value="now" checked="checked" id=" -now"> <?php echo ( isset($email) && $email->status == 'stopped' ) ? __('Resume', NEWSMAN) : __('Send immediately', NEWSMAN); ?></label>
 					<label for="newsman-send-scheduled" class="radio"><input type="radio" name="newsman-send" value="schedule" id="newsman-send-scheduled"> Schedule sending on</label>
 					<div style="margin: 1em 0;">
 						<input ype="text" id="newsman-send-datepicker" class="span3">
@@ -103,14 +107,14 @@
 				</div>
 			<?php else : ?>
 				<a href="<?php echo get_bloginfo('wpurl').'/wp-admin/admin.php?page=newsman-templates';?>" type="button" class="btn">&times; <?php _e('Close editor', NEWSMAN);?></a>
-				<a href="<?php echo get_bloginfo('wpurl').'/wp-admin/admin.php?page=newsman-templates&action=download&id='.$_REQUEST['id'];?>" type="button" class="btn"><i class="icon-download"></i> <?php _e('Export template', NEWSMAN); ?></a>
+				<a href="<?php echo get_bloginfo('wpurl').'/wp-admin/admin.php?page=newsman-templates&action=download&id='.$id;?>" type="button" class="btn"><i class="icon-download"></i> <?php _e('Export template', NEWSMAN); ?></a>
 			<?php endif; ?>
 				<hr>
 				<a class="btn btn-info" id="btn-send-test-email"><i class="icon-envelope icon-white"></i> <?php _e('Send test email', NEWSMAN); ?></a>
 				<div id="digest-controls" style="display: none;">
 					<h4 style="margin: 1.5em 0 1em;"><?php _e('Digest controls', NEWSMAN); ?></h4>
-					<button id="btn-add-posts" class="btn btn-info"><i class="icon-plus icon-white"></i><?php _e(' Add posts', NEWSMAN); ?></button>
-					<button id="btn-edit-postblock" class="btn"><i class="icon-edit"></i><?php _e(' Edit post template', NEWSMAN); ?></button>
+					<button id="btn-add-posts" class="btn btn-info"><i class="icon-plus icon-white"></i><?php _e(' Add posts', NEWSMAN); ?></button><br>
+					<button id="btn-edit-postblock" class="btn"><i class="icon-edit"></i><?php _e(' Edit post template', NEWSMAN); ?></button><br>
 					<button id="btn-edit-post-divider" class="btn"><i class="icon-edit"></i><?php _e(' Edit post divider', NEWSMAN); ?></button>								
 				</div>
 				<h4 style="margin: 1.5em 0 1em;">wpNewsman Shortcodes <a href="http://codex.wordpress.org/Shortcode_API"><i class="icon-question-sign"></i></a></h4>
@@ -128,6 +132,7 @@
 	</div> -->
 
 	<div id="dialog" style="display: none;">
+		<div class="editor-dialog-title">Content editor <span class="newsman-editor-dlg-close">&times;</span></div>
 		<form>
 		<textarea class="source-editor" name="editor1"><?php _e('hello', NEWSMAN); ?></textarea>
 		</form>

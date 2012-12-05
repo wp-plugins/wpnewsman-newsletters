@@ -9,6 +9,8 @@ define('KEY', "\xa3\xb4\xef\xda\x24\xd5\xcc\x3b");
 
 class newsmanUtils {
 
+	var $base64Map = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+
 	// singleton instance 
 	private static $instance; 
 
@@ -130,6 +132,8 @@ class newsmanUtils {
 		try {
 			$mail = new PHPMailer(true); // defaults to using php "mail()"
 
+			//
+
 			//$mail->Encoding = 'quoted-printable';
 			
 			switch ($m['mdo']) {
@@ -180,6 +184,21 @@ class newsmanUtils {
 				$to = $vars['email'];
 			}
 
+			$mail->addCustomHeader("X-WPNewsman-antispam: ".$this->encEmail($to));
+
+			if ( $opts['ts'] && $opts['ip'] ) {
+				$d = $opts['ts'];
+				$blogurl = get_bloginfo('wpurl');
+				$x_sub = 'Subscribed to '.$blogurl.', on '.$d.', from '.$opts['ip'];
+				$mail->addCustomHeader('X-Subscription: '.$x_sub);
+			}
+
+			if ( $opts['uns_link'] ) {
+				$mail->addCustomHeader('List-Unsubscribe: <'.$opts['uns_link'].'>,<mailto:'.$s['email'].'?subject=unsubscribe;'.$opts['uns_code'].'>');
+			}
+
+			
+			
 			$mail->AddAddress($to);
 			
 			$mail->Subject = $subject;
@@ -317,6 +336,14 @@ class newsmanUtils {
 			return $valid;
 		}
 	}
+
+	function extractEmail($str) {
+		if ( preg_match("/\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/", $str, $matches) ) {
+			return $matches[0];
+		}
+
+		return null;
+	}	
 
 	function current_time( $type, $gmt = 0 ) {
 		$t =  ( $gmt ) ? gmdate( 'Y-m-d H:i:s' ) : gmdate( 'Y-m-d H:i:s', ( time() + ( get_option( 'gmt_offset' ) * 3600 ) ) );
@@ -780,5 +807,34 @@ class newsmanUtils {
 		return preg_replace_callback('/<img[^>]*\>/i', array($this, 'compileThumbnailsCallback'), $tpl);
 		//return preg_replace_callback('/<img[^>]*?gsfinal[^>]*?\>/i', array($this, 'compileThumbnailsCallback'), $tpl);
 	}
+
+
+	/* --------------------------------------------------------------------------------------------------------- */
+	/* Modified Base64 to create email addres beacon */	
+	/* --------------------------------------------------------------------------------------------------------- */
+
+	public function genTranslationMap() {
+		return str_shuffle($this->base64Map);
+	}
+
+	function encEmail($email) {
+		$o = newsmanOptions::getInstance();
+		return strtr(base64_encode($email), $this->base64Map, $o->get('base64TrMap'));
+	}
+
+	function decEmail($enc_email) {
+		$o = newsmanOptions::getInstance();
+		return base64_decode(strtr($enc_email, $o->get('base64TrMap'), $this->base64Map));
+	}	
+
+	function unsubscribeFromLists($email, $statusStr) {
+		$email = $this->extractEmail($email);
+		$lists = newsmanList::findAll();
+		$opts = '';
+		foreach ($lists as $lst) {
+			$lst->unsubscribe($email, $statusStr);
+		}		
+	}
+
 
 }

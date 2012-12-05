@@ -117,11 +117,9 @@ jQuery(function($){
 		}).done(function(data){
 			var type = data.state ? 'success' : 'error';
 			showMessage(data.msg, 'success');
-			console.log(data);
 		}).fail(function(t, status, message) {
 			var data = JSON.parse(t.responseText);
 			showMessage(data.msg, 'error');
-			console.log(data);
 		});	
 		//*/
 	}
@@ -143,11 +141,9 @@ jQuery(function($){
 		}).done(function(data){
 			var type = data.state ? 'success' : 'error';
 			showMessage(data.msg, 'success');
-			console.log(data);
 		}).fail(function(t, status, message) {
 			var data = JSON.parse(t.responseText);
 			showMessage(data.msg, 'error');
-			console.log(data);
 		});	
 		//*/
 	}
@@ -160,6 +156,10 @@ jQuery(function($){
 			var that = this;
 
 			this.element.appendTo(document.body);
+
+			$(this.element).draggable({
+				handle: '.editor-dialog-title'
+			});
 
 			this.element.hasClass('newsman-editor-dlg');
 
@@ -175,7 +175,7 @@ jQuery(function($){
 			// 	alert('newsmanSave.ckeditor fired!!');
 			// });
 
-			var closeBtn = $('<span class="newsman-editor-dlg-close">&times;</span>').appendTo(this.element);
+			var closeBtn = $('.newsman-editor-dlg-close', this.element);
 
 			closeBtn.click(function(){
 				that.close();
@@ -183,7 +183,12 @@ jQuery(function($){
 
 			this.element.css({ position: 'absolute' });
 
-			$(this.options.edSelector).ckeditor(function(){
+			$(this.options.edSelector).ckeditor({
+				width: 750,
+				height: 400,
+				resize_enabled: true,
+				resize_dir: 'both'
+			},function(){
 				//that.edReady();
 			});
 
@@ -216,7 +221,6 @@ jQuery(function($){
 			this.close();
 		},
 		edReady: function() {
-			console.log('ckeditor Ready');
 
 			this.element.css({
 				position: 'fixed',
@@ -322,19 +326,16 @@ jQuery(function($){
 			var that = this;
 
 			$('.ob-insert-html', this.buttons).click(function(e){
-				console.log(':: insert html');
 				e.preventDefault();
 				that.switchTo('html');
 			});
 
 			$('.ob-insert-image', this.buttons).click(function(e){
-				console.log(':: insert image');
 				e.preventDefault();
 				that.switchTo('image');
 			});
 
 			$('.ob-clear', this.buttons).click(function(e){
-				console.log('::clear');
 				e.preventDefault();
 				that.clear();
 			});						
@@ -437,7 +438,6 @@ jQuery(function($){
 			this.buttons.remove();
 		},
 		destroy: function() {
-			console.log('Destroy called');
 
 			this.unbind();
 
@@ -456,7 +456,6 @@ jQuery(function($){
 		_create: function() {
 			if ( this.element.get(0).nodeName !== 'IMG' ) {
 				//debugger;
-				console.log(':: replaceing...');
 				var attrs = this.getAttrs(),
 					newEl = $('<img />');
 
@@ -511,7 +510,6 @@ jQuery(function($){
 		},
 		_create: function(){
 			if ( this.element.get(0).nodeName === 'IMG' ) {
-				console.log(':: replaceing...');
 				var attrs = this.getAttrs(),
 					newEl = $('<div></div>');
 
@@ -557,7 +555,6 @@ jQuery(function($){
 			var that = this;
 			// opening editor dialog and filling with outlet content
 			$('.ob-edit', this.buttons).click(function(){
-				console.log(':: edit');
 				that.edit();
 			});
 		},
@@ -1026,8 +1023,6 @@ jQuery(function($){
 			s = s.replace(new RegExp(rxStr), '$1'+value+'$3', 'ign');
 			$(style).text(s);
 
-			//console.log(new RegExp(rxStr, 'i').exec(s));
-
 		 	var data = {
 				action: O.actEditStyle,
 				id: NEWSMAN_ENTITY_ID,
@@ -1044,11 +1039,9 @@ jQuery(function($){
 			}).done(function(data){
 				var type = data.state ? 'success' : 'error';
 				showMessage(data.msg, 'success');
-				console.log(data);
 			}).fail(function(t, status, message) {
 				var data = JSON.parse(t.responseText);
 				showMessage(data.msg, 'error');
-				//console.log(data);
 			});	
 			//*/			
 		}			
@@ -1093,7 +1086,6 @@ jQuery(function($){
 				selector: tabDef.selector,
 				onChange: function(selector, name, value) {
 					saveStyleChnage(selector, name, value);
-					//console.log('[CHNAGE EVENT]: %s, %s:%s', selector, name, value);
 				}
 			});
 		}
@@ -1102,8 +1094,6 @@ jQuery(function($){
 		function parseEditables(tabDef, content) {
 			var res, rx = /\/\*@editable\*\/(.*?):\s*(.*?)\s*;/ig;
 			while ( res = rx.exec(content) ) {
-				// console.log(JSON.stringify(tabDef));
-				// console.log('create control: %s: %s', res[1], res[2]);
 				createControl(tabDef, res[1], res[2]);
 				debugControlTypes[res[1]] = '1';
 			}				
@@ -1115,11 +1105,6 @@ jQuery(function($){
 			d.selector = selector;
 
 			parseEditables(d, content);
-
-			// console.log('def: '+def);
-			// console.log('selector: '+selector);
-			// console.log('content: '+content);
-			// console.log('// -----------------');
 		}
 
 		function sanitizeName(name) {
@@ -1211,9 +1196,6 @@ jQuery(function($){
 				}
 				createTabs();
 				initTabs();
-				//$('#sub-tabs').show();
-				// console.log(tabs);
-				// console.log(JSON.stringify(debugControlTypes, null, ' '));
 			}
 			
 		});
