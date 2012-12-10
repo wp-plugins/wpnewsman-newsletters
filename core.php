@@ -21,6 +21,15 @@ require_once('lib/emogrifier.php');
 
 global $newsman_checklist;
 
+function wpnewsmanFilterSchedules($schedules) {
+	$schedules['1min'] = array('interval' => 60, 'display' => __('Every minute', NEWSMAN) );
+
+	return $schedules;
+}
+
+add_filter('cron_schedules', 'wpnewsmanFilterSchedules');
+
+
 function wpnewsman_loaded() {
 	$domain = NEWSMAN;
 	// The "plugin_locale" filter is also used in load_plugin_textdomain()
@@ -65,9 +74,9 @@ class newsman {
 
 	public function __construct() {
 
-		add_filter('cron_schedules', array($this, 'addRecurrences'));	
-
 		add_action('init', array($this, 'onInit'));
+
+		//add_filter('cron_schedules', array($this, 'addRecurrences'));		
 
 		$this->options = newsmanOptions::getInstance();
 		$this->utils = newsmanUtils::getInstance();
@@ -90,6 +99,7 @@ class newsman {
 		add_action('admin_menu', array($this, 'onAdminMenu'));
 		add_action('admin_init', array($this, 'onAdminInit'));
 		add_action('admin_head', array($this, 'onAdminHead'));
+
 		if ( !defined('NEWSMAN_WORKER') ) {
 			add_action('widgets_init', array($this, 'onWidgetsInit') );	
 		}	
@@ -333,7 +343,7 @@ class newsman {
 				}
 				return $this->utils->fancyExcerpt($newsman_loop_post->post_content, $words);
 			} else if ( $post == 'thumbnail' ) {
-				$post_thumbnail_id = get_post_thumbnail_id( $post->ID );
+				$post_thumbnail_id = get_post_thumbnail_id( $newsman_loop_post->ID );
 				$size = 'thumbnail';
 				$attrs = wp_get_attachment_image_src( $post_thumbnail_id, $size, false );
 				$url = $attrs[0];
@@ -527,6 +537,7 @@ class newsman {
 						$s->confirm();
 						$s->save();
 						$this->sendEmail('welcome');
+						$this->notifyAdmin('adminSubscriptionEvent');
 						$this->redirect( $this->getLink('confirmationSucceed', array('u' => $_REQUEST['code'] ) ) );
 					}
 					break;					
@@ -537,6 +548,7 @@ class newsman {
 				case 'unsubscribe':
 					$s->unsubscribe();
 					$s->save();
+					$this->notifyAdmin('adminUnsubscribeEvent');					
 					$this->redirect( $this->getLink('unsubscribeSucceed', array('u' => $_REQUEST['code'] ) ) );					
 					break;
 				case 'update-subscription':
@@ -722,9 +734,9 @@ class newsman {
 			'addressChanged' => array( __('Email address updated', NEWSMAN),'address-changed.txt'),
 			'adminSubscriptionEvent' => array( __('Administrator notification - new subscriber', NEWSMAN), 'admin-subscription-event.txt'),
 			'adminUnsubscribeEvent' => array(  __('Administrator notification - user unsubscribed', NEWSMAN), 'admin-unsubscribe-event.txt'),
-			'confirmation' => array(  __('Subscription confirmation', NEWSMAN), 'confirmation.txt'),
-			'unsubscribe' => array(  __('Unsubscribe notification', NEWSMAN), 'unsubscribe.txt'),
-			'welcome' => array(  __('Welcome letter, thanks for subscribing', NEWSMAN), 'welcome.txt')
+			'confirmation' => array( __('Subscription confirmation', NEWSMAN), 'confirmation.txt'),
+			'unsubscribe' => array( __('Unsubscribe notification', NEWSMAN), 'unsubscribe.txt'),
+			'welcome' => array( __('Welcome letter, thanks for subscribing', NEWSMAN), 'welcome.txt')
 		);
 
 		$tplFileName = NEWSMAN_PLUGIN_PATH."/email-templates/newsman-system/newsman-system.html";
@@ -789,6 +801,10 @@ class newsman {
 		}
 
 		delete_option('newsman_options');
+		delete_option('newsman_version');
+		delete_option('newsman_bh_pid');
+		delete_option('newsman_bh_pid');
+		delete_option('newsman_bh_last_stats');
 	}
 
 
@@ -818,6 +834,19 @@ class newsman {
 		$eml = $this->getEmail($name);
 
 		$this->utils->mail($eml, array(
+			'vars' => $newsman_current_subscriber
+		));
+
+		return $eml;
+	}
+
+	public function notifyAdmin($tplName) {
+		global $newsman_current_subscriber;
+
+		$eml = $this->getEmail($tplName);
+
+		$this->utils->mail($eml, array(
+			'to' => $this->options->get('sender.email'),
 			'vars' => $newsman_current_subscriber
 		));
 
@@ -1066,6 +1095,8 @@ class newsman {
 				$s->unsubscribe();
 				$s->save();
 
+				$this->notifyAdmin('adminUnsubscribeEvent');
+
 				if ( $use_excerpts ) {
 					$this->showActionExcerpt('unsubscribeSucceed');
 				} else {
@@ -1194,7 +1225,7 @@ class newsman {
 			$data .= '<!-- Powered by WPNewsman - http://wpnewsman.com/ -->';			
 		}		
 
-		$data .= '<form '.$clsa_form.' name="newsman-nsltr" action="'.$newsman_form_vars['blog_url'].'" method="post">';
+		$data .= '<form '.$clsa_form.' name="newsman-nsltr" action="'.get_bloginfo('wpurl').'" method="post">';
 
 		$data.= $frm->getForm();
 
@@ -1238,7 +1269,11 @@ class newsman {
 		echo apply_filters('newsman_amend_mode', $mode);
 	}
 
-	public function onAdminInit() {		
+	public function onAdminInit() {
+		if ( $this->utils->isUpdate() ) {
+			wp_redirect(NEWSMAN_BLOG_ADMIN_URL.'admin.php?page=newsman-mailbox&welcome=1');
+		}
+
 		add_meta_box("newsman-et-meta", __('Alternative Plain Text Body', NEWSMAN), array($this, "metaPlainBody"), "newsman_et", "normal", "default");
 	}
 
@@ -1247,6 +1282,7 @@ class newsman {
 	}
 
 	public function onAdminMenu() {
+		global $submenu;
 
 		if ( !current_user_can( 'newsman_wpNewsman' ) ) {
 			return;
@@ -1309,6 +1345,18 @@ class newsman {
 			'newsman-pro', 
 			array($this, 'pagePro')
 		);
+
+		// placing it first in the menu
+		for ($i=0, $c = count($submenu['newsman-mailbox']); $i < $c; $i++) { 
+			if ( $submenu['newsman-mailbox'][$i][2] === 'newsman-settings' ) {
+				$prevPos = $i-1;
+
+				$actionPagesSubmenu = array_splice($submenu['newsman-mailbox'], 0, 1);
+				array_splice($submenu['newsman-mailbox'], $prevPos, 0, $actionPagesSubmenu);
+				break;
+			}
+		}		
+
 	}
 
 	public function reAddExcerptMetabox($post_type, $position, $post) {
@@ -1339,9 +1387,7 @@ class newsman {
 			wp_schedule_event( time(), '1min', 'newsman_mailman_event');
 		}
 
-		//if ( !$this->isInstalled() ) {
-			$this->install();
-		//}
+		$this->install();
 
 		$this->ensureEnvironment();
 
@@ -1396,7 +1442,6 @@ class newsman {
 
 	public function getLink() {
 		
-		global $newsman_form_vars;
 		$pageName = func_get_arg(0);
 		
 		$params = ( func_num_args() == 2 ) ? func_get_arg(1) : array();
@@ -1502,6 +1547,7 @@ class newsman {
 		$this->processPageRequest();
 
 		do_action('newsman_core_loaded');
+
 	}
 
 	public function onInsertPost($post_id, $post = null) {		
@@ -1524,8 +1570,7 @@ class newsman {
 
 	// filters
 
-	public function addRecurrences($schedules) {
-
+	static function addRecurrences($schedules) {
 		$schedules['1min'] = array('interval' => 60, 'display' => __('Every minute', NEWSMAN) );
 
 		return $schedules;
@@ -1565,7 +1610,7 @@ class newsman {
 	// pages
 
 	public function pageOptions() {
-		include 'views/options.php';
+		include 'views/options.php';	
 	}
 
 	public function pageSubscribers() {
@@ -1586,7 +1631,19 @@ class newsman {
 
 	public function pageMailbox() {
 
+		if ( isset($_GET['welcome']) ) {
+			$hideVideo = true;
+			if ( !$this->options->get('hideInitialVideo') ) {
+				$hideVideo = false;
+				$this->options->set('hideInitialVideo', true);
+			}
+
+			include('views/welcome.php');
+			return;
+		}
+
 		$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : false;
+		$page 	= isset($_REQUEST['page']) ? $_REQUEST['page'] : false;
 		$type 	= isset($_REQUEST['type']) ? $_REQUEST['type'] : false;
 		$id 	= isset($_REQUEST['id']) ? $_REQUEST['id'] : false;
 
@@ -1722,7 +1779,6 @@ class newsman {
 		}
 		die();
 	}
-
 
 	public function getEmailToAsOptions() {
 		$options = '';

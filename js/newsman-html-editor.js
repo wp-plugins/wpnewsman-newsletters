@@ -455,7 +455,6 @@ jQuery(function($){
 	$.widget('glock.outletImg', $.glock.outlet, {
 		_create: function() {
 			if ( this.element.get(0).nodeName !== 'IMG' ) {
-				//debugger;
 				var attrs = this.getAttrs(),
 					newEl = $('<img />');
 
@@ -524,7 +523,7 @@ jQuery(function($){
 			}			
 			$.glock.outlet.prototype._create.apply(this, arguments);
 		},
-		getContent: function() {				
+		getContent: function() {			
 			return (this.element && this.element.innerHTML) || null;
 		},
 		setContent: function(newContent) {

@@ -993,3 +993,54 @@ select.map-select {
 	box-sizing: border-box !important;
 }
 
+.newsman-welcome,
+.newsman-welcome p {
+	font-size: 15px;
+}
+
+.newsman-welcome p {
+	line-height: 1.6em;
+	margin: 1em 0;
+
+}
+
+.newsman-welcome h1,
+.newsman-welcome h2,
+.newsman-welcome h3,
+.newsman-welcome h4,
+.newsman-welcome h5 {
+	color: #333;
+}
+
+.newsman-welcome h1 {
+	margin: .2em 200px 0 0;
+	line-height: 1.2em;
+	font-size: 2.8em;
+	font-weight: 200;
+}
+
+.newsman-welcome h3 {
+	font-size: 24px;
+	margin-bottom: 1em;
+}
+
+.newsman-welcome h4 {
+	font-size: 1em;
+	margin: 1.33em 0;
+}
+
+
+.newsman-welcome
+.about-text {
+	color: #777;
+	margin: 1em 200px 0 0;
+	min-height: 60px;
+	font-size: 24px;
+}
+
+.newsman-welcome
+.feature-section {
+	margin-bottom: 1.5em;
+}
+
+

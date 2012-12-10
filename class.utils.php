@@ -186,14 +186,14 @@ class newsmanUtils {
 
 			$mail->addCustomHeader("X-WPNewsman-antispam: ".$this->encEmail($to));
 
-			if ( $opts['ts'] && $opts['ip'] ) {
+			if ( isset($opts['ts']) && isset($opts['ip']) ) {
 				$d = $opts['ts'];
 				$blogurl = get_bloginfo('wpurl');
 				$x_sub = 'Subscribed to '.$blogurl.', on '.$d.', from '.$opts['ip'];
 				$mail->addCustomHeader('X-Subscription: '.$x_sub);
 			}
 
-			if ( $opts['uns_link'] ) {
+			if ( isset($opts['uns_link']) ) {
 				$mail->addCustomHeader('List-Unsubscribe: <'.$opts['uns_link'].'>,<mailto:'.$s['email'].'?subject=unsubscribe;'.$opts['uns_code'].'>');
 			}
 
@@ -835,6 +835,29 @@ class newsmanUtils {
 			$lst->unsubscribe($email, $statusStr);
 		}		
 	}
+
+	/* --------------------------------------------------------------------------------------------------------- */
+	/* Plugin version transformations */	
+	/* --------------------------------------------------------------------------------------------------------- */
+
+	private function versionToNum($ver) {
+		$s = preg_replace('/\D+/', '', $ver);
+		return is_numeric($s) ? intval($s) : 0;
+	}
+
+	public function isUpdate($writeNewVersion = true) {
+		$update = false;
+		$codeVersion = $this->versionToNum(NEWSMAN_VERSION);
+		$storedVersion = $this->versionToNum(get_option('newsman_version'));
+		if ( $codeVersion > $storedVersion ) {
+			$update = true;
+			if ( $writeNewVersion ) {
+				update_option('newsman_version', NEWSMAN_VERSION);
+			}			
+		}
+		return $update;
+	}
+
 
 
 }

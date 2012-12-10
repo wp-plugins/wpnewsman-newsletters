@@ -27,6 +27,8 @@ CKEDITOR.editorConfig = function( config ) {
 
 	//config.toolbar = 'NEWSMAN';
 
+	config.enterMode = CKEDITOR.ENTER_BR;
+	config.shiftEnterMode = CKEDITOR.ENTER_P;	
 
 	// The toolbar groups arrangement, optimized for two toolbar rows.
 	config.toolbarGroups = [

@@ -9,4 +9,4 @@ A contact has joined your mailing list. The contact's details are listed below:
 <p>A contact has joined your mailing list. The contact's details are listed below:</p>
 <ul>[newsman sub="*" tag="li"]</ul>
 <p>--</p>
-<p><a href="[newsman wp='url']/wp-admin/">[newsman wp="url"]/wp-admin/</a> -> GLock Newsletter -> Settings</p>
+<p><a href="[newsman wp='url']/wp-admin/">[newsman wp="url"]/wp-admin/</a> -> WPNewsman -> Settings</p>

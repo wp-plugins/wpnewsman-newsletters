@@ -40,7 +40,10 @@
 							<input type="text" name="newsman-social-googleplus">
 							<label>LinkedIn</label>
 							<input type="text" name="newsman-social-linkedin">
-						</div>				
+						</div>
+<!-- 						<h3><?php _e('Other', NEWSMAN); ?></h3>
+						<label class="checkbox" for="newsman-hideWelcomePage"><input type="checkbox" name="newsman-hideWelcomePage" value="1" /> Hide plugin welcome page.</label>
+ -->						
 					</div>
 					<div class="span4">
 						<!--   			 Info column  			 -->

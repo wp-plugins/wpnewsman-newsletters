@@ -74,7 +74,7 @@
 				<script type="text/javascript">
 					var NEWSMAN_PLUGIN_URL = '<?php echo NEWSMAN_PLUGIN_URL; ?>';
 					var NEWSMAN_ENTITY_ID = '<?php echo $id; ?>';
-					var NEWSMAN_ENT_TYPE = '<?php echo ( $page == "newsman-templates" && $action == "edit" ) ? "template" : "email"  ?>';
+					var NEWSMAN_ENT_TYPE = '<?php echo ( $page == "newsman-templates" && $action == "edit" ) ? "template" : "email";  ?>';
 					var NEWSMAN_ENT_ASSETS = '';
 					var NEWSMAN_ENT_STATUS = '<?php echo isset($email) ? $email->status : ""; ?>';
 					</script>

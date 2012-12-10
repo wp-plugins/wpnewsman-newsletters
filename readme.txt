@@ -1,10 +1,10 @@
 === WPNewsman Lite ===
-Contributors: Alex Ladyga, G-Lock Software
+Contributors: neocoder, G-Lock Software
 Donate Link: http://wpnewsman.com/premium-newsletter-plugin-wordpress/
 Tags: wpnewsman, newsletter, newsletters, newsletter signup, newsletter widget, subscribers, post notification, email subscription, email marketing, email, emailing, subscription
 Requires at least: 3.4
 Tested up to: 3.5
-Stable tag: 1.1.0
+Stable tag: 1.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -117,6 +117,14 @@ We got a User Feedback page where you can [add or vote for new features](http://
 
 == Changelog ==
 
+= 1.1.1 =
+* Fix form list styling ul.newsman-form li
+* removed unused js file
+* enhanced bounced handler
+* tweked blog digest template
+* fixed Send Subscribe/Unsubscribe Event Notifications to Admin option
+* flush rewrite rules on the activation
+
 = 1.1.0 =
 * updated CKEditor to v4
 * added html editor dialog move and resize
@@ -137,6 +145,11 @@ We got a User Feedback page where you can [add or vote for new features](http://
 * First public release. Hello World! 
 
 == Upgrade Notice ==
+
+= 1.1.1 =
+* Fix form list styling ul.newsman-form li
+* fixed Send Subscribe/Unsubscribe Event Notifications to Admin option
+* flush rewrite rules on the activation
 
 = 1.1.0 =
 * updated CKEditor to v4

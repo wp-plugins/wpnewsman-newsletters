@@ -745,7 +745,7 @@ body {
 }
 .wp_bootstrap .radio,
 .wp_bootstrap .checkbox {
-  padding-left: 18px;
+  padding-left: 19px;
 }
 .wp_bootstrap .radio input[type="radio"],
 .wp_bootstrap .checkbox input[type="checkbox"] {
@@ -2342,7 +2342,7 @@ body {
   margin-top: 4px;
 }
 .wp_bootstrap .alert {
-  padding: 8px 35px 8px 14px;
+  padding: 12px 14px 14px 14px;
   margin-bottom: 18px;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
   background-color: #fcf8e3;
