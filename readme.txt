@@ -1,5 +1,5 @@
 === WPNewsman Lite ===
-Contributors: neocoder, G-Lock Software
+Contributors: Alex Ladyga, G-Lock Software
 Donate Link: http://wpnewsman.com/premium-newsletter-plugin-wordpress/
 Tags: wpnewsman, newsletter, newsletters, newsletter signup, newsletter widget, subscribers, post notification, email subscription, email marketing, email, emailing, subscription
 Requires at least: 3.4
@@ -14,9 +14,9 @@ Powerful, easy to use, and easy to custom subscription and newsletter plugin
 
 = Easily add Newsletter Service to your WordPress site =
 
-With WPNewsman you can easily convert your website visitors into newsletter subscribers through double optin subscription forms in widgets, articles and pages, import and manage your lists, create and send beautiful newsletters directly from your WordPress site.
+An email newsletter is one of the most convenient and easy ways to keep in touch with your clients and prospects. With WPNewsman you can easily convert your website visitors into newsletter subscribers through double optin subscription forms in widgets, articles and pages, import and manage your lists, create and send beautiful newsletters directly from your WordPress site.
 
-Check it out! Download right now and free yourself from paying for expensive email campaigns. 
+Check it out! Download Right Now and Take Control of Your Email Campaigns. 
 
 = WPNewsman Pro =
 
