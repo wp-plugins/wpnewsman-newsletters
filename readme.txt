@@ -1,5 +1,5 @@
 === WPNewsman Lite ===
-Contributors: Alex Ladyga, G-Lock Software
+Contributors: Neocoder, G-Lock Software
 Donate Link: http://wpnewsman.com/premium-newsletter-plugin-wordpress/
 Tags: wpnewsman, newsletter, newsletters, newsletter signup, newsletter widget, subscribers, post notification, email subscription, email marketing, email, emailing, subscription
 Requires at least: 3.4

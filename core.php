@@ -1270,10 +1270,6 @@ class newsman {
 	}
 
 	public function onAdminInit() {
-		if ( $this->utils->isUpdate() ) {
-			wp_redirect(NEWSMAN_BLOG_ADMIN_URL.'admin.php?page=newsman-mailbox&welcome=1');
-		}
-
 		add_meta_box("newsman-et-meta", __('Alternative Plain Text Body', NEWSMAN), array($this, "metaPlainBody"), "newsman_et", "normal", "default");
 	}
 
@@ -1631,7 +1627,7 @@ class newsman {
 
 	public function pageMailbox() {
 
-		if ( isset($_GET['welcome']) ) {
+		if ( isset($_GET['welcome']) || $this->utils->isUpdate() ) {
 			$hideVideo = true;
 			if ( !$this->options->get('hideInitialVideo') ) {
 				$hideVideo = false;

@@ -159,7 +159,7 @@
 				<h2 style="color: #B94A48;"><?php _e('Uninstallation', NEWSMAN); ?></h2>
 				<div class="row-fluid">
 					<div class="span8">
-						<div class="alert alert-danger">
+						<div class="alert alert-danger" style="padding: 12px 14px 14px 14px;">
 							<label for="newsman-uninstall-deleteSubscribers" class="checkbox" style="color: #B94A48;"><input name="newsman-uninstall-deleteSubscribers" type="checkbox" value="1"> <?php _e('Delete subscribers\' lists during uninstallation', NEWSMAN); ?></label>
 							<p><?php _e('Checking this option will remove all the subscribers\' data during the plugin uninstallation. Be carefull, there is no undo.', NEWSMAN); ?></p>
 							<div style="text-align: right;">
