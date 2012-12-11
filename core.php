@@ -1270,6 +1270,16 @@ class newsman {
 	}
 
 	public function onAdminInit() {
+
+		$doRedirect = true;
+
+		if ( isset($_REQUEST['action']) && $_REQUEST['action']=='activate-plugin' ) {
+			$doRedirect = false;
+		}
+		if ( $this->utils->isUpdate() && $doRedirect ) {
+			wp_redirect(NEWSMAN_BLOG_ADMIN_URL.'admin.php?page=newsman-mailbox&welcome=1');
+		}
+
 		add_meta_box("newsman-et-meta", __('Alternative Plain Text Body', NEWSMAN), array($this, "metaPlainBody"), "newsman_et", "normal", "default");
 	}
 

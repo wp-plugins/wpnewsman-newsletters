@@ -138,6 +138,7 @@ jQuery(function($){
 			optToArr(opts, ['newsman']);
 
 			var el, cb, f = 'val';
+			debugger;
 
 			for ( name in o ) {
 				f = 'val';
@@ -152,7 +153,7 @@ jQuery(function($){
 				} else {
 					var radios = $('input[name="'+name+'"]').filter('[type="radio"]').removeAttr('checked').length;
 					if ( radios ) {
-						$('input[value="'+o[name]+'"]').attr('checked', 'checked');
+						$('input[name="'+name+'"]').filter('input[value="'+o[name]+'"]').attr('checked', 'checked');
 					} else {
 						$('input[name="'+name+'"], textarea[name="'+name+'"], select[name="'+name+'"]').not('[type="radio"]').val(o[name]);
 						$('input[name="'+name+'"]').filter('[type="hidden"]').change();

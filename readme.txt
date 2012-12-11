@@ -26,7 +26,7 @@ Check it out! Download Right Now and Take Control of Your Email Campaigns.
 
 = Watch this 7 min video to see it in action for yourself =
 
-http://www.youtube.com/watch?v=5loJxnWaOzM
+http://www.youtube.com/watch?v=NhmAfJQH4EU
 
 = Here’s what you get with WPNewsman for WordPress: =
 
