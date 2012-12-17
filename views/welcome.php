@@ -7,7 +7,7 @@
 				<h3>Trying for the First Time?</h3>
 				<div class="feature-section normal">
 					<p>Watch this 7 min video to see it in action (it's dead-simple to use):</p>
-					<p><iframe width="853" height="480" src="http://www.youtube.com/embed/NhmAfJQH4EU?rel=0" frameborder="0" allowfullscreen></iframe></p>
+					<p><iframe width="853" height="480" src="http://www.youtube.com/embed/5loJxnWaOzM?rel=0" frameborder="0" allowfullscreen></iframe></p>
 				</div>
 				<?php endif; ?>
 			</div>
@@ -29,7 +29,7 @@
 			</div>
 			<div class="feature-section row" style="margin-bottom: .5em">
 				<div class="span12">
-					<h3>Keep WPNewsman &amp; WordPress Updated</h3>
+					<h4>Keep WPNewsman &amp; WordPress Updated</h4>
 					<p>For the correct work of the plugin, update WPNewsman and WordPress to the latest versions.</p>
 				</div>			
 			</div>

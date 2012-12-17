@@ -3,7 +3,7 @@
 Plugin Name: G-Lock WPNewsman Lite
 Plugin URI: http://wpnewsman.com
 Description: You get simple yet powerful newsletter solution for WordPress. Now you can easily add double optin subscription forms in widgets, articles and pages, import and manage your lists, create and send beautiful newsletters directly from your WordPress site. You get complete freedom and a lower cost compared to Email Service Providers. Free yourself from paying for expensive email campaigns. WPNewsman plugin updated regularly with new features.
-Version: 1.1.1
+Version: 1.1.2
 Author: Alex Ladyga - G-Lock Software
 Author URI: http://www.glocksoft.com
 */
@@ -28,7 +28,7 @@ Author URI: http://www.glocksoft.com
 //error_reporting(E_ALL);
 
 define('NEWSMAN', 'wpnewsman');
-define('NEWSMAN_VERSION', '1.1.1');
+define('NEWSMAN_VERSION', '1.1.2');
 
 define('NEWSMAN_PLUGIN_URL', get_bloginfo('wpurl').'/'.PLUGINDIR.'/'.basename(dirname(__FILE__)));
 define('NEWSMAN_PLUGIN_PATH', ABSPATH.PLUGINDIR.'/'.basename(dirname(__FILE__)));
@@ -129,16 +129,6 @@ function newsmanCheckCompatibility() {
 		'name'  => __('MCrypt library', NEWSMAN),
 		'help'  => 'MCrypt library is required to securely store your passwords in the database. Read <a href="http://php.net/manual/en/mcrypt.setup.php">how to Install/Configure</a> or contact your hosting provider if you\'re on a shared hosting.'
 	);
-
-
-	// 4. IMAP
-
-	$newsman_checklist[] = array(
-		'passed' => function_exists('imap_open'),
-		'name'	 => __('IMAP module', NEWSMAN),
-		'help'   => 'IMAP module is required for bounce hadler. Read <a href="http://php.net/manual/en/imap.setup.php">how to Install/Configure</a> or contact your hosting provider if you\'re on a shared hosting.'
-	);
-
 
 	/// ----
 

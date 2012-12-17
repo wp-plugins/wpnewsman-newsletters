@@ -182,6 +182,32 @@
 			$this->respond(true, 'success', $res);
 		}
 
+		public function ajSendBugReport() {
+			$utils = newsmanUtils::getInstance();
+
+			$response = $this->param('response');
+			$extra = $this->param('extra');
+
+			$email = 'wpnewsman-reports@glocksoft.com';
+
+			$message = array(
+				'subject' => sprintf(__('WPNEWSMAN Bug Repoport from %s', NEWSMAN), get_bloginfo('wpurl')),
+				'plain' => "$response\n\n$extra"
+			);
+			
+			$res = $utils->mail($message, array(
+				'to' => $email
+			));
+			
+			//----------------------------------------- 
+			
+			if ( $res === true ) {
+				$this->respond(true, sprintf(__('Bug report was sent to %s.', NEWSMAN), $email) );
+			} else {
+				$this->respond(false, $res);
+			}
+		}
+
 		public 	function ajTestMailer() {
 
 			$utils = newsmanUtils::getInstance();

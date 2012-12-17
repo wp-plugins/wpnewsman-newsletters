@@ -1,3 +1,25 @@
+<script>	
+	var NEWSMAN_PHP_VERSION = '<?php echo phpversion(); ?>';
+	var NEWSMAN_VERSION = '<?php echo NEWSMAN_VERSION; ?>';
+</script>
+		<div class="modal dlg" id="newsman-modal-debugmsg" style="display: none;">
+		<div class="modal-header">
+			<button class="close" data-dismiss="modal">×</button>
+			<h3><?php _e('Debug Messages', NEWSMAN); ?></h3>
+		</div>
+		<div class="modal-body">
+			<h4><?php _e('Raw response', NEWSMAN); ?></h4>
+			<textarea id="debug-response"></textarea>
+			<h4><?php _e('Additional info', NEWSMAN); ?></h4>
+			<textarea id="debug-extra-info"></textarea>
+			<label class="alert alert-warn"><?php _e('Note: you can remove all sensitive data before sending bug report.', NEWSMAN); ?></label>
+		</div>
+		<div class="modal-footer">
+			<a class="btn pull-left" mr="send"><?php _e('Send Bug Report', NEWSMAN); ?></a>
+			<a class="btn" mr="cancel"><?php _e('Close', NEWSMAN); ?></a>
+		</div>
+	</div>	
+
 <div class="row-fluid common-footer">
 	<div class="span12">
 		<div class="newsman-links">

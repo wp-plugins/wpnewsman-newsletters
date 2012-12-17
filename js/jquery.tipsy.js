@@ -131,7 +131,6 @@
                 this.$tip = $('<div class="tipsy"></div>').html('<div class="tipsy-arrow"></div><div class="tipsy-inner"></div>');
                 this.$tip.data('tipsy-pointee', this.$element[0]);
                 this.$tip.bind('mouseenter', function(){
-                    debugger;
                     console.log('outTimeout: '+that.outTimeout);
                     clearTimeout(that.outTimeout);
                     that.outTimeout = null;

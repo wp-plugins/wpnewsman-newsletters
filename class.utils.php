@@ -103,7 +103,12 @@ class newsmanUtils {
 		if ( !isset($message['plain']) ) { $message['plain'] = ''; }
 		if ( !isset($message['html']) ) { $message['html'] = ''; }
 
-		$vars = $opts['vars'];
+
+		if ( isset($opts['vars']) ) {
+			$vars = $opts['vars'];
+		} else {
+			$vars = array();
+		}
 
 		$subject = $this->supplant($message['subject'], $vars);
 		$plain = $this->supplant($message['plain'], $vars);

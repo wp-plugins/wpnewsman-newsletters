@@ -1044,3 +1044,19 @@ select.map-select {
 }
 
 
+#newsman-modal-debugmsg .modal-body {
+	height: 300px;
+}
+
+#debug-response,
+#debug-extra-info {
+	width: 520px;
+}
+
+#debug-response {	
+	height: 137px;
+}
+
+#debug-extra-info {
+	height: 55px;	
+}

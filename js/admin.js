@@ -8,7 +8,7 @@ jQuery(function($){
 
 	window.NEWSMAN = {};
 
-	var showMessage = NEWSMAN.showMessage = function(msg, type, cb) {
+	var showMessage = NEWSMAN.showMessage = function(msg, type, cb, rawError) {
 
 		type = type || 'info';
 		var cls = 'alert-'+type;
@@ -19,7 +19,52 @@ jQuery(function($){
 
 		var wrap = $('.wrap.wp_bootstrap');
 
-		var wnd = $('<div class="alert gs-fixed '+cls+'">'+msg+'<a class="close" data-dismiss="alert" href="#">&times;</a></div>').appendTo(wrap);
+		var rawRespLink = '';
+		if ( rawError ) {
+			rawRespLink = ' <a class="view-raw-response" href="#view">Bug report.</a>';
+		}
+
+		var wnd = $('<div class="alert gs-fixed '+cls+'">'+msg+rawRespLink+'<a class="close" data-dismiss="alert" href="#">&times;</a></div>').appendTo(wrap);
+
+		if ( rawError ) {
+			$('.view-raw-response', wnd).click(function(e){
+				e.preventDefault();
+
+				$('#debug-response').val(rawError.responseText);
+
+				var extra = {
+					query: rawError.query,
+					navigator: {
+						platform: navigator.platform,
+						userAgent: navigator.userAgent,
+						language: navigator.language
+					},
+					php: NEWSMAN_PHP_VERSION,
+					newsmanVersion: NEWSMAN_VERSION
+				};
+
+				$('#debug-extra-info').val(JSON.stringify(extra));
+
+				showModal('#newsman-modal-debugmsg', function(mr){
+					if ( mr === 'send' ) {
+						$('.gs-fixed.alert-error').remove();
+						$.ajax({
+							type: 'POST',
+							url: ajaxurl,
+							data: {
+								action: 'newsmanAjSendBugReport',
+								response: $('#debug-response').val(),
+								extra: $('#debug-extra-info').val()
+							}
+						}).done(function(data){
+							showMessage(data.msg, 'success');
+						}).fail(NEWSMAN.ajaxFailHandler);
+					}
+
+				});				
+			});
+		}
+
 		function close() {
 			if ( wnd ) {
 				wnd.remove();
@@ -32,6 +77,20 @@ jQuery(function($){
 			setTimeout(close, 2000);
 		}		
 	};
+
+	NEWSMAN.ajaxFailHandler = function(t, status, message) {
+		var err = status;
+		try {
+			var data = JSON.parse(t.responseText);
+			err = data.msg;
+		} catch(e) {
+			err = 'Cannot parse server response.';
+		}
+		showMessage(err, 'error', null, {
+			responseText: t.responseText,
+			query: this.data
+		});
+	};	
 
 	var showLoading = NEWSMAN.showLoading = function(str) {
 		if ( $('#gs-loading-msg').get(0) ) { return; }
@@ -138,7 +197,6 @@ jQuery(function($){
 			optToArr(opts, ['newsman']);
 
 			var el, cb, f = 'val';
-			debugger;
 
 			for ( name in o ) {
 				f = 'val';
@@ -169,9 +227,7 @@ jQuery(function($){
 				callback();
 			}
 
-		}).fail(function(t, status, message) {
-			//console.log(arguments);
-		});			
+		}).fail(NEWSMAN.ajaxFailHandler);			
 	}
 
 
@@ -209,10 +265,7 @@ jQuery(function($){
 							window.location = data.redirect;
 						}						
 					}, 500);
-				}).fail(function(xhr){
-					var data = JSON.parse(xhr.responseText);
-					showMessage(data.msg, 'error');
-				});
+				}).fail(NEWSMAN.ajaxFailHandler);
 			}
 		});
 	});
@@ -532,10 +585,7 @@ jQuery(function($){
 				showMessage(data.msg, 'success');
 				done();
 				that.reset();
-			}).fail(function(xhr){
-				var r = xhr.responseText;
-				showMessage(r, 'error');
-			});
+			}).fail(NEWSMAN.ajaxFailHandler);
 		},
 		reset: function() {
 			this.showInfo('selectFile');
@@ -668,10 +718,7 @@ jQuery(function($){
 				that.currentHeader = data.header;
 				that._buildTable();
 
-			}).fail(function(t){
-				var data = JSON.parse(t.responseText);
-				showMessage(data.msg, 'error');
-			});
+			}).fail(NEWSMAN.ajaxFailHandler);
 
 		},
 		addFile: function(obj) {
@@ -867,9 +914,7 @@ jQuery(function($){
 				}).done(function(data){
 					iform.importForm('setFormFields', data.fields);
 
-				}).fail(function(xhr){
-					showMessage(newsmanL10n.error+xhr.responseText);
-				});
+				}).fail(NEWSMAN.ajaxFailHandler);
 			}
 
 
@@ -888,10 +933,7 @@ jQuery(function($){
 				$(data.files).each(function(i, file){
 					iform.importForm('addUploadedFile', { fileName: file });
 				});
-			}).fail(function(t, status, message) {
-				var data = JSON.parse(t.responseText);
-				showMessage(data.msg, 'error');
-			});
+			}).fail(NEWSMAN.ajaxFailHandler);
 
 			var sel = $('#newsman-lists').get(0);
 
@@ -924,10 +966,7 @@ jQuery(function($){
 
 						getSubscribers();
 
-					}).fail(function(t, status, message) {
-						var data = JSON.parse(t.responseText);
-						showMessage(data.msg, 'error');
-					}).always(function(){
+					}).fail(NEWSMAN.ajaxFailHandler).always(function(){
 						hideLoading();
 					});
 				}
@@ -958,10 +997,7 @@ jQuery(function($){
 
 						getSubscribers();
 
-					}).fail(function(t, status, message) {
-						var data = JSON.parse(t.responseText);
-						showMessage(data.msg, 'error');
-					});
+					}).fail(NEWSMAN.ajaxFailHandler);
 				}
 				return true;
 			});
@@ -1011,10 +1047,7 @@ jQuery(function($){
 							showMessage(newsmanL10n.youHaveSuccessfullyUnsubscribedSelectedSubs, 'success');
 							getSubscribers();
 
-						}).fail(function(t, status, message) {
-							var data = JSON.parse(t.responseText);
-							showMessage(data.msg, 'error');
-						});
+						}).fail(NEWSMAN.ajaxFailHandler);
 						
 					}
 					return true;
@@ -1052,10 +1085,7 @@ jQuery(function($){
 
 							getSubscribers();
 
-						}).fail(function(t, status, message) {
-							var data = JSON.parse(t.responseText);
-							showMessage(data.msg, 'error');
-						});						
+						}).fail(NEWSMAN.ajaxFailHandler);
 					}
 					return true;
 				});				
@@ -1091,10 +1121,7 @@ jQuery(function($){
 
 							getSubscribers();
 
-						}).fail(function(t, status, message) {
-							var data = JSON.parse(t.responseText);
-							showMessage(data.msg, 'error');
-						});
+						}).fail(NEWSMAN.ajaxFailHandler);
 					}
 					return true;
 				});
@@ -1130,10 +1157,7 @@ jQuery(function($){
 
 							getSubscribers();
 
-						}).fail(function(t, status, message) {
-							var data = JSON.parse(t.responseText);
-							showMessage(data.msg, 'error');
-						});
+						}).fail(NEWSMAN.ajaxFailHandler);
 					}
 					return true;
 				});
@@ -1165,14 +1189,9 @@ jQuery(function($){
 
 							showMessage(newsmanL10n.youHaveSuccessfullySentConfirmation, 'success');
 
-						}).fail(function(t, status, message) {
-							var data = JSON.parse(t.responseText);
-							showMessage(data.msg, 'error');
-						});
-						return true;
-					} else {
-						return true;
+						}).fail(NEWSMAN.ajaxFailHandler);
 					}
+					return true;
 				});
 
 			}
@@ -1222,9 +1241,10 @@ jQuery(function($){
 	 			$('#newsman-subs-unsubscribed').text(newsmanL10n.unsubscribedSubs.replace('#', cnt.unsubscribed));
 	 		}
 
-	 		function noData() {
+	 		function noData(err) {
+	 			var msg = err || newsmanL10n.noSubsYet;
 	 			var tbody = $('#newsman-mgr-subscribers tbody').empty();
-	 			$('<tr><td colspan="6" class="blank-row">'+newsmanL10n.noSubsYet+'</td></tr>').appendTo(tbody);
+	 			$('<tr><td colspan="6" class="blank-row">'+msg+'</td></tr>').appendTo(tbody);
 	 		}
 
 	 		function showLoading() {
@@ -1313,10 +1333,10 @@ jQuery(function($){
 				fillRows(data.rows);
 				renderPagination(data.count);
 
-			}).fail(function(t, status, message) {
-				var data = JSON.parse(t.responseText);
-				showMessage(data.msg, 'error');
-			});	 		
+			}).fail(function(){
+				noData('Some error occurred.');
+				NEWSMAN.ajaxFailHandler.apply(this, arguments);
+			});
 	 	}
 
 
@@ -1443,9 +1463,7 @@ jQuery(function($){
 			}).done(function(data){
 				var type = data.state ? 'success' : 'error';
 				showMessage(data.msg, type);
-			}).fail(function(t, status, message) {
-				showMessage(message, 'error');
-			});
+			}).fail(NEWSMAN.ajaxFailHandler);
 		}
 
 
@@ -1479,10 +1497,7 @@ jQuery(function($){
 			}).done(function(data){
 				var type = data.state ? 'success' : 'error';
 				showMessage(data.msg, 'success');
-			}).fail(function(t, status, message) {
-				var data = JSON.parse(t.responseText);
-				showMessage(data.msg, 'error');
-			}).always(function(){
+			}).fail(NEWSMAN.ajaxFailHandler).always(function(){
 				btn.text(txt).removeAttr('disabled');
 			});
 		});
@@ -1518,10 +1533,7 @@ jQuery(function($){
 					$('#newsman_form_'+p).val(data.list[p]);
 				}
 
-			}).fail(function(t, status, message) {
-				var data = JSON.parse(t.responseText);
-				showMessage(data.msg, 'error');
-			});	 
+			}).fail(NEWSMAN.ajaxFailHandler);	 
 
 		}
 
@@ -1553,10 +1565,7 @@ jQuery(function($){
 
 				showMessage(data.msg, 'success');
 
-			}).fail(function(t, status, message) {
-				var data = JSON.parse(t.responseText);
-				showMessage(data.msg, 'error');
-			});	 
+			}).fail(NEWSMAN.ajaxFailHandler);
 
 
 		}
@@ -1658,10 +1667,7 @@ jQuery(function($){
 						window.location = data.redirect;
 					}					
 				});
-			}).fail(function(t) {
-				var data = JSON.parse(t.responseText);
-				showMessage(data.msg, 'error');
-			});			
+			}).fail(NEWSMAN.ajaxFailHandler);
 
 		}
 
@@ -1685,10 +1691,7 @@ jQuery(function($){
 					NEWSMAN_ENTITY_ID = data.id;
 				}
 				done();
-			}).fail(function(t, status, message) {
-				var data = JSON.parse(t.responseText);
-				showMessage(data.msg, 'error');
-			});
+			}).fail(NEWSMAN.ajaxFailHandler);
 		}
 
 		$('#newsman-send-datepicker').datetimepicker({
@@ -1833,10 +1836,7 @@ jQuery(function($){
 						return true;
 					});
 
-				}).fail(function(t, status, message) {
-					var data = JSON.parse(t.responseText);
-					showMessage(data.msg, 'error');
-				});					
+				}).fail(NEWSMAN.ajaxFailHandler);
 			}
 
 			var refreshTimer = null;
@@ -1873,10 +1873,7 @@ jQuery(function($){
 
 					runPolling();
 
-				}).fail(function(t, status, message) {
-					var data = JSON.parse(t.responseText);
-					showMessage(data.msg, 'error');
-				});	 				
+				}).fail(NEWSMAN.ajaxFailHandler);
 			}
 
 			function formatStatus(st, date) {
@@ -2058,10 +2055,7 @@ jQuery(function($){
 
 					runPolling();
 
-				}).fail(function(t, status, message) {
-					var data = JSON.parse(t.responseText);
-					showMessage(data.msg, 'error');
-				});	 		
+				}).fail(NEWSMAN.ajaxFailHandler);
 			}
 
 
@@ -2103,10 +2097,7 @@ jQuery(function($){
 				}).done(function(data){
 					showMessage(newsmanL10n.youHaveSuccessfullyStoppedSending, 'success');
 					getEmails();
-				}).fail(function(t, status, message) {
-					var data = JSON.parse(t.responseText);
-					showMessage(data.msg, 'error');
-				});
+				}).fail(NEWSMAN.ajaxFailHandler);
 			});
 
 			$('#newsman-btn-resume').click(function(e){
@@ -2127,10 +2118,7 @@ jQuery(function($){
 				}).done(function(data){
 					showMessage(data.msg, 'success');
 					getEmails();
-				}).fail(function(t, status, message) {
-					var data = JSON.parse(t.responseText);
-					showMessage(data.msg, 'error');
-				});
+				}).fail(NEWSMAN.ajaxFailHandler);
 			});
 
 			$('#btn-compose').click(function(e){
@@ -2164,10 +2152,7 @@ jQuery(function($){
 					//fillRows(data.rows);
 					// renderPagination(data.count);
 
-				}).fail(function(t, status, message) {
-					var data = JSON.parse(t.responseText);
-					showMessage(data.msg, 'error');
-				});	 				
+				}).fail(NEWSMAN.ajaxFailHandler);
 
 				showModal('#newsman-modal-compose', function(mr){
 					return true;
@@ -2198,10 +2183,7 @@ jQuery(function($){
 								showMessage(newsmanL10n.youHaveSuccessfullyDeletedSelectedEmails, 'success');
 								getEmails();
 
-							}).fail(function(t, status, message) {
-								var data = JSON.parse(t.responseText);
-								showMessage(data.msg, 'error');
-							});
+							}).fail(NEWSMAN.ajaxFailHandler);
 						}
 
 					});
@@ -2267,10 +2249,7 @@ jQuery(function($){
 						showMessage('Some error occured. temaplte id is '+data.id, 'error');
 					}
 
-				}).fail(function(t, status, message) {
-					var data = JSON.parse(t.responseText);
-					showMessage(data.msg, 'error');
-				});	 					
+				}).fail(NEWSMAN.ajaxFailHandler);
 			}
 
 			function showNewTplDialog() {
@@ -2369,10 +2348,7 @@ jQuery(function($){
 
 								getTemplates();
 
-							}).fail(function(t, status, message) {
-								var data = JSON.parse(t.responseText);
-								showMessage(data.msg, 'error');
-							});							
+							}).fail(NEWSMAN.ajaxFailHandler);
 						}
 						return true;
 					});				
@@ -2476,10 +2452,7 @@ jQuery(function($){
 					fillRows(data.rows);
 					// renderPagination(data.count);
 
-				}).fail(function(t, status, message) {
-					var data = JSON.parse(t.responseText);
-					showMessage(data.msg, 'error');
-				});	 		
+				}).fail(NEWSMAN.ajaxFailHandler);
 			}
 
 
@@ -2602,10 +2575,7 @@ jQuery(function($){
 						window.location = data.redirect;
 					}					
 				});
-			}).fail(function(t) {
-				var data = JSON.parse(t.responseText);
-				showMessage(data.msg, 'error');
-			});
+			}).fail(NEWSMAN.ajaxFailHandler);
 		});
 
 		function setPostTemaplateType(callback) {
@@ -2668,10 +2638,7 @@ jQuery(function($){
 
 							postsSelector.clearSelection();
 
-						}).fail(function(t, status, message) {
-							var data = JSON.parse(t.responseText);
-							showMessage(data.msg, 'error');
-						}).always(function(){
+						}).fail(NEWSMAN.ajaxFailHandler).always(function(){
 							hideLoading();
 						});
 					});					
@@ -2708,10 +2675,7 @@ jQuery(function($){
 					}
 				}).editorDialog('setData', html)
 				  .editorDialog('open');				
-			}).fail(function(t, status, message) {
-				var data = JSON.parse(t.responseText);
-				showMessage(data.msg, 'error');
-			});			
+			}).fail(NEWSMAN.ajaxFailHandler);
 		}
 
 		function saveParticleSource(newContent) {
@@ -2728,10 +2692,7 @@ jQuery(function($){
 				}
 			}).done(function(data){
 				showMessage(data.msg, 'success');
-			}).fail(function(t, status, message) {
-				var data = JSON.parse(t.responseText);
-				showMessage(data.msg, 'error');
-			});
+			}).fail(NEWSMAN.ajaxFailHandler);
 		}
 
 		$('#btn-edit-postblock').click(function(e){
@@ -2797,10 +2758,7 @@ jQuery(function($){
 
 				done(lists);
 
-			}).fail(function(t, status, message) {
-				var data = JSON.parse(t.responseText);
-				showMessage(data.msg, 'error');
-			});	 						
+			}).fail(NEWSMAN.ajaxFailHandler);
 		}
 	});
 
@@ -2823,10 +2781,7 @@ jQuery(function($){
 				key: 'to',
 				value: items
 			}
-		}).fail(function(t, status, message) {
-			var data = JSON.parse(t.responseText);
-			showMessage(data.msg, 'error');
-		});
+		}).fail(NEWSMAN.ajaxFailHandler);
 	});	
 
 
@@ -2855,10 +2810,7 @@ jQuery(function($){
 					}
 				}).done(function(data){
 					showMessage(data.msg, 'success');
-				}).fail(function(t, status, message) {
-					var data = JSON.parse(t.responseText);
-					showMessage(data.msg, 'error');
-				}).always(function(){
+				}).fail(NEWSMAN.ajaxFailHandler).always(function(){
 					$('.modal-loading-block', that).hide();
 					$('.btn[mr="ok"]', that).removeAttr('disabled');
 				});		

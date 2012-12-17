@@ -144,13 +144,13 @@ class newsmanList extends newsmanStorable {
 		if ( $ext ) {
 			// today confirmed
 			$sql = "select count(*) from $this->tblSubscribers where status = ".NEWSMAN_SS_CONFIRMED." and DATE(ts) = CURDATE()";
-			$res = $wpdb->get_var($wpdb->prepare($sql));
+			$res = $wpdb->get_var($sql);
 			$stats['confirmedToday'] = $res ? $res : 0; 
 
 
 			// yesterday confirmed
 			$sql = "select count(*) from $this->tblSubscribers where status = ".NEWSMAN_SS_CONFIRMED." and DATE(ts) = DATE_SUB(CURDATE(),INTERVAL 1 DAY)";
-			$res = $wpdb->get_var($wpdb->prepare($sql));
+			$res = $wpdb->get_var($sql);
 			$stats['confirmedYesterday'] = $res ? $res : 0;
 		}
 

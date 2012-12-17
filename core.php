@@ -40,7 +40,9 @@ function wpnewsman_loaded() {
 }
 add_action('plugins_loaded', 'wpnewsman_loaded');
 
-mb_internal_encoding("UTF-8");
+if ( function_exists('mb_internal_encoding') ) {
+	mb_internal_encoding("UTF-8");
+}
 $loc = "UTF-8";
 putenv("LANG=$loc");
 $loc = setlocale(LC_ALL, $loc);
