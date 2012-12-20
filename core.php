@@ -1247,8 +1247,6 @@ class newsman {
 
 		if ( !get_option('newsman_code') ) {
 			$data .= '<p style="font-size:x-small; line-height:1.5em;">Powered by WPNewsman</p>';		
-			$data .= '<noscript><a href="http://wpnewsman.com/">G-Lock WPNewsman plugin</a></noscript>';
-			$data .= '<!-- / G-Lock WPNewsman plugin. -->';
 		}
 		
 		if ($print) {

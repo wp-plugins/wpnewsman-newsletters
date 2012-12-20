@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the G-Lock WPNewsman Lite package.
 msgid ""
 msgstr ""
-"Project-Id-Version: G-Lock WPNewsman Lite 1.1.2\n"
+"Project-Id-Version: G-Lock WPNewsman Lite 1.1.3\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/wpnewsman\n"
 "POT-Creation-Date: 2012-12-17 10:01:21+00:00\n"
 "MIME-Version: 1.0\n"
