@@ -113,7 +113,7 @@
 							<select name="" id="newsman-content-type">
 								<option value="full"><?php _e('Full post'); ?></option>
 								<option value="excerpt"><?php _e('Excerpt'); ?></option>
-								<option value="fancy"><?php _e('Fancy excerpt'); ?></option>
+								<option value="fancy" selected="selected"><?php _e('Fancy excerpt'); ?></option>
 							</select>
 						</label>
 						<h3 id="posts-counter"><?php _e('No posts selected'); ?></h3>

@@ -11,9 +11,9 @@ require_once('class.utils.php');
 class NEWSMAN_Widget_Form extends WP_Widget {
 
 	function __construct() {
-		$widget_ops = array('classname' => 'newsman-widget', 'description' => __('wpNewsman Subscription form for your newsletters'));
+		$widget_ops = array('classname' => 'newsman-widget', 'description' => __('WPNewsman Subscription form for your newsletters'));
 		$control_ops = array('width' => 400, 'height' => 350);
-		parent::__construct('newsman-form', __('Newsletter Subscription Form'), $widget_ops);
+		parent::__construct('newsman-form', __('WPNewsletter Subscription Form'), $widget_ops);
 	}
 
 	function widget( $args, $instance ) {
@@ -29,14 +29,15 @@ class NEWSMAN_Widget_Form extends WP_Widget {
 
 		$list = newsmanList::findOne('id = %d', array($listId));
 
+		$form = new newsmanForm($listId);
 
 		echo $before_widget;
 
-		$title = apply_filters( 'widget_title', $list->title );
+		$title = apply_filters( 'widget_title', $form->title );
 
 		if ( ! empty( $title ) ) {
 			echo $before_title ? $before_title : '<h3>';
-			echo $list->title;
+			echo $title;
 			echo $after_title ? $after_title : '</h3>';
 		}
 

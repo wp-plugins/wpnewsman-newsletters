@@ -48,6 +48,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 			$('option', this.element).each(function(i, el){
 				that.options.preFillItems.push( $(el).attr('value') );
+				$(el).hide();
 			});
 
 			if ( !$('.multis-items', this.element).get(0) ) {

@@ -1,544 +1,349 @@
 jQuery(function($){
 
+	function fieldName(str) {
+		return str.replace(/\W+$/ig, '').replace(/\W+/ig, '-').toLowerCase();
+	}	
 
-	$.widget('newsman.newsmanFormElement', {
-		options: {
-			useInlineLabels: false,
-			optionsContainer: null,
-			formItem: null
-		},
-		_create: function() {
-			this.formItem = $(this.options.formItem);
+	var form2 = {
+		useInlineLabels: true,
+		elements: [
+			{ type: 'title', value: 'Subscription' },
+			{ type: 'html', value: 'Enter your primary email address to get our free newsletter.' },
+			{ type: "text",  label: "First Name", name: "first-name", value: "" },
+			{ type: "text",  label: "Last Name", name: "last-name", value: "" },
+			{ type: "email", label: "Email", name:"email", value:"", required: true },
+			{ type: "radio", label: "Choose an option", name:"choose-an-option", checked: 'new-option-2', children: [
+				{ label: "new option 1", value: "new-option-1" },
+				{ label: "new option 2", value: "new-option-2" }
+			]},
+			{ type: "select", label: "Please select", name:"please-select", selected: 'option-2', children: [
+				{ label: 'option 1', value: 'option-1' },
+				{ label: 'option 2', value: 'option-2' },
+				{ label: 'option 3', value: 'option-3' }
+			]},
+			{ type: "radio", label: "Choose an option", name:"choose-an-option-two", checked: 'new-option-3', children: [
+				{ value: "new-option-3", label: "new option 3" },
+				{ value: "new-option-4", label: "new option 4" }
+			]},			
+			{ type: "checkbox", label: "Check me", name:"check-me", checked: false, value: "1" },
+			{ type: "submit",   value: "Subscribe", size: 'small', color: 'gray', style: 'rounded' },
+			{ type: 'html', value: 'You can leave the list at any time. Removal instructions are included in each message.' }
+		]
+	};
 
-			// 'use-inline-labels'
 
-			this.options.useInlineLabels = !!this.formItem.find('input').attr('placeholder');
+	// Option elements
 
-			this.optionsContainer = $(this.options.optionsContainer);
-			this.optionsEl = $('<div class="alert newsman-field-options">');
+	var defaultOptionsLists = {
+		countries: { "null": "Select country", "AF":"Afghanistan", "AX":"&Aring;land Islands", "AL":"Albania", "DZ":"Algeria", "AS":"American Samoa", "AD":"Andorra", "AO":"Angola", "AI":"Anguilla", "AQ":"Antarctica", "AG":"Antigua and Barbuda", "AR":"Argentina", "AM":"Armenia", "AW":"Aruba", "AU":"Australia", "AT":"Austria", "AZ":"Azerbaijan", "BS":"Bahamas", "BH":"Bahrain", "BD":"Bangladesh", "BB":"Barbados", "BY":"Belarus", "BE":"Belgium", "BZ":"Belize", "BJ":"Benin", "BM":"Bermuda", "BT":"Bhutan", "BO":"Bolivia, Plurinational State of", "BA":"Bosnia and Herzegovina", "BW":"Botswana", "BV":"Bouvet Island", "BR":"Brazil", "IO":"British Indian Ocean Territory", "BN":"Brunei Darussalam", "BG":"Bulgaria", "BF":"Burkina Faso", "BI":"Burundi", "KH":"Cambodia", "CM":"Cameroon", "CA":"Canada", "CV":"Cape Verde", "KY":"Cayman Islands", "CF":"Central African Republic", "TD":"Chad", "CL":"Chile", "CN":"China", "CX":"Christmas Island", "CC":"Cocos (Keeling) Islands", "CO":"Colombia", "KM":"Comoros", "CG":"Congo", "CD":"Congo, the Democratic Republic of the", "CK":"Cook Islands", "CR":"Costa Rica", "CI":"C&ocirc;te d'Ivoire", "HR":"Croatia", "CU":"Cuba", "CY":"Cyprus", "CZ":"Czech Republic", "DK":"Denmark", "DJ":"Djibouti", "DM":"Dominica", "DO":"Dominican Republic", "EC":"Ecuador", "EG":"Egypt", "SV":"El Salvador", "GQ":"Equatorial Guinea", "ER":"Eritrea", "EE":"Estonia", "ET":"Ethiopia", "FK":"Falkland Islands (Malvinas)", "FO":"Faroe Islands", "FJ":"Fiji", "FI":"Finland", "FR":"France", "GF":"French Guiana", "PF":"French Polynesia", "TF":"French Southern Territories", "GA":"Gabon", "GM":"Gambia", "GE":"Georgia", "DE":"Germany", "GH":"Ghana", "GI":"Gibraltar", "GR":"Greece", "GL":"Greenland", "GD":"Grenada", "GP":"Guadeloupe", "GU":"Guam", "GT":"Guatemala", "GG":"Guernsey", "GN":"Guinea", "GW":"Guinea-Bissau", "GY":"Guyana", "HT":"Haiti", "HM":"Heard Island and McDonald Islands", "VA":"Holy See (Vatican City State)", "HN":"Honduras", "HK":"Hong Kong", "HU":"Hungary", "IS":"Iceland", "IN":"India", "ID":"Indonesia", "IR":"Iran, Islamic Republic of", "IQ":"Iraq", "IE":"Ireland", "IM":"Isle of Man", "IL":"Israel", "IT":"Italy", "JM":"Jamaica", "JP":"Japan", "JE":"Jersey", "JO":"Jordan", "KZ":"Kazakhstan", "KE":"Kenya", "KI":"Kiribati", "KP":"Korea, Democratic People's Republic of", "KR":"Korea, Republic of", "KW":"Kuwait", "KG":"Kyrgyzstan", "LA":"Lao People's Democratic Republic", "LV":"Latvia", "LB":"Lebanon", "LS":"Lesotho", "LR":"Liberia", "LY":"Libyan Arab Jamahiriya", "LI":"Liechtenstein", "LT":"Lithuania", "LU":"Luxembourg", "MO":"Macao", "MK":"Macedonia, the former Yugoslav Republic of", "MG":"Madagascar", "MW":"Malawi", "MY":"Malaysia", "MV":"Maldives", "ML":"Mali", "MT":"Malta", "MH":"Marshall Islands", "MQ":"Martinique", "MR":"Mauritania", "MU":"Mauritius", "YT":"Mayotte", "MX":"Mexico", "FM":"Micronesia, Federated States of", "MD":"Moldova, Republic of", "MC":"Monaco", "MN":"Mongolia", "ME":"Montenegro", "MS":"Montserrat", "MA":"Morocco", "MZ":"Mozambique", "MM":"Myanmar", "NA":"Namibia", "NR":"Nauru", "NP":"Nepal", "NL":"Netherlands", "AN":"Netherlands Antilles", "NC":"New Caledonia", "NZ":"New Zealand", "NI":"Nicaragua", "NE":"Niger", "NG":"Nigeria", "NU":"Niue", "NF":"Norfolk Island", "MP":"Northern Mariana Islands", "NO":"Norway", "OM":"Oman", "PK":"Pakistan", "PW":"Palau", "PS":"Palestinian Territory, Occupied", "PA":"Panama", "PG":"Papua New Guinea", "PY":"Paraguay", "PE":"Peru", "PH":"Philippines", "PN":"Pitcairn", "PL":"Poland", "PT":"Portugal", "PR":"Puerto Rico", "QA":"Qatar", "RE":"R&eacute;union", "RO":"Romania", "RU":"Russian Federation", "RW":"Rwanda", "BL":"Saint Barth&eacute;lemy", "SH":"Saint Helena, Ascension and Tristan da Cunha", "KN":"Saint Kitts and Nevis", "LC":"Saint Lucia", "MF":"Saint Martin (French part)", "PM":"Saint Pierre and Miquelon", "VC":"Saint Vincent and the Grenadines", "WS":"Samoa", "SM":"San Marino", "ST":"Sao Tome and Principe", "SA":"Saudi Arabia", "SN":"Senegal", "RS":"Serbia", "SC":"Seychelles", "SL":"Sierra Leone", "SG":"Singapore", "SK":"Slovakia", "SI":"Slovenia", "SB":"Solomon Islands", "SO":"Somalia", "ZA":"South Africa", "GS":"South Georgia and the South Sandwich Islands", "ES":"Spain", "LK":"Sri Lanka", "SD":"Sudan", "SR":"Suriname", "SJ":"Svalbard and Jan Mayen", "SZ":"Swaziland", "SE":"Sweden", "CH":"Switzerland", "SY":"Syrian Arab Republic", "TW":"Taiwan, Province of China", "TJ":"Tajikistan", "TZ":"Tanzania, United Republic of", "TH":"Thailand", "TL":"Timor-Leste", "TG":"Togo", "TK":"Tokelau", "TO":"Tonga", "TT":"Trinidad and Tobago", "TN":"Tunisia", "TR":"Turkey", "TM":"Turkmenistan", "TC":"Turks and Caicos Islands", "TV":"Tuvalu", "UG":"Uganda", "UA":"Ukraine", "AE":"United Arab Emirates", "GB":"United Kingdom", "US":"United States", "UM":"United States Minor Outlying Islands", "UY":"Uruguay", "UZ":"Uzbekistan", "VU":"Vanuatu", "VE":"Venezuela, Bolivarian Republic of", "VN":"Viet Nam", "VG":"Virgin Islands, British", "VI":"Virgin Islands, U.S.", "WF":"Wallis and Futuna", "EH":"Western Sahara", "YE":"Yemen", "ZM":"Zambia", "ZW":"Zimbabwe" },
+		states: { "null": "Select state", "AL":"Alabama","AK":"Alaska","AZ":"Arizona","AR":"Arkansas","CA":"California","CO":"Colorado","CT":"Connecticut","DE":"Delaware", "DC": "District of Columbia", "FL":"Florida","GA":"Georgia","HI":"Hawaiʻi","ID":"Idaho","IL":"Illinois","IN":"Indiana","IA":"Iowa","KS":"Kansas","KY":"Kentucky","LA":"Louisiana","ME":"Maine","MD":"Maryland","MA":"Massachusetts","MI":"Michigan","MN":"Minnesota","MS":"Mississippi","MO":"Missouri","MT":"Montana","NE":"Nebraska","NV":"Nevada","NH":"New Hampshire","NJ":"New Jersey","NM":"New Mexico","NY":"New York","NC":"North Carolina","ND":"North Dakota","OH":"Ohio","OK":"Oklahoma","OR":"Oregon","PA":"Pennsylvania","RI":"Rhode Island","SC":"South Carolina","SD":"South Dakota","TN":"Tennessee","TX":"Texas","UT":"Utah","VT":"Vermont","VA":"Virginia","WA":"Washington","WV":"West Virginia","WI":"Wisconsin","WY":"Wyoming"},
+		genders: { "male": "Male", "female": "Female", "wonttell": "Won't tell" }
+	};
 
-			$([
-				'<strong>Field options</strong>',
-				'<br>',
-				'<label for="newsman_fb_field_name">Name:</label>',
-				'<input class="newsman_fb_field_name span2" type="text">'
-			].join('')).appendTo(this.optionsEl);			
-		},
-		_init: function() {
-			var that = this;
-
-			this.formItem.click(function(e){
-				e.preventDefault();
-				that.selectedItem();
-				that.showOptions();
-			});
-
-			// field name
-			$('.newsman_fb_field_name', this.optionsEl).keyup(function(e){
-				var newName = $(this).val();
-				that.setFormElName(newName);
-			});
-
-			$('.close', this.formItem).click(function(e){
-				that.formItem.fadeOut(function(){
-					that.formItem.remove();
-				});
-			});			
-		},
-		selectedItem: function() {
-			var form = this.formItem.closest('.newsman-form');
-			console.log(form.get(0));
-			$('.newsman-form-item', form).removeClass('selected');
-			this.formItem.addClass('selected');
-		},
-		showOptions: function() {
-			this.optionsEl.find('.newsman_fb_field_name').val(this.getFormElName());
-
-			this.optionsContainer.empty();
-			this.optionsEl.appendTo(this.optionsContainer);
-		},
-		setRequired: function(req) {
-			this.formItem[req ? 'addClass' : 'removeClass']('newsman-required');
-		},
-		getRequired: function() {
-			return this.formItem.hasClass('newsman-required');			
-		},
-		getFormElName: function() {
-			var lbl = this.formItem.find('label').get(0)
-			return $(lbl).text();
-		},
-		setFormElName: function(newName) {			
-			var lbl = $('label', this.formItem).get(0),
-				textNode = lbl.childNodes[1] || lbl.childNodes[0];
-			textNode.textContent = newName;
-		},
-		setFormElValue: function(value){
-
-		},
-		setFormElReq: function(required) {
-
-		},
-		updateOptions: function(newOpts) {
-			for ( var p in newOpts ) {
-				this.options[p] = newOpts[p];
-			}
-			if ( this.optionsUpdated ) {
-				this.optionsUpdated();
-			}
-		}
+	$('#newsman_form_g').submit(function(e){
+		e.preventDefault();
+		return false;
 	});
 
-	$.widget('newsman.newsmanFormElementText', $.newsman.newsmanFormElement, {
-		_create: function() {
-			var that = this;
+	function buildForm(formDef) {
+		var that = {},
+			formUl = $('ul.newsman-form').empty().get(0),
+			fbPanel = $('#fb-panel').get(0);
 
-			$.newsman.newsmanFormElement.prototype._create.apply(this, arguments);
+		$(formDef.elements).each(function(i, el){
+			normalizeDefinition(el);
+		});
 
-			// creating options controls
-			
-			$([
-				'<br>',
-				'<label class="checkbox"><input class="required" type="checkbox" name="required"> Required</label>'
-			].join('')).appendTo(this.optionsEl);
-		},
-		_init: function() {
-			var that = this;
-			$.newsman.newsmanFormElement.prototype._init.apply(this, arguments);
+		var viewModel = ko.mapping.fromJS(formDef);
 
-			$('input.required', this.optionsEl).change(function(e){
-				that.setRequired(this.checked);
-			});
-		},
-		showOptions: function() {
-			$.newsman.newsmanFormElement.prototype.showOptions.apply(this, arguments);
+		// adding event handlers to each form element
+		$(viewModel.elements()).each(function(i, el){
+			addHandlers(el);
+		});
 
-			$('input[name="required"]', this.optionsEl).get(0).checked = this.getRequired();
-		},
-		getFormElName: function() {
-			if ( this.options.useInlineLabels ) {
-				return this.formItem.find('input').attr('placeholder');
-			} else {
-				return $.newsman.newsmanFormElement.prototype.getFormElName.apply(this, arguments);
-			}
-		},
-		setFormElName: function(newName) {
-			if ( this.options.useInlineLabels ) {
-				this.formItem.find('input').attr('placeholder', newName);
-			} else {
-				$.newsman.newsmanFormElement.prototype.setFormElName.apply(this, arguments);
-			}
-		},
-		optionsUpdated: function() {
-			var op = this.options.useInlineLabels ? 'hide' : 'show';
-			var lbl = $('label', this.formItem)[op]().text();
-			if ( this.options.useInlineLabels ) {
-				$('input[type="text"], input[type="email"]', this.formItem).attr('placeholder', lbl)
-			} else {
-				$('input[type="text"], input[type="email"]', this.formItem).removeAttr('placeholder');
-			}
-		}		
-	});	
+		function addHandlers(el) {
+			el.fieldName = ko.computed(function() {
+				return this.value ? fieldName(this.value()) : fieldName(this.label());
+			}, el);
 
-	$.widget('newsman.newsmanFormElementCheckbox', $.newsman.newsmanFormElement, {
-		_create: function() {
-			var that = this;
+			var elType = el.type();
 
-			$.newsman.newsmanFormElement.prototype._create.apply(this, arguments);
+			el.removeFormItem = function(formEl) {
+				var idx = viewModel.elements.indexOf(formEl);
+				if ( idx > -1 ) {
+					viewModel.elements.splice(idx, 1);
+				}				
+			};
 
-			// creating options controls
-			
-			$([
-				'<br>',
-				'<label for="newsman_fb_field_value" class="checkbox"><input type="checkbox" class="newsman_fb_field_value"> Default state</label>',
-				'<br>',
-				'<label class="checkbox"><input class="required" type="checkbox" name="required"> Required</label>'
-			].join('')).appendTo(this.optionsEl);
+			if ( elType === 'radio' || elType === 'select' ) {
 
-		},
-		_init: function() {
-			var that = this;
-			$.newsman.newsmanFormElement.prototype._init.apply(this, arguments);
-
-			$('input.required', this.optionsEl).change(function(e){
-				that.setRequired(this.checked);
-			});
-
-			$('input.newsman_fb_field_value', this.optionsEl).change(function(e){
-				$('input[type="checkbox"]', that.formItem)[0].checked = this.checked;
-			});
-		}		
-	});		
-
-	$.widget('newsman.newsmanFormElementRadio', $.newsman.newsmanFormElement, {
-		_create: function() {
-			var that = this;
-
-			$.newsman.newsmanFormElement.prototype._create.apply(this, arguments);
-
-			// creating options controls
-
-			this.optionsEl.addClass('newsman-field-options-radio');
-			
-			$([
-				'<div class="options">',					
-				'</div>',
-				'<button class="btn" type="button"><i class="icon-plus-sign"></i> Add Option</button>',
-				'<br>',
-				'<div class="option-params" style="display: none;">',
-					'<hr>',
-					'<strong>Selected option name</strong>',
-					'<br>',
-					'<input class="newsman_fb_option_name span2" type="text">',
-				'</div>'
-				// '<label class="checkbox"><input class="required" type="checkbox" name="required"> Required</label>'
-			].join('')).appendTo(this.optionsEl);
-
-			$('button', this.optionsEl).click(function(e){
-				that.addlinkedRadio();
-			});
-
-			this.optionsList = $('.options', this.optionsEl);
-
-			this.formItem.find('input[type="radio"]').each(function(i, formRadioEl){
-				that.addlinkedRadio($(formRadioEl).closest('label'));
-			});
-		},
-		_init: function() {
-			$.newsman.newsmanFormElement.prototype._init.apply(this, arguments);
-			var that = this;
-			$('.newsman_fb_field_name', this.optionsEl).change(function(){
-				that.setCommonName();
-			});
-			$('input.required', this.optionsEl).change(function(e){
-				that.setRequired(this.checked);
-			});			
-
-			$('.newsman_fb_option_name', that.optionsEl).keyup(function(e){
-				var newName = $(this).val();
-				that.optionsEl.find('label.radio.selected span').text(newName);
-				that.selectedFormRadioEl.find('span').text(newName);
-			});	
-		},
-		setCommonName: function() {
-			var commonName = safeName( $('.newsman_fb_field_name', this.optionsEl).val() );
-			this.formItem.find('input[type="radio"]').attr('name', commonName);
-			this.optionsList.find('input[type="radio"]').attr('name', 'ed-'+commonName);			
-		},
-		showOptions: function() {
-			$.newsman.newsmanFormElement.prototype.showOptions.apply(this, arguments);
-			this.setCommonName();
-		},
-		addlinkedRadio: function(formRadioEl) {
-			var that = this;
-			var num = this.formItem.find('input[type="radio"]').length+1;
-
-			var commonName = safeName( $('.newsman_fb_field_name', this.optionsEl).val() );
-
-			if ( !formRadioEl ) {
-				formRadioEl = $('<label class="radio"><input type="radio" name="'+commonName+'" value="new-option-'+num+'"><span>new option '+num+'</span></label>').appendTo(this.formItem);
-			} else {
-				formRadioEl = $(formRadioEl);
-			}
-
-			var name = formRadioEl.closest('label').text();
-
-			var edRadio = $('<label class="radio radio-option"><input type="radio" name="ed-'+commonName+'"><span>'+name+'</span><i class="icon-minus-sign newsman-remove-option"></i></label>').appendTo(this.optionsList);
-
-			edRadio.click(function(e){
-				that.optionsEl.find('label.radio').removeClass('selected');
-				edRadio.addClass('selected');
-				that.selectedFormRadioEl = formRadioEl;
-				$('.option-params', that.optionsEl).show();
-				$('.newsman_fb_option_name', that.optionsEl).val(edRadio.find('span').text());
-			});
-
-			var rbOpt  = $('input', edRadio)[0],
-				rbForm = $('input', formRadioEl)[0];
-
-			rbOpt.checked = rbForm.checked;
-
-			$(rbOpt).change(function(e){
-				rbForm.checked = rbOpt.checked;
-			});
-
-			edRadio.find('i').click(function(e){
-				formRadioEl.remove();
-				edRadio.remove();
-			});
-		}
-	});		
-
-	$.widget('newsman.newsmanFormElementSubmit', $.newsman.newsmanFormElement, {
-		_create: function() {
-			var that = this;
-
-			$.newsman.newsmanFormElement.prototype._create.apply(this, arguments);
-
-			// creating options controls
-			
-			$([
-				'<br>',
-				'<label class="checkbox"><input class="required" type="checkbox" name="required"> Required</label>'
-			].join('')).appendTo(this.optionsEl);
-		},
-		getFormElName: function() {
-			return this.formItem.find('input').val();
-		},
-		setFormElName: function(newName) {
-			$('input[type="submit"]', this.formItem).val(newName);
-		}
-	});	
-
-	var selectedItem;
-
-	function getTextNodeValue(el) {
-		if (!el) { return ''; }
-		for (var i = 0; i < el.childNodes.length; i++) {
-			if (el.childNodes[i].nodeType == 3) {
-				return el.childNodes[i].textContent;
-			}
-		}
-	}
-
-
-	function safeName(str) {
-		return str.replace(/\W+$/ig, '').replace(/\W+/ig, '-').toLowerCase();
-	}
-
-	function showOptions() {
-		var type = selectedItem.attr('gstype'),
-			label = getTextNodeValue($('label', selectedItem).get(0)),
-			required = selectedItem.hasClass('required'),
-			value = $('input', selectedItem).val(),
-			foBlock = null;
-
-		$('.newsman-field-options').hide();
-
-		switch ( type ) {
-			case 'radio':
-				foBlock = $('#newsman-field-options-radio').show();
-				$('#newsman-field-options-otitle').show();
-				$('#newsman-field-options-radio .newsman_fb_field_name').val(label);
-
-				var optionsUl =$('#newsman-field-options-radio .options').empty();
-				var name = safeName(label);
-
-				$('label.radio', selectedItem).each(function(i, el){
-					var lbl = getTextNodeValue(el);
-					var chkd = $('input', el).is(':checked') ? 'checked="checked"' : '';
-					$('<label id="ed-'+el.id+'" class="radio radio-option"><input name="ed-'+name+'" '+chkd+' type="radio">'+lbl+' <i class="icon-minus-sign newsman-remove-option"></i></label>').appendTo(optionsUl);
+				$(el.children()).each(function(i){
+					var c = el.children()[i];
+					c.edit = ko.observable(false);
+					c.value = ko.computed(function(){
+						return fieldName(this.label());
+					}, c);
 				});
-				
-				break;
-			case 'text':
-			case 'email':
-				foBlock = $('#newsman-field-options-text').show();
-				$('#newsman-field-options-text .newsman_fb_field_name').val(label);
-				$('#newsman-field-options-text .newsman_fb_field_value').val(value);									
-				break;
-			case 'checkbox':
-				foBlock = $('#newsman-field-options-checkbox').show();
-				$('#newsman-field-options-checkbox .newsman_fb_field_name').val(label);
-				$('#newsman-field-options-checkbox input[type="checkbox"]').get(0).checked = 
-					$('input[type="checkbox"]', selectedItem).is(':checked');
-				break;
 
-			case 'submit':
-				$('#newsman-field-options-submit').show();
-				label = $('input[type="submit"]', selectedItem).val();
-				$('#newsman-field-options-submit .newsman_fb_field_name').val(label);
-				break;
-		}
+				el.loadOptionsList = function(el, ev) { 
+					ev.preventDefault();
 
-		if ( foBlock ) {
-			$('input.required', foBlock).attr('checked', required);
-		}
-	}
+					var listName = $(ev.target).attr('data-list');
 
-	$.widget('newsman.newsmanFormBuilder', {
-		options: {
-			useInlineLabels: false
-		},
-		_create: function() {
-			var that = this;
-			this.formEl = this.element.find('.newsman-form');
+					var convEl = $('<div></div>');
 
-			this.options.useInlineLabels = this.formEl.hasClass('inline-labels');
+					var that = this;
 
-			$('#use-inline-labels').get(0).checked = this.options.useInlineLabels;
+					setTimeout(function() {
+						if ( defaultOptionsLists[listName] ) {
+							var list = defaultOptionsLists[listName];
+							for ( var value in list ) {
+								that._addOption(convEl.html(list[value]).text(), value);
+								//that._addOption(list[value], value);
+							}
+						}						
+					}, 10);
 
-			function setFormOptions (argument) {
-				$('.newsman-form')[that.options.useInlineLabels ? 'addClass' : 'removeClass']('inline-labels');
-			}
-			setFormOptions();
-			
-			$('#use-inline-labels').change(function() {
-				var u = that.options.useInlineLabels = $(this).get(0).checked;
-				that.eachElement('updateOptions', {
-					useInlineLabels: u
-				});
-				setFormOptions();
-			});
-
-			$('.newsman-form-item').each(function(i, el) {
-				var opts = {
-					useInlineLabels: that.options.useInlineLabels,
-					optionsContainer: '#newsman-formbuilder-options',
-					formItem: $(el)
 				};
 
-				switch ( $(el).attr('gstype') ) {
-					case 'text':
-					case 'email':
-						$(el).newsmanFormElementText(opts);
-						break;
-					case 'checkbox':
-						$(el).newsmanFormElementCheckbox(opts);
-						break;
-					case 'radio':
-						$(el).newsmanFormElementRadio(opts);
-						break;
-					case 'submit':
-						$(el).newsmanFormElementSubmit(opts);
-						break;
-				}
-			});
-
-			$('.newsman-form').sortable();
-
-			$('#btn-add-field li').click(function(e){
-				that.addField($(e.target).attr('type'));
-			});
-	
-		},
-		eachElement: function(method, params) {
-			var args = Array.prototype.slice.call(arguments);
-
-			$('.newsman-form-item').each(function(i, el) {
-				switch ( $(el).attr('gstype') ) {
-					case 'text':
-					case 'email':
-						$(el).newsmanFormElementText(method, params);
-						break;
-					case 'checkbox':
-						$(el).newsmanFormElementCheckbox(method, params);
-						break;
-					case 'radio':
-						$(el).newsmanFormElementRadio(method, params);
-						break;
-					case 'submit':
-						$(el).newsmanFormElementSubmit(method, params);
-						break;
-				}
-			});
-		},
-		addField: function(type) {
-			var html = '',
-				inl = this.options.useInlineLabels;
-			switch ( type ) {
-				case 'checkbox':
-					html = ['<li gstype="checkbox" class="newsman-form-item">',
-								'<label class="checkbox">',
-									'<input type="checkbox" name="check-me" value="1">',
-									newsmanL10n.checkMe,
-								'</label>',
-								'<span style="display:none" class="newsman-required-msg cbox">'+newsmanL10n.required+'</span>',
-								'<button class="close">&times;</button>',
-							'</li>'].join('');
-					break;
-				case 'radio':
-					html = [
-						'<li gstype="radio" class="newsman-form-item">',
-							'<label>'+newsmanL10n.chooseAnOption+'</label>',
-							'<span style="display:none;" class="newsman-required-msg radio">'+newsmanL10n.required+'</span>',
-							'<label class="radio"><input type="radio" name="choose_an_option" value="new-option-1"><span>'+newsmanL10n.optionOne+'</span></label>',
-							'<button class="close">×</button>',
-						'</li>'].join('');
-					break;
-				case 'text':
-					html = ['<li gstype="text" class="newsman-form-item">',
-								'<label'+(inl ? ' style="display: none;"': '')+'>'+newsmanL10n.untitled+'</label>',
-								'<input type="text" name="untitled" value="" '+(inl ? 'placeholder="'+newsmanL10n.untitled+'"' : '')+'>',
-								'<span class="newsman-required-msg" style="display:none;">'+newsmanL10n.required+'</span>',
-								'<button class="close">&times;</button>',
-							'</li>'].join('');
-					break;
-			}
-			var el = $(html).appendTo($('ul.newsman-form'));
-
-			var opts = {
-				useInlineLabels: this.options.useInlineLabels,
-				optionsContainer: '#newsman-formbuilder-options',
-				formItem: $(el)
-			};			
-
-			switch ( type ) {
-				case 'text':
-				case 'email':
-					$(el).newsmanFormElementText(opts);
-					break;
-				case 'checkbox':
-					$(el).newsmanFormElementCheckbox(opts);
-					break;
-				case 'radio':
-					$(el).newsmanFormElementRadio(opts);
-					break;
-				case 'submit':
-					$(el).newsmanFormElementSubmit(opts);
-					break;
-			}			
-		},
-		serializeForm: function(dontStore) {
-			var form = { elements: [] };
-			form.useInlineLabels = $('.newsman-form').hasClass('inline-labels');
-
-			$('.newsman-form-builder ul.newsman-form li').each(function(i, el){
-				var lbl = $('label', el).get(0);
-				var elObj = {
-					type: $(el).attr('gstype')
+				el.addOption = function() {
+					this._addOption();
 				};
 
-				if ( $(el).hasClass('newsman-required') ) {
-					elObj.required = true;
+				el._addOption = function(label, value) {
+					label = label || 'new option';
+
+					var c = {
+						label: ko.observable(label),
+						edit: ko.observable(false)
+					};
+
+					value = ko.observable(value) || ko.computed(function(){
+						return fieldName(this.label());
+					}, c);
+
+					c.value = value;
+
+					el.children.push(c);
+				};
+
+				el.removeOption = function(child) {
+					var idx = el.children.indexOf(child);
+
+					if ( idx > -1 ) {
+						el.children.splice(idx, 1);
+					}
 				}
+			}
 
-				if ( lbl ) {
-					elObj.label = getTextNodeValue(lbl);
-					elObj.name = safeName(elObj.label);
-				}
+			if ( elType === 'submit' ) {
+				el.getSubmitClass = function() {
+					var classes = {
+						'newsman-button': false,
 
-				switch ( elObj.type ) {
-					case 'text':
-					case 'submit':
-					case 'email':
-						elObj.value = $('input', el).val();
-						break;
-					case 'checkbox':
-						elObj.checked = $('input', el).is(':checked');
-						elObj.value = '1';
-						break;
-					case 'radio':
-						elObj.children = [];
-						$('label.radio input', el).each(function(i, el){
-							var chld = {}, el = $(this);
-							chld.checked = el.is(':checked');
-							chld.value = el.val();
-							chld.label = $(el).closest('label').find('span').text();
+						'newsman-button-mini': false,
+						'newsman-button-small': false,
+						'newsman-button-medium': false,
+						'newsman-button-large': false,
 
-							elObj.children.push(chld);											
-						});
-						var v = $('label.radio input').val();
-						break;
-				}
+						'newsman-button-brick': false,
+						'newsman-button-pill': false,
+						'newsman-button-rounded': false,
 
+						'newsman-button-gray': false,
+						'newsman-button-pink': false,
+						'newsman-button-blue': false,
+						'newsman-button-green': false,
+						'newsman-button-turquoise': false,
+						'newsman-button-black': false,
+						'newsman-button-darkgray': false,
+						'newsman-button-yellow': false,
+						'newsman-button-purple': false,
+						'newsman-button-darkblue': false
+					};
 
-				form.elements.push(elObj);
-			});	
+					var size =  this.size(),
+						color = this.color(),
+						style = this.style();
 
-			var jsonForm = JSON.stringify(form)
-			
-			return jsonForm;
+					if ( style !== 'none' ) {
+
+						classes['newsman-button'] = true;
+						classes['newsman-button-'+style] = true;
+
+						classes['newsman-button-'+color] = true;
+
+						classes['newsman-button-'+size] = true;
+					}
+
+					return classes;
+				};
+			}
 		}
-	});	
 
+		function normalizeDefinition(el) {
+			el.required = el.required || false;
+			el.active = el.active || false;
+
+			if ( el.type === 'select' ) {
+				el.children = el.children || [];
+			}
+
+			if ( el.type === 'submit' ) {
+				el.size = el.size || 'small';
+				el.style = el.style || 'rounded';
+				el.color = el.color || 'grey';
+			}
+		}
+
+		viewModel.toggleEdit = function(el, e) {
+			var ed = el.edit();
+			el.edit(!ed);
+			if ( !ed ) {				
+				$(e.target).closest('li').find('input[type="text"]').focus();
+			}
+		};
+
+		viewModel.formItemTpl = function(el){
+			var map = {
+				'checkbox': 'tpl-newsman-form-el-checkbox',
+				'text': 	'tpl-newsman-form-el-text',
+				'email': 	'tpl-newsman-form-el-email',
+				'submit': 	'tpl-newsman-form-el-submit',
+				'radio': 	'tpl-newsman-form-el-radio',
+				'select': 	'tpl-newsman-form-el-select',
+				'title': 	'tpl-newsman-form-el-title',
+				'html': 	'tpl-newsman-form-el-html',
+			};
+			return map[el.type()] || 'tpl-newsman-form-el-dummy';
+		};
+
+		viewModel.optionsTpl = function(el) {
+			var map = {
+				'checkbox': 'tpl-newsman-options-checkbox',
+				'text': 	'tpl-newsman-options-text',
+				'email': 	'tpl-newsman-options-text',
+				'submit': 	'tpl-newsman-options-submit',
+				'radio': 	'tpl-newsman-options-radio',
+				'select': 	'tpl-newsman-options-select',
+				'title': 	'tpl-newsman-options-title',
+				'html': 	'tpl-newsman-options-html',
+			};
+
+			return map[el.type()] || 'tpl-newsman-options-dummy';
+		};
+
+		viewModel.elClick = function(el, ev){
+			var els = viewModel.elements();
+			for (var i = 0, l = els.length; i < l; i++) {
+				els[i].active(false);
+			};
+			el.active(true);
+		};
+
+		ko.applyBindings(viewModel, fbPanel);
+
+		that.addFormElement = function(type) {
+
+			var elTemplates = {
+				'text': {
+					type: "text",  label: "Untitled", name: "untitled", value: ""
+				},
+				'checkbox': {
+					type: "checkbox", label: "Untitled checkbox", name:"untitled-checkbox", checked: false, value: "1"
+				},
+				'radio': {
+					type: "radio",
+					label: "Choose an option",
+					name:"choose-an-option",
+					checked: 'option-1',
+					children: [
+						{ label: "option 1", value: "option-1" },
+						{ label: "option 2", value: "option-2" }
+					]
+				},
+				'select': {
+					type: "select",
+					label: "Please select",
+					name:"please-select",
+					selected: 'option-1',
+					children: [
+						{ label: 'option 1', value: 'option-1' },
+						{ label: 'option 2', value: 'option-2' },
+						{ label: 'option 3', value: 'option-3' }
+					]
+				},
+				'submit': {
+					type: "submit", value: "Subscribe", size: 'small', color: 'gray', style: 'rounded'
+				},
+				'title': {
+					type: 'title', value: 'Subscription'
+				},
+				'html': {
+					type: 'html', value: '<p style="line-height:1.5em;">Enter your primary email address to get our free newsletter.</p>'
+				}
+			};
+
+			if ( elTemplates[type] ) {
+
+				var el = JSON.parse(JSON.stringify(elTemplates[type]));
+
+				normalizeDefinition(el);
+
+				var obsEl = ko.mapping.fromJS(el);
+
+				addHandlers(obsEl);
+
+				viewModel.elements.splice( viewModel.elements.length-1, 0, obsEl );
+
+			} else {
+				NEWSMAN.showMessage('Form element type "'+type+'" is not defined.', 'error');
+			}
+
+		};
+
+		that.toJSON = function() {
+			return ko.mapping.toJSON(viewModel);
+		};
+
+		that.toJS = function() {
+			return ko.mapping.toJS(viewModel);
+		};		
+
+		return that;
+	}
+
+	var formString = $('#serialized-form').val(),
+		formObj = {};
+
+	try {		
+		formObj = JSON.parse(formString);
+	} catch(e) {
+	}
+
+	window.newsmanFormBuilder = buildForm(formObj);
+	//window.newsmanFormBuilder = buildForm(form2);
+
+	$('#btn-load-default-form').click(function(){
+
+		var defForm = {
+			useInlineLabels: true,
+			elements: [
+				{ type: 'title', value: 'Subscription' },
+				{ type: 'html', value: 'Enter your primary email address to get our free newsletter.' },
+				{ type: "text",  label: "First Name", name: "first-name", value: "" },
+				{ type: "text",  label: "Last Name", name: "last-name", value: "" },
+				{ type: "email", label: "Email", name:"email", value:"", required: true },
+				{ type: "submit",   value: "Subscribe", size: 'small', color: 'gray', style: 'rounded' },
+				{ type: 'html', value: 'You can leave the list at any time. Removal instructions are included in each message.' }
+			]
+		};
+
+		window.newsmanFormBuilder = buildForm(defForm);		
+	});
+
+	$('#btn-add-field ul a').click(function(e){
+		var type = $(this).attr('type');
+		newsmanFormBuilder.addFormElement(type);
+	});
 });

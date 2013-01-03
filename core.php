@@ -20,6 +20,8 @@ require_once('class.zip.php');
 require_once('lib/emogrifier.php');
 
 global $newsman_checklist;
+global $newsman_error_message;
+global $newsman_success_message;
 
 function wpnewsmanFilterSchedules($schedules) {
 	$schedules['1min'] = array('interval' => 60, 'display' => __('Every minute', NEWSMAN) );
@@ -43,6 +45,7 @@ add_action('plugins_loaded', 'wpnewsman_loaded');
 if ( function_exists('mb_internal_encoding') ) {
 	mb_internal_encoding("UTF-8");
 }
+
 $loc = "UTF-8";
 putenv("LANG=$loc");
 $loc = setlocale(LC_ALL, $loc);
@@ -75,6 +78,9 @@ class newsman {
 	} 
 
 	public function __construct() {
+
+		$newsman_error_message = '';
+		$newsman_success_message = '';
 
 		add_action('init', array($this, 'onInit'));
 
@@ -119,6 +125,8 @@ class newsman {
 		add_filter('gettext', array($this, 'customLabels'));
 		add_filter( 'wp_insert_post_data', array($this, 'actionPagesCommentsOff') );
 
+		add_filter('the_content', array($this, 'pre_content_message'));
+
 		if ( function_exists('add_shortcode') ) {
 			add_shortcode('newsman-form', array($this, 'shortCode'));
 			add_shortcode('newsman', array($this, 'newsmanShortCode'));
@@ -160,6 +168,8 @@ class newsman {
 	}
 
 	// ------------------------------------------------
+
+
 
 	public function actionPagesCommentsOff( $data ) {
 		if ( $data['post_type'] == 'newsman_ap' ) {
@@ -430,7 +440,9 @@ class newsman {
 
 	public function shortCode($attrs) {
 
-		return $this->putForm(false, $attrs['id']);
+		$horizontal = in_array('horizontal', array_values($attrs));
+
+		return $this->putForm(false, $attrs['id'], $horizontal);
 	}
 
 	public function formChangeEmail($attr) {
@@ -538,8 +550,12 @@ class newsman {
 					} else {
 						$s->confirm();
 						$s->save();
-						$this->sendEmail('welcome');
-						$this->notifyAdmin('adminSubscriptionEvent');
+						if ( $this->options->get('sendWelcome') ) {
+							$this->sendEmail('welcome');	
+						}
+						if ( $this->options->get('notifyAdmin') ) {
+							$this->notifyAdmin('adminSubscriptionEvent');	
+						}						
 						$this->redirect( $this->getLink('confirmationSucceed', array('u' => $_REQUEST['code'] ) ) );
 					}
 					break;					
@@ -550,7 +566,14 @@ class newsman {
 				case 'unsubscribe':
 					$s->unsubscribe();
 					$s->save();
-					$this->notifyAdmin('adminUnsubscribeEvent');					
+					if ( $this->options->get('notifyAdmin') ) {
+						$this->notifyAdmin('adminUnsubscribeEvent');
+					}
+
+					if ( $this->options->get('sendUnsubscribed') ) {
+						$this->sendEmail('unsubscribe');
+					}
+
 					$this->redirect( $this->getLink('unsubscribeSucceed', array('u' => $_REQUEST['code'] ) ) );					
 					break;
 				case 'update-subscription':
@@ -875,6 +898,8 @@ class newsman {
 
 				do_action('newsman_get_ext_script');
 
+				wp_enqueue_script('jquery-ui-core ');
+
 				wp_enqueue_script('jquery-ui-datepicker');
 
 				wp_enqueue_style('jquery-tipsy-css', NEWSMAN_PLUGIN_URL.'/css/tipsy.css');
@@ -906,6 +931,12 @@ class newsman {
 					}
 				}
 
+				if ( isset($_GET['action']) && $_GET['action'] === 'editlist' ) {
+					wp_enqueue_script('newsman-ko', NEWSMAN_PLUGIN_URL.'/js/knockout-2.2.0.js', array('jquery'));
+					wp_enqueue_script('newsman-ko-mapping', NEWSMAN_PLUGIN_URL.'/js/knockout.mapping.js', array('newsman-ko'));
+					wp_enqueue_script('newsman-ko-sortable', NEWSMAN_PLUGIN_URL.'/js/knockout-sortable.min.js', array('newsman-ko'));
+				}
+
 				if ( $NEWSMAN_PAGE || defined('INSER_POSTS_FRAME') ) {
 					// bootstrap
 					wp_enqueue_style('bootstrap');				
@@ -915,7 +946,7 @@ class newsman {
 					// ------ 
 
 					wp_register_style('jq-multiselect', NEWSMAN_PLUGIN_URL.'/js/css/jquery.multiselect.css');
-					wp_enqueue_style('jq-multiselect');					
+					wp_enqueue_style('jq-multiselect');
 
 					wp_register_style('jquery-ui-timepicker', NEWSMAN_PLUGIN_URL.'/css/jquery-ui-timepicker-addon.css');
 					wp_register_script('jquery-ui-timepicker-js', NEWSMAN_PLUGIN_URL.'/js/jquery-ui-timepicker-addon.js', array('jquery-ui-datepicker'));
@@ -936,7 +967,7 @@ class newsman {
 					wp_register_style('newsman', NEWSMAN_PLUGIN_URL.'/css/newsman.css');
 					wp_register_style('newsman_admin', NEWSMAN_PLUGIN_URL.'/css/newsman_admin.css');
 
-					wp_register_script( 'jquery-multiselect', NEWSMAN_PLUGIN_URL.'/js/jquery.multiselect.min.js', array('jquery', 'jquery-ui-widget'));
+					wp_register_script( 'jquery-multiselect', NEWSMAN_PLUGIN_URL.'/js/jquery.multiselect.js', array('jquery', 'jquery-ui-core', 'jquery-ui-widget'));
 					wp_register_script('newsman-admin', NEWSMAN_PLUGIN_URL.'/js/admin.js', array('jquery', 'jquery-ui-widget', 'jquery-ui-tabs'));
 
 					wp_enqueue_style('newsman');			
@@ -1000,7 +1031,8 @@ class newsman {
 						'emlsSent' => __('Sent (#)', NEWSMAN),
 						'resume' => __('Resume', NEWSMAN),
 						'pleaseChooseSubscribersList' => __('Please fill the "To:" field.', NEWSMAN),
-						'pleaseSelectEmailsFist' => __('Please select emails first.', NEWSMAN)
+						'pleaseSelectEmailsFist' => __('Please select emails first.', NEWSMAN),
+						'pleaseSelect' => __('Please select', NEWSMAN)
 					) );					
 				}
 
@@ -1048,6 +1080,9 @@ class newsman {
 		global $newsman_current_ucode;
 		global $newsman_current_list;
 
+		global $newsman_error_message;
+		global $newsman_success_message;
+
 		$use_excerpts = isset($_REQUEST['newsman_use_excerpts']);
 
 		if ( isset($_REQUEST['u']) && !empty($_REQUEST['u']) ) {
@@ -1077,15 +1112,21 @@ class newsman {
 
 			$newEmail = strtolower($_REQUEST['nwsmn-chsub-newemail']);
 
-			$this->utils->emailValid($newEmail, true);
+			$this->utils->emailValid($newEmail, 'DIE_ON_FAILURE');
 
-			$s->email = $newEmail;
-			$s->save();
+			if ( $list->findSubscriber("email = %s", $newEmail) ) {
+				$newsman_error_message = sprintf(__('Email address %s is already subscribed to the list.', NEWSMAN), $newEmail);
+			} else {
+				$newsman_success_message = sprintf(__('Your email address %s was successfully changed.', NEWSMAN), $s->email);
+				$s->email = $newEmail;
+				$s->save();
+				$newsman_current_subscriber = $s->toJSON();
+			}
 
 			if ( $use_excerpts ) {
 				$this->showActionExcerpt('changeSubscription');
 			} else {
-				$this->redirect( $this->getLink('changeSubscription', array('u' => $_REQUEST['u'] ) ) );
+				//$this->redirect( $this->getLink('changeSubscription', array('u' => $_REQUEST['u'] ) ) );
 			}
 		}    
 		
@@ -1097,7 +1138,13 @@ class newsman {
 				$s->unsubscribe();
 				$s->save();
 
-				$this->notifyAdmin('adminUnsubscribeEvent');
+				if ( $this->options->get('notifyAdmin') ) {
+					$this->notifyAdmin('adminUnsubscribeEvent');
+				}
+
+				if ( $this->options->get('sendUnsubscribed') ) {
+					$this->sendEmail('unsubscribe');
+				}				
 
 				if ( $use_excerpts ) {
 					$this->showActionExcerpt('unsubscribeSucceed');
@@ -1206,9 +1253,11 @@ class newsman {
 		die();
 	}
 
-	public function putForm($print = true, $listId = false) {
+	public function putForm($print = true, $listId = false, $horizontal = false) {
 		$list = newsmanList::findOne('id = %d', array($listId));
 		$frm = new newsmanForm($listId);
+
+		$frm->horizontal = $horizontal;
 
 		$data = '';
 																	   
@@ -1220,20 +1269,22 @@ class newsman {
 			$clsa_placehldr = '';
 		}
 
-		$data .= $list->header;
+		//$data .= $list->header;
 		
 		wp_enqueue_script('newsmanform');
 		if ( !get_option('newsman_code') ) {
-			$data .= '<!-- Powered by WPNewsman - http://wpnewsman.com/ -->';			
-		}		
+			$data .= '<!-- Powered by WPNewsman '.NEWSMAN_VERSION.' - http://wpnewsman.com/ -->';			
+		}
 
-		$data .= '<form '.$clsa_form.' name="newsman-nsltr" action="'.get_bloginfo('wpurl').'" method="post">';
+		$id = "newsman-form-".$list->uid;
+
+		$data .= "<form id=\"$id\" ".$clsa_form.' name="newsman-nsltr" action="'.$this->utils->addTrSlash( get_bloginfo('wpurl') ).'" method="post">';
 
 		$data.= $frm->getForm();
 
 		$data .= '</form>';
 		
-		$data .= $list->footer;
+		//$data .= $list->footer;
 		
 		/*
 		* G-Lock WPNewsman has required a great deal of time and effort to develop.
@@ -1966,6 +2017,20 @@ class newsman {
 
 		$names .= ']';
 		return $names;
+	}
+
+	public function pre_content_message($content) {
+		global $newsman_error_message;
+		global $newsman_success_message;
+		$msg = '';
+
+		if ( $newsman_error_message || $newsman_success_message ) {
+			$class = $newsman_error_message ? 'newsman-msg-error' : 'newsman-msg-success';
+			$str = $newsman_error_message ? $newsman_error_message : $newsman_success_message;
+			$msg = '<div class="'.$class.'"><span>'.htmlentities($str).'</span></div>';
+		}
+
+		return $msg . $content;
 	}
 }
 

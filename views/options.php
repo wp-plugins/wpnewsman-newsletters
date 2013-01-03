@@ -185,7 +185,7 @@
 			<h3><?php _e('Please, confirm...', NEWSMAN); ?></h3>
 		</div>
 		<div class="modal-body">
-			<p><?php _e('Are you sure you want to uninstall Glock Newsletter Plugin and all of its settings?', NEWSMAN); ?></p>
+			<p><?php _e('Are you sure you want to uninstall WPNewsman Plugin and all of its settings?', NEWSMAN); ?></p>
 		</div>
 		<div class="modal-footer">
 			<a class="btn" mr="cancel"><?php _e('Close', NEWSMAN); ?></a>

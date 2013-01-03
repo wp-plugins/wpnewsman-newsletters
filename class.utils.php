@@ -677,13 +677,8 @@ class newsmanUtils {
 		global $NEWSMAN_CURRENT_ASSETS_DIR;
 		$NEWSMAN_CURRENT_ASSETS_DIR = NEWSMAN_PLUGIN_URL.'/email-templates/'.$assetsDir.'/';
 
-		$rx = '/(src=(\\\'|"))(.*?)(\2)/i';
-		$rx2 = '/(url\((\\\'|"|))(.*?)(\2\))/i';
-		$rx3 = '/(placehold=(\\\'|"))(.*?)(\2)/i';
-
+		$rx = '/((?:src|url|placehold|gssource|gsdefault)=(\\\'|"))(.*?)(\2)/i';
 		$tpl = preg_replace_callback($rx, array($this, 'expandAssetsURLsCallback'), $tpl);		
-		$tpl = preg_replace_callback($rx2, array($this, 'expandAssetsURLsCallback'), $tpl);
-		$tpl = preg_replace_callback($rx3, array($this, 'expandAssetsURLsCallback'), $tpl);
 
 		return $tpl;
 	}	
@@ -845,7 +840,7 @@ class newsmanUtils {
 	/* Plugin version transformations */	
 	/* --------------------------------------------------------------------------------------------------------- */
 
-	private function versionToNum($ver) {
+	public function versionToNum($ver) {
 		$s = preg_replace('/\D+/', '', $ver);
 		return is_numeric($s) ? intval($s) : 0;
 	}
@@ -857,11 +852,92 @@ class newsmanUtils {
 		if ( $codeVersion > $storedVersion ) {
 			$update = true;
 			if ( $writeNewVersion ) {
+				require_once('migration.php');
+				if ( function_exists('newsman_do_migration') ) {
+					newsman_do_migration();
+				}				
+				update_option('newsman_old_version', get_option('newsman_version'));
 				update_option('newsman_version', NEWSMAN_VERSION);
 			}			
 		}
 		return $update;
 	}
+
+
+	// ***************
+
+
+	public function getSystemInfo() {
+		global $wp_locale, $wp_version;   
+
+		$info = array('----- Begin System Info -----', "\n");
+
+		$col = 22;
+
+		$info[] = str_pad('WPNewsman Version:', $col).NEWSMAN_VERSION;
+		$info[] = str_pad('WordPress Version:', $col).$wp_version;
+
+		$info[] = "\n";
+
+		$info[] = str_pad('WordPress URL:', $col).get_bloginfo('wpurl');
+		$info[] = str_pad('Site URL:', $col).get_bloginfo('siteurl');
+
+		$info[] = "\n";
+
+		$info[] = str_pad('WP_DEBUG:', $col).( ( defined('WP_DEBUG') && WP_DEBUG ) ? 'Enabled' : 'Disabled' );
+		$info[] = str_pad('Multi-Site:', $col).( function_exists('is_multisite') & is_multisite() ? 'Enabled' : 'Disabled' );
+
+		$info[] = str_pad('User Agent:', $col).$_SERVER['HTTP_USER_AGENT'];
+
+		$info[] = "\n";
+		$info[] = "Active theme: ";
+
+		// Getting theme data
+
+		$data = array();
+
+		if ( function_exists( 'wp_get_theme' ) ) {
+			if ( is_child_theme() ) {
+				$parentTheme = wp_get_theme();
+				$them = wp_get_theme( $parentTheme->get('Template') );
+			} else {
+				$theme = wp_get_theme();
+			}
+			
+			$data['theme_name'] = $theme->get('Name');
+			$data['theme_version'] = $theme->get('Version');
+			$data['theme_uri'] = $theme->get('AuthorURI');
+		} else {
+			$theme_data = get_theme_data( TEMPLATEPATH.'/style.css' );
+			$data['theme_name'] = $theme_data['Name'];
+			$data['theme_version'] = $theme_data['Version'];
+			$data['theme_uri'] = isset($theme_data['Theme URI']) ? $theme_data['Theme URI'] : $theme_data['Autor URI'] ;
+		}
+
+		$info[] = "  ".$data['theme_name']." ".$data['theme_version'];
+		$info[] = "  ".$data['theme_uri'];
+
+
+		// Getting plugins info
+		$info[] = "\n";
+		$info[] = "Active plugins:";
+
+		$plugins = get_option('active_plugins');
+
+		foreach ($plugins as $plugin) {
+
+			$pluginFile = ABSPATH.PLUGINDIR.'/'.$plugin;
+			$pluginData = get_plugin_data( $pluginFile );
+
+			$info[] = "  ".$pluginData['Name']." ".$pluginData['Version'];
+			$info[] = "  ".$pluginData['PluginURI'];
+			$info[] = "\n";
+		}
+
+		$info[] = "----- End System Info -----";
+
+		return implode("\n", $info);
+	}	
 
 
 

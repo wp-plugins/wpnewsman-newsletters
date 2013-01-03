@@ -4,7 +4,7 @@ A contact has joined your mailing list. The contact's details are listed below:
 
 [newsman sub="*"]
 --
-[newsman wp="url"]/wp-admin/ -> Settings -> G-Lock Double Opt-In Manager
+[newsman wp="url"]/wp-admin/ -> WPNewsman -> Settings
 --- html ---
 <p>A contact has joined your mailing list. The contact's details are listed below:</p>
 <ul>[newsman sub="*" tag="li"]</ul>

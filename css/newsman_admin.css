@@ -174,6 +174,9 @@ input[type="text"], input[type="password"], input[type="number"], input[type="se
 	margin-bottom: 10px;
 }
 
+.wp_bootstrap h2 {
+	margin: 0 !important;
+}
 
 .wp_bootstrap .checkbox {
 	background: transparent;
@@ -233,7 +236,14 @@ input[type="text"], input[type="password"], input[type="number"], input[type="se
 
 .newsman-form-builder .newsman-form-item {
 	position: relative;
-	paddd
+	cursor: move;
+}
+
+.newsman-form-item:hover:before { 
+	content: url('../img/drag_handle.png');
+	position: absolute;
+	top: 15px;
+	left: 14px;	
 }
 
 .newsman-form-builder .newsman-form-item .close {
@@ -275,7 +285,12 @@ input[type="text"], input[type="password"], input[type="number"], input[type="se
 
 
 .newsman-form-builder .newsman-form-item {
-	padding: 1em !important;
+	padding: 10px 40px !important;
+}
+
+.newsman-form-builder .newsman-form-item input,
+.newsman-form-builder .newsman-form-item button {
+	margin-bottom: 0 !important;
 }
 
 .newsman-form-builder .checkbox {
@@ -285,12 +300,23 @@ input[type="text"], input[type="password"], input[type="number"], input[type="se
 
 .newsman-field-options {
 	display: block;
+	/*padding: 8px 14px !important;*/
 }
 
+#newsman-formbuilder-formoptions > strong,
+.newsman-field-options > strong {
+	display: inline-block;
+	margin-bottom: 5px;
+}
 
-.newsman-field-options-radio .options label {
+.newsman-field-options .options {
+	max-height: 250px;
+	overflow-y: auto;
+}
+
+.newsman-field-options .options li {
 	position: relative;
-	padding: 7px 25px 6px 26px;
+	padding: 4px 25px 4px 10px;
 
 	-moz-border-radius: 3px;
 	-webmkit-border-radius: 3px;
@@ -298,25 +324,27 @@ input[type="text"], input[type="password"], input[type="number"], input[type="se
 	border-radius: 3px;
 }
 
-.newsman-field-options-radio .options label i {
+.newsman-field-options .options li i {
 	visibility: hidden;
 	position: absolute;
 	top: .7em;
+	cursor: pointer;
 }
 
-.newsman-field-options-radio .options .newsman-remove-option {
-	right: 10px;	
+.newsman-field-options .options .newsman-remove-option {
+	right: 10px;
+	top: 7px;
 }
 
-.newsman-field-options-radio .options label:hover,
-.newsman-field-options-radio .options label.selected {
+.newsman-field-options .options li:hover,
+.newsman-field-options .options li.selected {
 	background: #ecb694;
 	background: rgba(214, 85, 34, 0.4 );	
 }
 
 
 
-.newsman-field-options-radio .options label:hover i {
+.newsman-field-options .options li:hover i {
 	visibility: visible;
 }
 
@@ -1053,10 +1081,71 @@ select.map-select {
 	width: 520px;
 }
 
-#debug-response {	
-	height: 137px;
+#debug-response,
+#debug-extra-info {
+	height: 100px;	
 }
 
-#debug-extra-info {
-	height: 55px;	
+.newsman-field-options-html textarea {
+	width: 260px;
+	height: 100px;
+}
+
+input.newsman-field-options-radio-opt-input {
+	width: 103px;
+	padding: 1px 3px;
+	margin: 0;
+}
+
+.radio-option span {
+	display: inline;
+}
+.radio-option .newsman-field-options-radio-opt-input {
+	display: none;
+}
+
+.radio-option.edit span {
+	display: none;
+}
+.radio-option.edit .newsman-field-options-radio-opt-input {
+	display: inline;
+}
+
+.newsman-actionlink {
+	display: inline-block;
+	margin-left: 30px;
+	cursor: pointer;
+	color: black;
+	font-size: 11px;
+}
+
+.newsman-opt-sect-header {
+	margin-bottom: 10px;
+}
+
+.newsman-opt-sect-header .btn-group {
+	margin-left: 10px;
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.newsman-actionlink:hover {
+	color: #0075CC;
+	position: relative;
+	top: 1px;
+	
+}
+
+#newsman-formbuilder-options ul.options,
+#newsman-formbuilder-options ul.options li {
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;		
+}
+
+#tpl-frame {
+	border: 1px solid #B8B8B8;
 }

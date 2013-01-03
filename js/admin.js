@@ -30,38 +30,32 @@ jQuery(function($){
 			$('.view-raw-response', wnd).click(function(e){
 				e.preventDefault();
 
-				$('#debug-response').val(rawError.responseText);
+				$('#debug-response').val([
+					'Query: \n'+rawError.query+'\n',
+					'Response: \n'+rawError.responseText
+				].join('\n'));
 
-				var extra = {
-					query: rawError.query,
-					navigator: {
-						platform: navigator.platform,
-						userAgent: navigator.userAgent,
-						language: navigator.language
-					},
-					php: NEWSMAN_PHP_VERSION,
-					newsmanVersion: NEWSMAN_VERSION
-				};
+				getSystemInfo(function(msg) {
+					$('#debug-extra-info').val(msg);
 
-				$('#debug-extra-info').val(JSON.stringify(extra));
+					showModal('#newsman-modal-debugmsg', function(mr){
+						if ( mr === 'send' ) {
+							$('.gs-fixed.alert-error').remove();
+							$.ajax({
+								type: 'POST',
+								url: ajaxurl,
+								data: {
+									action: 'newsmanAjSendBugReport',
+									response: $('#debug-response').val(),
+									extra: $('#debug-extra-info').val()
+								}
+							}).done(function(data){
+								showMessage(data.msg, 'success');
+							}).fail(NEWSMAN.ajaxFailHandler);
+						}
+					});		
+				});
 
-				showModal('#newsman-modal-debugmsg', function(mr){
-					if ( mr === 'send' ) {
-						$('.gs-fixed.alert-error').remove();
-						$.ajax({
-							type: 'POST',
-							url: ajaxurl,
-							data: {
-								action: 'newsmanAjSendBugReport',
-								response: $('#debug-response').val(),
-								extra: $('#debug-extra-info').val()
-							}
-						}).done(function(data){
-							showMessage(data.msg, 'success');
-						}).fail(NEWSMAN.ajaxFailHandler);
-					}
-
-				});				
 			});
 		}
 
@@ -79,6 +73,12 @@ jQuery(function($){
 	};
 
 	NEWSMAN.ajaxFailHandler = function(t, status, message) {
+
+		if ( t.readyState < 3 ) {
+			// if we didn't establish the connection to the server
+			return;
+		}
+
 		var err = status;
 		try {
 			var data = JSON.parse(t.responseText);
@@ -91,6 +91,18 @@ jQuery(function($){
 			query: this.data
 		});
 	};	
+
+	function getSystemInfo(callback) {
+		$.ajax({
+			type: 'POST',
+			url: ajaxurl,
+			data: {
+				action: 'newsmanAjGetSystemInfo'
+			}
+		}).done(function(data){
+			callback(data.msg);
+		}).fail(NEWSMAN.ajaxFailHandler);
+	}
 
 	var showLoading = NEWSMAN.showLoading = function(str) {
 		if ( $('#gs-loading-msg').get(0) ) { return; }
@@ -221,7 +233,9 @@ jQuery(function($){
 				
 			}
 
-			refreshMDO();
+			if ( NEWSMAN.refreshMDO ) {
+				NEWSMAN.refreshMDO();	
+			}			
 
 			if ( typeof callback === 'function' ) {
 				callback();
@@ -877,7 +891,146 @@ jQuery(function($){
 			formPanel: '#file-import-settings'
 		});
 
-		// 
+	 	function getSubscribers() {
+	 		var q = $.extend({}, pageState);
+	 		q.action = 'newsmanAjGetSubscribers';
+	 		q.listId = $('#newsman-lists').val() || '1';
+
+	 		$('#newsman-checkall').removeAttr('checked');
+
+	 		var x32 = '1ug';
+
+	 		showLoading();
+
+	 		function get95pcnt() {
+	 			var x = parseInt(x32, 32);
+	 			return Math.ceil(x*0.95);
+	 		}
+
+	 		function getx() {
+	 			return parseInt(x32, 32);
+	 		}
+
+	 		function warn(msg) {
+	 			$('#newsman-limit-alert').remove();
+	 			$('<div id="newsman-limit-alert" class="alert">'+msg+'</div>').insertBefore($('#newsman-mgr-subscribers'));
+	 		}
+
+	 		function fillCounters(cnt) {
+
+	 			if ( typeof NEWSMAN_LITE_MODE !== 'undefined' && NEWSMAN_LITE_MODE ) {
+		 			if ( cnt.all >= get95pcnt() && cnt.all < getx() ) {
+		 				warn('Warning! You are close to the limit of '+getx()+' subscribers you can send emails to in the Lite version of the plugin. Please, <a href="">upgrade to the Pro version</a> to send emails without limitations.');
+		 			} else if ( cnt.all >= getx() ) {
+		 				warn('Warning! You exceeded the limit of '+getx()+' subscribers you can send emails to in the Lite version of the plugin. Please, <a href="">upgrade to the Pro version</a> to send emails without limitations.');
+		 			}
+	 			}
+
+
+	 			$('#newsman-subs-all').text(newsmanL10n.allSubs.replace('#', cnt.all));
+	 			$('#newsman-subs-confirmed').text(newsmanL10n.confirmedSubs.replace('#', cnt.confirmed));
+	 			$('#newsman-subs-unconfirmed').text(newsmanL10n.unconfirmedSubs.replace('#', cnt.unconfirmed));
+	 			$('#newsman-subs-unsubscribed').text(newsmanL10n.unsubscribedSubs.replace('#', cnt.unsubscribed));
+	 		}
+
+	 		function noData(err) {
+	 			var msg = err || newsmanL10n.noSubsYet;
+	 			var tbody = $('#newsman-mgr-subscribers tbody').empty();
+	 			$('<tr><td colspan="6" class="blank-row">'+msg+'</td></tr>').appendTo(tbody);
+	 		}
+
+	 		function showLoading() {
+	 			var tbody = $('#newsman-mgr-subscribers tbody').empty();
+	 			$('<tr><td colspan="6" class="blank-row"><img src="'+NEWSMAN_PLUGIN_URL+'/img/ajax-loader.gif"> Loading...</td></tr>').appendTo(tbody);	 			
+	 		}
+
+	 		function renderButtons(start, num, current, count) {
+	 			var cl ,el = $('.pagination ul').empty();	
+
+	 			if ( count < 2 ) {
+					$('.pagination').hide();
+	 			} else {
+	 				$('.pagination').show();
+	 			}
+
+	 			var end = start+num-1;
+
+	 			end = end > count ? count : end;
+
+	 			// prev button
+	 			if ( current > 1 ) {
+	 				$('<li><a href="#/'+pageState.show+'/'+(current-1)+'">«</a></li>').appendTo(el);
+	 			}
+
+	 			for (var i = start; i <= end; i++) {
+	 				cl = ( i === current ) ? 'class="active"' : '';
+	 				$('<li '+cl+'><a href="#/'+pageState.show+'/'+i+'">'+i+'</a></li>').appendTo(el);
+	 			}
+
+	 			if ( current < count ) {
+	 				$('<li><a href="#/'+pageState.show+'/'+(current+1)+'">»</a></li>').appendTo(el);
+	 			}
+	 		}
+
+	 		function renderPagination(cntData) {
+	 			var cnt =  cntData[pageState.show],
+	 				pages = Math.ceil( cnt / pageState.ipp ),
+	 				buttonsNum = 4,
+	 				btnPages = Math.ceil( pageState.pg / buttonsNum );
+
+	 			if ( pages < 5 ) {
+	 				renderButtons(1, buttonsNum, pageState.pg, pages);
+	 			} else {
+	 				var start = ( (btnPages-1) * buttonsNum ) + 1;
+	 				renderButtons(start, buttonsNum, pageState.pg, pages);
+	 			}			
+	 		}
+
+	 		function fieldsToHTML(obj) {
+	 			var html = ['<ul class="unstyled">'];
+	 			for ( var name in obj ) {
+	 				html.push('<li>'+name+': '+obj[name]+'</li>');
+	 			}
+	 			html.push('</ul>');
+	 			return html.join('');
+	 		}
+
+			function fillRows(rows) {
+				var tbody = $('#newsman-mgr-subscribers tbody').empty();
+				if (rows.length) {
+					$(rows).each(function(i, r){
+						$(['<tr>',
+								'<td><input value="'+r.id+'" type="checkbox"></td>',
+								'<td>'+r.email+'</td>',
+								'<td>'+r.ts+'</td>',
+								'<td>'+r.ip+'</td>',
+								'<td>'+statusToText(r.status, r.status == 2 ? r.bounceStatus : '')+'</td>',
+								'<td>'+fieldsToHTML(r.fields)+'</td>',
+							'</tr>'].join('')).appendTo(tbody);
+					});	 				
+				} else {
+					noData();
+				}
+			}
+
+			 // ---------------------------------
+
+			$.ajax({
+				type: 'POST',
+				url: ajaxurl,
+				data: q
+			}).done(function(data){
+
+				fillCounters(data.count);
+				fillRows(data.rows);
+				renderPagination(data.count);
+
+			}).fail(function(){
+				noData('Some error occurred.');
+				NEWSMAN.ajaxFailHandler.apply(this, arguments);
+			});
+	 	}
+
 
 		var uploader = $('<div></div>').neoFileUploader({
 			debug: true,
@@ -1199,145 +1352,6 @@ jQuery(function($){
 
 	 	var email = $('#newsman-email-search').val();
 
-	 	function getSubscribers() {
-	 		var q = $.extend({}, pageState);
-	 		q.action = 'newsmanAjGetSubscribers';
-	 		q.listId = $('#newsman-lists').val() || '1';
-
-	 		$('#newsman-checkall').removeAttr('checked');
-
-	 		var x32 = '1ug';
-
-	 		showLoading();
-
-	 		function get95pcnt() {
-	 			var x = parseInt(x32, 32);
-	 			return Math.ceil(x*0.95);
-	 		}
-
-	 		function getx() {
-	 			return parseInt(x32, 32);
-	 		}
-
-	 		function warn(msg) {
-	 			$('#newsman-limit-alert').remove();
-	 			$('<div id="newsman-limit-alert" class="alert">'+msg+'</div>').insertBefore($('#newsman-mgr-subscribers'));
-	 		}
-
-	 		function fillCounters(cnt) {
-
-	 			if ( typeof NEWSMAN_LITE_MODE !== 'undefined' && NEWSMAN_LITE_MODE ) {
-		 			if ( cnt.all >= get95pcnt() && cnt.all < getx() ) {
-		 				warn('Warning! You are close to the limit of '+getx()+' subscribers you can send emails to in the Lite version of the plugin. Please, <a href="">upgrade to the Pro version</a> to send emails without limitations.');
-		 			} else if ( cnt.all >= getx() ) {
-		 				warn('Warning! You exceeded the limit of '+getx()+' subscribers you can send emails to in the Lite version of the plugin. Please, <a href="">upgrade to the Pro version</a> to send emails without limitations.');
-		 			}
-	 			}
-
-
-	 			$('#newsman-subs-all').text(newsmanL10n.allSubs.replace('#', cnt.all));
-	 			$('#newsman-subs-confirmed').text(newsmanL10n.confirmedSubs.replace('#', cnt.confirmed));
-	 			$('#newsman-subs-unconfirmed').text(newsmanL10n.unconfirmedSubs.replace('#', cnt.unconfirmed));
-	 			$('#newsman-subs-unsubscribed').text(newsmanL10n.unsubscribedSubs.replace('#', cnt.unsubscribed));
-	 		}
-
-	 		function noData(err) {
-	 			var msg = err || newsmanL10n.noSubsYet;
-	 			var tbody = $('#newsman-mgr-subscribers tbody').empty();
-	 			$('<tr><td colspan="6" class="blank-row">'+msg+'</td></tr>').appendTo(tbody);
-	 		}
-
-	 		function showLoading() {
-	 			var tbody = $('#newsman-mgr-subscribers tbody').empty();
-	 			$('<tr><td colspan="6" class="blank-row"><img src="'+NEWSMAN_PLUGIN_URL+'/img/ajax-loader.gif"> Loading...</td></tr>').appendTo(tbody);	 			
-	 		}
-
-	 		function renderButtons(start, num, current, count) {
-	 			var cl ,el = $('.pagination ul').empty();	
-
-	 			if ( count < 2 ) {
-					$('.pagination').hide();
-	 			} else {
-	 				$('.pagination').show();
-	 			}
-
-	 			var end = start+num-1;
-
-	 			end = end > count ? count : end;
-
-	 			// prev button
-	 			if ( current > 1 ) {
-	 				$('<li><a href="#/'+pageState.show+'/'+(current-1)+'">«</a></li>').appendTo(el);
-	 			}
-
-	 			for (var i = start; i <= end; i++) {
-	 				cl = ( i === current ) ? 'class="active"' : '';
-	 				$('<li '+cl+'><a href="#/'+pageState.show+'/'+i+'">'+i+'</a></li>').appendTo(el);
-	 			}
-
-	 			if ( current < count ) {
-	 				$('<li><a href="#/'+pageState.show+'/'+(current+1)+'">»</a></li>').appendTo(el);
-	 			}
-	 		}
-
-	 		function renderPagination(cntData) {
-	 			var cnt =  cntData[pageState.show],
-	 				pages = Math.ceil( cnt / pageState.ipp ),
-	 				buttonsNum = 4,
-	 				btnPages = Math.ceil( pageState.pg / buttonsNum );
-
-	 			if ( pages < 5 ) {
-	 				renderButtons(1, buttonsNum, pageState.pg, pages);
-	 			} else {
-	 				var start = ( (btnPages-1) * buttonsNum ) + 1;
-	 				renderButtons(start, buttonsNum, pageState.pg, pages);
-	 			}			
-	 		}
-
-	 		function fieldsToHTML(obj) {
-	 			var html = ['<ul class="unstyled">'];
-	 			for ( var name in obj ) {
-	 				html.push('<li>'+name+': '+obj[name]+'</li>');
-	 			}
-	 			html.push('</ul>');
-	 			return html.join('');
-	 		}
-
-			function fillRows(rows) {
-				var tbody = $('#newsman-mgr-subscribers tbody').empty();
-				if (rows.length) {
-					$(rows).each(function(i, r){
-						$(['<tr>',
-								'<td><input value="'+r.id+'" type="checkbox"></td>',
-								'<td>'+r.email+'</td>',
-								'<td>'+r.ts+'</td>',
-								'<td>'+r.ip+'</td>',
-								'<td>'+statusToText(r.status, r.status == 2 ? r.bounceStatus : '')+'</td>',
-								'<td>'+fieldsToHTML(r.fields)+'</td>',
-							'</tr>'].join('')).appendTo(tbody);
-					});	 				
-				} else {
-					noData();
-				}
-			}
-
-			 // ---------------------------------
-
-			$.ajax({
-				type: 'POST',
-				url: ajaxurl,
-				data: q
-			}).done(function(data){
-
-				fillCounters(data.count);
-				fillRows(data.rows);
-				renderPagination(data.count);
-
-			}).fail(function(){
-				noData('Some error occurred.');
-				NEWSMAN.ajaxFailHandler.apply(this, arguments);
-			});
-	 	}
 
 
 	 	function r(type, p) {
@@ -1385,12 +1399,16 @@ jQuery(function($){
 			}
 		}
 
-		function refreshMDO() {
-			var mdo = $('.newsman-mdo:checked').val();					
-			$('#newsman-smtp-settings')[ mdo === 'smtp' ? 'show' : 'hide' ]();
+		if ( !NEWSMAN.refreshMDO ) {
+			NEWSMAN.refreshMDO = function() {
+				var mdo = $('.newsman-mdo:checked').val();					
+				$('#newsman-smtp-settings')[ mdo === 'smtp' ? 'show' : 'hide' ]();
+			};
 		}
-		$('.newsman-mdo').click(refreshMDO);
-		refreshMDO();
+
+
+		$('.newsman-mdo').click(NEWSMAN.refreshMDO);
+		NEWSMAN.refreshMDO();
 
 
 
@@ -1512,7 +1530,7 @@ jQuery(function($){
 
 	if ( $('#newsman-page-list').get(0) ) {
 
-		$('.newsman-form-builder').newsmanFormBuilder();
+		//$('.newsman-form-builder').newsmanFormBuilder();
 
 		function safeName(str) {
 			return str.replace(/\W+$/ig, '').replace(/\W+/ig, '-').toLowerCase();
@@ -1544,7 +1562,7 @@ jQuery(function($){
 			var data = {},
 				form = $('#newsman_form_g');
 
-			$('#newsman_form_json').val( $('.newsman-form-builder').newsmanFormBuilder('serializeForm') );
+			$('#newsman_form_json').val( newsmanFormBuilder.toJSON() );
 
 			$('input, textarea, select', form).each(function(i, el){
 				var name = $(el).attr('name'),
@@ -1618,6 +1636,8 @@ jQuery(function($){
 			height: 300
 		});
 
+		window.eee = editor;
+
 		function changed(){
 			saveEmail();
 		}
@@ -1673,16 +1693,28 @@ jQuery(function($){
 
 		function saveEmail(done) {
 			done = done || function(){};
+
+
+			var edBody = editor.document ? editor.document.getBody().$ : {},
+				to = $('#eml-to').multis('getItems')+'',
+				subj = $('#newsman-email-subj').val(),
+				plain = edBody.textContent || edBody.innerText || '',
+				html = editor.getData();
+
+			if ( !to || !subj || !plain || !html ) {
+				return;
+			}
+
 			$.ajax({
 				type: 'POST',
 				url: ajaxurl,
 				data: {
 					id: NEWSMAN_ENTITY_ID,
 					action: 'newsmanAjSavePlainEmail',
-					to: $('#eml-to').multis('getItems')+'',
-					subj: $('#newsman-email-subj').val(),
-					plain: editor.document ? editor.document.getBody().$.innerText : '',
-					html: editor.getData(),
+					to: to,
+					subj: subj,
+					plain: plain,
+					html: html,
 					send: $('input[name="newsman-send"]:checked').val(),
 					ts: Math.round( $('#newsman-send-datepicker').datetimepicker('getDate') / 1000 )					
 				}

@@ -191,7 +191,7 @@
 			$email = 'wpnewsman-reports@glocksoft.com';
 
 			$message = array(
-				'subject' => sprintf(__('WPNEWSMAN Bug Repoport from %s', NEWSMAN), get_bloginfo('wpurl')),
+				'subject' => sprintf(__('WPNEWSMAN Bug Report from %s', NEWSMAN), get_bloginfo('wpurl')),
 				'plain' => "$response\n\n$extra"
 			);
 			
@@ -1510,6 +1510,7 @@
 		public function ajResendConfirmation() {
 			global $newsman_current_subscriber;		
 			global $newsman_current_email;
+			global $newsman_current_list;
 
 			$all = ( $this->param('all', '0') === '1' );
 
@@ -1524,6 +1525,8 @@
 			if ( !$list ) {
 				$this->errListNotFound($listId);
 			}
+
+			$newsman_current_list = $list;
 
 			if ( $all ) {
 				$subs = $list->findAllSubscribers();
@@ -1559,10 +1562,11 @@
 		public function ajSetListSettings() {
 			$id = $this->param('id');
 
-			$footer = $this->param('footer');
-			$header = $this->param('header');
+			// $footer = $this->param('footer');
+			// $header = $this->param('header');
+			// $title = $this->param('title');
+
 			$json = $this->param('json');
-			$title = $this->param('title');
 			$name = $this->param('name');
 
 			$list = newsmanList::findOne('id = %d', array($id));
@@ -1573,9 +1577,9 @@
 				$list->id = $id;
 
 				$list->name = $name;
-				$list->title = $title;
-				$list->footer = $footer;
-				$list->header = $header;
+				// $list->title = $title;
+				// $list->footer = $footer;
+				// $list->header = $header;
 				$list->form = $json;
 
 				do_action('newsman_set_ext_from_options', $this, $list);
@@ -1732,6 +1736,11 @@
 			}
 
 			$this->respond(true, 'Errors log', $res);
+		}
+
+		public function ajGetSystemInfo() {
+			$u = newsmanUtils::getInstance();
+			$this->respond(true, $u->getSystemInfo());
 		}
 
 	}

@@ -8,6 +8,9 @@ class newsmanForm {
 	var $decodedForm;
 	var $adminMode;
 	var $useInlineLabels;
+	var $horizontal;
+
+	var $elId;
 
 	public function __construct($id, $admin = false) {
 		$o = newsmanOptions::getInstance();
@@ -18,14 +21,22 @@ class newsmanForm {
 			$list = newsmanList::findOne('uid = %s', array($id));
 		}
 
+		$this->horizontal = false;
+
+		$this->title = '';
+
 		$this->list = $list;
 
 		// form onbject contains form elements,
 		// and general form options like useInlineLabels
 		$formObj = json_decode($list->form, true);
 
+		$this->raw = $list->form;
+
 		$this->useInlineLabels = $formObj['useInlineLabels'];	
 		$this->decodedForm = $formObj['elements'];
+
+		$this->elId = 0;
 
 		// echo '<pre>';
 		// print_r($list->form);
@@ -40,6 +51,8 @@ class newsmanForm {
 			foreach ($this->decodedForm as $item) {
 				if ( $item['type'] === 'submit' ) {
 					$hasSubmit = true;
+				} elseif ( $item['type'] === 'title' ) {
+					$this->title = $item['value'];
 				}
 			}			
 			if ( !$hasSubmit ) {
@@ -54,6 +67,12 @@ class newsmanForm {
 		$this->adminMode = $admin;
 	}
 
+	private function getElId() {
+		$this->elId += 1;
+
+		return 'newsman-form-el-'.$this->elId;
+	}
+
 	private function getCloseButton() {		
 		return $this->adminMode ? '<button class="close">&times;</button>' : '';
 	}
@@ -62,51 +81,58 @@ class newsmanForm {
 
 		$req = isset($item['required']) && $item['required'] ? 'newsman-required' : '';
 		$type = $this->adminMode ? 'gstype="text"' : '';
-		$it = $item['type'];
+		$it = 'newsman-form-item-'.$item['type'];
 
 		$lblSt = $this->useInlineLabels ? 'style="display: none;"' : '';
 
-		$lbl = '<label '.$lblSt.' >'.$item['label'].'</label>';
-		$ph = $this->useInlineLabels ? 'placeholder="'.$item['label'].'"' : '';
+		$lbl = '<label '.$lblSt.' >'.htmlentities($item['label']).'</label>';
+		$ph = $this->useInlineLabels ? 'placeholder="'.htmlspecialchars($item['label']).'"' : '';
 
-		return	"<li $type class=\"newsman-form-item $req $it\">".
+		$elId = $this->getElId();
+
+		return	"<div $type class=\"newsman-form-item $req $it $elId\">".
 					$lbl.
-					'<input type="text" name="'.$item['name'].'" value="'.$item['value'].'" '.$ph.'>'.
+					'<input type="text" name="'.htmlspecialchars($item['name']).'" value="'.htmlspecialchars($item['value']).'" '.$ph.'>'.
 					'<span class="newsman-required-msg" style="display:none;">'.__('Required', NEWSMAN).'</span>'.
 					$this->getCloseButton().
-				'</li>';
+				'</div>';
 	}
 
 	private function getEmail($item) {
 		$req = isset($item['required']) && $item['required'] ? 'newsman-required' : '';
 		$type = $this->adminMode ? 'gstype="email"' : '';
-		$it = $item['type'];
+		$it = 'newsman-form-item-'.$item['type'];
 
 		$lblSt = $this->useInlineLabels ? 'style="display: none;"' : '';
 
-		$lbl = '<label '.$lblSt.'>'.$item['label'].'</label>';
-		$ph = $this->useInlineLabels ? 'placeholder="'.$item['label'].'"' : '';
+		$lbl = '<label '.$lblSt.'>'.htmlentities($item['label']).'</label>';
+		$ph = $this->useInlineLabels ? 'placeholder="'.htmlspecialchars($item['label']).'"' : '';
 
-		return 	"<li $type class=\"newsman-form-item $req $it\">".
+		$elId = $this->getElId();
+
+		return 	"<div $type class=\"newsman-form-item $req $it $elId\">".
 					$lbl.
-					'<input type="text" name="newsman-email" '.$ph.' value="'.$item['value'].'">'.
+					'<input type="text" name="newsman-email" '.$ph.' value="'.htmlspecialchars($item['value']).'">'.
 					'<span class="newsman-required-msg" style="display:none;">'.__('Required', NEWSMAN).'</span>'.
-				'</li>';
+				'</div>';
 	}	
 
 	private function getCheckbox($item) {
 		$req = isset($item['required']) && $item['required'] ? 'newsman-required' : '';
 		$type = $this->adminMode ? 'gstype="checkbox"' : '';
 		$chkd = $item['checked'] ? 'checked="checked"' : '';
-		$it = $item['type'];
-		return "<li $type class=\"newsman-form-item $req $it\">".
+		$it = 'newsman-form-item-'.$item['type'];
+
+		$elId = $this->getElId();
+
+		return "<div $type class=\"newsman-form-item $req $it $elId\">".
 					'<label class="checkbox">'.
-						'<input type="checkbox" '.$chkd.' name="'.$item['name'].'" value="'.$item['value'].'"> '.
-						$item['label'].
+						'<input type="checkbox" '.$chkd.' name="'.htmlspecialchars($item['name']).'" value="'.htmlspecialchars($item['value']).'"> '.
+						htmlentities($item['label']).
 					'</label>'.
 					'<span style="display:none" class="newsman-required-msg cbox">'.__('Required', NEWSMAN).'</span>'.
 					$this->getCloseButton().
-				'</li>';
+				'</div>';
 	}
 
 	private function valueFromLabel($lbl) {
@@ -116,7 +142,7 @@ class newsmanForm {
 	private function getRadio($item) {
 		$req = isset($item['required']) && $item['required'] ? 'newsman-required' : '';
 		$type = $this->adminMode ? 'gstype="radio"' : '';
-		$it = $item['type'];
+		$it = 'newsman-form-item-'.$item['type'];
 		$radios = '';
 		$children = isset($item['value']) ? $item['value'] : $item['children'];
 		$i = 0;
@@ -127,26 +153,87 @@ class newsmanForm {
 
 			$val = isset($radio['value']) ? $radio['value'] : $this->valueFromLabel($radio['label']);
 			$chkd = $radio['checked'] ? 'checked="checked"' : '';
-			$radios .= 	'<label id="'.$id.'" class="radio">'.
-							'<input type="radio" name="'.$item['name'].'" '.$chkd.' value="'.$val.'">'.
-							'<span>'.$radio['label'].'</span>'.
+			$radios .= 	'<label id="'.htmlspecialchars($id).'" class="radio">'.
+							'<input type="radio" name="'.htmlspecialchars($item['name']).'" '.$chkd.' value="'.htmlspecialchars($val).'">'.
+							'<span>'.htmlentities($radio['label']).'</span>'.
 						'</label>';
 		}
-		return "<li $type class=\"newsman-form-item $req $it\">".
+
+		$elId = $this->getElId();
+
+		return "<div $type class=\"newsman-form-item $req $it $elId\">".
 					'<label>'.$item['label'].'</label>'.
 					'<span style="display:none;" class="newsman-required-msg radio">'.__('Required', NEWSMAN).'</span>'.
 					'<div class="newsman-radio-options">'.
 					$radios.
 					'</div>'.
 					$this->getCloseButton().
-				'</li>';
+				'</div>';
+	}
+
+	private function getSelect($item) {
+		$req = isset($item['required']) && $item['required'] ? 'newsman-required' : '';
+		$type = $this->adminMode ? 'gstype="select"' : '';
+		$it = 'newsman-form-item-'.$item['type'];
+		$options = '';
+		$children = isset($item['value']) ? $item['value'] : $item['children'];
+
+		foreach ($children as $opt) {
+
+			$val = isset($radio['value']) ? $radio['value'] : $this->valueFromLabel($radio['label']);
+			$chkd = $radio['checked'] ? 'checked="checked"' : '';
+			$options .= '<option value="'.htmlspecialchars($opt['value']).'">'.$opt['label'].'</option>';
+		}
+
+		$lblSt = $this->useInlineLabels ? 'style="display: none;"' : '';
+
+		$elId = $this->getElId();
+
+		return "<div $type class=\"newsman-form-item $req $it $elId\">".
+					'<label '.$lblSt.'>'.$item['label'].'</label>'.
+					'<span style="display:none;" class="newsman-required-msg radio">'.__('Required', NEWSMAN).'</span>'.
+					'<select name="'.htmlspecialchars($item['name']).'">'.
+					$options.
+					'</select>'.
+					$this->getCloseButton().
+				'</div>';
+	}	
+
+	private function getHTML($item) {
+		$it = 'newsman-form-item-'.$item['type'];
+
+		$elId = $this->getElId();
+
+		return "<div class=\"newsman-form-item $it $elId\">".$item['value'].'</div>';
 	}
 
 	private function getSubmit($item) {
-		$type = $this->adminMode ? 'gstype="submit"' : '';
-		return '<li '.$type.' class="newsman-form-item">'.
-					'<input type="submit" class="btn" name="nwsmn-subscribe" value="'.$item['value'].'">'.
-				'</li>';
+		$elType = $this->adminMode ? 'gstype="submit"' : '';
+
+		$style = isset($item['style']) ? $item['style'] : 'none';
+		$size = isset($item['size']) ? $item['size'] : 'small';
+		$color = isset($item['color']) ? $item['color'] : 'gray';
+
+		$btnClasses = '';
+
+		$btn = '';
+
+		if ( $style !== 'none' ) {
+			$btnClasses .= ' newsman-button';
+
+			$btnClasses .= ' newsman-button-'.$size;
+			$btnClasses .= ' newsman-button-'.$style;
+			$btnClasses .= ' newsman-button-'.$color;	
+
+			$btn = '<button type="submit" class="'.$btnClasses.'" name="nwsmn-subscribe" value="1">'.htmlentities($item['value']).'</button>';
+
+		} else {
+			$btn = '<input type="submit" class="button btn" name="nwsmn-subscribe" value="'.htmlspecialchars($item['value']).'">';
+		}
+
+		$elId = $this->getElId();
+
+		return "<div ".$elType.' class="newsman-form-item '.$elId.'">'.$btn.'</div>';
 	}
 
 	public function parse() {
@@ -167,7 +254,8 @@ class newsmanForm {
 			return;
 		}
 		$il = $this->useInlineLabels ? ' inline-labels' : '';
-		$formHtml = '<ul class="newsman-form'.$il.'">';
+		$hor = $this->horizontal ? ' newsman-form-horizontal' : '';
+		$formHtml = '<div class="newsman-form'.$il.$hor.'">';
 		$hasEmailField = false;
 
 		foreach ($this->decodedForm as $item) {
@@ -192,13 +280,13 @@ class newsmanForm {
 			));
 		}
 
-		$formHtml .= '<input type="hidden" name="uid" value="'.$this->uid.'">';
+		$formHtml .= '<input type="hidden" name="uid" value="'.htmlspecialchars($this->uid).'">';
 
 		if ( $use_excerpts ) {
 			$formHtml .= '<input type="hidden" name="newsman_use_excerpts" value="1">';
 		}
 
-		return $formHtml.'</ul>';
+		return $formHtml.'</div>';
 	}
 
 	public function getFields() {

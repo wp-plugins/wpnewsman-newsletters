@@ -4,7 +4,7 @@ Donate Link: http://wpnewsman.com/premium-newsletter-plugin-wordpress/
 Tags: wpnewsman, newsletter, newsletters, newsletter signup, newsletter widget, subscribers, post notification, email subscription, email marketing, email, emailing, subscription
 Requires at least: 3.4
 Tested up to: 3.5
-Stable tag: 1.1.3
+Stable tag: 1.2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -117,6 +117,18 @@ We got a User Feedback page where you can [add or vote for new features](http://
 
 == Changelog ==
 
+= 1.2.0 =
+* Added: possibility to put the fields in the subscription form side by side
+* Added: possibility to customize the Subscribe button
+* Added: select element to the subscription form
+* Added: ability to reset the default image and download the image source in the email templates
+* Fixed: the plugin gave errors when the user tried to open a new page until the current page is not fully loaded
+* Fixed: "Send welcome message" and "Send unsubscribe notifications" options in the Settings did not work
+* Fixed: the text part of the default email templates is updated accordingly to the changes made to the HTML part
+* Fixed: the link in the confirmation email did not work if the user resent the confirmation email
+* Fixed: editing of the digest template in Firefox v17
+* Fixed: a few issues in the Settings
+
 = 1.1.3 =
 * Improved the digest template: you can change the ribbon image in the template
 * clean up the plugin code
@@ -154,6 +166,9 @@ We got a User Feedback page where you can [add or vote for new features](http://
 * First public release. Hello World! 
 
 == Upgrade Notice ==
+
+= 1.2.0 =
+* Added new form builder capabilities and made a lot of code improvements
 
 = 1.1.3 =
 * Improved the digest template: you can change the ribbon image in the template

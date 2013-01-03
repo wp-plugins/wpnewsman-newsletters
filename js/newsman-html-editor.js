@@ -123,6 +123,32 @@ jQuery(function($){
 		});	
 		//*/
 	}
+
+	function savePlainText(callback) {
+		var frm = $('#tpl-frame').get(0),
+			txt;
+
+		$('.outlet-buttons', frm.contentDocument.body).remove();
+
+		txt = $(frm.contentDocument.body).text();
+		txt = $.trim(txt.replace('[newsman badge]', ''));
+		txt = txt.replace(/(^\s+$)|(^\s+)/mg, ''); // removing empty string
+
+	 	var data = {
+			action: O.actSetData,
+			id: NEWSMAN_ENTITY_ID,
+			key: 'plain',
+			value: txt 
+	 	};
+
+		$.ajax({
+			type: 'POST',
+			url: ajaxurl,
+			data: data
+		}).done(function(data){
+			callback();
+		}).fail(NEWSMAN.ajaxFailHandler);
+	}
 	
 
 	function saveNewContent(content, outlet) {
@@ -140,11 +166,14 @@ jQuery(function($){
 			data: data
 		}).done(function(data){
 			var type = data.state ? 'success' : 'error';
-			showMessage(data.msg, 'success');
-		}).fail(function(t, status, message) {
-			var data = JSON.parse(t.responseText);
-			showMessage(data.msg, 'error');
-		});	
+
+			savePlainText(function(err){
+				if ( !err ) {
+					showMessage(data.msg, 'success');		
+				}
+			});
+			
+		}).fail(NEWSMAN.ajaxFailHandler);	
 		//*/
 	}
 
@@ -381,14 +410,64 @@ jQuery(function($){
 			$(el)[newOutletType]('edit');
 
 		},
+
+		_bindMoves: function() {
+			var that = this;
+			if ( this._moveHandler ) { return; }
+
+			this._moveHandler = function(e) {
+				var parentOffset = that.element.offset();
+				//or $(this).offset(); if you really just want the current element's offset
+				var relX = e.pageX - parentOffset.left,
+					relY = e.pageY - parentOffset.top;
+
+				var w = that.element[0].offsetWidth,
+					h = that.element[0].offsetHeight,
+					w2 = Math.round(w/2),
+					h2 = Math.round(h/2),
+					posCode;
+
+				/*
+					the element rectangle is divided into quarters numbered from 1 from left top corner
+					posCode is the number of active quarter
+				*/
+
+				if ( relX <= w2 && relY <= h2 ) {
+					posCode = 'Q1';
+				} else if ( relX > w2 && relY <= h2 ) {
+					posCode = 'Q2';
+				} else if ( relX > w2 && relY > h2 ) {
+					posCode = 'Q3';
+				} else if ( relX <= w2 && relY > h2 ) {
+					posCode = 'Q4';
+				}
+
+				if ( posCode != that._buttonsPosCode ) {
+					that._buttonsPosCode = posCode;
+					that._setButtonsPosition();
+				}
+			};
+
+			this.element.bind('mousemove', this._moveHandler);
+		},
+		_unbindMoves: function() {
+			if ( this._moveHandler ) {
+				this.element.unbind('mousemove', this._moveHandler);	
+			}			
+			this._moveHandler = null;
+		},
+
 		_enter: function() {
 			this.show();
+			this._bindMoves();
+
 		},
 		_leave: function(e) {
-			var ino = this.inOutlet(e.toElement); 
+			var ino = this.inOutlet(e.relatedTarget);
 
 			if ( !ino ) {
 				this.hide();
+				this._unbindMoves();
 			}
 		},
 		inOutlet: function(el) {
@@ -411,6 +490,36 @@ jQuery(function($){
 			}
 			return false;
 		},
+		_setButtonsPosition: function() {
+			var pos = $.extend({}, this.element.offset(), {
+				width: this.element[0].offsetWidth,
+				height: this.element[0].offsetHeight
+			});
+
+			var buttonsWidth = this.buttons[0].offsetWidth,
+				buttonsHeight = this.buttons[0].offsetHeight;
+
+			var q = this._buttonsPosCode || 'Q2',
+				oPos;
+
+			switch ( q ) {
+				case 'Q1':
+					oPos = { top: pos.top, left: pos.left };
+					break;
+				case 'Q2':
+					oPos = { top: pos.top, left: pos.left + pos.width - buttonsWidth };
+					break;
+				case 'Q3':
+					oPos = { top: pos.top + pos.height - buttonsHeight, left: pos.left + pos.width - buttonsWidth };
+					break;
+				case 'Q4':
+					oPos = { top: pos.top + pos.height - buttonsHeight, left: pos.left };
+					break;
+			}
+			if ( oPos.left < 0 ) { oPos.left = 0; }
+
+			this.buttons.css(oPos);
+		},
 		show: function() {
 			var that = this;
 			if ( !this.inTree(this.buttons) ) {
@@ -418,19 +527,9 @@ jQuery(function($){
 
 				this.buttons.bind('mouseleave', function(e){ that._leave(e); });
 
-				var pos = $.extend({}, this.element.offset(), {
-					width: this.element[0].offsetWidth,
-					height: this.element[0].offsetHeight
-				});
+				this._setButtonsPosition();
 
-				var buttonsWidth = this.buttons[0].offsetWidth,
-				buttonsHeight = this.buttons[0].offsetHeight;
-
-				var oPos = { top: pos.top, left: pos.left + pos.width - buttonsWidth };
-
-				if ( oPos.left < 0 ) { oPos.left = 0; }
-
-				this.buttons.css(oPos).show();
+				this.buttons.show();
 				this._bind();
 			}
 		},
@@ -483,6 +582,15 @@ jQuery(function($){
 			$.glock.outlet.prototype._getButtons.apply(this, arguments);
 
 			$('<li class="ob-image">select image</li>').appendTo(this.buttons);
+
+			if ( this.element.attr('gsdefault') ) {
+				$('<li class="ob-default-image">default image</li>').appendTo(this.buttons);	
+			}
+
+			if ( this.element.attr('gssource') ) {
+				$('<li class="ob-download-source">download source</li>').appendTo(this.buttons);	
+			}		
+			
 		},
 		_bind: function() {
 			$.glock.outlet.prototype._bind.apply(this, arguments);
@@ -491,11 +599,28 @@ jQuery(function($){
 				e.preventDefault();
 				that.md.show(that);
 			});
+			$('.ob-default-image', this.buttons).click(function(e){
+				e.preventDefault();
+				that.setDefaultImage();
+			});
+			$('.ob-download-source', this.buttons).click(function(e){
+				e.preventDefault();
+				that.downloadSourceImage();
+			});
 		},
 		clear: function() {
 			var newURL = this.element.attr('placehold');
 			this.element.attr('src', newURL);
 			saveNewContent(newURL, this);
+		},
+		setDefaultImage: function() {
+			var newURL = this.element.attr('gsdefault');
+			this.element.attr('src', newURL);
+			saveNewContent(newURL, this);
+		},
+		downloadSourceImage: function() {
+			var url = this.element.attr('gssource');
+			window.location = url;
 		}
 	});
 

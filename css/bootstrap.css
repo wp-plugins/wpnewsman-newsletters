@@ -2355,12 +2355,14 @@ body {
 .wp_bootstrap .alert-heading {
   color: #c09853;
 }
+
 .wp_bootstrap .alert .close {
-  position: relative;
-  top: -2px;
-  right: -21px;
+  position: absolute;
+  top: 5px;
+  right: 10px;
   line-height: 18px;
 }
+
 .wp_bootstrap .alert-success {
   background-color: #dff0d8;
   border-color: #d6e9c6;

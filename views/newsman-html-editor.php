@@ -178,7 +178,7 @@
 									<select name="" id="newsman-content-type">
 										<option value="full"><?php _e('Full post', NEWSMAN); ?></option>
 										<option value="excerpt"><?php _e('Excerpt', NEWSMAN); ?></option>
-										<option value="fancy"><?php _e('Fancy excerpt', NEWSMAN); ?></option>
+										<option value="fancy" selected="selected"><?php _e('Fancy excerpt', NEWSMAN); ?></option>
 									</select>
 								</label>
 								<label class="checkbox"><input type="checkbox" id="newsman-bcst-include-private"><?php _e(' Show private posts', NEWSMAN); ?></label>

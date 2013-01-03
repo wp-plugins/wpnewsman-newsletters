@@ -21,7 +21,7 @@ jQuery(function($){
 		errors = {};
 		
 		// email validation
-		el = $('.newsman-form-item.email.newsman-required input[type="text"]', form);
+		el = $('.newsman-form-item.newsman-form-item-email input', form);
 		v = el.val();
 		v = v.replace(/^\s+/).replace(/\s+$/);
 		if ( !v ) {			
@@ -31,7 +31,7 @@ jQuery(function($){
 		}
 
 		// text validation
-		$('.newsman-form-item.text.newsman-required', form).each(function(i, block){
+		$('.newsman-form-item.newsman-form-item-text.newsman-required', form).each(function(i, block){
  			el = $('input[type="text"]', block);
 			v = el.val();		
 			if ( !v ) {
@@ -41,22 +41,32 @@ jQuery(function($){
 
 
 		// checkbox validation
-		$('.newsman-form-item.checkbox.newsman-required', form).each(function(i, block){
+		$('.newsman-form-item.newsman-form-item-checkbox.newsman-required', form).each(function(i, block){
 			 el = $('input[type="checkbox"]', block);
 			if ( !el.is(':checked') ) {
 				err('Please fill all the required fields.', block);
 			}					 
 		});		
 
-
 		// radio validation
-		$('.newsman-form-item.radio.newsman-required', form).each(function(i, block){
+		$('.newsman-form-item.newsman-form-item-radio.newsman-required', form).each(function(i, block){
 			el = $('input[type="radio"]:checked', block).get(0);
 
 			if ( !el ) {
 				err('Please fill all the required fields.', block);
 			}				
-		})	
+		});
+
+		// select validation
+		$('.newsman-form-item.newsman-form-item-select.newsman-required', form).each(function(i, block){
+
+			v = $('select', block).val();
+
+			if ( !v || v === 'null' ) {
+				err('Please fill all the required fields.', block);
+			}				
+		});
+
 	});
 
 });
