@@ -10,13 +10,13 @@ jQuery(function($){
 			} else {
 				errors[msg] = 1;
 			}
-			$(el).closest('.newsman-form-item').addClass('error');						
+			$(el).closest('.newsman-form-item').addClass('newsman-form-error');						
 			$('<div class="error-msg">'+msg+'</div>').prependTo(form);
 			e.preventDefault();				
 		}
 
 		//reset errors
-		$('.newsman-form-item.error', form).removeClass('error');
+		$('.newsman-form-item.newsman-form-error', form).removeClass('newsman-form-error');
 		$('.error-msg', form).remove();
 		errors = {};
 		

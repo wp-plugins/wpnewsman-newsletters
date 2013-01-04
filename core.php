@@ -888,7 +888,7 @@ class newsman {
 		
 		$NEWSMAN_PAGE = strpos($page, 'newsman') !== false;
 
-		wp_register_script('newsmanform', NEWSMAN_PLUGIN_URL.'/js/newsmanform.js', array('jquery'));
+		wp_register_script('newsmanform', NEWSMAN_PLUGIN_URL.'/js/newsmanform.js', array('jquery'), NEWSMAN_VERSION);
 
 		if ( function_exists('wp_enqueue_script') ) {
 
@@ -905,12 +905,12 @@ class newsman {
 				wp_enqueue_style('jquery-tipsy-css', NEWSMAN_PLUGIN_URL.'/css/tipsy.css');
 				wp_enqueue_script('jquery-tipsy', NEWSMAN_PLUGIN_URL.'/js/jquery.tipsy.js', array('jquery'));
 
-				wp_register_style('newsman-html-editor', NEWSMAN_PLUGIN_URL.'/css/html-editor.css');
-				wp_register_script('newsman-html-editor-js', NEWSMAN_PLUGIN_URL.'/js/newsman-html-editor.js', array('jquery','jquery-ui-core', 'jquery-ui-dialog', 'jquery-tipsy'));
+				wp_register_style('newsman-html-editor', NEWSMAN_PLUGIN_URL.'/css/html-editor.css', array(), NEWSMAN_VERSION);
+				wp_register_script('newsman-html-editor-js', NEWSMAN_PLUGIN_URL.'/js/newsman-html-editor.js', array('jquery','jquery-ui-core', 'jquery-ui-dialog', 'jquery-tipsy'), NEWSMAN_VERSION);
 
-				wp_register_style('fileuploader-css', NEWSMAN_PLUGIN_URL.'/css/fileuploader.css');
-				wp_register_script('fileuploader-iframe-transport-js', NEWSMAN_PLUGIN_URL.'/js/uploader/jquery.iframe-transport.js', array('jquery'));	
-				wp_register_script('fileuploader-js', NEWSMAN_PLUGIN_URL.'/js/uploader/jquery.fileupload.js', array('jquery', 'jquery-ui-widget', 'fileuploader-iframe-transport-js'));
+				wp_register_style('fileuploader-css', NEWSMAN_PLUGIN_URL.'/css/fileuploader.css', array(), NEWSMAN_VERSION);
+				wp_register_script('fileuploader-iframe-transport-js', NEWSMAN_PLUGIN_URL.'/js/uploader/jquery.iframe-transport.js', array('jquery'), NEWSMAN_VERSION);	
+				wp_register_script('fileuploader-js', NEWSMAN_PLUGIN_URL.'/js/uploader/jquery.fileupload.js', array('jquery', 'jquery-ui-widget', 'fileuploader-iframe-transport-js'), NEWSMAN_VERSION);
 
 				if ( in_array($page, array('newsman-mailbox', 'newsman-templates') ) && $action == 'edit' && $type != 'wp' ) {
 					wp_enqueue_style('newsman-html-editor');
@@ -926,8 +926,8 @@ class newsman {
 					wp_enqueue_script('fileuploader-js');
 
 					if ( $action === 'editlist' ) {
-						wp_enqueue_script('newsman-jquery-placeholder', NEWSMAN_PLUGIN_URL.'/js/jquery.placeholder.js', array('jquery'));
-						wp_enqueue_script('newsman-formbuilder', NEWSMAN_PLUGIN_URL.'/js/newsman-formbuilder.js', array('jquery', 'jquery-ui-widget'));
+						wp_enqueue_script('newsman-jquery-placeholder', NEWSMAN_PLUGIN_URL.'/js/jquery.placeholder.js', array('jquery'), NEWSMAN_VERSION);
+						wp_enqueue_script('newsman-formbuilder', NEWSMAN_PLUGIN_URL.'/js/newsman-formbuilder.js', array('jquery', 'jquery-ui-widget'), NEWSMAN_VERSION);
 					}
 				}
 
@@ -945,14 +945,14 @@ class newsman {
 					wp_enqueue_script('director');		
 					// ------ 
 
-					wp_register_style('jq-multiselect', NEWSMAN_PLUGIN_URL.'/js/css/jquery.multiselect.css');
+					wp_register_style('jq-multiselect', NEWSMAN_PLUGIN_URL.'/js/css/jquery.multiselect.css', array(), NEWSMAN_VERSION);
 					wp_enqueue_style('jq-multiselect');
 
 					wp_register_style('jquery-ui-timepicker', NEWSMAN_PLUGIN_URL.'/css/jquery-ui-timepicker-addon.css');
 					wp_register_script('jquery-ui-timepicker-js', NEWSMAN_PLUGIN_URL.'/js/jquery-ui-timepicker-addon.js', array('jquery-ui-datepicker'));
 
-					wp_enqueue_style('multis-css', NEWSMAN_PLUGIN_URL.'/js/css/multis.css');
-					wp_enqueue_script('multis-js', NEWSMAN_PLUGIN_URL.'/js/jquery.multis.js', array('jquery', 'jquery-ui-widget') );					
+					wp_enqueue_style('multis-css', NEWSMAN_PLUGIN_URL.'/js/css/multis.css', array(), NEWSMAN_VERSION);
+					wp_enqueue_script('multis-js', NEWSMAN_PLUGIN_URL.'/js/jquery.multis.js', array('jquery', 'jquery-ui-widget'), NEWSMAN_VERSION );
 
 					wp_enqueue_script('neouploader-js', NEWSMAN_PLUGIN_URL.'/js/neoUploader.js', array('jquery', 'jquery-ui-widget') );
 
@@ -964,11 +964,11 @@ class newsman {
 					wp_register_script('newsman-ckeditor', NEWSMAN_PLUGIN_URL.'/js/ckeditor/ckeditor.js');
 					wp_register_script('newsman-ckeditor-jq', NEWSMAN_PLUGIN_URL.'/js/ckeditor/adapters/jquery.js', array('jquery', 'newsman-ckeditor'));
 
-					wp_register_style('newsman', NEWSMAN_PLUGIN_URL.'/css/newsman.css');
-					wp_register_style('newsman_admin', NEWSMAN_PLUGIN_URL.'/css/newsman_admin.css');
+					wp_register_style('newsman', NEWSMAN_PLUGIN_URL.'/css/newsman.css', array(), NEWSMAN_VERSION);
+					wp_register_style('newsman_admin', NEWSMAN_PLUGIN_URL.'/css/newsman_admin.css', array(), NEWSMAN_VERSION);
 
-					wp_register_script( 'jquery-multiselect', NEWSMAN_PLUGIN_URL.'/js/jquery.multiselect.js', array('jquery', 'jquery-ui-core', 'jquery-ui-widget'));
-					wp_register_script('newsman-admin', NEWSMAN_PLUGIN_URL.'/js/admin.js', array('jquery', 'jquery-ui-widget', 'jquery-ui-tabs'));
+					wp_register_script( 'jquery-multiselect', NEWSMAN_PLUGIN_URL.'/js/jquery.multiselect.js', array('jquery', 'jquery-ui-core', 'jquery-ui-widget'), NEWSMAN_VERSION);
+					wp_register_script('newsman-admin', NEWSMAN_PLUGIN_URL.'/js/admin.js', array('jquery', 'jquery-ui-widget', 'jquery-ui-tabs'), NEWSMAN_VERSION);
 
 					wp_enqueue_style('newsman');			
 					wp_enqueue_style('newsman_admin');
@@ -1060,7 +1060,7 @@ class newsman {
 			}
 		}
 
-		wp_register_style('newsman', NEWSMAN_PLUGIN_URL.'/css/newsman.css');
+		wp_register_style('newsman', NEWSMAN_PLUGIN_URL.'/css/newsman.css', array(), NEWSMAN_VERSION);
 		wp_enqueue_style('newsman');
 	}
 

@@ -4,7 +4,7 @@ Donate Link: http://wpnewsman.com/premium-newsletter-plugin-wordpress/
 Tags: wpnewsman, newsletter, newsletters, newsletter signup, newsletter widget, subscribers, post notification, email subscription, email marketing, email, emailing, subscription
 Requires at least: 3.4
 Tested up to: 3.5
-Stable tag: 1.2.0
+Stable tag: 1.2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -117,6 +117,10 @@ We got a User Feedback page where you can [add or vote for new features](http://
 
 == Changelog ==
 
+= 1.2.1 =
+* Fixed: CSS and JS files browser caching issue
+* Changed: the name of the сss class of required form field in error state from "error" to "newsman-form-error". If you did custom styling make sure to check this and apply changes to your css.
+
 = 1.2.0 =
 * Added: possibility to put the fields in the subscription form side by side
 * Added: possibility to customize the Subscribe button
@@ -166,6 +170,9 @@ We got a User Feedback page where you can [add or vote for new features](http://
 * First public release. Hello World! 
 
 == Upgrade Notice ==
+
+= 1.2.1 =
+* Version 1.2.0 changed the form layout ( dropped <ul> and <li> tags ) to support broader range of themes thus could break your custom css rules for WPNewsman if you had ones. Please check your custom form styling and change the CSS selectors to new ones.
 
 = 1.2.0 =
 * Added new form builder capabilities and made a lot of code improvements
