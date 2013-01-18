@@ -40,7 +40,8 @@
 </script>
 
 <div id="newsman-page-compose" class="wrap wp_bootstrap">
-
+	<?php include("_header.php"); ?>
+	
 	<div class="row">
 		<div class="span12">
 			<div style="border-bottom: 1px solid #DADADA; overflow: hidden;">
@@ -52,7 +53,7 @@
 	<div action="" class="form-horizontal form-compose-email">
 
 		<div class="row">
-			<div class="span8">
+			<div class="span9">
 				<!--	TO	 -->
 
 				<div class="control-group">
@@ -79,7 +80,8 @@
 				</div>				
 			</div>
 
-			<div class="span4">
+			<div class="span4">				
+				<?php if ( isset($email) ) {  do_action('newsman_put_tracking_settings', $email); } ?>
 				<h3><?php _e('Sending', NEWSMAN); ?></h3>
 				<label for="newsman-send-now" class="radio"><input type="radio" name="newsman-send" value="now" checked="checked" id="newsman-send-now"> <?php echo ( isset($email) && $email->status == 'stopped' ) ? __('Resume', NEWSMAN) : __('Send immediately', NEWSMAN); ?></label>
 				<label for="newsman-schedule" class="radio"><input <?php if ( isset($email) && $email->status === 'scheduled' ) { echo 'checked="checked"'; } ?> type="radio" name="newsman-send" value="schedule" id="newsman-schedule"> <?php _e('Schedule sending on', NEWSMAN); ?></label>

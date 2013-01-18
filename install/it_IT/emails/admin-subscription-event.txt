@@ -1,0 +1,12 @@
+Un contatto si è ISCRITTO alla tua mailing list at [newsman wp="blogname"]
+--- plain ---
+Un contatto si è ISCRITTO alla tua mailing list. Seguono dettagli:
+
+[newsman sub="*"]
+--
+[newsman wp="url"]/wp-admin/ -> WPNewsman -> Impostazioni
+--- html ---
+<p>Un contatto si è ISCRITTO alla tua mailing list. Seguono dettagli:</p>
+<ul>[newsman sub="*" tag="li"]</ul>
+<p>--</p>
+<p><a href="[newsman wp='url']/wp-admin/">[newsman wp="url"]/wp-admin/</a> -> WPNewsman -> Impostazioni</p>

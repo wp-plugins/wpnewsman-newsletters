@@ -1,0 +1,12 @@
+﻿Контакт подписался на вашу рассылку на  [newsman wp="blogname"]
+--- текст ---
+Контакт подписался на вашу рассылку. Информация о контакте приведена ниже:
+
+[newsman sub="*"]
+--
+[newsman wp="url"]/wp-admin/ -> Настройки -> WPNewsman
+--- html ---
+<p>Контакт подписался на вашу рассылку. Информация о контакте приведена ниже:</p>
+<ul>[newsman sub="*" tag="li"]</ul>
+<p>--</p>
+<p><a href="[newsman wp='url']/wp-admin/">[newsman wp="url"]/wp-admin/</a> -> WPNewsman -> Настройки</p>

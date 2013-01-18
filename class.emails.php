@@ -16,11 +16,8 @@ class newsmanEmail extends newsmanStorable {
 		'plain' => 'text',
 
 		'editor' => 'string',
-
 		'ucode' => 'string', // unique email id
-
 		'assets' => 'text',
-
 		'particles' => 'text', // addition email parts like repeatable post_blocks
 
 		'created' => 'datetime',
@@ -30,7 +27,9 @@ class newsmanEmail extends newsmanStorable {
 		'sentTo' => 'int', // Current number of recipient the email is sent to
 		'sent' => 'int', // total number of emails emails
 		'recipients' => 'int', // Number of recipients which are eligible to receive this email. Sets at the beginig of sending
-		'workerPid' => 'int'
+		'workerPid' => 'int',
+		'analytics' => 'string', // analytics type  '', or ga or piwik
+		'campName' => 'string' // analytics  campaign name
 	);
 
 	static $json_serialized = array('to');
@@ -51,6 +50,7 @@ class newsmanEmail extends newsmanStorable {
 		}
 
 		$this->embedStyles();
+		$this->addAnalytics();
 
 		return parent::save();
 	}
@@ -77,6 +77,24 @@ class newsmanEmail extends newsmanStorable {
 
 			$this->p_html = $u->normalizeShortcodesInLinks( $emo->emogrify() );			
 		}
+	}
+
+	private function addTracking($matches) {
+		$u = newsmanUtils::getInstance();
+
+		$url = $matches[3];
+
+		$url = apply_filters('newsman_apply_analytics', $url, $this->analytics, $this->campName);
+
+		return $matches[1].$url.$matches[4];
+	}
+
+	public function addAnalytics() {
+
+		if ( $this->analytics ) {			
+			$this->p_html = preg_replace_callback('/(<\w+[^>]+href=(\\\'|"))(\w+\:[^>]*?)(\2[^>]*>)/i', array($this, 'addTracking'), $this->p_html);
+		}
+
 	}
 
 	public function getToLists() {

@@ -2,10 +2,16 @@
 
 <script>
 	window.NEWSMAN_LISTS = <?php $g = newsman::getInstance(); echo $g->listNamesAsJSArr(); ?>;
+
+	window.onload = function(){
+		if ( parent.newsmanHtmlEditorContentLoaded ) {
+			parent.newsmanHtmlEditorContentLoaded();
+		}
+	};
 </script>
 
 <div id="newsman-html-editor" class="wrap wp_bootstrap">
-
+	<?php include("_header.php"); ?>
 	<div class="row">
 		<div class="span12">
 			<div style="border-bottom: 1px solid #DADADA; overflow: hidden;">
@@ -48,21 +54,24 @@
 	<div action="" class="form-horizontal form-compose-email">
 
 		<div class="row">
-			<div class="span12">
+			<div class="span12" id="tpl-styling-controls">
 				<ul class="nav nav-tabs" id="style-tabs">
-					<li class="active"><a href="#page" data-toggle="tab"><?php _e('Page', NEWSMAN); ?></a></li>
+<!-- 					<li class="active"><a href="#page" data-toggle="tab"><?php _e('Page', NEWSMAN); ?></a></li>
 					<li><a href="#header" data-toggle="tab"><?php _e('Header', NEWSMAN); ?></a></li>
 					<li><a href="#body" data-toggle="tab"><?php _e('Body', NEWSMAN); ?></a></li>
-					<li><a href="#footer" data-toggle="tab"><?php _e('Footer', NEWSMAN); ?></a></li>
+					<li><a href="#footer" data-toggle="tab"><?php _e('Footer', NEWSMAN); ?></a></li> -->
 				</ul>
 
 				<div class="tab-content" id="sub-tabs">
-					<div class="tab-pane active" id="home">
-						<ul class="nav nav-tabs nav-tabs-sl" id="page-tabs">
-							<li class="active"><a href="#page" data-toggle="tab"><?php _e('background color', NEWSMAN); ?></a></li>
+					<div class="tab-pane active" id="home">						
+						<div class="modal-loading-block">
+							<img src="<?php echo NEWSMAN_PLUGIN_URL;?>/img/ajax-loader.gif" alt="<?php esc_attr_e('Loading...', NEWSMAN); ?>"> <?php _e('Loading...', NEWSMAN); ?>
+						</div>
+						<ul class="nav nav-tabs nav-tabs-sl" id="page-tabs">							
+<!-- 							<li class="active"><a href="#page" data-toggle="tab"><?php _e('background color', NEWSMAN); ?></a></li>
 							<li><a href="#header" data-toggle="tab"><?php _e('Header', NEWSMAN); ?></a></li>
 							<li><a href="#body" data-toggle="tab"><?php _e('Body', NEWSMAN); ?></a></li>
-							<li><a href="#footer" data-toggle="tab"><?php _e('Footer', NEWSMAN); ?></a></li>
+							<li><a href="#footer" data-toggle="tab"><?php _e('Footer', NEWSMAN); ?></a></li> -->
 						</ul>
 					</div>
 				</div>				
@@ -93,15 +102,17 @@
 
 			<?php if ( NEWSMAN_EDIT_ENTITY == 'email' ): ?>
 				<div class="form-vertical" id="newsman-send-form">
-					<h3><?php _e('Sending', NEWSMAN)?></h3>
+					<?php do_action('newsman_put_tracking_settings', $email); ?>
+					<h3><?php _e('Sending', NEWSMAN); ?></h3>
 					<input type="hidden" name="page" value="newsman-mailbox">
 					<input type="hidden" name="action" value="send">
 
-					<label for="newsman-send-now" class="radio"><input type="radio" name="newsman-send" value="now" checked="checked" id=" -now"> <?php echo ( isset($email) && $email->status == 'stopped' ) ? __('Resume', NEWSMAN) : __('Send immediately', NEWSMAN); ?></label>
+					<label for="newsman-send-now" class="radio"><input type="radio" name="newsman-send" value="now" id="newsman-send-now" checked="checked"> <?php echo ( isset($email) && $email->status == 'stopped' ) ? __('Resume', NEWSMAN) : __('Send immediately', NEWSMAN); ?></label>
 					<label for="newsman-send-scheduled" class="radio"><input type="radio" name="newsman-send" value="schedule" id="newsman-send-scheduled"> Schedule sending on</label>
 					<div style="margin: 1em 0;">
 						<input ype="text" id="newsman-send-datepicker" class="span3">
 					</div>
+					
 					<button id="newsman-btn-send" type="button" class="btn btn-primary"><?php echo ( isset($email) && ( $email->status === 'stopped' || $email->status === 'error' ) ) ? __('Resume', NEWSMAN) : __('Send', NEWSMAN); ?></button>
 					<a type="button" href="<?php echo NEWSMAN_BLOG_ADMIN_URL; ?>admin.php?page=newsman-mailbox" id="newsman-close" class="btn"><?php _e('Close', NEWSMAN); ?></a>
 				</div>
@@ -137,7 +148,7 @@
 		<textarea class="source-editor" name="editor1"><?php _e('hello', NEWSMAN); ?></textarea>
 		</form>
 	</div>	
-
+	
 	<div class="modal dlg" id="newsman-modal-add-posts" style="display: none;">
 		<div class="modal-header">
 			<button class="close" data-dismiss="modal">×</button>
@@ -150,6 +161,19 @@
 						<div id="posts-controls">
 							<input type="text" id="newsman-search" placeholder="<?php esc_attr_e('Search...', NEWSMAN); ?>">
 							<div class="newsman-bcst-topbar">
+								<label><span class="text"><?php _e('Post type:', NEWSMAN);?></span>
+									<select name="newsman_post_type" id="newsman-post-type">
+									<?php
+										$u = newsmanUtils::getInstance();
+										$types = $u->getPostTypes();
+										
+										foreach ($types as $t) {
+											$sel = $t['selected'] ? ' selected="selected"' : '';
+											echo '<option value="'.$t['name'].'"'.$sel.'>'.$t['name'].'</option>';
+										}
+									?>
+									</select>
+								</label>
 								<label><span class="text"><?php _e('Categories:', NEWSMAN); ?></span>
 									<select name="newsman_bcst_sel_cat" id="newsman-bcst-sel-cat" multiple="multiple">
 									<?php

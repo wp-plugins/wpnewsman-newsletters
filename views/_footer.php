@@ -23,8 +23,8 @@
 <div class="row-fluid common-footer">
 	<div class="span12">
 		<div class="newsman-links">
-			<a href="http://wpnewsman.com/documentation/">Support &amp; documentation</a> | <a href="http://support.glocksoft.net/feedback">Request feature</a> | <a href="http://wpnewsman.com/terms-conditions/">
-Terms and Conditions</a> | <a href="http://wpnewsman.com/follow-us-and-spread-the-word-about-wpnewsman/">Spread the Word</a> | <span>WPNewsman Version: <?php echo nwsmn_get_prop('version'); ?></span>
+			<a href="http://wpnewsman.com/documentation/"><?php echo __("Support & documentation", NEWSMAN); ?></a> | <a href="http://support.glocksoft.net/feedback"><?php _e("Request feature", NEWSMAN); ?></a> | <a href="http://wpnewsman.com/terms-conditions/">
+<?php _e("Terms and Conditions", NEWSMAN); ?></a> | <a href="http://wpnewsman.com/follow-us-and-spread-the-word-about-wpnewsman/"><?php _e("Spread the Word", NEWSMAN); ?></a> | <span><?php _e("WPNewsman Version: ", NEWSMAN); echo nwsmn_get_prop('version'); ?></span>
 		</div>
 		<div class="buttons">
 			<div>

@@ -216,7 +216,9 @@ jQuery(function($){
 				width: 750,
 				height: 400,
 				resize_enabled: true,
-				resize_dir: 'both'
+				resize_dir: 'both',
+				entities: false,
+				entities_latin: false
 			},function(){
 				//that.edReady();
 			});
@@ -566,7 +568,7 @@ jQuery(function($){
 			}
 
 			var src = this.element.attr('src');
-			if ( !src || !src.match(/\/[^\/]+\.\w+$/) ) {
+			if ( !src || !src.match(/^\w+:\/\/[^\'\"]+/) ) { // simple url match
 				var ph = this.element.attr('placehold') || '100x100.gif';
 				this.element.attr('src', ph);
 			}
@@ -684,13 +686,12 @@ jQuery(function($){
 		},
 		clear: function() {
 			this.setContent('');
+			saveNewContent('', this);
 		}
 	});
 
 	function initOutlets(document){
 		$('<link rel="stylesheet" href="'+NEWSMAN_PLUGIN_URL+'/css/tpleditor.css" />').appendTo($('head', document));
-		//DEBUG
-		window.xdoc = document;
 		$('[gsedit]', document).each(function(i, el){			
 			var params = { doc: document, typeSwitch: outletTypeSwitched },
 				oType = ( el.nodeName === 'IMG' ) ? 'outletImg' : 'outletHTML';
@@ -983,37 +984,6 @@ jQuery(function($){
 
 		return that;
 	}
-
-
-	// testing controls
-
-	// makeStyleControl({
-	// 	name: 'letter-spacing',
-	// 	value: 'normal',
-	// 	selector: '#containerBody, body'
-	// }).render('#home').init();
-
-	// makeColorStyleControl({
-	// 	name: 'background-color',
-	// 	value: '#fafafa',
-	// 	selector: '#containerBody, body'
-	// }).render('#home').init();
-
-	// window.bs = makeBorderStyleControl({
-	// 	name: 'border-bottom',
-	// 	value: '3px dotted #ffee45',
-	// 	selector: '#containerBody, body'
-	// }).render('#home').init();
-
-	// window.sel = makeSelectStyleControl({
-	// 	name: 'text-align',
-	// 	value: 'center',
-	// 	selector: '#containerBody, body',
-	// 	options: [
-	// 		'left', 'right', 'center', 'justify'
-	// 	]
-	// }).render('#home').init();		
-
 
 	function styleControlFromType(args) {
 		var map = {

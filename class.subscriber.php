@@ -93,6 +93,10 @@ class newsmanSub {
 		$this->tableName = $tableName;
 	}
 
+	public function setDate($date) {
+		$this->rawRec['ts'] = $date;
+	}
+
 	public function toJSON() {
 		$jo = array(
 			'id' => $this->rawRec['id'],

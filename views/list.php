@@ -1,16 +1,17 @@
 <script>
 	window.NEWSMAN_LIST_ID = '<?php echo $id; ?>';
+	window.NEWSMAN_DEF_FORM = <?php echo newsmanGetDefaultForm();?>;
 </script>
 
 <!--  form builder templates -->
 
 <script type="text/html" id="tpl-newsman-form-options">
-	<strong>Form options</strong><br>
-	<label class="checkbox" for="use-inline-labels"><input id="use-inline-labels" type="checkbox"> Use inline labels </label>
+	<strong><?php _e('Form options', NEWSMAN); ?></strong><br>
+	<label class="checkbox" for="use-inline-labels"><input id="use-inline-labels" type="checkbox"> <?php _e('Use inline labels', NEWSMAN); ?> </label>
 </script>
 
 
-<!-- title element temaplates -->
+<!-- title element templates -->
 <script type="text/html" id="tpl-newsman-form-el-title">
 	<li gstype="title" class="newsman-form-item" data-bind="css: { selected: active }, click: $parent.elClick">
 		<h3 data-bind="text: value"></h3>
@@ -20,15 +21,15 @@
 
 <script type="text/html" id="tpl-newsman-options-title">
 	<div class="newsman-field-options newsman-field-options-title" data-bind="visible: active()">
-		<strong>Field options</strong>
-		<label>Title</label>
+		<strong><?php _e('Field options', NEWSMAN); ?></strong>
+		<label><?php _e('Title', NEWSMAN); ?></label>
 		<input type="text" data-bind="value: value, valueUpdate:'afterkeydown'">
 	</div>
 </script>
 
-<!-- /title element temaplates -->
+<!-- /title element templates -->
 
-<!-- html element temaplates -->
+<!-- html element templates -->
 <script type="text/html" id="tpl-newsman-form-el-html">
 	<li gstype="title" class="newsman-form-item" data-bind="css: { selected: active }, click: $parent.elClick">
 		<div data-bind="html: value"></div>
@@ -38,34 +39,34 @@
 
 <script type="text/html" id="tpl-newsman-options-html">
 	<div class="newsman-field-options newsman-field-options-html" data-bind="visible: active()">
-		<strong>Field options</strong>
-		<label>HTML content</label>
+		<strong><?php _e('Field options', NEWSMAN); ?></strong>
+		<label><?php _e('HTML content', NEWSMAN); ?></label>
 		<textarea data-bind="value: value, valueUpdate:'afterkeydown'"></textarea>
 	</div>
 </script>
 
-<!-- /html element temaplates -->
+<!-- /html element templates -->
 
 <!-- Text element templates -->
 <script type="text/html" id="tpl-newsman-form-el-text">
 	<li gstype="text" class="newsman-form-item text" data-bind="css: { selected: active, 'newsman-required': required }, click: $parent.elClick">
 		<label class="newsman-form-item-label" style="display: none;" data-bind="text: label, visible: !$parent.useInlineLabels()"></label>
-		<input type="text" name="" value="" placeholder="" data-bind="value: value, attr: { placeholder: label, name: fieldName() }">
+		<input type="text" name="" value="" placeholder="" data-bind="value: value, attr: { placeholder: label, name: name() }">
 		<button class="close" data-bind="click: removeFormItem">×</button>
 	</li>
 </script>
 <script type="text/html" id="tpl-newsman-form-el-email">
 	<li gstype="text" class="newsman-form-item text" data-bind="css: { selected: active, 'newsman-required': required }, click: $parent.elClick">
 		<label class="newsman-form-item-label" style="display: none;" data-bind="text: label, visible: !$parent.useInlineLabels()"></label>
-		<input type="text" name="" value="" placeholder="" data-bind="value: value, attr: { placeholder: label, name: fieldName() }">
+		<input type="text" name="" value="" placeholder="" data-bind="value: value, attr: { placeholder: label, name: name() }">
 	</li>
 </script>
 <script type="text/html" id="tpl-newsman-options-text">
 	<div class="newsman-field-options newsman-field-options-text" data-bind="visible: active()">
-		<strong>Field options</strong><br>
-		<label for="newsman_fb_field_name">Name</label>
+		<strong><?php _e('Field options', NEWSMAN); ?></strong><br>
+		<label for="newsman_fb_field_name"><?php _e('Name', NEWSMAN); ?></label>
 		<input class="newsman_fb_field_name span2" type="text" data-bind="value:label">
-		<label class="checkbox"><input type="checkbox" data-bind="checked: required"> Required</label>
+		<label class="checkbox"><input type="checkbox" data-bind="checked: required"> <?php _e('Required', NEWSMAN); ?></label>
 	</div>
 </script>
 <!-- /Text element templates -->
@@ -73,22 +74,22 @@
 <!-- Checkbox element templates -->
 <script type="text/html" id="tpl-newsman-form-el-checkbox">
 	<li gstype="checkbox" class="newsman-form-item" style="position: relative;" data-bind="css: { selected: active, 'newsman-required': required }, click: $parent.elClick">
-		<label class="newsman-form-item-label checkbox"><input type="checkbox" name="" value="1" data-bind="attr: {name: fieldName()}"><span data-bind="text: label"></span></label>
+		<label class="newsman-form-item-label checkbox"><input type="checkbox" name="" value="1" data-bind="attr: {name: name()}"><span data-bind="text: label"></span></label>
 		<button class="close" data-bind="click: removeFormItem">×</button>
 	</li>
 </script>
 <script type="text/html" id="tpl-newsman-options-checkbox">
 	<div class="newsman-field-options newsman-field-options-text" data-bind="visible: active()">
-		<strong>Field options</strong><br>
-		<label for="newsman_fb_field_name">Name</label>
+		<strong><?php _e('Field options', NEWSMAN); ?></strong><br>
+		<label for="newsman_fb_field_name"><?php _e('Name', NEWSMAN); ?></label>
 		<input class="newsman_fb_field_name span2" type="text" data-bind="value:label">
-		<label class="checkbox"><input type="checkbox" data-bind="checked: required"> Required</label>
+		<label class="checkbox"><input type="checkbox" data-bind="checked: required"> <?php _e('Required', NEWSMAN); ?></label>
 	</div>
 </script>
 <!-- /Checkbox element templates -->
 
 
-<!-- Dummy element temaplates -->
+<!-- Dummy element templates -->
 <script type="text/html" id="tpl-newsman-form-el-dummy">
 	<li gstype="text" class="newsman-form-item" data-bind="css: { selected: active, 'newsman-required': required }, click: $parent.elClick">
 		<p>dummy</p>
@@ -97,12 +98,12 @@
 
 <script type="text/html" id="tpl-newsman-options-dummy">
 	<div class="newsman-field-options newsman-field-options-text" data-bind="visible: active()">
-		<strong>Field options</strong><br>
+		<strong><?php _e('Field options', NEWSMAN); ?></strong><br>
 		<p>No options in dummy template</p>
 	</div>
 </script>
 
-<!-- /Dummy element temaplates -->
+<!-- /Dummy element templates -->
 
 
 <!-- Submit element templates -->
@@ -114,40 +115,39 @@
 </script>
 <script type="text/html" id="tpl-newsman-options-submit">
 	<div class="newsman-field-options newsman-field-options-text" data-bind="visible: active()">
-		<strong>Field options</strong><br>
-		<label for="newsman_fb_field_name">Name</label>
+		<strong><?php _e('Field options', NEWSMAN); ?></strong><br>
+		<label for="newsman_fb_field_name"><?php _e('Name', NEWSMAN); ?></label>
 		<input class="newsman_fb_field_name span2" type="text" data-bind="value:value">
 
-		<label>Size</label>
+		<label><?php _e('Size', NEWSMAN); ?></label>
 		<select class="input-medium" data-bind="value:size">
-			<option value="mini">Mini</option>
-			<option value="small">Small</option>
-			<option value="medium">Medium</option>
-			<option value="large">Large</option>
+			<option value="mini"><?php _e('Mini', NEWSMAN); ?></option>
+			<option value="small"><?php _e('Small', NEWSMAN); ?></option>
+			<option value="medium"><?php _e('Medium', NEWSMAN); ?></option>
+			<option value="large"><?php _e('Large', NEWSMAN); ?></option>
 		</select>
 
-		<label>Color</label>
+		<label><?php _e('Color', NEWSMAN); ?></label>
 		<select class="input-medium" data-bind="value: color">
-			<option value="gray">Gray</option>
-			<option value="pink">Pink</option>
-			<option value="blue">Blue</option>
-			<option value="green">Green</option>
-			<option value="turquoise">Turquoise</option>
-			<option value="black">Black</option>
-			<option value="darkgray">Dark Gray</option>
-			<option value="yellow">Yellow</option>
-			<option value="purple">Purple</option>
-			<option value="darkblue">Dark blue</option>
+			<option value="gray"><?php _e('Gray', NEWSMAN); ?></option>
+			<option value="pink"><?php _e('Pink', NEWSMAN); ?></option>
+			<option value="blue"><?php _e('Blue', NEWSMAN); ?></option>
+			<option value="green"><?php _e('Green', NEWSMAN); ?></option>
+			<option value="turquoise"><?php _e('Turquoise', NEWSMAN); ?></option>
+			<option value="black"><?php _e('Black', NEWSMAN); ?></option>
+			<option value="darkgray"><?php _e('Dark Gray', NEWSMAN); ?></option>
+			<option value="yellow"><?php _e('Yellow', NEWSMAN); ?></option>
+			<option value="purple"><?php _e('Purple', NEWSMAN); ?></option>
+			<option value="darkblue"><?php _e('Dark blue', NEWSMAN); ?></option>
 		</select>		
 
-		<label>Style</label>
+		<label><?php _e('Style', NEWSMAN); ?></label>
 		<select class="input-medium" data-bind="value: style">
-			<option value="none">None ( Theme native )</option>
-			<option value="brick">Brick</option>
-			<option value="rounded">Rounded</option>
-			<option value="pill">Pill</option>
+			<option value="none"><?php _e('None ( Theme native )', NEWSMAN); ?></option>
+			<option value="brick"><?php _e('Brick', NEWSMAN); ?></option>
+			<option value="rounded"><?php _e('Rounded', NEWSMAN); ?></option>
+			<option value="pill"><?php _e('Pill', NEWSMAN); ?></option>
 		</select>
-
 
 	</div>
 </script>
@@ -166,29 +166,29 @@
 </script>
 <script type="text/html" id="tpl-newsman-options-radio">
 	<div class="newsman-field-options newsman-field-options-radio" data-bind="visible: active">
-		<strong>Field options</strong><br>
-		<label for="newsman_fb_field_name">Name</label>
+		<strong><?php _e('Field options', NEWSMAN); ?></strong><br>
+		<label for="newsman_fb_field_name"><?php _e('Name', NEWSMAN); ?></label>
 		<input class="newsman_fb_field_name span2" type="text" data-bind="value: label">
-		<label class="checkbox"><input type="checkbox" data-bind="checked: required"> Required</label>
+		<label class="checkbox"><input type="checkbox" data-bind="checked: required"> <?php _e('Required', NEWSMAN); ?></label>
 		<div class="newsman-opt-sect-header">
-			<strong>Radio options</strong>
+			<strong><?php _e('Radio options', NEWSMAN); ?></strong>
 			<div class="btn-group">
-				<button class="btn btn-mini dropdown-toggle" data-toggle="dropdown"><i class="icon-plus-sign"></i> Add <span class="caret"></span></button>
+				<button class="btn btn-mini dropdown-toggle" data-toggle="dropdown"><i class="icon-plus-sign"></i> <?php _e('Add', NEWSMAN); ?> <span class="caret"></span></button>
 				<ul class="dropdown-menu">
-					<li><a href="#" data-bind="click: addOption">New option</a></li>
+					<li><a href="#" data-bind="click: addOption"><?php _e('New option', NEWSMAN); ?></a></li>
 					<li class="divider"></li>
-					<li><a href="#" data-bind="click: loadOptionsList" data-list="genders">Genders</a></li>
+					<li><a href="#" data-bind="click: loadOptionsList" data-list="genders"><?php _e('Genders', NEWSMAN); ?></a></li>
 				</ul>
 			</div>			
 		</div>
 		<ul class="options unstyled" data-bind="foreach: children">
-			<li class="radio-option" title="Double click to edit" data-bind="css: { edit: edit }, event: { dblclick: $root.toggleEdit}"><span data-bind="text:label"></span><input type="text" data-bind="value: label, valueUpdate:'afterkeydown', event: { blur: $root.toggleEdit }" class="newsman-field-options-radio-opt-input"><i class="icon-trash newsman-remove-option" data-bind="click: $parent.removeOption"></i></li>
+			<li class="radio-option" title="<?php _e('Double click to edit', NEWSMAN); ?>" data-bind="css: { edit: edit }, event: { dblclick: $root.toggleEdit}"><span data-bind="text:label"></span><input type="text" data-bind="value: label, valueUpdate:'afterkeydown', event: { blur: $root.toggleEdit }" class="newsman-field-options-radio-opt-input"><i class="icon-trash newsman-remove-option" data-bind="click: $parent.removeOption"></i></li>
 		</ul>		
 	</div>
 </script>
-<!-- /Radio element temaplates -->
+<!-- /Radio element templates -->
 
-<!-- Select element temaplates -->
+<!-- Select element templates -->
 <script type="text/html" id="tpl-newsman-form-el-select">
 	<li gstype="radio" class="newsman-form-item" data-bind="css: { selected: active, 'newsman-required': required }, click: $parent.elClick">
 		<label class="newsman-form-item-label" data-bind="text: label, visible: !$parent.useInlineLabels()"></label>
@@ -200,37 +200,37 @@
 </script>
 <script type="text/html" id="tpl-newsman-options-select">
 	<div class="newsman-field-options newsman-field-options-select" data-bind="visible: active()">
-		<strong>Field options</strong><br>
-		<label for="newsman_fb_field_name">Name</label>
+		<strong><?php _e('Field options', NEWSMAN); ?></strong><br>
+		<label for="newsman_fb_field_name"><?php _e('Name', NEWSMAN); ?></label>
 		<input class="newsman_fb_field_name span2" type="text" data-bind="value: label">
-		<label class="checkbox"><input type="checkbox" data-bind="checked: required"> Required</label>
+		<label class="checkbox"><input type="checkbox" data-bind="checked: required"> <?php _e('Required', NEWSMAN); ?></label>
 		<div class="newsman-opt-sect-header">
-			<strong>Select options</strong>
+			<strong><?php _e('Select options', NEWSMAN); ?></strong>
 			<div class="btn-group">
-				<button class="btn btn-mini dropdown-toggle" data-toggle="dropdown"><i class="icon-plus-sign"></i> Add <span class="caret"></span></button>
+				<button class="btn btn-mini dropdown-toggle" data-toggle="dropdown"><i class="icon-plus-sign"></i> <?php _e('Add', NEWSMAN); ?> <span class="caret"></span></button>
 				<ul class="dropdown-menu">
-					<li><a href="#" data-bind="click: addOption">New option</a></li>
+					<li><a href="#" data-bind="click: addOption"><?php _e('New option', NEWSMAN); ?></a></li>
 					<li class="divider"></li>
-					<li><a href="#" data-bind="click: loadOptionsList" data-list="countries">Countries</a></li>
-					<li><a href="#" data-bind="click: loadOptionsList" data-list="states">States</a></li>
+					<li><a href="#" data-bind="click: loadOptionsList" data-list="countries"><?php _e('Countries', NEWSMAN); ?></a></li>
+					<li><a href="#" data-bind="click: loadOptionsList" data-list="states"><?php _e('States', NEWSMAN); ?></a></li>
 				</ul>
 			</div>			
 		</div>
 		<ul class="options unstyled" data-bind="foreach: children">
-			<li class="radio-option" title="Double click to edit" data-bind="css: { edit: edit }, event: { dblclick: $root.toggleEdit}"><span data-bind="html:label"></span><input type="text" data-bind="value: label, valueUpdate:'afterkeydown', event: { blur: $root.toggleEdit }" class="newsman-field-options-radio-opt-input"><i class="icon-trash newsman-remove-option" data-bind="click: $parent.removeOption"></i></li>
+			<li class="radio-option" title="<?php _e('Double click to edit', NEWSMAN); ?>" data-bind="css: { edit: edit }, event: { dblclick: $root.toggleEdit}"><span data-bind="html:label"></span><input type="text" data-bind="value: label, valueUpdate:'afterkeydown', event: { blur: $root.toggleEdit }" class="newsman-field-options-radio-opt-input"><i class="icon-trash newsman-remove-option" data-bind="click: $parent.removeOption"></i></li>
 		</ul>		
 	</div>
 </script>
-<!-- /Select element temaplates -->
+<!-- /Select element templates -->
 
 
 <!--  /form builder templates -->
 
 <div class="wrap wp_bootstrap" id="newsman-page-list">
-
+	<?php include("_header.php"); ?>
 	<div class="row-fluid" style="border-bottom: 1px solid #DADADA;">
 		<div class="span12">
-			<h2><?php _e('Edit subscribers list', NEWSMAN); ?></h2>
+			<h2><?php _e('Edit subscribers list', NEWSMAN); ?><span style="margin-left: 10px;"><?php do_action('newsman_put_list_select', false); ?></span></h2>
 		</div>		
 	</div>
 
@@ -238,37 +238,17 @@
 
 	<form name="newsman_form_g" id="newsman_form_g" method="POST" action="">
 		
-		<label for="newsman_form_name"><h2>List name</h2></label>
-		<input type="text" class="span9" id="newsman_form_name" name="newsman-form-name" placeholder="List Name">
+		<label for="newsman_form_name"><h2><?php _e('List name', NEWSMAN); ?></h2></label>
+		<input type="text" class="span9" id="newsman_form_name" name="newsman-form-name" placeholder="<?php _e('List Name', NEWSMAN); ?>">
 
 		<!--												Submission form	 							-->
-
-<!-- 		<div class="row-fluid ">
-			<div class="span8">
-				<h2><?php _e('Submission Form', NEWSMAN); ?></h2>
-
-				<label for="newsman_form_title"><?php _e('Form Title (Headline)', NEWSMAN); ?></label>
-				<textarea id="newsman_form_title" class="span8" type="text" rows="5" cols="60" name="newsman-form-title"></textarea>
-
-				<label for="newsman_form_header"><?php _e('Form Header', NEWSMAN); ?></label>
-				<textarea id="newsman_form_header" class="span8" type="text" rows="5" cols="60" name="newsman-form-header"></textarea>
-
-				<label><?php _e('Form Footer', NEWSMAN); ?></label>
-				<textarea id="newsman_form_footer" class="span8" type="text" rows="5" cols="60" name="newsman-form-footer"></textarea><br />
-			</div>
-			<div class="span4">
-				<h4><?php _e('Define Why People Should Subscribe', NEWSMAN); ?></h4><br>
-				<p><?php _e('If you don\'t give people a good reason (better yet, several good reasons) to subscribe, well... they won\'t subscribe. Even if they love your blog.', NEWSMAN); ?></p>
-				<p><?php _e('To get more subscribers faster, write a good headline for your signup form that sells visitors on subscribing. Give people a good reason to subscribe. In most cases it is a simple convenience of being notified about new articles on your blog. It may be also a promise of giving something of value that non-subscribers won\'t get. Whatever your incentive is, clearly define it either in the form header or footer.'); ?></p>
-			</div>
-		</div> -->
 
 		<div class="row-fluid newsman-form-builder">
 			<div class="span8">
 				<div class="h-toolbar">
 					<h2><?php _e('Form Builder', NEWSMAN); ?></h2>
 					<div id="btn-add-field" class="btn-group">
-						<a class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><i class="icon-plus-sign icon-white"></i> Add Field <span class="caret"></span></a>
+						<a class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><i class="icon-plus-sign icon-white"></i> <?php _e('Add Field', NEWSMAN); ?> <span class="caret"></span></a>
 						<ul class="dropdown-menu">
 							<li><a type="text"><?php _e('Text', NEWSMAN); ?></a></li>
 							<!-- <li><a type="email"><?php _e('Email', NEWSMAN); ?></a></li> -->
@@ -296,7 +276,7 @@
 						<div class="alert newsman-options-panel">
 							<div id="newsman-formbuilder-formoptions" class="">
 								<strong><?php _e('Form options', NEWSMAN); ?></strong><br>
-								<label class="checkbox" for="use-inline-labels"><input id="use-inline-labels" data-bind="checked: useInlineLabels" type="checkbox"> Use inline labels </label>
+								<label class="checkbox" for="use-inline-labels"><input id="use-inline-labels" data-bind="checked: useInlineLabels" type="checkbox"> <?php _e('Use inline labels', NEWSMAN); ?> </label>
 							</div>
 							<div id="newsman-formbuilder-options" data-bind="template: { name: optionsTpl, foreach: elements }">
 								
@@ -309,13 +289,22 @@
 			</div>
 			<div class="span4 ext-form-block">
 				<?php do_action_ref_array('newsman_get_ext_form_options', array( $list )); ?>
-				<h3><?php _e('One more thing,'); ?></h3>
-				<p><?php _e('you can put this form inside any post content with this short-code:'); ?></p>
+				
+				<h3><?php _e('Here are the unsubscribe links', NEWSMAN); ?></h3>
+				<p><?php _e('if your are using 3rd party software to send emails:', NEWSMAN); ?></p>
+				<p><strong><?php _e('Link to "update subscription" form:', NEWSMAN); ?></strong></p>
+				<pre><code><?php echo get_bloginfo('wpurl')."/?newsman=update-subscription&code=".$list->uid.':[ucode]'; ?></code></pre>
+				<p><strong><?php _e('Link to instant unsubscribe:', NEWSMAN); ?></strong></p>
+				<pre><code><?php echo get_bloginfo('wpurl')."/?newsman=unsubscribe&code=".$list->uid.':[ucode]'; ?></code></pre>
+				
+				<p><?php echo sprintf(__('You must replace the %s with the value of the ucode field of the exported subscribers list.', NEWSMAN), '<code>[ucode]</code>'); ?></p>
+				
+				<h3><?php _e('One more thing,', NEWSMAN); ?></h3>
+				<p><?php _e('you can put this form inside any post content with this short-code:', NEWSMAN); ?></p>
 				<pre><code>[newsman-form id='<?php echo $list->id; ?>']</code></pre>
-				<p><?php _e('and you can make it horizontal with this shortcode'); ?></p>
+				<p><?php _e('and you can make it horizontal with this shortcode', NEWSMAN); ?></p>
 				<pre><code>[newsman-form id='<?php echo $list->id; ?>' horizontal]</code></pre>
 			</div>
-
 		</div>
 
 		<hr>

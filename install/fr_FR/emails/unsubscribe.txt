@@ -1,0 +1,27 @@
+Confirmation de la demande de désabonnement
+--- texte pur ---
+Bonjour,
+
+Ce message est envoyé pour vous informer que nous avons reçu une demande de supprimer l'enregistrement suivant de notre liste:
+
+Adresse email: [newsman sub="email"]
+
+Cet enregistrement a été supprimé de notre base de données et sera également supprimé des fichiers de sauvegarde.
+
+Si vous continuez à recevoir les messages non désirés de notre système, s'il vous plaît laissez-nous savoir en utilisant l'information de contact ci-dessous et nous prendrons des mesures immédiatement.
+
+Cordialement,
+[newsman me="name"]
+[newsman me="email"]
+[newsman wp="url"]
+--- html ---
+<p>Bonjour,</p>
+<p>Ce message est envoyé pour vous informer que nous avons reçu une demande de supprimer l'enregistrement suivant de notre liste:</p>
+<p>Adresse email: [newsman sub="email"]</p>
+<p>Cet enregistrement a été supprimé de notre base de données et sera également supprimé des fichiers de sauvegarde.</p>
+<p>Si vous continuez à recevoir les messages non désirés de notre système, s'il vous plaît laissez-nous savoir en utilisant l'information de contact ci-dessous et nous prendrons des mesures immédiatement.</p>
+<p>&nbsp;</p>
+<p>Cordialement,<br>
+[newsman me="name"]<br>
+[newsman me="email"]<br>
+<a href="[newsman wp='url']">[newsman wp="url"]</a></p>

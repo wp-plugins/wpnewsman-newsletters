@@ -1,4 +1,5 @@
 <div class="wrap wp_bootstrap" id="newsman-page-options">
+	<?php include("_header.php"); ?>
 	<div class="row-fluid" style="border-bottom: 1px solid #DADADA; height: 63px;">
 		<div class="span12">
 			<h2><?php _e('Settings', NEWSMAN); ?></h2>
@@ -11,10 +12,14 @@
 		
 		<ul class="nav nav-tabs" id="myTab">
 			<?php newsmanOutputTabs(array(
-				array( 'title' => 'General', 'id' => 'general' ),
-				array( 'title' => 'Email Settings', 'id' => 'emailsettings' ),
-				array( 'title' => 'Delivery Settings', 'id' => 'delivery' ),
-				array( 'title' => 'Uninstallation', 'id' => 'uninstall' )
+				/* translators: Options page tab title */
+				array( 'title' => __('General', NEWSMAN), 'id' => 'general' ),
+				/* translators: Options page tab title */
+				array( 'title' => __('Email Settings', NEWSMAN), 'id' => 'emailsettings' ),
+				/* translators: Options page tab title */
+				array( 'title' => __('Delivery Settings', NEWSMAN), 'id' => 'delivery' ),
+				/* translators: Options page tab title */
+				array( 'title' => __('Uninstallation', NEWSMAN), 'id' => 'uninstall' )
 			)); ?> 		
 	 	</ul>
 		 
@@ -23,7 +28,7 @@
 				<!--												General	 	 							-->
 				<div class="row-fluid">
 					<div class="span8">
-						<label class="checkbox" for="newsman_cron_clean_unsubscribed_every_week"><input type="checkbox" name="newsman-cleanUnconfirmed" value="1" /> Delete subscribers who didn't confirm their subscription within 7 days</label>
+						<label class="checkbox" for="newsman_cron_clean_unsubscribed_every_week"><input type="checkbox" name="newsman-cleanUnconfirmed" value="1" /> <?php _e("Delete subscribers who didn't confirm their subscription within 7 days", NEWSMAN); ?></label>
 						<div style="margin-top: 10px;">
 							<h3 style="margin-bottom: 5px;"><?php _e('Plugin statistics on the dashboard', NEWSMAN); ?></h3>
 							<label class="radio"><input type="radio" name="newsman-dashboardStats" value="off" /> <?php _e('Do not show', NEWSMAN); ?></label>					
@@ -64,10 +69,10 @@
 					<div class="span8">
 						<h2><?php _e('Email Settings', NEWSMAN); ?></h2>
 						<label class="newsman-edit-label" for="newsman-sender-name"><?php _e('From Name:', NEWSMAN); ?></label>
-						<input  type="text" size="40" name="newsman-sender-name" value="" /><br />
+						<input  type="text" size="40" name="newsman-sender-name" value="" /><br>
 
 						<label class="newsman-edit-label" for="newsman-sender-email"><?php _e('From Email:', NEWSMAN); ?></label>
-						<input  type="text" size="40" name="newsman-sender-email" value="" /><br />
+						<input  type="text" size="40" name="newsman-sender-email" value="" /><br>
 
 						<label class="newsman-edit-label" for="newsman-sender-returnEmail"><?php _e('Return Email Address:', NEWSMAN); ?></label>
 						<input  type="text" size="40" name="newsman-sender-returnEmail" value="" />
@@ -88,8 +93,8 @@
 
 				<div class="row-fluid">
 					<div class="span8">
-						<h3 style="margin-bottom: 10px;"><input style="vertical-align: middle;" name="newsman-mailer-throttling-on" type="checkbox"> Throttling</h3>
-						<span class="form-line">Limit sending to <input class="span1" name="newsman-mailer-throttling-limit" type="text"> emails per <select style="width: 100px;" name="newsman-mailer-throttling-period"><option value="min">Minute</option><option value="hour">Hour</option><option value="day">Day</option></select> </span>
+						<h3 style="margin-bottom: 10px;"><input style="vertical-align: middle;" name="newsman-mailer-throttling-on" type="checkbox"> <?php _e("Throttling", NEWSMAN); ?></h3>
+						<span class="form-line"><?php _e("Limit sending to ", NEWSMAN); ?><input class="span1" name="newsman-mailer-throttling-limit" type="text"> <?php _e("emails per", NEWSMAN); ?> <select style="width: 100px;" name="newsman-mailer-throttling-period"><option value="min"><?php _e("Minute", NEWSMAN); ?></option><option value="hour"><?php _e("Hour", NEWSMAN); ?></option><option value="day"><?php _e("Day", NEWSMAN); ?></option></select> </span>
 					</div>
 				</div>
 
@@ -110,23 +115,23 @@
 								<br>
 
 								<label class="newsman-edit-label-small" for="newsman-mailer-smtp-host"><?php _e('Hostname:', NEWSMAN); ?></label>
-								<input class="newsman-edit-small" type="text" id="newsman_smtp_hostname" name="newsman-mailer-smtp-host" value="" /><br />
+								<input class="newsman-edit-small" type="text" id="newsman_smtp_hostname" name="newsman-mailer-smtp-host" value="" /><br>
 								
 								<label class="newsman-edit-label-small" for="newsman_smtp_username"><?php _e('Username:', NEWSMAN); ?></label>
-								<input class="newsman-edit-small" type="text" id="newsman_smtp_username" name="newsman-mailer-smtp-user" value="" /><br />
+								<input class="newsman-edit-small" type="text" id="newsman_smtp_username" name="newsman-mailer-smtp-user" value="" /><br>
 								
 								<label class="newsman-edit-label-small" for="newsman-mailer-smtp-user"><?php _e('Password:', NEWSMAN); ?></label>
-								<input class="newsman-edit-small" type="password" id="newsman_smtp_password" name="newsman-mailer-smtp-pass" value="" /><br />
+								<input class="newsman-edit-small" type="password" id="newsman_smtp_password" name="newsman-mailer-smtp-pass" value="" /><br>
 								
 								<label class="newsman-edit-label-small" for="newsman-mailer-smtp-port"><?php _e('Port:', NEWSMAN); ?></label>
-								<input class="newsman-edit-small" type="text" id="newsman_smtp_port" name="newsman-mailer-smtp-port" value="" /><br />
+								<input class="newsman-edit-small" type="text" id="newsman_smtp_port" name="newsman-mailer-smtp-port" value="" /><br>
 								
 								<!-- <fieldset id="newsman_smtp_secure_conn" > -->
 								<h3 style="margin-bottom: 5px;"><?php _e('Secure Connection', NEWSMAN); ?></h3>
 								<div id="newsman_smtp_secure_conn" style="padding-left: 11px;">
-									<label class="radio"><input  type="radio" id="newsman_smtp_secure_conn_off" name="newsman-mailer-smtp-secure" value="off" /> <?php _e('Don\'t Use'); ?></label>
-									<label class="radio"><input  type="radio" id="newsman_smtp_secure_conn_tls" name="newsman-mailer-smtp-secure" value="tls" /> <?php _e('Use Start TLS'); ?></label>				
-									<label class="radio"><input  type="radio" id="newsman_smtp_secure_conn_ssl" name="newsman-mailer-smtp-secure" value="ssl" /> <?php _e('Use SSL'); ?></label>
+									<label class="radio"><input  type="radio" id="newsman_smtp_secure_conn_off" name="newsman-mailer-smtp-secure" value="off" /> <?php _e("Don't Use", NEWSMAN); ?></label>
+									<label class="radio"><input  type="radio" id="newsman_smtp_secure_conn_tls" name="newsman-mailer-smtp-secure" value="tls" /> <?php _e("Use Start TLS", NEWSMAN); ?></label>				
+									<label class="radio"><input  type="radio" id="newsman_smtp_secure_conn_ssl" name="newsman-mailer-smtp-secure" value="ssl" /> <?php _e("Use SSL", NEWSMAN); ?></label>
 								</div>
 								<!-- </fieldset> -->
 							</div>
@@ -161,9 +166,9 @@
 					<div class="span8">
 						<div class="alert alert-danger" style="padding: 12px 14px 14px 14px;">
 							<label for="newsman-uninstall-deleteSubscribers" class="checkbox" style="color: #B94A48;"><input name="newsman-uninstall-deleteSubscribers" type="checkbox" value="1"> <?php _e('Delete subscribers\' lists during uninstallation', NEWSMAN); ?></label>
-							<p><?php _e('Checking this option will remove all the subscribers\' data during the plugin uninstallation. Be carefull, there is no undo.', NEWSMAN); ?></p>
+							<p><?php _e('Checking this option will remove all the subscribers\' data during the plugin uninstallation. Be careful, there is no undo.', NEWSMAN); ?></p>
 							<div style="text-align: right;">
-								<a id="btn-uninstall-now" class="btn btn-danger">Uninstall now</a>
+								<a id="btn-uninstall-now" class="btn btn-danger"><?php _e("Uninstall now", NEWSMAN); ?></a>
 							</div>
 						</div>
 					</div>

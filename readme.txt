@@ -4,7 +4,7 @@ Donate Link: http://wpnewsman.com/premium-newsletter-plugin-wordpress/
 Tags: wpnewsman, newsletter, newsletters, newsletter signup, newsletter widget, subscribers, post notification, email subscription, email marketing, email, emailing, subscription
 Requires at least: 3.4
 Tested up to: 3.5
-Stable tag: 1.2.1
+Stable tag: 1.3.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,7 +12,7 @@ Powerful, easy to use, and easy to custom subscription and newsletter plugin
 
 == Description ==
 
-= Easily add Newsletter Service to your WordPress site =
+= WPNewsman is extremely easy to use and was built to be very user friendly! =
 
 An email newsletter is one of the most convenient and easy ways to keep in touch with your clients and prospects. With WPNewsman you can easily convert your website visitors into newsletter subscribers through double optin subscription forms in widgets, articles and pages, import and manage your lists, create and send beautiful newsletters directly from your WordPress site.
 
@@ -117,6 +117,17 @@ We got a User Feedback page where you can [add or vote for new features](http://
 
 == Changelog ==
 
+= 1.3.0 =
+* Added: support of multiple lists in the Lite version. Upon the first plugin activation, WPNewsman automatically creates the list called "wp-users" and imports the users of your WordPress site into that list. Thus, you get two lists - default list and WordPress users' list.
+* Added: ability to merge Google Analytics and Piwik remote tracking into links in the Pro version.
+* Added: ability to insert the Unsubscribe and Change Subscription links from the HTML editor menu.
+* Added: the post selector dialog for the digest template.
+* Added: "Lists and Forms" menu item under WPNewsman in your WordPress admin.
+* Added: ability to select a template for action pages.
+* Added: translation to the Russian, French, German and Italian languages. You can use WP Native Dashboard to switch to your locale.
+* Fixed: "Edit post template" feature for the digest template.
+* Other small fixes and improvements.
+
 = 1.2.1 =
 * Fixed: CSS and JS files browser caching issue
 * Changed: the name of the сss class of required form field in error state from "error" to "newsman-form-error". If you did custom styling make sure to check this and apply changes to your css.
@@ -170,6 +181,9 @@ We got a User Feedback page where you can [add or vote for new features](http://
 * First public release. Hello World! 
 
 == Upgrade Notice ==
+
+= 1.3.0 =
+* Added: support of multiple lists in the Lite version. Upon the first plugin activation, WPNewsman automatically creates the list called "wp-users" and imports the users of your WordPress site into that list. Thus, you get two lists - default list and WordPress users' list.
 
 = 1.2.1 =
 * Version 1.2.0 changed the form layout ( dropped <ul> and <li> tags ) to support broader range of themes thus could break your custom css rules for WPNewsman if you had ones. Please check your custom form styling and change the CSS selectors to new ones.

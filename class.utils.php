@@ -2,6 +2,7 @@
 
 require_once('class.options.php');
 require_once('class.list.php');
+require_once('class.shortcode.php');
 
 require_once(ABSPATH.'/wp-includes/class-phpmailer.php');
 
@@ -22,14 +23,20 @@ class newsmanUtils {
 		return self::$instance; 
 	} 
 
-	function emailFromFile($fileName) {
-		$emailSource = file_get_contents(NEWSMAN_PLUGIN_PATH.'/install/emails/'.$fileName);
-
+	function emailFromFile($fileName, $lang = 'en_US') {
+		$filePath = NEWSMAN_PLUGIN_PATH.'/install/'.$lang.'/emails/'.$fileName;
+		
 		$eml = array(
 			'subject' => '',
 			'plain' => '',
 			'html' => ''
 		);
+
+		if ( !file_exists($filePath) ) {
+			return $eml;
+		}
+
+		$emailSource = file_get_contents($filePath);
 
 		$b = '';
 		$state = 'subject';
@@ -68,9 +75,18 @@ class newsmanUtils {
 		return $eml;
 	}
 
-	function loadTpl($fileName) {
-		return file_get_contents(NEWSMAN_PLUGIN_PATH.'/install/templates/'.$fileName);
-	}	
+	function loadTpl($fileName, $lang = 'en_US') {
+		$path = NEWSMAN_PLUGIN_PATH.'/install/'.$lang.'/templates/'.$fileName; 
+		$tpl = '';
+		if ( file_exists($path) ) {
+			$tpl = file_get_contents($path);
+		}
+		return $tpl;
+	}
+
+	private function installLangExists($lang = 'en_US') {
+		return is_dir(NEWSMAN_PLUGIN_PATH.'/install/'.$lang);
+	}
 
 	/*
 	$opts = array(
@@ -677,7 +693,7 @@ class newsmanUtils {
 		global $NEWSMAN_CURRENT_ASSETS_DIR;
 		$NEWSMAN_CURRENT_ASSETS_DIR = NEWSMAN_PLUGIN_URL.'/email-templates/'.$assetsDir.'/';
 
-		$rx = '/((?:src|url|placehold|gssource|gsdefault)=(\\\'|"))(.*?)(\2)/i';
+		$rx = '/(\b(?:src|url|placehold|gssource|gsdefault)=(\\\'|"))(.*?)(\2)/i';
 		$tpl = preg_replace_callback($rx, array($this, 'expandAssetsURLsCallback'), $tpl);		
 
 		return $tpl;
@@ -855,7 +871,8 @@ class newsmanUtils {
 				require_once('migration.php');
 				if ( function_exists('newsman_do_migration') ) {
 					newsman_do_migration();
-				}				
+				}		
+				do_action('wpnewsman_update');		
 				update_option('newsman_old_version', get_option('newsman_version'));
 				update_option('newsman_version', NEWSMAN_VERSION);
 			}			
@@ -939,6 +956,224 @@ class newsmanUtils {
 		return implode("\n", $info);
 	}	
 
+	public function getFirstImage($post) {
+		if ( is_object($post) ) {
+			// do nothing
+		} else if ( is_numeric($post) ) {
+			$post = get_post($post);
+		}
+		$content = $post->post_content;
+		if ( preg_match('/<img.+src=[\'"]([^\'"]+)[\'"].*>/i', $content, $matches) ) {
+			return $matches[1];
+		}
+		return null;
+	}
+
+	/* --------------------------------------------------------------------------------------------------------- */
+	/* L10n functions */	
+	/* --------------------------------------------------------------------------------------------------------- */
+
+	public function installActionPages($lang = 'en_US', $replace = false) {
+		// loading pages & email templates
+		$options = newsmanOptions::getInstance();
+
+		$pagesData = array(
+			'alreadySubscribedAndVerified' => array(
+				'slug' => 'already-subscribed-and-verified',
+				'title' => __('Already Subscribed and Verified', NEWSMAN),
+				'template' => 'already-subscribed-and-verified.html',
+				'excerpt' => 'already-subscribed-and-verified-ex.html',
+			),
+			'badEmail' => array(
+				'slug' => 'bad-email-format',
+				'title' => __('Bad email address format', NEWSMAN),
+				'template' => 'bad-email.html',
+				'excerpt' => 'bad-email-ex.html'
+			),
+			'changeSubscription' => array(
+				'slug' => 'change-subscription',
+				'title' => __('Change Subscription', NEWSMAN),
+				'template' => 'change-subscription.html',
+				'excerpt' => 'change-subscription-ex.html'
+			),
+			'confirmationRequired' => array(
+				'slug' => 'confirmation-required',
+				'title' => __('Confirmation Required', NEWSMAN),
+				'template' => 'confirmation-required.html',
+				'excerpt' => 'confirmation-required-ex.html'
+			),
+			'confirmationSucceed' => array(
+				'slug' => 'confirmation-successful',
+				'title' => __('Confirmation Successful', NEWSMAN),
+				'template' => 'confirmation-successful.html',
+				'excerpt' => 'confirmation-successful-ex.html'
+			),
+			'emailSubscribedNotConfirmed' => array(
+				'slug' => 'email-subscribed-not-confirmed',
+				'title' => __('Subscription not yet confirmed', NEWSMAN),
+				'template' => 'email-subscribed-not-confirmed.html',
+				'excerpt' => 'email-subscribed-not-confirmed-ex.html'
+			),
+			'unsubscribeSucceed' => array(
+				'slug' => 'unsubscribe-succeed',
+				'title' => __('Successfully unsubscribed', NEWSMAN),
+				'template' => 'unsubscribe-succeed.html',
+				'excerpt' => 'unsubscribe-succeed-ex.html'
+			)
+		);
+
+		foreach ($pagesData as $pageKey => $data) {
+			$pageId = $options->get('activePages.'.$pageKey);
+
+			if ( !$pageId ) {
+				$new_page = array(
+					'post_type' => 'newsman_ap',
+					'post_title' => $data['title'],
+					'post_name' => $data['slug'],
+					'post_content' => $this->loadTpl($data['template'], $lang ),
+					'post_excerpt' => $this->loadTpl($data['excerpt'],  $lang ),
+					'post_status' => 'publish',
+					'post_author' => 1
+				);
+				$pageId = wp_insert_post($new_page);
+
+				$options->set('activePages.'.$pageKey, $pageId);
+			} else if ( $replace && $this->installLangExists($lang) ) {
+				// replacing the action page
+				$ap = get_post($pageId);
+				$ap->post_title = $data['title'];
+				$ap->post_content = $this->loadTpl($data['template'], $lang);
+				$ap->post_excerpt = $this->loadTpl($data['excerpt'],  $lang);
+
+				wp_update_post($ap);
+			}
+		}		
+	}
+
+	public function installSystemEmailTemplates($lang = 'en_US', $replace = false) {
+		$options = newsmanOptions::getInstance();
+		// loading email templates
+
+		$emailTemplates = array(
+			'addressChanged' => array( __('Email address updated', NEWSMAN),'address-changed.txt'),
+			'adminSubscriptionEvent' => array( __('Administrator notification - new subscriber', NEWSMAN), 'admin-subscription-event.txt'),
+			'adminUnsubscribeEvent' => array(  __('Administrator notification - user unsubscribed', NEWSMAN), 'admin-unsubscribe-event.txt'),
+			'confirmation' => array( __('Subscription confirmation', NEWSMAN), 'confirmation.txt'),
+			'unsubscribe' => array( __('Unsubscribe notification', NEWSMAN), 'unsubscribe.txt'),
+			'welcome' => array( __('Welcome letter, thanks for subscribing', NEWSMAN), 'welcome.txt')
+		);
+
+		$tplFileName = NEWSMAN_PLUGIN_PATH."/email-templates/newsman-system/newsman-system.html";
+		$baseTpl = file_get_contents($tplFileName);
+
+		foreach ($emailTemplates as $key => $v) {
+
+			$name = $v[0];
+			$fileName = $v[1];
+
+			$tplId = $options->get('emailTemplates.'.$key);
+			$eml = $this->emailFromFile($fileName, $lang);
+
+			if ( !$tplId ) {				
+
+				$tpl = new newsmanEmailTemplate();
+
+				$tmp_base = $baseTpl;
+
+				$tpl->name = $name;
+				$tpl->subject = $eml['subject'];
+				$tpl->html = $this->replaceSectionContent($tmp_base, 'std_content', $eml['html']);
+				$tpl->plain = $eml['plain'];
+				$tpl->system = true;
+
+				$tplId = $tpl->save();
+
+				$options->set('emailTemplates.'.$key, $tplId);
+			} else if ( $replace && $this->installLangExists($lang) ) {
+				$tpl = newsmanEmailTemplate::findOne('id = %d', array($tplId));
+
+				if ( $tpl ) {
+					$tmp_base = $baseTpl;
+
+					$tpl->name = $name;
+					$tpl->subject = $eml['subject'];
+					$tpl->html = $this->replaceSectionContent($tmp_base, 'std_content', $eml['html']);
+					$tpl->plain = $eml['plain'];
+					$tpl->system = true;
+
+					$tpl->save();
+				}
+			}
+		}
+	}
+
+	public function getPostTypes() {
+		$res = array();
+
+		$types = get_post_types(array(
+			'public'   => true,
+			'show_ui'  => true
+		));
+
+		foreach ($types as $key => $value) {
+			$res[] = array( 'name' => $value, "selected" => false );
+		}
+
+		return $res;
+	}
+
+	/* --------------------------------------------------------------------------------------------------------- */
+	/* Shortcode fucntions */	
+	/* --------------------------------------------------------------------------------------------------------- */
+
+	public function modifyShortCode(&$content, $name, $searchParams = array(), $replaceParams = array()) {
+
+		$offset = 0;
+
+		while ( preg_match('/\['.$name.'\s*([^\[\]]*)\]/i', $content, $matches, PREG_OFFSET_CAPTURE, $offset) ) {
+
+			$start = $matches[0][1];
+			$length = strlen($matches[0][0]);
+			$offset = $start+$length+1;
+
+			$sc = new newsmanShortCode($name, $content, $start, $length);	
+
+			$sc->paramsFromStr($matches[1][0]);
+
+			if ( $sc->matchParams($searchParams) ) {
+				$sc->set($replaceParams);
+				$newlen = strlen($sc->toString());
+				$content = $sc->updateSource();
+				$offset = $start + $newlen + 1;
+			}		
+
+		}	
+
+		return $content;
+	}
+
+	public function findShortCode(&$content, $name, $searchParams = array()) {
+
+		$offset = 0;
+
+		while ( preg_match('/\['.$name.'\s*([^\[\]]*)\]/i', $content, $matches, PREG_OFFSET_CAPTURE, $offset) ) {
+
+			$start = $matches[0][1];
+			$length = strlen($matches[0][0]);
+			$offset = $start+$length+1;
+
+			$sc = new newsmanShortCode($name, $content, $start, $length);	
+
+			$sc->paramsFromStr($matches[1][0]);
+
+			if ( $sc->matchParams($searchParams) ) {
+				return $sc;
+			}		
+
+		}	
+
+		return null;
+	}
 
 
 }

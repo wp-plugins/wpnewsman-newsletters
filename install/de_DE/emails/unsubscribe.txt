@@ -1,0 +1,19 @@
+Abmeldebestätigung anfordern
+--- plain ---
+Hallo, wir senden ihnen diese email, um sie zu benachrichtigen, dass wir eine Anfrage betreffend der Löschung des folgenden Abonnenten aus unserem email-Verteiler erhalten haben:
+
+Email: [newsman sub="email"] Dieser Abonnent wurde aus unserer email-Datenbank entfernt. Weiters werden in Kürze alle diesbezüglichen Sicherungsdateien entfernt werden. Falls sie weiterhin emails von unserem email-Verteilersystem erhalten sollten, teilen sie uns dies bitte über unten angeführte Kontaktdaten mit. Wir werden uns nach ihrer diesbezüglichen Mitteilung sofort um das Problem kümmern. Mit freundlichen Grüßen,
+[newsman me="name"]
+[newsman me="email"]
+[newsman wp="url"]
+--- html ---
+<p>Hallo,</p>
+<p>wir senden ihnen diese email, um sie zu benachrichtigen, dass wir eine Anfrage betreffend der Löschung des folgenden Abonnenten aus unserem email-Verteiler erhalten haben:</p>
+<p>Email: [newsman sub="email"]</p>
+<p>Dieser Abonnent wurde aus unserer email-Datenbank entfernt. Weiters werden in Kürze alle diesbezüglichen Sicherungsdateien entfernt werden.</p>
+<p>Falls sie weiterhin emails von unserem email-Verteilersystem erhalten sollten, teilen sie uns dies bitte über unten angeführte Kontaktdaten mit. Wir werden uns nach ihrer diesbezüglichen Mitteilung sofort um das Problem kümmern.</p>
+<p>&nbsp;</p>
+<p>Mit freundlichen Grüßen,<br>
+[newsman me="name"]<br>
+[newsman me="email"]<br>
+<a href="[newsman wp='url']">[newsman wp="url"]</a></p>

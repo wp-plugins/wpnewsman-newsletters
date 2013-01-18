@@ -7,9 +7,6 @@
 	require_once('class.emailtemplates.php');
 	require_once('class.sentlog.php');
 
-	ignore_user_abort(true);
-	set_time_limit(0);
-
 	if ( !defined('NEWSMAN_SS_UNCONFIRMED') )  { define('NEWSMAN_SS_UNCONFIRMED',0);  }
 	if ( !defined('NEWSMAN_SS_CONFIRMED') )    { define('NEWSMAN_SS_CONFIRMED',1);    }
 	if ( !defined('NEWSMAN_SS_UNSUBSCRIBED') ) { define('NEWSMAN_SS_UNSUBSCRIBED',2); }
@@ -130,7 +127,7 @@
 
 
 		private function errCantWriteTemplate($id) {
-			$this->respond(false, sprintf(__('Cannot edit temaplte. Temaplate with id "%s" cannot be written.', NEWSMAN), $id) );
+			$this->respond(false, sprintf(__('Cannot edit template. Template with id "%s" cannot be written.', NEWSMAN), $id) );
 		}
 
 		private function errListNotFound($id) {
@@ -350,12 +347,12 @@
 			$opts = $this->param('options', false);
 
 			if ( !$opts ) {
-				$this->respond(false, __('Error: options parameter was empty or not defined.', NEWSMAN));
+				$this->respond(false, __('Error: "options" request parameter was empty or not defined.', NEWSMAN));
 			} else {
 				$opts = json_decode($opts, true);
 				$o->load($opts, 'PRESERVE_OLD_VALUES');
 				do_action('newsman_options_updated');
-				$this->respond(true, __('Options where successfully saved.', NEWSMAN) );
+				$this->respond(true, __('Options were successfully saved.', NEWSMAN) );
 			}
 		}	
 
@@ -439,6 +436,8 @@
 			$cats	= $this->param('cats', '[]');
 			$auths	= $this->param('auths', false);
 
+			$postType = $this->param('postType', 'post');
+
 			$ipp = $this->param('ipp', 15);
 			$page = $this->param('page', 1);
 
@@ -486,7 +485,7 @@
 			$u = newsmanUtils::getInstance();
 
 			$args = array(		
-				'post_type' => 'post',						
+				'post_type' => $postType,
 				'post_status' => array('publish'),
 				'posts_per_page' => $ipp,
 				'paged' => $page,
@@ -548,7 +547,8 @@
 			foreach ($lists as $list) {
 				$listsNames[] = array(
 					'id' => $list->id,
-					'name' => $list->name
+					'name' => $list->name,
+					'stats' => $list->getStats($q)
 				);
 			}
 
@@ -967,7 +967,7 @@
 				$this->respond(false, newsmanEmailTemplate::$lastError);				
 			} else {
 				$note = ( $r == 0 ) ? __('You can\'t delete system templates marked with a gear icon.', NEWSMAN) : '';
-				$this->respond(true, sprintf( _n("You have successfully deleted %d template.", "You have successfully deleted %d tempaltes.", $r), $r ).$note);
+				$this->respond(true, sprintf( _n("You have successfully deleted %d template.", "You have successfully deleted %d templates.", $r), $r ).$note);
 			}
 		}
 
@@ -1090,7 +1090,7 @@
 					$this->errEmailNotFound($id);
 				}
 			} else {
-				$this->respond(false, sprintf(__('Unrecognised "send" parameter - %s', NEWSMAN), $send) );
+				$this->respond(false, sprintf(__('Unrecognized "send" parameter - %s', NEWSMAN), $send) );
 			}
 		}
 
@@ -1142,7 +1142,7 @@
 				}
 			}
  		
-			$this->respond(true, __('Emails where successfully unsubscribed.', NEWSMAN));
+			$this->respond(true, __('Emails were successfully unsubscribed.', NEWSMAN));
 		}
 
 
@@ -1273,7 +1273,7 @@
 			$importParams = json_decode($importParams, true);
 			$imported += $this->importFile($importParams);
 
-			$msg = sprintf( _n( 'Imported %d subscriber. Make sure you send him confrmation email.', 'Imported %d subscribers. Make sure you send them confrmation email.', $imported, NEWSMAN), $imported);
+			$msg = sprintf( _n( 'Imported %d subscriber. Make sure you send him confirmation email.', 'Imported %d subscribers. Make sure you send them confirmation email.', $imported, NEWSMAN), $imported);
 
 			$this->respond(true, $msg, array(
 				'files' => $this->getUploadedFiles()
@@ -1357,7 +1357,7 @@
 			$g = newsman::getInstance();
 			$g->mailman();
 			
-			$this->respond(true, __('Selected emails where successfully resumed', NEWSMAN));
+			$this->respond(true, __('Selected emails were successfully resumed', NEWSMAN));
 		}
 
 		/**
@@ -1391,7 +1391,7 @@
 		}
 
 		/**
-		 * Compiles posts block for digest temaplte
+		 * Compiles posts block for digest template
 		 * &pids - post ids to include in format "1,2,3,4"
 		 * &entType - entity type. "email" or "template"
 		 * &entity - entity id
@@ -1412,7 +1412,7 @@
 			$entType = $this->param('entType');
 
 			if ( !in_array($entType, array('email', 'template')) ) {
-				$this->respond(false, sprintf(__('"entType" prameter value "%s" should be "email" or "template".', NEWSMAN), $entType) );
+				$this->respond(false, sprintf(__('"entType" parameter value "%s" should be "email" or "template".', NEWSMAN), $entType) );
 			}
 
 			$ent = $this->getEntityById($entityId, $entType);
@@ -1420,8 +1420,20 @@
 			$postBlockTpl = $u->getSectionContent($ent->particles, 'gsedit', 'post_block');
 			$postDividerTpl = $u->getSectionContent($ent->particles, 'gsedit', 'post_divider');
 
+			$sc = $u->findShortCode($postBlockTpl, 'newsman', array( 'post' => array('fancy_excerpt', 'post_excerpt', 'post_content') ));
+
+			$postType = 'post';
+
+			if ( $sc ) {
+				$ptype = $sc->get('type');
+				if ( $ptype ) {
+					$postType = $ptype;
+				}
+			}	
+
 			$args = array(
-				'post__in' => $pids
+				'post__in' => $pids,
+				'post_type' => $postType
 			);
 
 			$output = '';
@@ -1457,20 +1469,23 @@
 			
 			$entityId = $this->param('entity');
 			$entType = $this->param('entType');
-			$newType = $this->param('postTemplateType');
+			$newTplType = $this->param('postTemplateType');
+			$postType = $this->param('postType', 'post');
 
-			if ( !in_array($newType, array('post_content', 'post_excerpt', 'fancy_excerpt')) ) {
-				$this->respond(false, sprintf(__('"postTemplateType" prameter value "%s" should be "post_content", "post_excerpt" or "fancy_excerpt".', NEWSMAN), $newType) );
+			if ( !in_array($newTplType, array('post_content', 'post_excerpt', 'fancy_excerpt')) ) {
+				$this->respond(false, sprintf(__('"postTemplateType" parameter value "%s" should be "post_content", "post_excerpt" or "fancy_excerpt".', NEWSMAN), $newTplType) );
 			}
 
 			if ( !in_array($entType, array('email', 'template')) ) {
-				$this->respond(false, sprintf(__('"entType" prameter value "%s" should be "email" or "template".', NEWSMAN), $entType) );
+				$this->respond(false, sprintf(__('"entType" parameter value "%s" should be "email" or "template".', NEWSMAN), $entType) );
 			}
 
 			$ent = $this->getEntityById($entityId, $entType);
 			$postBlockTpl = $u->getSectionContent($ent->particles, 'gsedit', 'post_block');
 
-			$postBlockTpl = preg_replace('/(\[newsman[^\[\]]+post=(?:\'|"))(fancy_excerpt|post_excerpt|post_content)((?:\'|")[^\[\]]+\])/', '$1'.$newType.'$3', $postBlockTpl);
+			//$postBlockTpl = preg_replace('/(\[newsman[^\[\]]+post=(?:\'|"))(fancy_excerpt|post_excerpt|post_content)((?:\'|")[^\[\]]+\])/', '$1'.$newTplType.'$3', $postBlockTpl);
+			$postBlockTpl = $u->modifyShortCode($postBlockTpl, 'newsman', array( 'post' => array('fancy_excerpt', 'post_excerpt', 'post_content') ), array( 'post'=> $newTplType, 'type'=>$postType ));	
+
 			$ent->particles = $u->replaceSectionContent($ent->particles, 'post_block', $postBlockTpl);
 			$ent->save();
 			$this->respond(true, __('Posts block successfully updated', NEWSMAN));
@@ -1633,11 +1648,16 @@
 
 			$ent = $this->getEntityById($entityId, $entType);
 
-			$email = new newsmanEmail();
+			if ( $ent instanceof newsmanEmail ) {
+				$email = $ent;
+			} else {
+				$email = new newsmanEmail();
 
-			$email->subject = $ent->subject;
-			$email->p_html = $ent->p_html;
-			$email->plain = $ent->plain;
+				$email->subject = $ent->subject;
+				$email->p_html = $ent->p_html;
+				$email->plain = $ent->plain;
+			}
+
 
 			$msg = $email->renderMessage($data);
 			$msg['html'] = $u->expandAssetsURLs($msg['html'], $ent->assets);
@@ -1741,6 +1761,82 @@
 		public function ajGetSystemInfo() {
 			$u = newsmanUtils::getInstance();
 			$this->respond(true, $u->getSystemInfo());
+		}
+
+		public function ajSwitchLocale() {
+			$u = newsmanUtils::getInstance();
+			$n = newsman::getInstance();
+
+			$switchLocale = $this->param('switch-locale', false);
+			$swtichLocalePages = $this->param('swtich-locale-pages', false);
+			$swtichLocaleTemplates = $this->param('swtich-locale-templates', false);
+
+			switch ( $switchLocale ) {
+				case 'replace-all':
+					$u->installActionPages($n->wplang, 'REPLACE');
+					$u->installSystemEmailTemplates($n->wplang, 'REPLACE');
+
+					$n->options->set('lang', $n->wplang);
+					$n->lang = $n->wplang;
+					break;
+
+				case 'just-update-locale':
+					$n->options->set('lang', $n->wplang);
+					$n->lang = $n->wplang;
+					break;
+
+				case 'custom':
+
+					if ( $swtichLocalePages ) {
+						$u->installActionPages($n->wplang, 'REPLACE');
+					}
+
+					if ( $swtichLocaleTemplates ) {
+						$u->installSystemEmailTemplates($n->wplang, 'REPLACE');
+					}
+
+					$n->options->set('lang', $n->wplang);
+					$n->lang = $n->wplang;
+					break;
+
+				case 'nothing':
+					$n->options->set('hideLangNotice', $n->wplang);
+					break;
+			}
+
+			$this->respond(true, 'success');			
+		}
+
+		public function ajDeleteForms() {
+			$u = newsmanUtils::getInstance();
+
+			$ids = $this->param('ids');
+			$set = $u->jsArrToMySQLSet($ids);
+
+			$r = newsmanList::removeAll('`id` in '.$set);
+
+			if ( !$r ) {
+				$this->respond(false, newsmanList::$lastError);
+			} else {
+				$this->respond(true, __('success', NEWSMAN) );
+			}			
+		}
+
+		public function ajSetEmailAnalytics() {
+			$emlId   = $this->param('id');
+			$type = $this->param('type', '');
+			$camp = $this->param('campaign', '');
+
+			$email = newsmanEmail::findOne('id = %d', array( $emlId ) );			
+
+			if ( $email ) {
+				$email->analytics = $type;
+				$email->campName = $camp;
+				$email->save();
+				$this->respond(true, 'success');
+			} else {
+				$this->errEmailNotFound($emlId);				
+			}
 		}
 
 	}

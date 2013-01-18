@@ -1,0 +1,49 @@
+Herzlich willkommen bei [newsman me="name"]
+--- plain ---Hallo! Danke, dass sie unseren Newsletter abonniert haben. Sie sind jetzt bei unserem Newsletter angemeldet und werden tolle Tipps, Tricks und Aktionen ein paar mal im Monat zugesendet bekommen. Wir geben Ihre E-Mail-Adresse und ihre persönlichen, privaten Angaben nicht an Dritte weiter. 
+
+Um zu gewährleisten, dass sie künftig tolle Tipps, Tricks und Angebote erhalten, fügen Sie bitte [newsman me = "email"] in Ihr E-Mail-Adressbuch oder in ihre Empfängerliste ein, damit unsere Newsletter nicht irrtümlich als Spam identifizert werden. Mit freundlichen Grüßen,
+[newsman me="name"]
+[newsman me="email"]
+[newsman wp="url"]
+
+--Sie erhalten diese email, da sich sich bei [newsman sub="ts"] auf [newsman wp="url"] als Newletterabonnent angemeldet haben. Sie können ihren Abonnentenstatus unter den nachstehend angeführten Link ändern: 
+[newsman link="update-subscription"]
+--- html ---
+<p>Hallo,</p>
+<p>danke, dass sie unseren Newsletter abonniert haben. Sie sind jetzt bei unserem Newsletter angemeldet und werden tolle Tipps, Tricks und Aktionen ein paar mal im Monat zugesendet bekommen.</p>
+<p>Wir geben Ihre E-Mail-Adresse und ihre persönlichen, privaten Angaben nicht an Dritte weiter.</p>
+<p>
+
+Um zu gewährleisten, dass sie künftig tolle Tipps, Tricks und Angebote erhalten, fügen Sie bitte [newsman me="email"] in Ihr E-Mail-Adressbuch oder in ihre Empfängerliste ein, damit unsere Newsletter nicht irrtümlich als Spam identifizert werden.</p>
+<p>&nbsp;</p>
+
+<p>Mit freundlichen Grüßen,<br>
+[newsman me="name"]<br>
+[newsman me="email"]<br>
+<a href="[newsman wp='url']">[newsman wp="url"]</a></p>
+<p>&nbsp;<p>
+<table bgcolor="#eeeeee" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #eeeeee; background-position: top; background-repeat: repeat-x; border-top-color: #dddddd; border-top-style: solid; border-top-width: 2px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px;"> 
+ <tbody> 
+	<tr> 
+	 <td colspan="4" style="height: 28px; white-space : nowrap;">&nbsp;</td> 
+	</tr> 
+	<tr> 
+	 <td style="width: 25px;"></td> 
+	 <td width="10"></td> 
+	 <td style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 11px; line-height: 17px; color: #777; text-shadow: 0 1px 0 #ffffff;"> 
+		<div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 11px; line-height: 17px; color: #666; text-shadow: 0 1px 0 #ffffff;">
+			Sie sind jetzt bei unserem Newsletter [newsman sub="ts"] auf <a href="[newsman wp='url']angemeldet." style="border: none; color: #0084b4; text-decoration: none;">[newsman wp="blogname"]</a> from IP: [newsman sub="ip"]
+		</div> 
+		<div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 11px; line-height: 17px; color: #666; text-shadow: 0 1px 0 #ffffff;">
+		 Sie können ihren Abonnentenstatus unter den nachstehend angeführten Link ändern: 
+		 <a href="[newsman link='update-subscription']" style="border: none; color: #0084b4; text-decoration: none;">Email-Adresse ändern oder Abmeldung unter</a>.</div> 
+		<div>
+		 <a href="#" style="border: none; color: #0084b4; text-decoration: none; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; text-decoration: none; font-size: 11px; line-height: 17px; color: #999999; text-shadow: 0 1px 0 #ffffff;">Copyright (C) [newsman wp="blogname"]. <span style="white-space: nowrap;">Alle Rechte vorbehalten.</span></a>
+		</div> </td> 
+	 <td style="width: 75px;"></td> 
+	</tr> 
+	<tr> 
+	 <td colspan="3" height="25"></td> 
+	</tr> 
+ </tbody> 
+</table>

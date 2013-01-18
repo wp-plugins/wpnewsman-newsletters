@@ -1,0 +1,36 @@
+[newsman wp="blogname"]: Confermate il vostro indirizzo
+--- plain ---
+Ciao,
+
+Siamo sicuri che [newsman wp="blogname"] ti piacerà! Prima di spedirti l'informazione che hai richiesto, vogliamo essere certi di avere il tuo permesso.
+
+Ti chiediamo di cliccare sul link sottostante per autorizzarci la spedizione di queste informazioni. Richiede solo pochi istanti! Se non puoi cliccare all'indirizzo specificato, copia e incolla il link in un browser.
+
+CONFERMA CLICCANDO QUI:
+
+[newsman link="confirmation"]
+
+Se invece hai ricevuto questo messaggio per errore e non è tua intenzione iscriverti, ignora semplicemente questo messaggio.
+
+Cordiali saluti,
+[newsman wp="blogname"]
+
+--
+Richiesta generata da:
+IP: [newsman sub="ip"]
+Data: [newsman sub="ts"]
+URL: [newsman wp="url"]
+--- html ---
+<p>Ciao,</p>
+<p>Siamo sicuri che [newsman wp="blogname"] ti piacerà! Prima di spedirti l'informazione che hai richiesto, vogliamo essere certi di avere il tuo permesso.</p>
+<p>Ti chiediamo di cliccare sul link sottostante per autorizzarci la spedizione di queste informazioni. Richiede solo pochi istanti! Se non puoi cliccare all'indirizzo specificato, copia e incolla il link in un browser.</p>
+<p>CONFERMA CLICCANDO QUI:</p>
+<p><a href="[newsman link='confirmation']">[newsman link="confirmation"]</a></p>
+<p>Se invece hai ricevuto questo messaggio per errore e non è tua intenzione iscriverti, ignora semplicemente questo messaggio.</p>
+<p>&nbsp;</p>
+<p>Cordiali saluti,<br />
+	[newsman wp="blogname"]<br />
+	<a href="[newsman wp='url']">[newsman wp="url"]</a></p>
+<p style="font-size: x-small">
+	Richiesta generata da:<br />
+	IP:&nbsp;[newsman sub="ip"], data:&nbsp;[newsman sub="ts"]</p>

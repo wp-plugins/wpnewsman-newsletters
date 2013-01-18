@@ -1,0 +1,17 @@
+﻿Контакт отписался от вашей рассылки на [newsman wp="url"]
+--- текст ---
+Контакт отписался от вашей рассылки. Информация о контакте приведена ниже:
+
+[newsman sub="*"]
+
+Причина отписки: 
+$u_reason
+
+--
+[newsman wp="url"]/wp-admin/ -> Настройки -> WPNewsman
+--- html ---
+<p>Контакт отписался от вашей рассылки. Информация о контакте приведена ниже:</p>
+<ul>[newsman sub="*" tag="li"]</ul>
+&nbsp;
+<p>--</p>
+<p><a href="[newsman wp='url']/wp-admin/">[newsman wp="url"]/wp-admin/</a> -> WPNewsman -> Настройки</p>

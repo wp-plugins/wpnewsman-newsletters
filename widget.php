@@ -13,7 +13,7 @@ class NEWSMAN_Widget_Form extends WP_Widget {
 	function __construct() {
 		$widget_ops = array('classname' => 'newsman-widget', 'description' => __('WPNewsman Subscription form for your newsletters'));
 		$control_ops = array('width' => 400, 'height' => 350);
-		parent::__construct('newsman-form', __('WPNewsletter Subscription Form'), $widget_ops);
+		parent::__construct('newsman-form', __('WPNewsman Subscription Form'), $widget_ops);
 	}
 
 	function widget( $args, $instance ) {

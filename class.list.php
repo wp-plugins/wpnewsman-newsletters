@@ -48,7 +48,7 @@ class newsmanList extends newsmanStorable {
 
 		$lvl += 1;
 		if ( $lvl > 10 ) {
-			throw new Exception( __('Cannot find free list unique ID. Recurse operations limit exceeded.', NEWSMAN) );
+			throw new Exception( __('Cannot find free unique list ID. Recursive operations limit exceeded.', NEWSMAN) );
 		}
 		$uid = $u->base64EncodeU(sha1(NONCE_SALT.microtime(), true));
 		$lst = static::findOne('uid = %s', array($uid));

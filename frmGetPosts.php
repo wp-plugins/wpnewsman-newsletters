@@ -84,6 +84,19 @@
 					<input type="text" id="newsman-search" placeholder="<?php esc_attr_e('Search...', NEWSMAN);?>">
 					<hr>
 					<div class="newsman-bcst-topbar">
+						<label><span class="text"><?php _e('Post type:', NEWSMAN);?></span>
+							<select name="newsman_post_type" id="newsman-post-type" multiple="multiple">
+							<?php
+								$u = newsmanUtils::getInstance();
+								$type = $u->getPostTypes();
+								
+								foreach ($type as $item) {
+									$sel = $item->selected ? ' selected="selected"' : '';
+									echo '<option value="'.$item->name.'"'.$sel.'>'.$item->name.'</option>';
+								}
+							?>
+							</select>
+						</label>						
 						<label><span class="text"><?php _e('Categories:', NEWSMAN);?></span>
 							<select name="newsman_bcst_sel_cat" id="newsman-bcst-sel-cat" multiple="multiple">
 							<?php

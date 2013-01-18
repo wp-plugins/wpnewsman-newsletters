@@ -1,12 +1,184 @@
 jQuery(function($){
 
+	// php comaptible sprintf function for l10n capabilities
+	// taken from http://phpjs.org/functions/sprintf/
+	function sprintf () {
+		var regex = /%%|%(\d+\$)?([-+\'#0 ]*)(\*\d+\$|\*|\d+)?(\.(\*\d+\$|\*|\d+))?([scboxXuideEfFgG])/g;
+		var a = arguments,
+		i = 0,
+		format = a[i++];
+
+		// pad()
+		var pad = function (str, len, chr, leftJustify) {
+		if (!chr) {
+		  chr = ' ';
+		}
+		var padding = (str.length >= len) ? '' : Array(1 + len - str.length >>> 0).join(chr);
+		return leftJustify ? str + padding : padding + str;
+		};
+
+		// justify()
+		var justify = function (value, prefix, leftJustify, minWidth, zeroPad, customPadChar) {
+		var diff = minWidth - value.length;
+		if (diff > 0) {
+		  if (leftJustify || !zeroPad) {
+		    value = pad(value, minWidth, customPadChar, leftJustify);
+		  } else {
+		    value = value.slice(0, prefix.length) + pad('', diff, '0', true) + value.slice(prefix.length);
+		  }
+		}
+		return value;
+		};
+
+		// formatBaseX()
+		var formatBaseX = function (value, base, prefix, leftJustify, minWidth, precision, zeroPad) {
+		// Note: casts negative numbers to positive ones
+		var number = value >>> 0;
+		prefix = prefix && number && {
+		  '2': '0b',
+		  '8': '0',
+		  '16': '0x'
+		}[base] || '';
+		value = prefix + pad(number.toString(base), precision || 0, '0', false);
+		return justify(value, prefix, leftJustify, minWidth, zeroPad);
+		};
+
+		// formatString()
+		var formatString = function (value, leftJustify, minWidth, precision, zeroPad, customPadChar) {
+		if (precision != null) {
+		  value = value.slice(0, precision);
+		}
+		return justify(value, '', leftJustify, minWidth, zeroPad, customPadChar);
+		};
+
+		// doFormat()
+		var doFormat = function (substring, valueIndex, flags, minWidth, _, precision, type) {
+		var number;
+		var prefix;
+		var method;
+		var textTransform;
+		var value;
+
+		if (substring == '%%') {
+		  return '%';
+		}
+
+		// parse flags
+		var leftJustify = false,
+		  positivePrefix = '',
+		  zeroPad = false,
+		  prefixBaseX = false,
+		  customPadChar = ' ';
+		var flagsl = flags.length;
+		for (var j = 0; flags && j < flagsl; j++) {
+		  switch (flags.charAt(j)) {
+		  case ' ':
+		    positivePrefix = ' ';
+		    break;
+		  case '+':
+		    positivePrefix = '+';
+		    break;
+		  case '-':
+		    leftJustify = true;
+		    break;
+		  case "'":
+		    customPadChar = flags.charAt(j + 1);
+		    break;
+		  case '0':
+		    zeroPad = true;
+		    break;
+		  case '#':
+		    prefixBaseX = true;
+		    break;
+		  }
+		}
+
+		// parameters may be null, undefined, empty-string or real valued
+		// we want to ignore null, undefined and empty-string values
+		if (!minWidth) {
+		  minWidth = 0;
+		} else if (minWidth == '*') {
+		  minWidth = +a[i++];
+		} else if (minWidth.charAt(0) == '*') {
+		  minWidth = +a[minWidth.slice(1, -1)];
+		} else {
+		  minWidth = +minWidth;
+		}
+
+		// Note: undocumented perl feature:
+		if (minWidth < 0) {
+		  minWidth = -minWidth;
+		  leftJustify = true;
+		}
+
+		if (!isFinite(minWidth)) {
+		  throw new Error('sprintf: (minimum-)width must be finite');
+		}
+
+		if (!precision) {
+		  precision = 'fFeE'.indexOf(type) > -1 ? 6 : (type == 'd') ? 0 : undefined;
+		} else if (precision == '*') {
+		  precision = +a[i++];
+		} else if (precision.charAt(0) == '*') {
+		  precision = +a[precision.slice(1, -1)];
+		} else {
+		  precision = +precision;
+		}
+
+		// grab value using valueIndex if required?
+		value = valueIndex ? a[valueIndex.slice(0, -1)] : a[i++];
+
+		switch (type) {
+		case 's':
+		  return formatString(String(value), leftJustify, minWidth, precision, zeroPad, customPadChar);
+		case 'c':
+		  return formatString(String.fromCharCode(+value), leftJustify, minWidth, precision, zeroPad);
+		case 'b':
+		  return formatBaseX(value, 2, prefixBaseX, leftJustify, minWidth, precision, zeroPad);
+		case 'o':
+		  return formatBaseX(value, 8, prefixBaseX, leftJustify, minWidth, precision, zeroPad);
+		case 'x':
+		  return formatBaseX(value, 16, prefixBaseX, leftJustify, minWidth, precision, zeroPad);
+		case 'X':
+		  return formatBaseX(value, 16, prefixBaseX, leftJustify, minWidth, precision, zeroPad).toUpperCase();
+		case 'u':
+		  return formatBaseX(value, 10, prefixBaseX, leftJustify, minWidth, precision, zeroPad);
+		case 'i':
+		case 'd':
+		  number = +value || 0;
+		  number = Math.round(number - number % 1); // Plain Math.round doesn't just truncate
+		  prefix = number < 0 ? '-' : positivePrefix;
+		  value = prefix + pad(String(Math.abs(number)), precision, '0', false);
+		  return justify(value, prefix, leftJustify, minWidth, zeroPad);
+		case 'e':
+		case 'E':
+		case 'f': // Should handle locales (as per setlocale)
+		case 'F':
+		case 'g':
+		case 'G':
+		  number = +value;
+		  prefix = number < 0 ? '-' : positivePrefix;
+		  method = ['toExponential', 'toFixed', 'toPrecision']['efg'.indexOf(type.toLowerCase())];
+		  textTransform = ['toString', 'toUpperCase']['eEfFgG'.indexOf(type) % 2];
+		  value = prefix + Math.abs(number)[method](precision);
+		  return justify(value, prefix, leftJustify, minWidth, zeroPad)[textTransform]();
+		default:
+		  return substring;
+		}
+		};
+
+		return format.replace(regex, doFormat);
+	}	
+
 	// common functions
 
 	var o = {};
 
 	var postsSelector;
 
-	window.NEWSMAN = {};
+	window.NEWSMAN = {
+		ajFormReq: {}
+	};
 
 	var showMessage = NEWSMAN.showMessage = function(msg, type, cb, rawError) {
 
@@ -21,7 +193,7 @@ jQuery(function($){
 
 		var rawRespLink = '';
 		if ( rawError ) {
-			rawRespLink = ' <a class="view-raw-response" href="#view">Bug report.</a>';
+			rawRespLink = ' <a class="view-raw-response" href="#view">'+newsmanL10n.bugReport+'</a>';
 		}
 
 		var wnd = $('<div class="alert gs-fixed '+cls+'">'+msg+rawRespLink+'<a class="close" data-dismiss="alert" href="#">&times;</a></div>').appendTo(wrap);
@@ -79,17 +251,23 @@ jQuery(function($){
 			return;
 		}
 
-		var err = status;
+		var err = status,
+			showedError = false;
 		try {
 			var data = JSON.parse(t.responseText);
-			err = data.msg;
+			err = data.msg;			
 		} catch(e) {
 			err = 'Cannot parse server response.';
+			showMessage(err, 'error', null, {
+				responseText: t.responseText,
+				query: this.data
+			});
+			showedError = true;		
 		}
-		showMessage(err, 'error', null, {
-			responseText: t.responseText,
-			query: this.data
-		});
+
+		if ( !showedError ) {
+			showMessage(err, 'error', null);
+		}
 	};	
 
 	function getSystemInfo(callback) {
@@ -243,6 +421,17 @@ jQuery(function($){
 
 		}).fail(NEWSMAN.ajaxFailHandler);			
 	}
+
+	/************************************************/
+	/*	Success callbacks for ajax form responses   */
+	/************************************************/
+
+	NEWSMAN.ajFormReq.ajSwitchLocale = function(data) {
+		$('form[action="ajSwitchLocale"]').closest('.newsman-admin-notification').fadeOut();
+	};
+
+
+	/************************************************/
 
 
 	// initiating tabs if present on the page	
@@ -427,7 +616,7 @@ jQuery(function($){
 			}
 
 			function loadMore() {
-				$('h3', this).text('Loading...');
+				$('h3', this).text(newsmanL10n.loading);
 				paging.page += 1;
 				refreshPosts('append');
 			}
@@ -436,6 +625,14 @@ jQuery(function($){
 
 			function refreshPosts(append) {
 				append = append == 'append';
+
+				var container = $('#newsman-bcst-posts');
+
+				if ( !append ) {
+					container.empty();
+					$('<div class="stub-wrap"><div class="stub">'+newsmanL10n.loading+'</div></div>').appendTo(container);
+				}
+
 				var ccats = getSelectedCats(),
 					cauths = getSelectedAuthors(),
 					limit, q, d, s;
@@ -445,6 +642,7 @@ jQuery(function($){
 
 				d = {
 					action: "newsmanAjGetPosts",
+					postType: $('#newsman-post-type').val(),
 					includePrivate: $('#newsman-bcst-include-private').is(':checked') ? 1 : 0					
 				};
 
@@ -468,11 +666,10 @@ jQuery(function($){
 					$('#newsman-bcst-posts .stub-wrap').remove();
 
 					if ( data && data.posts ) {
-						var container = $('#newsman-bcst-posts');
 
 						if ( !append ) {
 							container.empty();
-						}
+						}						
 
 						$('.newsman-bcst-load-button', container).remove();
 
@@ -492,13 +689,13 @@ jQuery(function($){
 								// adding "load more" button
 								$([
 								'<div class="newsman-bcst-load-button">',
-									'<h3>Load more...</h3>',
+									'<h3>'+newsmanL10n.loadMore+'</h3>',
 								'</div>'
 								].join('')).appendTo(container);								
 							}
 
 						} else {
-							$('<div class="stub-wrap"><div class="stub">Sorry, no posts matched your criteria.</div></div>').appendTo(container);
+							$('<div class="stub-wrap"><div class="stub">'+newsmanL10n.sorryNoPostsMathedCriteria+'</div></div>').appendTo(container);
 						}
 
 						countSelectedPosts();
@@ -507,7 +704,7 @@ jQuery(function($){
 				});
 			}
 
-			$('#newsman-bcst-sel-auth, #newsman-bcst-sel-cat').change(refreshPosts);
+			$('#newsman-bcst-sel-auth, #newsman-bcst-sel-cat, #newsman-post-type').change(refreshPosts);
 			$('#newsman-bcst-include-private').click(refreshPosts);
 
 			loadOptions(function(){
@@ -543,7 +740,7 @@ jQuery(function($){
 			skipFirstRow: false,			
 			messages: {
 				selectFile: 'Please select a file to import.',
-				loading: 'Loading...'
+				loading: newsmanL10n.loading
 			}
 		},
 		_create: function(){
@@ -811,7 +1008,7 @@ jQuery(function($){
 		uploadError: function(obj) {
 			var li = $('.neo-upload-list [fileid="'+obj.id+'"]');
 			li.find('.progress').remove();
-			var err = $('<span class="label label-important" title="'+obj.reason+'"><i class="icon-warning-sign icon-white"></i> Error</span>');
+			var err = $('<span class="label label-important" title="'+obj.reason+'"><i class="icon-warning-sign icon-white"></i> '+newsmanL10n.error2+'</span>');
 			var wrap = $('<div class="upload-error" style="margin-top: 4px;"></div>');
 			err.appendTo(wrap);
 			wrap.appendTo(li.find('a'));
@@ -917,12 +1114,14 @@ jQuery(function($){
 	 		}
 
 	 		function fillCounters(cnt) {
+	 			
+	 			var upgradeLink = NEWSMAN_BLOG_ADMIN_URL+'/admin.php?page=newsman-pro';
 
 	 			if ( typeof NEWSMAN_LITE_MODE !== 'undefined' && NEWSMAN_LITE_MODE ) {
 		 			if ( cnt.all >= get95pcnt() && cnt.all < getx() ) {
-		 				warn('Warning! You are close to the limit of '+getx()+' subscribers you can send emails to in the Lite version of the plugin. Please, <a href="">upgrade to the Pro version</a> to send emails without limitations.');
+		 				warn( sprintf( newsmanL10n.warnCloseToLimit, getx(), upgradeLink ) );
 		 			} else if ( cnt.all >= getx() ) {
-		 				warn('Warning! You exceeded the limit of '+getx()+' subscribers you can send emails to in the Lite version of the plugin. Please, <a href="">upgrade to the Pro version</a> to send emails without limitations.');
+		 				warn( sprintf( newsmanL10n.warnExceededLimit, getx(), upgradeLink ) );
 		 			}
 	 			}
 
@@ -941,7 +1140,7 @@ jQuery(function($){
 
 	 		function showLoading() {
 	 			var tbody = $('#newsman-mgr-subscribers tbody').empty();
-	 			$('<tr><td colspan="6" class="blank-row"><img src="'+NEWSMAN_PLUGIN_URL+'/img/ajax-loader.gif"> Loading...</td></tr>').appendTo(tbody);	 			
+	 			$('<tr><td colspan="6" class="blank-row"><img src="'+NEWSMAN_PLUGIN_URL+'/img/ajax-loader.gif"> '+newsmanL10n.loading+'</td></tr>').appendTo(tbody);	 			
 	 		}
 
 	 		function renderButtons(start, num, current, count) {
@@ -1158,9 +1357,59 @@ jQuery(function($){
 
 		// Unsubscribe & Delete modal windows
 
-		if ( typeof NEWSMANEXT !== 'undefined' ) {
-			NEWSMANEXT.initListsSelect(getSubscribers, showMessage, showModal);
+		function enableFormEditButton() {
+			var listId = $('#newsman-lists').val();
+			$('#btn-edit-form').attr('href', NEWSMAN_BLOG_ADMIN_URL+'admin.php?page=newsman-subs&action=editlist&id='+listId);
 		}
+
+		var lastListId = null;
+
+		/**
+		 * We have "Add new..." list button as an item in the dropdown,
+		 * so we remember the current position in the list tot get back to it
+		 * if we click cancel in the dialog 
+		 */
+
+		$('#newsman-lists')
+		.bind('mousedown', function(e){
+			lastListId = $('#newsman-lists').val();
+		})
+		.change(function(e){
+			var v = $('#newsman-lists').val();
+			if ( v === 'add' ) {
+				$('#newsman-lists').val(lastListId);
+				showModal('#newsman-modal-create-list', function(mr){
+					if ( mr == 'ok' ) {
+						$.ajax({
+							type: 'POST',
+							url: ajaxurl,
+							data: {
+								action: 'newsmanAjCreateList',
+								name: $('#new-list-name').val()
+							}
+						}).done(function(data){
+
+							if ( data.id ) {
+								$('<option value="'+data.id+'">'+data.name+'</option>').insertBefore( $('#new-list-group') );
+								$('#newsman-lists').val(data.id).change();
+								window.location.hash = '#/all';
+							}
+
+						}).fail(function(t, status, message) {
+							var data = JSON.parse(t.responseText);
+							showMessage(data.msg, 'error');
+						});
+
+					}
+					return true;
+				});
+			} else {
+				enableFormEditButton();
+				getSubscribers();
+			}			
+		});
+
+		enableFormEditButton();		
 
 		// -----------	
 
@@ -1530,6 +1779,13 @@ jQuery(function($){
 
 	if ( $('#newsman-page-list').get(0) ) {
 
+		$('#newsman-lists').change(function(e){
+			var listId = $(this).val();
+			window.location = NEWSMAN_BLOG_ADMIN_URL+'admin.php?page=newsman-subs&action=editlist&id='+listId;
+		});
+
+		// 
+
 		//$('.newsman-form-builder').newsmanFormBuilder();
 
 		function safeName(str) {
@@ -1636,8 +1892,6 @@ jQuery(function($){
 			height: 300
 		});
 
-		window.eee = editor;
-
 		function changed(){
 			saveEmail();
 		}
@@ -1666,29 +1920,36 @@ jQuery(function($){
 			changed();
 		});
 
+		editor.on('changed', function(){
+			changed();
+		});		
+
 		$('#newsman-email-subj').change(function(){
 			changed();
 		});
 
 		function sendEmail() {
 
-			$.ajax({
-				type: 'POST',
-				url: ajaxurl,
-				data: {
-					action: "newsmanAjScheduleEmail",
-					id: NEWSMAN_ENTITY_ID,
-					send: $('input[name="newsman-send"]:checked').val(),
-					ts: Math.round( $('#newsman-send-datepicker').datetimepicker('getDate') / 1000 )
-				}
-			}).done(function(data){
-				showMessage(data.msg, 'success', function(){
-					if ( data.redirect ) {
-						window.location = data.redirect;
-					}					
-				});
-			}).fail(NEWSMAN.ajaxFailHandler);
+			saveEmail(function(){
 
+				$.ajax({
+					type: 'POST',
+					url: ajaxurl,
+					data: {
+						action: "newsmanAjScheduleEmail",
+						id: NEWSMAN_ENTITY_ID,
+						send: $('input[name="newsman-send"]:checked').val(),
+						ts: Math.round( $('#newsman-send-datepicker').datetimepicker('getDate') / 1000 )
+					}
+				}).done(function(data){
+					showMessage(data.msg, 'success', function(){
+						if ( data.redirect ) {
+							window.location = data.redirect;
+						}					
+					});
+				}).fail(NEWSMAN.ajaxFailHandler);				
+
+			});
 		}
 
 		function saveEmail(done) {
@@ -1809,7 +2070,7 @@ jQuery(function($){
 				showLoading();
 				var b = $('#newsman-modal-errorlog .modal-body').empty();
 
-				$('<div><img src="'+NEWSMAN_PLUGIN_URL+'/img/ajax-loader.gif"> Loading...</div>').appendTo(b);
+				$('<div><img src="'+NEWSMAN_PLUGIN_URL+'/img/ajax-loader.gif"> '+newsmanL10n.loading+'</div>').appendTo(b);
 
 				$.ajax({
 					type: 'POST',
@@ -1822,14 +2083,14 @@ jQuery(function($){
 
 					$('#newsman-modal-errorlog .modal-body').empty();
 
-					$('<h3 style="margin-bottom: 1em;">Sent '+data.sent+' of '+data.recipients+' emails</h3>').appendTo(b);
+					$('<h3 style="margin-bottom: 1em;">'+sprintf(newsmanL10n.sentXofXemails, data.sent, data.recipients)+'</h3>').appendTo(b);
 
 					if ( data.msg ) {
-						$('<h3 style="margin-bottom: 1em;">Status: '+data.msg+'</h3>').appendTo(b);	
+						$('<h3 style="margin-bottom: 1em;">'+newsmanL10n.status+' '+data.msg+'</h3>').appendTo(b);	
 					}					
 
 					if ( data.errors.length ) {
-						$('<h3 style="margin-bottom: .5em;">Email Errors</h3>').appendTo(b);
+						$('<h3 style="margin-bottom: .5em;">'+newsmanL10n.emailErrors+'</h3>').appendTo(b);
 
 						function getList(err) {
 							var id = 'newsman-errlog-'+err.listId,
@@ -1838,13 +2099,13 @@ jQuery(function($){
 							if ( tb.get(0) ) {
 								return tb;
 							} else {
-								$('<h4 style="margin-bottom: .5em;">List: '+err.listName+'</h4>').appendTo(b);
+								$('<h4 style="margin-bottom: .5em;">'+newsmanL10n.list+' '+err.listName+'</h4>').appendTo(b);
 								var tbl = $([
 									'<table id="'+id+'" class="table table-striped table-bordered">',
 										'<thead>',
 											'<tr>',
-												'<th>Email Address</th>',
-												'<th>Error Message</th>',
+												'<th>'+newsmanL10n.emailAddress+'</th>',
+												'<th>'+newsmanL10n.errorMessage+'</th>',
 											'</tr>',
 										'</thead>',
 										'<tbody>',
@@ -1949,11 +2210,11 @@ jQuery(function($){
 
 
 			function fillCounters(cnt) {
-				$('#newsman-mailbox-all').text('All emails ('+cnt.all+')');
-				$('#newsman-mailbox-inprogress').text('In progress ('+cnt.inprogress+')');
-				$('#newsman-mailbox-drafts').text('Drafts ('+cnt.drafts+')');					
-				$('#newsman-mailbox-pending').text('Pending ('+cnt.pending+')');
-				$('#newsman-mailbox-sent').text('Sent ('+cnt.sent+')');
+				$('#newsman-mailbox-all').text( newsmanL10n.vAllEmails + ' ('+cnt.all+')');
+				$('#newsman-mailbox-inprogress').text(newsmanL10n.vInProgress + ' ('+cnt.inprogress+')');
+				$('#newsman-mailbox-drafts').text(newsmanL10n.vDrafts + ' ('+cnt.drafts+')');					
+				$('#newsman-mailbox-pending').text( newsmanL10n.vPending + ' ('+cnt.pending+')');
+				$('#newsman-mailbox-sent').text( newsmanL10n.vSent + ' ('+cnt.sent+')');
 			}		
 
 			function renderButtons(start, num, current, count) {
@@ -2015,7 +2276,7 @@ jQuery(function($){
 
 		 		function showLoading() {
 		 			var tbody = $('#newsman-mgr-subscribers tbody').empty();
-		 			$('<tr><td colspan="6" class="blank-row"><img src="'+NEWSMAN_PLUGIN_URL+'/img/ajax-loader.gif"> Loading...</td></tr>').appendTo(tbody);	 			
+		 			$('<tr><td colspan="6" class="blank-row"><img src="'+NEWSMAN_PLUGIN_URL+'/img/ajax-loader.gif"> '+newsmanL10n.loading+'</td></tr>').appendTo(tbody);	 			
 		 		}				
 
 				function fieldsToHTML(obj) {
@@ -2158,7 +2419,7 @@ jQuery(function($){
 
 				var tbody = $('#dlg-templates-tbl').empty();
 
-				$('<tr><td class="blank-row"><img src="'+NEWSMAN_PLUGIN_URL+'/img/ajax-loader.gif"> Loading...</td></tr>').appendTo(tbody);
+				$('<tr><td class="blank-row"><img src="'+NEWSMAN_PLUGIN_URL+'/img/ajax-loader.gif"> '+newsmanL10n.loading+'</td></tr>').appendTo(tbody);
 
 				$.ajax({
 					type: 'POST',
@@ -2278,7 +2539,7 @@ jQuery(function($){
 					if ( data.id ) {
 						window.location = NEWSMAN_BLOG_ADMIN_URL+'admin.php?page=newsman-templates&action=edit&id='+data.id;
 					} else {
-						showMessage('Some error occured. temaplte id is '+data.id, 'error');
+						showMessage('Some error occured. template id is '+data.id, 'error');
 					}
 
 				}).fail(NEWSMAN.ajaxFailHandler);
@@ -2515,6 +2776,195 @@ jQuery(function($){
 		})();
 	}
 
+	/*******	 Manage Forms/Lists 	**********/
+
+	if ( $('#newsman-forms').get(0) ) {
+		(function(){
+
+			//var email = $('#newsman-email-search').val();
+			var pageState = {
+				// show: 'all',
+				// pg: 1,
+				// ipp: 15
+			};
+
+			function newForm(name) {
+				var q = {
+					action: 'newsmanAjCreateList',
+					name: name
+				};
+
+				$.ajax({
+					type: 'POST',
+					url: ajaxurl,
+					data: q
+				}).done(function(data){
+
+					if ( data.id ) {
+						var tbody = $('#newsman-forms tbody');
+						$([
+							'<tr>',
+								'<td><input value="'+data.id+'" type="checkbox"></td>',
+								'<td><a href="'+NEWSMAN_BLOG_ADMIN_URL+'admin.php?page=newsman-subs&action=editlist&id='+data.id+'">'+data.name+'</a></td>',
+								'<td>0</td>',
+								'<td>0</td>',
+								'<td>0</td>',
+							'</tr>'
+						].join()).appendTo(tbody);						
+					} else {
+						showMessage('Some error occured. template id is '+data.id, 'error');
+					}
+
+				}).fail(NEWSMAN.ajaxFailHandler);
+			}
+
+			function showNewFormDialog() {
+				showModal('#newsman-modal-new-form', {
+
+					show: function() {
+						$('input', this).val('');
+					},
+
+					result: function(mr){
+						var name = $('input', this).val();
+
+						if ( mr == 'ok' ) {
+							newForm(name, function(err){
+								if ( !err ) {
+									getForms();
+								}
+							});
+						}
+						return true;
+					}
+				});				
+			}
+
+			$('#btn-new-form').click(function(e){
+				e.preventDefault();
+				showNewFormDialog();
+			});
+
+			$('#btn-delete-forms').click(function(e){
+				e.preventDefault();
+				// ajDeleteEmailTemplates				
+				var ids = [];
+				$('#newsman-forms tbody input:checked').each(function(i, el){
+					ids.push( parseInt($(el).val(), 10) );
+				});
+
+				if ( !ids.length ) {					
+					showMessage(newsmanL10n.pleaseMarkFormsForDeletion);
+				} else {
+					showModal('#newsman-modal-delete', function(mr){
+						if ( mr === 'ok' || mr === 'all' ) {
+							$.ajax({
+								type: 'POST',
+								url: ajaxurl,
+								data: {
+									ids: ids+'',
+									action: 'newsmanAjDeleteForms'
+								}
+							}).done(function(data) {
+								showMessage(data.msg, 'success');
+								getForms();
+							}).fail(NEWSMAN.ajaxFailHandler);
+						}
+						return true;
+					});				
+				}				
+			});
+
+
+			function getForms() {
+				var q = $.extend({}, pageState);
+				q.action = 'newsmanAjGetLists';
+
+				function noData() {
+					var tbody = $('#newsman-forms tbody').empty();
+					$('<tr><td colspan="5" class="blank-row">'+newsmanL10n.youHaveNoFormsYet+'</td></tr>').appendTo(tbody);
+				}
+
+				function renderPagination(cntData) {
+					var cnt =  cntData[pageState.show],
+						pages = Math.ceil( cnt / pageState.ipp ),
+						buttonsNum = 4,
+						btnPages = Math.ceil( pageState.pg / buttonsNum );
+
+					if ( pages < 5 ) {
+						renderButtons(1, buttonsNum, pageState.pg, pages);
+					} else {
+						var start = ( (btnPages-1) * buttonsNum ) + 1;
+						renderButtons(start, buttonsNum, pageState.pg, pages);
+					}			
+				}
+
+				function fieldsToHTML(obj) {
+					var html = ['<ul class="unstyled">'];
+					for ( var name in obj ) {
+						html.push('<li>'+name+': '+obj[name]+'</li>');
+					}
+					html.push('</ul>');
+					return html.join('');
+				}
+
+
+
+				function fillRows(lists) {
+					var tbody = $('#newsman-forms tbody').empty();
+					if (lists.length) {
+						$(lists).each(function(i, l){
+							$(['<tr>',
+									'<td><input value="'+l.id+'" type="checkbox"></td>',
+									'<td><a href="'+NEWSMAN_BLOG_ADMIN_URL+'admin.php?page=newsman-subs&action=editlist&id='+l.id+'">'+l.name+'</a></td>',
+									'<td>'+(l.stats.confirmed || 0)+'</td>',
+									'<td>'+(l.stats.unconfirmed || 0)+'</td>',
+									'<td>'+(l.stats.unsubscribed || 0)+'</td>',
+								'</tr>'].join('')).appendTo(tbody);
+						});	 				
+					} else {
+						noData();
+					}
+				}
+
+			 	// ---------------------------------
+
+				$.ajax({
+					type: 'POST',
+					url: ajaxurl,
+					data: q
+				}).done(function(data){
+					fillRows(data.lists);
+				}).fail(NEWSMAN.ajaxFailHandler);
+			}
+
+
+			function r(type, p) {
+				type = type || 'all';
+				p = p || 1;
+
+				pageState.pg = parseInt(p, 10);
+				pageState.show = type.toLowerCase();
+				getForms();
+
+				$('.subsubsub a.current').removeClass('current');
+				$('#newsman-mailbox-'+type).addClass('current');
+			}
+
+			getForms();
+
+			// var router = new Router({
+			// 	'/newform': showNewFormDialog,
+			// 	'/:type/:p': r,
+			// 	'/:type': r				
+			// });
+
+			// router.init('/all/1');	
+
+
+		})();
+	}
+
 	/*******	 HTML editor 	**********/
 
 	if ( $('#newsman-html-editor').get(0) ) {
@@ -2610,7 +3060,7 @@ jQuery(function($){
 			}).fail(NEWSMAN.ajaxFailHandler);
 		});
 
-		function setPostTemaplateType(callback) {
+		function setPostTemplateType(callback) {
 
 			var newType, et = $('#newsman-content-type').val(),
 				etMap = {
@@ -2626,6 +3076,7 @@ jQuery(function($){
 					action: 'newsmanAjSetPostTemplateType',
 					entType: NEWSMAN_ENT_TYPE,
 					entity: NEWSMAN_ENTITY_ID,
+					postType: $('#newsman-post-type').val(),
 					postTemplateType: newType
 				}
 			}).done(function(e){
@@ -2634,7 +3085,6 @@ jQuery(function($){
 				callback( new Error(xhr.responseText) );
 			});
 		}
-
 
 		$('#btn-add-posts').click(function(e){
 			//newsman-modal-add-posts
@@ -2647,9 +3097,9 @@ jQuery(function($){
 
 					showLoading();
 
-					// first we update the post temaplte with the type of 
+					// first we update the post template with the type of 
 					// content which we want to insert
-					setPostTemaplateType(function(err){
+					setPostTemplateType(function(err){
 						if ( err ) { console.error(err); }
 
 						$.ajax({
@@ -2681,7 +3131,7 @@ jQuery(function($){
 		});
 
 		/**
-		 *		Editing temaplte particles
+		 *		Editing template particles
 		 */
 
 		var currentParticleName = '';
@@ -2743,19 +3193,33 @@ jQuery(function($){
 			saveParticleSource();
 		});		
 
+		window.newsmanHtmlEditorContentLoaded = function(){
+			var frm = $('#tpl-frame'),
+				w = frm.width();
+			setTimeout(function() {
+				frm.width(w+1);				
+				setTimeout(function() { 
+					frm.width(w);
+				}, 0);
+			}, 0);
+		};
+
 
 		// Code to fix iframe redraw bug. not fully fixed, but at least something
 		$(window).load(function(){
 			var t;
+
 			$($('#tpl-frame').contents()).scroll(function(e){
 				if ( t ) {
 					clearTimeout(t);
 					t = null;
 				}				
 				t = setTimeout(function() {
-					$('#tpl-frame').css({ height: '701px' });
+					var h = $('#tpl-frame').height();
+
+					$('#tpl-frame').css({ height: (h+1)+'px' });
 					setTimeout(function(){
-						$('#tpl-frame').css({ height: '700px' });
+						$('#tpl-frame').css({ height: h+'px' });
 					}, 1);
 				}, 100);
 			});
@@ -2816,11 +3280,17 @@ jQuery(function($){
 		}).fail(NEWSMAN.ajaxFailHandler);
 	});	
 
-
 	$('#btn-send-test-email').click(function(){
 		if ( editor ) {
 			editor.setMode('wysiwyg');
 		}
+
+		for (var ins in CKEDITOR.instances) {
+			if ( CKEDITOR.instances.hasOwnProperty(ins) ) {
+				CKEDITOR.instances[ins].fire('changed');
+			}
+		}
+
 		showModal('#newsman-modal-send-test', function(mr){
 			var that = this;
 			if ( mr == 'ok' ) {
@@ -2852,5 +3322,43 @@ jQuery(function($){
 			}				
 		});
 	});	
+
+	// ajax forms
+
+	$('.newsman-ajax-from').each(function(i, form){
+		$(form).submit(function(e){
+			e.preventDefault();
+			var action = $(this).attr('action'),
+				dataObj = {
+					action: 'newsman'+action.replace(/\b[a-z]/g, function(с) {
+						return с.toUpperCase();
+					})
+				};
+
+			$($(this).serializeArray()).each(function(i, el){
+				dataObj[el.name] = el.value;
+			});
+
+			$.ajax({
+				type: 'POST',
+				url: ajaxurl,
+				data: dataObj
+			}).done(function(data){
+				if ( data.msg && data.msg !== 'success' ) {
+					showMessage(data.msg, 'success');	
+				}
+				if ( NEWSMAN.ajFormReq[action] ) {
+					NEWSMAN.ajFormReq[action](data);
+				}				
+			}).fail(NEWSMAN.ajaxFailHandler);
+
+			return false;
+		});
+	});
+
+	if ( NEWSMANEXT && NEWSMANEXT.initAnalyticsControls) {
+		NEWSMANEXT.initAnalyticsControls();
+	}
+
 
 });

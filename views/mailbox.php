@@ -3,7 +3,8 @@
 	var NEWSMAN_PLUGIN_URL = '<?php echo NEWSMAN_PLUGIN_URL; ?>';
 	var NEWSMAN_BLOG_ADMIN_URL = '<?php echo get_bloginfo("wpurl")."/wp-admin"; ?>';
 </script>
-<div class="wrap wp_bootstrap">	
+<div class="wrap wp_bootstrap">
+	<?php include("_header.php"); ?>
 	<div class="row-fluid" style="border-bottom: 1px solid #DADADA;">
 		<div class="span12">
 			<h2><?php _e('Mailbox', NEWSMAN); ?>   <form id="newsman-email-search-form" class="form-search" style="display: inline-block; float: right;">
@@ -65,10 +66,10 @@
 		<thead>
 			<tr>
 				<th scope="col" class="check-column"><input id="newsman-checkall" type="checkbox"></th>
-				<th style="width: 300px;" scope="col"><?php _e('Subject', NEWSMAN); ?></th>
-				<th style="width: 200px;" scope="col"><?php _e('To', NEWSMAN); ?></th>
-				<th style="width: 130px;" scope="col"><?php _e('Created', NEWSMAN); ?></th>
-				<th style="width: 100px;" scope="col"><?php _e('Status', NEWSMAN); ?></th>
+				<th style="width: 300px;" scope="col"><?php /* translators: email property */ _e('Subject', NEWSMAN); ?></th>
+				<th style="width: 200px;" scope="col"><?php /* translators: email property */ _e('To', NEWSMAN); ?></th>
+				<th style="width: 130px;" scope="col"><?php /* translators: email property */ _e('Created', NEWSMAN); ?></th>
+				<th style="width: 100px;" scope="col"><?php /* translators: email property */ _e('Status', NEWSMAN); ?></th>
 				<th scope="col"><?php _e('Status message', NEWSMAN); ?></th>
 			</tr>
 		</thead>

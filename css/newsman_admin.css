@@ -58,7 +58,10 @@ input[type="text"], input[type="password"], input[type="number"], input[type="se
   outline: 0;
   outline: thin dotted \9;
   /* IE6-9 */
+}
 
+#posts-controls select {
+	width: 240px;
 }
 
 
@@ -378,6 +381,7 @@ input[type="text"], input[type="password"], input[type="number"], input[type="se
 	width: 520px;
 }
 
+#newsman-post-type,
 #newsman-content-type {
 	display: inline-block;
 	vertical-align: baseline;
@@ -1149,3 +1153,60 @@ input.newsman-field-options-radio-opt-input {
 #tpl-frame {
 	border: 1px solid #B8B8B8;
 }
+
+#tpl-styling-controls {
+	min-height: 142px;
+}
+
+#tpl-styling-controls .modal-loading-block {
+	margin: 20px auto;
+	width: 240px;
+	float: none;
+}
+
+/*********************************/
+/*   Admin page notifications    */
+/*********************************/
+
+.newsman-admin-notification {
+	position: relative;
+	color: black !important;
+	margin-top: 20px;
+	padding: 15px 20px !important;
+}
+
+.newsman-admin-notification p {
+	margin: 10px 0;
+}
+
+.newsman-admin-notification
+.notification-action-form {
+	margin-bottom: 20px;
+}
+
+#newsman-loc-mig-custom-opts {
+	opacity: 0.5;	
+}
+
+/*********************************/
+/*   Send block in html editor   */
+/*********************************/
+
+
+#newsman-send-form h3 {
+	margin: .5em 0;
+}
+
+#newsman-send-form h3:first-child {
+	margin-top: 0;
+}
+
+#newsman-send-form input[type="text"] {
+	margin-top: .5em;
+}
+
+#newsman-mailbox .label {
+	margin-right: 4px;
+}
+
+

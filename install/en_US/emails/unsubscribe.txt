@@ -1,0 +1,27 @@
+Removal Request Confirmation
+--- plain ---
+Hi,
+
+This email is being sent to notify you that we have received a request to remove the following record from our mailing list:
+
+Email: [newsman sub="email"]
+
+This record was removed from our online database and will also be removed from any backup files shortly.
+
+If you do receive further unwanted email from our system, please let us know using the contact information below and we'd be happy to address the issue immediately.
+
+Sincerely,
+[newsman me="name"]
+[newsman me="email"]
+[newsman wp="url"]
+--- html ---
+<p>Hi,</p>
+<p>This email is being sent to notify you that we have received a request to remove the following record from our mailing list:</p>
+<p>Email: [newsman sub="email"]</p>
+<p>This record was removed from our online database and will also be removed from any backup files shortly.</p>
+<p>If you do receive further unwanted email from our system, please let us know using the contact information below and we'd be happy to address the issue immediately.</p>
+<p>&nbsp;</p>
+<p>Sincerely,<br>
+[newsman me="name"]<br>
+[newsman me="email"]<br>
+<a href="[newsman wp='url']">[newsman wp="url"]</a></p>

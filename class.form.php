@@ -180,8 +180,8 @@ class newsmanForm {
 
 		foreach ($children as $opt) {
 
-			$val = isset($radio['value']) ? $radio['value'] : $this->valueFromLabel($radio['label']);
-			$chkd = $radio['checked'] ? 'checked="checked"' : '';
+			$val = isset($opt['value']) ? $opt['value'] : $this->valueFromLabel($opt['label']);
+			$chkd = (isset($opt['checked']) && $opt['checked']) ? 'checked="checked"' : '';
 			$options .= '<option value="'.htmlspecialchars($opt['value']).'">'.$opt['label'].'</option>';
 		}
 

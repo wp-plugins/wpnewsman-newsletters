@@ -8,7 +8,7 @@ var customPluginsRoot = ckeditorBasePath+ 'custom_plugins/';
 
 //CKEDITOR.plugins.addExternal('newsman_insert_posts', customPluginsRoot+'newsman_insert_posts/plugin.js', '');	
 CKEDITOR.plugins.addExternal('newsman_save', customPluginsRoot+'newsman_save/plugin.js', '');	
-
+CKEDITOR.plugins.addExternal('newsmanshortcodes', customPluginsRoot+'newsman_shortcodes/plugin.js', '');	
 
 CKEDITOR.editorConfig = function( config ) {
 	// Define changes to default configuration here.
@@ -20,10 +20,13 @@ CKEDITOR.editorConfig = function( config ) {
 	// config.resize_minWidth = 800;
 	// config.resize_minHeight = 600;	
 
+	config.entities = false;
+	config.entities_latin = false;
+
 	config.resize_enabled = true;
 
 	// config.extraPlugins = 'newsman_insert_posts,newsman_save';	
-	config.extraPlugins = 'newsman_save';	
+	config.extraPlugins = 'newsman_save,newsmanshortcodes';	
 
 	//config.toolbar = 'NEWSMAN';
 

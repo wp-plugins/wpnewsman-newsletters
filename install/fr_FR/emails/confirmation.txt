@@ -1,0 +1,36 @@
+[newsman wp="blogname"]: S'il vous plaît, confirmez votre adresse email
+--- texte pur ---
+Bonjour,
+
+Vous allez aimer  [newsman wp="blogname"]! Avant de commencer vous envoyer les bulletins d'information que vous avez demandés, nous voulons être sûrs que nous avons votre permission.
+
+Cliquez sur le lien ci-dessous pour nous donner la permission de vous envoyer les bulletins d'information. C'est rapide et facile! Si vous ne pouvez pas cliquer sur le lien ci-dessous, s'il vous plaît copiez le lien et ouvrez-le dans votre navigateur.
+
+CLIQUEZ SUR CE LIEN POUR CONFIRMER:
+
+[newsman link="confirmation"]
+
+Si vous ne voulez pas de vous abonner, ignorez ce message.
+
+Cordialement,
+[newsman wp="blogname"]
+
+--
+Demande générée par:
+IP: [newsman sub="ip"]
+Date: [newsman sub="ts"]
+URL: [newsman wp="url"]
+--- html ---
+<p>Bonjour,</p>
+<p>Vous allez aimer  [newsman wp="blogname"]! Avant de commencer vous envoyer les bulletins d'information que vous avez demandés, nous voulons être sûrs que nous avons votre permission.</p>
+<p>Cliquez sur le lien ci-dessous pour nous donner la permission de vous envoyer les bulletins d'information. C'est rapide et facile! Si vous ne pouvez pas cliquer sur le lien ci-dessous, s'il vous plaît copiez le lien et ouvrez-le dans votre navigateur.</p>
+<p>CLIQUEZ SUR CE LIEN POUR CONFIRMER:</p>
+<p><a href="[newsman link='confirmation']">[newsman link="confirmation"]</a></p>
+<p>Si vous ne voulez pas de vous abonner, ignorez ce message.</p>
+<p>&nbsp;</p>
+<p>Cordialement,<br>
+	[newsman wp="blogname"]<br>
+	<a href="[newsman wp='url']">[newsman wp="url"]</a></p>
+<p style="font-size: x-small">
+	Demande générée par:<br>
+	IP:&nbsp;[newsman sub="ip"], date:&nbsp;[newsman sub="ts"]</p>

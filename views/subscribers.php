@@ -3,9 +3,10 @@
 </script>
 <!-- proto-->
 <div class="wrap wp_bootstrap">
+	<?php include("_header.php"); ?>
 	<div style="border-bottom: 1px solid #DADADA; overflow: hidden;">
 
-		<h2><?php _e('Manage Subscribers', NEWSMAN); ?><?php do_action('newsman_put_list_select'); ?> <a href="<?php echo NEWSMAN_BLOG_ADMIN_URL; ?>admin.php?page=newsman-subs&amp;action=editlist" id="btn-edit-form" class="btn">Form &amp; List options</a> <form id="subs-search-form" class="form-search" style="display: inline-block; float: right;">
+		<h2><?php _e('Manage Subscribers', NEWSMAN); ?><?php do_action('newsman_put_list_select', true); ?> <a href="<?php echo NEWSMAN_BLOG_ADMIN_URL; ?>admin.php?page=newsman-subs&amp;action=editlist" id="btn-edit-form" class="btn">Form &amp; List options</a> <form id="subs-search-form" class="form-search" style="display: inline-block; float: right;">
 			<input  id="newsman-subs-search" type="text" class="input-medium search-query">
 			<button id="newsman-subs-search-clear" style="display:none;" class="btn"><?php _e('Clear', NEWSMAN); ?></button>
 			<button id="newsman-subs-search-btn" type="submit" class="btn"><?php _e('Search', NEWSMAN); ?></button>
@@ -261,7 +262,7 @@
 			</div>
 		</div>
 		<div class="modal-footer">
-			<label for="cb-uns-from-all" id="lbl-uns-from-all" class="checkbox"><input type="checkbox" id="cb-uns-from-all"><?php _e(' Unsubsribe from all lists', NEWSMAN); ?></label>
+			<label for="cb-uns-from-all" id="lbl-uns-from-all" class="checkbox"><input type="checkbox" id="cb-uns-from-all"><?php _e(' Unsubscribe from all lists', NEWSMAN); ?></label>
 			<a class="btn btn-warning" mr="ok"><?php _e('Unsubscribe', NEWSMAN); ?></a>
 			<a class="btn" mr="cancel"><?php _e('Close', NEWSMAN); ?></a>
 		</div>

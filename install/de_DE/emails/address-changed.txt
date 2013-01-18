@@ -1,0 +1,11 @@
+[newsman wp="url"] Abonnement - email Adresse wurde aktualisiert
+--- plain ---
+Herzlichen Dank! Ihre email Adresse wurde aktualisiert. Neue e-mail Adresse: [newsman sub="email"]. 
+
+Sie können ihre Einstellungen über untenstehenden Link bearbeiten:
+[newsman link="update-subscription"]
+--- html ---
+<p>
+Herzlichen Dank! Ihre email Adresse wurde aktualisiert. Neue e-mail Adresse: [newsman sub="email"].</p>
+
+<p>Sie können <a href="[newsman link='update-subscription']">sich abmelden oder ihre email Adresse ändern</a>.</p>

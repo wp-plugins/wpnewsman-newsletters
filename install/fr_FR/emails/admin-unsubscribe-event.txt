@@ -1,0 +1,17 @@
+Un contact s'est désabonné de votre liste à [newsman wp="url"]
+--- texte pur ---
+Un contact s'est désabonné de votre liste. Les details du contact sont ci-dessous:
+
+[newsman sub="*"]
+
+Raison: 
+$u_reason
+
+--
+[newsman wp="url"]/wp-admin/ -> Settings -> WPNewsman
+--- html ---
+<p>Un contact s'est désabonné de votre liste. Les details du contact sont ci-dessous:</p>
+<ul>[newsman sub="*" tag="li"]</ul>
+&nbsp;
+<p>--</p>
+<p><a href="[newsman wp='url']/wp-admin/">[newsman wp="url"]/wp-admin/</a> -> WPNewsman -> Paramètres</p>

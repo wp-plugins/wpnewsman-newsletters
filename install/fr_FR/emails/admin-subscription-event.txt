@@ -1,0 +1,12 @@
+Un contact a rejoint votre liste sur [newsman wp="blogname"]
+--- texte pur ---
+Un contact a rejoint votre liste. Les details du contact sont ci-dessous:
+
+[newsman sub="*"]
+--
+[newsman wp="url"]/wp-admin/ -> Settings -> WPNewsman
+--- html ---
+<p>Un contact a rejoint votre liste. Les details du contact sont ci-dessous:</p>
+<ul>[newsman sub="*" tag="li"]</ul>
+<p>--</p>
+<p><a href="[newsman wp='url']/wp-admin/">[newsman wp="url"]/wp-admin/</a> -> WPNewsman -> Paramètres</p>

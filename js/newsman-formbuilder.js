@@ -4,34 +4,6 @@ jQuery(function($){
 		return str.replace(/\W+$/ig, '').replace(/\W+/ig, '-').toLowerCase();
 	}	
 
-	var form2 = {
-		useInlineLabels: true,
-		elements: [
-			{ type: 'title', value: 'Subscription' },
-			{ type: 'html', value: 'Enter your primary email address to get our free newsletter.' },
-			{ type: "text",  label: "First Name", name: "first-name", value: "" },
-			{ type: "text",  label: "Last Name", name: "last-name", value: "" },
-			{ type: "email", label: "Email", name:"email", value:"", required: true },
-			{ type: "radio", label: "Choose an option", name:"choose-an-option", checked: 'new-option-2', children: [
-				{ label: "new option 1", value: "new-option-1" },
-				{ label: "new option 2", value: "new-option-2" }
-			]},
-			{ type: "select", label: "Please select", name:"please-select", selected: 'option-2', children: [
-				{ label: 'option 1', value: 'option-1' },
-				{ label: 'option 2', value: 'option-2' },
-				{ label: 'option 3', value: 'option-3' }
-			]},
-			{ type: "radio", label: "Choose an option", name:"choose-an-option-two", checked: 'new-option-3', children: [
-				{ value: "new-option-3", label: "new option 3" },
-				{ value: "new-option-4", label: "new option 4" }
-			]},			
-			{ type: "checkbox", label: "Check me", name:"check-me", checked: false, value: "1" },
-			{ type: "submit",   value: "Subscribe", size: 'small', color: 'gray', style: 'rounded' },
-			{ type: 'html', value: 'You can leave the list at any time. Removal instructions are included in each message.' }
-		]
-	};
-
-
 	// Option elements
 
 	var defaultOptionsLists = {
@@ -61,9 +33,11 @@ jQuery(function($){
 			addHandlers(el);
 		});
 
+		// Addes knockout handlers and observables to the form element definition
 		function addHandlers(el) {
-			el.fieldName = ko.computed(function() {
-				return this.value ? fieldName(this.value()) : fieldName(this.label());
+			el.name = ko.computed(function() {				
+				var v = this.value && this.value();
+				return v ? fieldName(v) : fieldName(this.label());
 			}, el);
 
 			var elType = el.type();
@@ -322,22 +296,10 @@ jQuery(function($){
 	}
 
 	window.newsmanFormBuilder = buildForm(formObj);
-	//window.newsmanFormBuilder = buildForm(form2);
 
 	$('#btn-load-default-form').click(function(){
 
-		var defForm = {
-			useInlineLabels: true,
-			elements: [
-				{ type: 'title', value: 'Subscription' },
-				{ type: 'html', value: 'Enter your primary email address to get our free newsletter.' },
-				{ type: "text",  label: "First Name", name: "first-name", value: "" },
-				{ type: "text",  label: "Last Name", name: "last-name", value: "" },
-				{ type: "email", label: "Email", name:"email", value:"", required: true },
-				{ type: "submit",   value: "Subscribe", size: 'small', color: 'gray', style: 'rounded' },
-				{ type: 'html', value: 'You can leave the list at any time. Removal instructions are included in each message.' }
-			]
-		};
+		var defForm = NEWSMAN_DEF_FORM;
 
 		window.newsmanFormBuilder = buildForm(defForm);		
 	});

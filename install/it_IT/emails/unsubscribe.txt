@@ -1,0 +1,27 @@
+Removal Request Confirmation
+--- plain ---
+Ciao,
+
+Questa mail ti viene spedita per notificarti che abbiamo ricevuto una richiesta di cancellazione dalla nostra Newsletter per l'indirizzo:
+
+Email: [newsman sub="email"]
+
+Questo indirizzo è stato rimosso dal nostro database e sarà presto rimosso anche da tutti i backup.
+
+Se dovessi ricevere ulteriori email indesiderate dal nostro sistema, faccelo sapere ai nostri contatti specificati sotto e ce ne occuperemo immediatamente.
+
+Cordialmente,
+[newsman me="name"]
+[newsman me="email"]
+[newsman wp="url"]
+--- html ---
+<p>Ciao,</p>
+<p>Questa mail ti viene spedita per notificarti che abbiamo ricevuto una richiesta di cancellazione dalla nostra Newsletter per l'indirizzo:</p>
+<p>Email: [newsman sub="email"]</p>
+<p>Questo indirizzo è stato rimosso dal nostro database e sarà presto rimosso anche da tutti i backup.</p>
+<p>Se dovessi ricevere ulteriori email indesiderate dal nostro sistema, faccelo sapere ai nostri contatti specificati sotto e ce ne occuperemo immediatamente.</p>
+<p>&nbsp;</p>
+<p>Cordialmente,<br />
+[newsman me="name"]<br />
+[newsman me="email"]<br />
+<a href="[newsman wp='url']">[newsman wp="url"]</a></p>

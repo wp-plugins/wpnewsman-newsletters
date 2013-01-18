@@ -1,5 +1,6 @@
 <!-- proto-->
 <div class="wrap wp_bootstrap">
+	<?php include("_header.php"); ?>
 	<div style="border-bottom: 1px solid #DADADA; overflow: hidden;">
 		<h2><?php _e('Email Templates', NEWSMAN); ?></h2>
 	</div>

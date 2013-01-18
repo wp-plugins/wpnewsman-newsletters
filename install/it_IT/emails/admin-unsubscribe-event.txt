@@ -1,0 +1,17 @@
+Un contatto si è DISISCRITTO dalla tua mailing list at [newsman wp="url"]
+--- plain ---
+Un contatto si è DISISCRITTO dalla tua mailing list. Seguono dettagli:
+
+[newsman sub="*"]
+
+Motivo: 
+$u_reason
+
+--
+[newsman wp="url"]/wp-admin/ -> WPNewsman -> Impostazioni
+--- html ---
+<p>Un contatto si è disiscritto dalla tua mailing list. Seguono dettagli:</p>
+<ul>[newsman sub="*" tag="li"]</ul>
+&nbsp;
+<p>--</p>
+<p><a href="[newsman wp='url']/wp-admin/">[newsman wp="url"]/wp-admin/</a> -> WPNewsman -> Impostazioni</p>

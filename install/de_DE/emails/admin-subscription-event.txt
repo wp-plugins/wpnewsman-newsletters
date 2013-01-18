@@ -1,0 +1,11 @@
+Ein Kontakt ist ihrer Mailing-Liste [newsman wp="blogname"]
+ beigetreten.--- plain ---Ein Kontakt ist ihrer Mailing-Liste beigetreten. Die Kontaktdetails sind nachfolgend angeführt:
+
+[newsman sub="*"]
+--
+[newsman wp="url"]/wp-admin/ -> Settings -> G-Lock Double Opt-In Manager
+--- html ---
+<p>Ein Kontakt ist ihrer Mailing-Liste beigetreten. Die Kontaktdetails sind nachfolgend angeführt:</p>
+<ul>[newsman sub="*" tag="li"]</ul>
+<p>--</p>
+<p><a href="[newsman wp='url']/wp-admin/">[newsman wp="url"]/wp-admin/</a> -> WPNewsman -> Settings</p>

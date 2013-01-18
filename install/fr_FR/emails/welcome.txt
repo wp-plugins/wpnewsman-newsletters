@@ -1,0 +1,57 @@
+Bienvenue de [newsman me="name"]
+--- texte pur ---
+Bonjour,
+
+Merci de votre abonnement. Vous êtes maintenant inscrits à nos bulletins d'information, et vous recevrez d'excellent conseils, astuces et stratégies quelques fois par mois. Nous espèrons que vous allez avoir une valeur hors de nos bulletins! C'est là que TOUS nos meilleurs articles vont!
+
+Nous n'allons pas partager votre adresse email avec des parties tierces et nous allons garder vos données personnelles confidentielles et sécurisées.
+
+Pour vous assurer de recevoir les futurs conseils, astuces, et offres destinés à nos abonnés seulement, s'il vous plaît ajouter [newsman me="email"] à votre carnet d'adresses email ou à votre liste d'expéditeurs sûrs.
+
+Cordialement,
+[newsman me="name"]
+[newsman me="email"]
+[newsman wp="url"]
+
+--
+Vous recevez ce message parce que [newsman sub="ts"] sur [newsman wp="url"] vous vous êtes abonnés à recevoir nos bulletins d'information.
+						 
+Vous pouvez modifier votre address email d'abonnement par le lien ce-dessous:
+[newsman link="update-subscription"]
+--- html ---
+<p>Bonjour,</p>
+<p>Merci de votre abonnement. Vous êtes maintenant inscrits à nos bulletins d'information, et vous recevrez d'excellent conseils, astuces et stratégies quelques fois par mois. Nous espèrons que vous allez avoir une valeur hors de nos bulletins! C'est là que TOUS nos meilleurs articles vont!</p>
+<p>Nous n'allons pas partager votre adresse email avec des parties tierces et nous allons garder vos données personnelles confidentielles et sécurisées.</p>
+<p>Pour vous assurer de recevoir les futurs conseils, astuces, et offres destinés à nos abonnés seulement, s'il vous plaît ajouter [newsman me="email"] à votre carnet d'adresses email ou à votre liste d'expéditeurs sûrs.</p>
+<p>&nbsp;</p>
+
+<p>Cordialement,<br>
+[newsman me="name"]<br>
+[newsman me="email"]<br>
+<a href="[newsman wp='url']">[newsman wp="url"]</a></p>
+<p>&nbsp;<p>
+<table bgcolor="#eeeeee" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #eeeeee; background-position: top; background-repeat: repeat-x; border-top-color: #dddddd; border-top-style: solid; border-top-width: 2px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px;"> 
+ <tbody> 
+	<tr> 
+	 <td colspan="4" style="height: 28px; white-space : nowrap;">&nbsp;</td> 
+	</tr> 
+	<tr> 
+	 <td style="width: 25px;"></td> 
+	 <td width="10"></td> 
+	 <td style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 11px; line-height: 17px; color: #777; text-shadow: 0 1px 0 #ffffff;"> 
+		<div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 11px; line-height: 17px; color: #666; text-shadow: 0 1px 0 #ffffff;">
+			Vous vous êtes abonnés à [newsman sub="ts"] sur <a href="[newsman wp='url']" style="border: none; color: #0084b4; text-decoration: none;">[newsman wp="blogname"]</a> de IP: [newsman sub="ip"]
+		</div> 
+		<div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 11px; line-height: 17px; color: #666; text-shadow: 0 1px 0 #ffffff;">
+		 Vous pouvez aussi 
+		 <a href="[newsman link='update-subscription']" style="border: none; color: #0084b4; text-decoration: none;">changer votre adresse email d'abonnement ou vous désabonner ici</a>.</div> 
+		<div>
+		 <a href="#" style="border: none; color: #0084b4; text-decoration: none; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; text-decoration: none; font-size: 11px; line-height: 17px; color: #999999; text-shadow: 0 1px 0 #ffffff;">Droit d'auteur (C) [newsman wp="blogname"]. <span style="white-space: nowrap;">Tous droits réservés.</span></a>
+		</div> </td> 
+	 <td style="width: 75px;"></td> 
+	</tr> 
+	<tr> 
+	 <td colspan="3" height="25"></td> 
+	</tr> 
+ </tbody> 
+</table>

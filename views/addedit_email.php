@@ -1,5 +1,6 @@
 <!-- proto-->
 <div class="wrap wp_bootstrap">
+	<?php include("_header.php"); ?>
 	<div style="border-bottom: 1px solid #DADADA; overflow: hidden;">
 		<h2><?php _e('Mailbox', NEWSMAN); ?>   <form class="form-search" style="display: inline-block; float: right;">
 			<input id="newsman-email-search" type="text" class="input-medium search-query">
