@@ -931,12 +931,18 @@ class newsman {
 					wp_register_script('newsman-ck-max-patch', NEWSMAN_PLUGIN_URL.'/js/ck-max-patch.js', array('jquery', 'newsman-ckeditor'));
 
 					wp_register_style('newsman', NEWSMAN_PLUGIN_URL.'/css/newsman.css', array(), NEWSMAN_VERSION);
+					
+
+					wp_register_style('newsman-ie9', NEWSMAN_PLUGIN_URL.'/css/newsman-ie9.css', array(), NEWSMAN_VERSION);
+					$GLOBALS['wp_styles']->add_data( 'newsman-ie9', 'conditional', 'gte IE 9' );
+
 					wp_register_style('newsman_admin', NEWSMAN_PLUGIN_URL.'/css/newsman_admin.css', array(), NEWSMAN_VERSION);
 
 					wp_register_script( 'jquery-multiselect', NEWSMAN_PLUGIN_URL.'/js/jquery.multiselect.js', array('jquery', 'jquery-ui-core', 'jquery-ui-widget'), NEWSMAN_VERSION);
 					wp_register_script('newsman-admin', NEWSMAN_PLUGIN_URL.'/js/admin.js', array('jquery', 'jquery-ui-widget', 'jquery-ui-tabs'), NEWSMAN_VERSION);
 
-					wp_enqueue_style('newsman');			
+					wp_enqueue_style('newsman');
+					wp_enqueue_style('newsman-ie9');
 					wp_enqueue_style('newsman_admin');
 
 					wp_enqueue_script('jquery');
@@ -1057,6 +1063,11 @@ class newsman {
 
 		wp_register_style('newsman', NEWSMAN_PLUGIN_URL.'/css/newsman.css', array(), NEWSMAN_VERSION);
 		wp_enqueue_style('newsman');
+
+		wp_register_style('newsman-ie9', NEWSMAN_PLUGIN_URL.'/css/newsman-ie9.css', array(), NEWSMAN_VERSION);
+		$GLOBALS['wp_styles']->add_data( 'newsman-ie9', 'conditional', 'gte IE 9' );
+		wp_enqueue_style('newsman-ie9');
+
 	}
 
 	public function cleanOldUnconfirmed() {

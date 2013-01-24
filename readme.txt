@@ -4,15 +4,15 @@ Donate Link: http://wpnewsman.com/premium-newsletter-plugin-wordpress/
 Tags: wpnewsman, newsletter, newsletters, newsletter signup, newsletter widget, subscribers, post notification, email subscription, email marketing, email, emailing, subscription
 Requires at least: 3.4
 Tested up to: 3.5
-Stable tag: 1.3.0
+Stable tag: 1.3.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Powerful, easy to use, and easy to custom subscription and newsletter plugin
+Powerful, easy to use, and easy to customize subscription and newsletter plugin
 
 == Description ==
 
-= WPNewsman is extremely easy to use and was built to be very user friendly! =
+= WPNewsman is built to be extremely easy to use and to be very user friendly! =
 
 An email newsletter is one of the most convenient and easy ways to keep in touch with your clients and prospects. With WPNewsman you can easily convert your website visitors into newsletter subscribers through double optin subscription forms in widgets, articles and pages, import and manage your lists, create and send beautiful newsletters directly from your WordPress site.
 
@@ -20,7 +20,7 @@ Check it out! Download Right Now and Take Control of Your Email Campaigns.
 
 = WPNewsman Pro =
 
-*WPNewsman Pro* is a **significant upgrade** to *WPNewsman Lite* that allows you to embed forms on external sites, create multiple subscribers' lists using different opt-in forms, send newsletters to an unlimited number of subscribers and keep your mailing lists verified and clean. You get **complete freedom and lower cost** compared to Email Service Providers' rigid requirements. You can learn more about *WPNewsman Pro* here:
+*WPNewsman Pro* is a **significant upgrade** to *WPNewsman Lite* that allows you to embed forms on external sites, send newsletters to an unlimited number of subscribers, track the recipient's actions with Google Analytics or Piwik, and keep your mailing lists verified and clean. You get **complete freedom and lower cost** compared to Email Service Providers' rigid requirements. You can learn more about *WPNewsman Pro* here:
 
 [Home](http://wpnewsman.com/ "Home") | [Review](http://wpnewsman.com/review-newsletter-plugin-wordpress/ "Review") | [Upgrade to WPNewsman Pro](http://wpnewsman.com/premium-newsletter-plugin-wordpress/ "Upgrade to WPNewsman Pro")
 
@@ -31,16 +31,16 @@ http://www.youtube.com/watch?v=NhmAfJQH4EU
 = Here’s what you get with WPNewsman for WordPress: =
 
 * Effortless installation and configuration
-* You have control over your lists and not someone else
+* Your own control over your lists
 * Quick signup widget & forms
 * Easy customization of the Welcome Email and Thank You page
 * Easy mailing list management
 * Ability to quickly re-send a confirmation request
 * Full control and freedom over email newsletter design
 * Multiple sending options
-* Keep your mailing lists verified and clean — the bounce handler is included into the Pro version
+* Automated bounced emails handling -- you keep your mailing lists verified and clean
 * Confirmation when the user unsubscribes
-* Send emails via Amazon SES and enjoy high deliverability rate like big Email Service Providers
+* Integration with Amazon SES -- enjoy high deliverability rate like big Email Service Providers
 
 ... and more
 
@@ -54,10 +54,13 @@ Compatible with G-Lock EasyMail 6 [The Best Newsletter Software](http://directem
 
 = Translations in your language =
 
-Translations are included in the plugin. Join the translation teams on [our Transifex page](https://www.transifex.com/projects/p/g-lock-wpnewsman/).
+Translations are included in the plugin: 
+* French
+* German
+* Italian
+* Russian
 
-* Your language: [get a Pro license in exchange for your translation](http://support.glocksoft.net/kb/articles/68-translation-of-wpnewsman-in-your-language)
-
+* Your language: [get a Pro license in exchange for your translation](http://support.glocksoft.net/kb/articles/68-translation-of-wpnewsman-in-your-language). Join the translation teams on [our Transifex page](https://www.transifex.com/projects/p/g-lock-wpnewsman/).
 
 == Installation ==
 
@@ -116,6 +119,13 @@ We got a User Feedback page where you can [add or vote for new features](http://
 3. Subscriber management.
 
 == Changelog ==
+
+= 1.3.1 =
+* Added: ability to import the subscriber's IP address.
+* Added: two text blocks to the deafult Digest template.
+* Fixed: "Subscribe" button css for the Internet Explorer 9.
+* Other internal fixes and improvements.
+
 
 = 1.3.0 =
 * Added: support of multiple lists in the Lite version. Upon the first plugin activation, WPNewsman automatically creates the list called "wp-users" and imports the users of your WordPress site into that list. Thus, you get two lists - default list and WordPress users' list.
@@ -181,6 +191,9 @@ We got a User Feedback page where you can [add or vote for new features](http://
 * First public release. Hello World! 
 
 == Upgrade Notice ==
+
+= 1.3.1 =
+* Added ability to import the subscriber's IP address; two text blocks to the deafult Digest template and fixed "Subscribe" button css for the Internet Explorer 9.
 
 = 1.3.0 =
 * Added: support of multiple lists in the Lite version. Upon the first plugin activation, WPNewsman automatically creates the list called "wp-users" and imports the users of your WordPress site into that list. Thus, you get two lists - default list and WordPress users' list.

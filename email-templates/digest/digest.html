@@ -11,6 +11,7 @@
 		@tab Page
 		@section Background
 		*/
+
 body {
 	margin: 0;
 	padding: 0;
@@ -26,6 +27,41 @@ body {
 	/*@editable*/border-right: 1px solid #cccccc;
 	background-color: #dddddd;
 	position: relative;
+}
+/*
+		@tab Body
+		@section body style
+		@tip Set the background color for your email's body area.
+		*/
+#templateContainer, .bodyContent {
+	/*@editable*/background-color: #FFFFFF;
+}
+/*
+		@tab Body
+		@section body text
+		@tip Set the styling for your email's main content text. Choose a size and color that is easy to read.
+		@theme main
+		*/
+.bodyContent div {
+	/*@editable*/color: #505050;
+	/*@editable*/font-family: Arial;
+	/*@editable*/font-size: 14px;
+	/*@editable*/line-height: 150%;
+	/*@editable*/text-align: left;
+}
+/*
+		@tab Body
+		@section body link
+		@tip Set the styling for your email's main content links. Choose a color that helps them stand out from your text.
+		*/
+.bodyContent div a:link, .bodyContent div a:visited, .bodyContent div a .yshortcuts {
+	/*@editable*/color: #336699;
+	/*@editable*/font-weight: normal;
+	/*@editable*/text-decoration: underline;
+}
+.bodyContent img {
+	display: inline;
+	height: auto;
 }
 /*
 		@tab Header
@@ -157,11 +193,10 @@ body {
 	background-color: #f2f2f2;
 	color: #f2f2f2;
 	max-width: 249px;
-	margin: 0 0 15px 15px;	
+	margin: 0 0 15px 15px;
 	padding: 0px;
 	display: block;
 }
-
 .image-holder {
 	position: relative;
 }
@@ -194,8 +229,37 @@ body {
                     <tr>
                       <td style="border-top: 1px solid #dddddd;background-color: #ffffff;">&nbsp;</td>
                       <td style="border-top: 1px solid #dddddd;background-color: #ffffff;">&nbsp;</td>
-                      <td height="17" style="border-top: 1px solid #dddddd;background-color: #ffffff;">&nbsp;</td>
-                      <td height="17" style="border-top: 1px solid #dddddd;background-color: #ffffff;">&nbsp;</td>
+                      <td height="17" style="border-top: 1px solid #dddddd;background-color: #ffffff;"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                          <tbody>
+                            <tr>
+                              <td height="18" style="font-size: 1px;"></td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                          <tbody>
+                            <tr>
+                              <td width="10" style="font-size: 1px;">&nbsp;</td>
+                              <td style="padding: 0px 0 0 0px !important;" valign="top" class="bodyContent"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                  <tbody>
+                                    <tr>
+                                      <td valign="top">
+                                      <div gsedit="std_content00">
+                                          <p>Some introduction text here. You can write your welcome words here or clear this section.</p>
+                                        </div></td>
+                                    </tr>
+                                  </tbody>
+                                </table></td>
+                              <td width="10" style="font-size: 1px;">&nbsp;</td>
+                            </tr>
+                            <tr class="hide">
+                              <td width="10" style="font-size: 1px;">&nbsp;</td>
+                              <td height="20" style="font-size: 1px;">&nbsp;</td>
+                              <td width="10" style="font-size: 1px;">&nbsp;</td>
+                            </tr>
+                          </tbody>
+                        </table></td>
+                      <td style="border-top: 1px solid #dddddd;background-color: #ffffff;">&nbsp;</td>
                     </tr>
                   </tbody>
                 </table></td>
@@ -221,8 +285,7 @@ body {
                         <!-- /heading --></td>
                     </tr>
                     <tr>
-                      <td gsspecial="posts">
-                      <!-- story padding --> 
+                      <td gsspecial="posts"><!-- story padding --> 
                         
                         <!--                        
                         <table width="500" border="0" align="center" cellpadding="0" cellspacing="0" class="story-padding padding">
@@ -240,12 +303,11 @@ body {
                         <table style="position: relative;" class="frame" bgcolor="#ffffff" width="670" border="0" cellspacing="0" cellpadding="0">
                           <tbody>
                             <tr>
-                              <td style="width: 85px;width: 75px;">&nbsp;</td>
-                              <td valign="top">
-                              <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                              <td style="width: 75px;">&nbsp;</td>
+                              <td valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="0">
                                   <tbody>
                                     <tr>
-                                      <td height="18" style="font-size: 1px;">&nbsp;</td>
+                                      <td height="18" style="font-size: 1px;"></td>
                                     </tr>
                                   </tbody>
                                 </table>
@@ -253,12 +315,10 @@ body {
                                   <tbody>
                                     <tr>
                                       <td width="10" style="font-size: 1px;">&nbsp;</td>
-                                      <td style="padding: 0px 0 0 0px !important; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #333333; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #333333;">
-                                      <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                      <td style="padding: 0px 0 0 0px !important; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #333333; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #333333;"><table width="100%" border="0" cellspacing="0" cellpadding="0">
                                           <tbody>
                                             <tr>
-                                              <td valign="top" class="image-holder">
-                                              <table align="right" border="0" cellspacing="0" cellpadding="0" class="down">
+                                              <td valign="top" class="image-holder"><table align="right" border="0" cellspacing="0" cellpadding="0" class="down">
                                                   <tbody>
                                                     <tr>
                                                       <td class="story-image-wrapper"><a href="[newsman post='permalink']" title="[newsman post='post_title']"> <img alt="" src="[newsman post='thumbnail']" gsedit="story_image" gsblock="image,html" gsfinal="[newsman post='thumbnail']" placehold="200x144.gif" width="200" height="144" class="story-image" border="0"> </a></td>
@@ -323,43 +383,71 @@ body {
                               <td style="width: 85px;">&nbsp;</td>
                             </tr>
                             <tr>
-                              <td style="width: 85px;width: 75px;">&nbsp;</td>
-                              <td style="padding: 10px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #333333;padding: 0px !important; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #333333;">
+                              <td style="width: 85px; width: 75px;">&nbsp;</td>
+                              <td style="padding: 0px 0 0 0px !important;" valign="top" class="bodyContent">
                               <!--<div gsedit="post_divider">
                                   <hr width="520" height="1" class="story-separator" style="border: 0; margin: 0 auto; color: #e8e8e8; background-color: #e8e8e8; height: 1px;" />
-                                </div></td>-->
+                                </div></td>--> 
                               <td style="width: 85px;">&nbsp;</td>
                             </tr>
                           </tbody>
                         </table>
                         
                         <!-- /story --> 
-                        
-                        <!-- story padding --> 
-                        
-                        <!--  
-                        <table width="500" border="0" align="center" cellpadding="0" cellspacing="0" class="story-padding padding" style="background-color: white;">
-                          <tbody>
-                            <tr>
-                              <td width="500" height="20"></td>
-                            </tr>
-                          </tbody>
-                        </table>--> 
-                        
-                        <!-- /story padding -->
-                        
-                       </td>
-                    </tr>
+                        </td>
+                    </tr>              
                   </tbody>
                 </table>
+                
+<table cellpadding="0" cellspacing="0" border="0" width="670">
+                  <tbody>
+                    <tr>
+                      <td width="75" style="background-color: #ffffff;">&nbsp;</td>
+                      
+                      <td width="490" height="17" style="border-top: 1px solid #dddddd;background-color: #ffffff;">
+                      <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                          <tbody>
+                            <tr>
+                              <td height="18" style="font-size: 1px;">&nbsp;</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                          <tbody>
+                            <tr>
+                              <td width="10" style="font-size: 1px;">&nbsp;</td>
+                              <td style="padding: 0px 0 0 0px !important;" valign="top" class="bodyContent">
+                              <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                  <tbody>
+                                    <tr>
+                                      <td valign="top">
+                                      <div gsedit="std_content01">
+                                          <p>Some closing words here. You can write your signature here or clear this section.</p>
+                                        </div></td>
+                                    </tr>
+                                  </tbody>
+                                </table></td>
+                              <td width="10" style="font-size: 1px;">&nbsp;</td>
+                            </tr>
+                            <tr class="hide">
+                              <td width="10" style="font-size: 1px;">&nbsp;</td>
+                              <td height="20" style="font-size: 1px;">&nbsp;</td>
+                              <td width="10" style="font-size: 1px;">&nbsp;</td>
+                            </tr>
+                          </tbody>
+                        </table></td>
+                      <td width="85" style="background-color: #ffffff;">&nbsp;</td>
+                    </tr>
+                  </tbody>
+                </table>                
+                
                 
                 <!-- Footer -->
                 
                 <table width="670" border="0" cellpadding="0" cellspacing="0" class="main frame" style="background-color: #ffffff;">
                   <tbody>
                     <tr>
-                      <td>
-                      <table border="0" cellpadding="0" cellspacing="0" width="670" class="frame footer">
+                      <td><table border="0" cellpadding="0" cellspacing="0" width="670" class="frame footer">
                           <tbody>
                             <tr>
                               <td colspan="5" height="28">&nbsp;</td>
@@ -381,18 +469,15 @@ body {
                               <td align="center" colspan="4"></td>
                             </tr>
                           </tbody>
-                        </table>
-                       </td>
+                        </table></td>
                     </tr>
                   </tbody>
                 </table>
                 
-                <!-- /Footer -->
-              </td>
+                <!-- /Footer --></td>
             </tr>
           </tbody>
-        </table>
-       </td>
+        </table></td>
     </tr>
   </tbody>
 </table>

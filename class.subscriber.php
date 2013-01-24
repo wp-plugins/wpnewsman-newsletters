@@ -121,8 +121,10 @@ class newsmanSub {
 
 	public function fill($data) {
 		foreach ($data as $key => $value) {
-			if ( $key == 'email' ) {
+			if ( $key === 'email' ) {
 				$this->email = $value;
+			} else if ( $key === 'ip' ) {
+				$this->rawRec['ip'] = $value;
 			} else {
 				$this->rawRec['fields'][$key] = $value;	
 			}			

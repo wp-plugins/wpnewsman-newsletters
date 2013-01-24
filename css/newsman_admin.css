@@ -791,6 +791,11 @@ select.map-select {
 	display: inline-block !important;
 }
 
+#tbl-field-map {
+	width: auto;
+	max-width: none;
+}
+
 #tbl-field-map th {
 	vertical-align: middle;
 }
@@ -1208,5 +1213,15 @@ input.newsman-field-options-radio-opt-input {
 #newsman-mailbox .label {
 	margin-right: 4px;
 }
+
+
+#wpwrap input[type="text"].error {
+	color: #b94a48;
+	border-color: #b94a48;
+	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+	 -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+	      box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+
 
 

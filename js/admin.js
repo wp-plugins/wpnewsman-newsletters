@@ -282,6 +282,40 @@ jQuery(function($){
 		}).fail(NEWSMAN.ajaxFailHandler);
 	}
 
+	var sendValidation = NEWSMAN.sendValidation = (function(){
+
+		var that = {},
+			validators = [];
+
+		that.addValidator = function(callback) {
+			if ( $.inArray(callback, validators) === -1 ) {
+				validators.push(callback);
+			}
+		};
+
+		that.removeValidator = function(callback) {
+			var idx = $.inArray(callback, validators);
+			if ( idx !== -1 ) {
+				validators.splice(idx, 1);
+			}
+		};
+
+		that.validate = function() {
+			for (var i = 0; i < validators.length; i++) {
+				if ( !validators[i]() ) {
+					return false;
+				}
+			}
+			return true;
+		};
+
+		that.clear = function() {
+			validators = [];
+		};
+
+		return that;
+	}());
+
 	var showLoading = NEWSMAN.showLoading = function(str) {
 		if ( $('#gs-loading-msg').get(0) ) { return; }
 		str = (!str) ? ' Please wait...' : ' '+str;
@@ -831,10 +865,15 @@ jQuery(function($){
 					'<option value="null"></option>'];
 
 			for ( var n in this.formFields ) {
-				if ( n ) {
+				if ( n && this.formFields[n] ) {
 					var rxStr = this.formFields[n].replace(/\W+/, '.*'),
-						rx = new RegExp(rxStr, 'i'),
+						rx = new RegExp(rxStr, 'i'), // field full name like "IP Address"
+						rx2 = new RegExp(n, 'i'), // field key like "ip"
 						selected = rx.exec(val) ? ' selected="selected"' : '';
+
+						if ( !selected ) {
+							selected = rx2.exec(val) ? ' selected="selected"' : '';
+						}
 
 					if ( selected ) {
 						// with a greate probability we found a header
@@ -1930,6 +1969,10 @@ jQuery(function($){
 
 		function sendEmail() {
 
+			if ( !sendValidation.validate() ) {
+				return;
+			}
+
 			saveEmail(function(){
 
 				$.ajax({
@@ -1952,17 +1995,32 @@ jQuery(function($){
 			});
 		}
 
+		function convertToPlainText(el) {
+			var div = document.createElement('div');
+			$(div).html( $(el).html() );
+
+			$('a', div).replaceWith(function(){
+				var a = $(this);
+				return $('<span />', { html: a.text() + '( '+a.attr('href')+' )' });
+			});
+
+			return div.textContent || div.innerText || '';
+		}
+
 		function saveEmail(done) {
 			done = done || function(){};
 
+			// TODO: create function to get plain text email with urls
+			// instead of anchors
 
 			var edBody = editor.document ? editor.document.getBody().$ : {},
 				to = $('#eml-to').multis('getItems')+'',
 				subj = $('#newsman-email-subj').val(),
-				plain = edBody.textContent || edBody.innerText || '',
+				//plain = edBody.textContent || edBody.innerText || '',
+				plain = convertToPlainText(edBody),
 				html = editor.getData();
 
-			if ( !to || !subj || !plain || !html ) {
+			if ( !plain || !html ) {
 				return;
 			}
 
@@ -3039,6 +3097,10 @@ jQuery(function($){
 				return;
 			}
 
+			if ( !sendValidation.validate() ) {
+				return;
+			}			
+
 			var opt = $('#newsman-send-form input[name="newsman-send"]:checked').val();
 			var datetime = $('#newsman-send-datepicker').datetimepicker('getDate');
 
@@ -3356,7 +3418,7 @@ jQuery(function($){
 		});
 	});
 
-	if ( NEWSMANEXT && NEWSMANEXT.initAnalyticsControls) {
+	if ( typeof NEWSMANEXT !== 'undefined' && NEWSMANEXT.initAnalyticsControls) {
 		NEWSMANEXT.initAnalyticsControls();
 	}
 

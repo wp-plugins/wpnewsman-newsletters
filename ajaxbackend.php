@@ -1316,9 +1316,12 @@
 			if ( !$form ) {
 				$this->errListNotFound($id);
 			} else {
+				$fields = $form->getFields();
+
+				$fields['ip'] = 'IP Address';
 				
 				$this->respond(true, __('success', NEWSMAN), array(
-					'fields' => $form->getFields()
+					'fields' => $fields
 				));
 			}
 		}

@@ -292,8 +292,8 @@ class newsmanForm {
 	public function getFields() {
 		$fields = array();
 		foreach ($this->decodedForm as $item) {
-			if ( isset($item['name']) ) {
-				$fields[$item['name']] = $item['label'];	
+			if ( isset($item['name']) && isset($item['type']) && $item['type'] !== 'html' ) {
+				$fields[$item['name']] = $item['label'];
 			}			
 		}
 		return $fields;

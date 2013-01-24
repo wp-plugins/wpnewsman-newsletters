@@ -724,9 +724,16 @@ class newsmanUtils {
 		return '('.$set.')';
 	}
 
+	public function listsNamesSortCallback($a, $b) {
+		return strcmp($a->name, $b->name);
+	}
+
 	public function getListsSelectOptions($selectedId = false, $showAddNew = true) {
 		$lists = newsmanList::findAll();
 		$opts = '';
+
+		usort($lists, array($this, 'listsNamesSortCallback'));
+
 		foreach ($lists as $lst) {
 			$sel = ( $selectedId !== false && $lst->id == $selectedId ) ? 'selected="selected"' : '';
 			$opts .= '<option '.$sel.' value="'.$lst->id.'">'.$lst->name.'</option>';

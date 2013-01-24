@@ -38,8 +38,6 @@
 									// $('.newsman-bcst-post.active input', frameDoc).each(function(i, el){
 									// 	ids.push(parseInt($(el).val(), 10));
 									// });
-
-									console.log(' selected posts:  '+frameDoc.newsmanGetIDS());
 								}
 							});
 						}
