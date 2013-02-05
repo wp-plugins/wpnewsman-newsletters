@@ -1435,6 +1435,7 @@
 			}	
 
 			$args = array(
+				'nopaging' => true,
 				'post__in' => $pids,
 				'post_type' => $postType
 			);

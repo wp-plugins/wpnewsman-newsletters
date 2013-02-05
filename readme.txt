@@ -4,7 +4,7 @@ Donate Link: http://wpnewsman.com/premium-newsletter-plugin-wordpress/
 Tags: wpnewsman, newsletter, newsletters, newsletter signup, newsletter widget, subscribers, post notification, email subscription, email marketing, email, emailing, subscription
 Requires at least: 3.4
 Tested up to: 3.5
-Stable tag: 1.3.1
+Stable tag: 1.3.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -55,6 +55,7 @@ Compatible with G-Lock EasyMail 6 [The Best Newsletter Software](http://directem
 = Translations in your language =
 
 Translations are included in the plugin: 
+
 * French
 * German
 * Italian
@@ -119,6 +120,12 @@ We got a User Feedback page where you can [add or vote for new features](http://
 3. Subscriber management.
 
 == Changelog ==
+
+= 1.3.2 =
+* Added: Color and Font buttons to the template HTML editor.
+* Fixed: Missing list selection dropdown in the widget settings.
+* A few minor fixes and improvements.
+
 
 = 1.3.1 =
 * Added: ability to import the subscriber's IP address.
@@ -191,6 +198,9 @@ We got a User Feedback page where you can [add or vote for new features](http://
 * First public release. Hello World! 
 
 == Upgrade Notice ==
+
+= 1.3.2 =
+* Fixed missing list selection dropdown in the WPNewsman widget settings.
 
 = 1.3.1 =
 * Added ability to import the subscriber's IP address; two text blocks to the deafult Digest template and fixed "Subscribe" button css for the Internet Explorer 9.

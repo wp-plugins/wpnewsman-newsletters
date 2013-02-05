@@ -793,7 +793,6 @@ class newsmanUtils {
 	public function compileThumbnailsCallback($matches) {
 		$tag = $matches[0];
 		$placehold = '';
-		$gsfinal = '';
 		$src = '';
 
 		if ( preg_match('/(placehold=")([^"]+)(")/i', $tag, $m) ) {
@@ -804,24 +803,12 @@ class newsmanUtils {
 			$src = $this->extractURLFilename($m[2]);
 		}
 
-		if ( preg_match('/(gsfinal=")([^"]+)(")/i', $tag, $m) ) {
-			$gsfinal = $this->extractURLFilename($m[2]);
-		}
-
-		// echo 'placehold = '; var_dump($placehold);
-		// echo 'gsfinal = '; var_dump($gsfinal);
-		// echo 'src = '; var_dump($src);
-
-		if ( $src === '' && $gsfinal === '' ) {
+		if ( $src === '' ) {
 			return '';
 		}
 
 		if ( $placehold == $src ) {
-			if ( !$gsfinal ) { // if there's no thumbnail image in the post - removeing img tag at all
-				return '';	
-			} else {
-				return preg_replace('/(src=")([^"]+)(")/i', '$1'.$gsfinal.'$3', $tag);		
-			}			
+			return '';	
 		}
 		return $tag;		
 	}

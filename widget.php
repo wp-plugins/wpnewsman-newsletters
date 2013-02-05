@@ -57,8 +57,11 @@ class NEWSMAN_Widget_Form extends WP_Widget {
 		$list = $instance['list'] ? $instance['list'] : '1';
 		$u = newsmanUtils::getInstance();
 
-		$widget_options_form = '<input type="hidden" name="'.$this->get_field_name('list').'" value="'.$list.'" id="'.$this->get_field_id('list').'">';
-		$widget_options_form = apply_filters('newsman_widget_options_form', $widget_options_form, $this, $instance);
+		$widget_options_form = '
+		<p><label for="'.$this->get_field_id('list').'">'.__('List:', NEWSMAN).'</label>
+		<select name="'.$this->get_field_name('list').'" id="'.$this->get_field_id('list').'">
+			'.$u->getListsSelectOptions($list, false).'
+		</select></p>';
 
 		echo $widget_options_form;
 	}

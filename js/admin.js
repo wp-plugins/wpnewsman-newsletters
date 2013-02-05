@@ -2010,13 +2010,9 @@ jQuery(function($){
 		function saveEmail(done) {
 			done = done || function(){};
 
-			// TODO: create function to get plain text email with urls
-			// instead of anchors
-
 			var edBody = editor.document ? editor.document.getBody().$ : {},
 				to = $('#eml-to').multis('getItems')+'',
 				subj = $('#newsman-email-subj').val(),
-				//plain = edBody.textContent || edBody.innerText || '',
 				plain = convertToPlainText(edBody),
 				html = editor.getData();
 

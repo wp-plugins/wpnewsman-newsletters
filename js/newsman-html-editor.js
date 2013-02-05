@@ -213,7 +213,7 @@ jQuery(function($){
 			this.element.css({ position: 'absolute' });
 
 			$(this.options.edSelector).ckeditor({
-				width: 750,
+				width: 850,
 				height: 400,
 				resize_enabled: true,
 				resize_dir: 'both',

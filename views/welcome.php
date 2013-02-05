@@ -15,17 +15,9 @@
       <?php endif; ?>
     </div>
     <div class="changelog">
-      <div class="feature-section row">
-        <div class="span4">
-          <h4>Customer Support</h4>
-          <p>Our support team is active, accessible and happy to help when you need it. Place a ticket with our <a href="http://support.glocksoft.net/" target="_blank" title="Visit our support site">Support Department</a>. </p>
-        </div>
-        <div class="span4">
-          <h4>Be part of WPNewsman's future</h4>
-          <p>We are open to user feedbacks and feature suggestions. <a href="http://support.glocksoft.net/feedback" target="_blank" title="Feedback">Add your own</a> and let others vote for it. We'll consider the most requested features for addition in the future versions of the plugin.</p>
-        </div>
-        <div class="span4">
-          <h4>We love you and your kind words!</h4>
+      <div class="feature-section row" style="margin-bottom: .5em">
+        <div class="span12">
+          <h3>We love you and your kind words!</h3>
           <p>We love reviews because they encourage and inspire us. <a href="http://wordpress.org/support/view/plugin-reviews/wpnewsman-newsletters" target="_blank" title="Rate WPNewsman!">Add your own review</a> and make our day.</p>
         </div>
       </div>
@@ -39,17 +31,11 @@
         <div class="span12">
           <h3>Change log</h3>
           <ul>
-            <li>Added: support of multiple lists in the Lite version. Upon the first plugin activation, WPNewsman automatically creates the list called &quot;wp-users&quot; and imports the users of your WordPress site into that list. Thus, your wp-users list can now be used to send important site information, in addition to newsletters.</li>
-            <li>Added: ability to merge Google Analytics and Piwik remote tracking into links in the Pro version.</li>
-            <li>Added: ability to insert the Unsubscribe and Change Subscription links from the HTML editor menu.</li>
-            <li>Added: the post selector dialog for the digest template.</li>
-            <li>Added: &quot;Lists and Forms&quot; menu item under WPNewsman in your WordPress admin.</li>
-            <li>Added: ability to select a template for action pages.</li>
-            <li>Added: translation to the Russian, French, German and Italian languages. You can use WP Native Dashboard plugin to switch to your locale on the fly.</li>
-            <li>Fixed: &quot;Edit post template&quot; feature for the digest template.</li>
-            <li>Other small fixes and improvements.</li>
+            <li>Added: Color and Font buttons to the template HTML editor.</li>
+            <li>Fixed: Missing list selection dropdown in the widget settings.</li>
+            <li>A few minor fixes and improvements.</li>
           </ul>
-          <p>For the correct work of the plugin, update WPNewsman and WordPress to the latest versions.</p>
+          <p>For the correct work of the plugin, always update WPNewsman and WordPress to the latest versions.</p>
         </div>
       </div>
     </div>
