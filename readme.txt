@@ -120,23 +120,23 @@ We got a User Feedback page where you can [add or vote for new features](http://
 
 == Changelog ==
 
+= 1.3.4 =
+* Fixed: CKEditor toolbar layout
+
 = 1.3.3 =
 * Fixed: the plugin overwrote system email templates and action pages during update/activation.
 * Fixed: "Catchable fatal error: Object of class WP_Error could not be converted to string..." error on themes without the proper custom post type support.
-
 
 = 1.3.2 =
 * Added: Color and Font buttons to the template HTML editor.
 * Fixed: Missing list selection dropdown in the widget settings.
 * A few minor fixes and improvements.
 
-
 = 1.3.1 =
 * Added: ability to import the subscriber's IP address.
 * Added: two text blocks to the deafult Digest template.
 * Fixed: "Subscribe" button css for the Internet Explorer 9.
 * Other internal fixes and improvements.
-
 
 = 1.3.0 =
 * Added: support of multiple lists in the Lite version. Upon the first plugin activation, WPNewsman automatically creates the list called "wp-users" and imports the users of your WordPress site into that list. Thus, you get two lists - default list and WordPress users' list.
@@ -202,6 +202,9 @@ We got a User Feedback page where you can [add or vote for new features](http://
 * First public release. Hello World! 
 
 == Upgrade Notice ==
+
+= 1.3.4 =
+* Fixed CKEditor toolbar layout.
 
 = 1.3.3 =
 * Fixed a bug that caused plugin to overwrite system email templates and action pages during update/activation.

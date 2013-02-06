@@ -50,7 +50,8 @@
             {
                 label: 'Insert posts',
                 command: 'newsmanOpenInsertPostDlg',
-                icon: iconPath + 'wpmini-blue.png'
+                icon: iconPath + 'wpmini-blue.png',
+                toolbar: 'newsmanBar'
             } );
         }
     } );

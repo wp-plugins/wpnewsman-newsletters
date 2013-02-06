@@ -37,6 +37,7 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 				title :"Newsman",
 				voiceLabel : "Newsman",
 				className : 'cke_styles',
+				toolbar: 'newsmanBar',
 				multiSelect : false,
 
 				panel :

@@ -27,7 +27,7 @@
 				editor.ui.addButton( 'newsmanSave', {
 					label : 'Save',
 					command : pluginName,
-					toolbar: 'newsmanBar'
+					toolbar: 'newsmanSave'
 					//className: 'cke_button_save'
 				});
 
