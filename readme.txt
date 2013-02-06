@@ -4,7 +4,7 @@ Donate Link: http://wpnewsman.com/premium-newsletter-plugin-wordpress/
 Tags: wpnewsman, newsletter, newsletters, newsletter signup, newsletter widget, subscribers, post notification, email subscription, email marketing, email, emailing, subscription
 Requires at least: 3.4
 Tested up to: 3.5
-Stable tag: 1.3.2
+Stable tag: 1.3.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -55,7 +55,6 @@ Compatible with G-Lock EasyMail 6 [The Best Newsletter Software](http://directem
 = Translations in your language =
 
 Translations are included in the plugin: 
-
 * French
 * German
 * Italian
@@ -120,6 +119,11 @@ We got a User Feedback page where you can [add or vote for new features](http://
 3. Subscriber management.
 
 == Changelog ==
+
+= 1.3.3 =
+* Fixed: the plugin overwrote system email templates and action pages during update/activation.
+* Fixed: "Catchable fatal error: Object of class WP_Error could not be converted to string..." error on themes without the proper custom post type support.
+
 
 = 1.3.2 =
 * Added: Color and Font buttons to the template HTML editor.
@@ -198,6 +202,10 @@ We got a User Feedback page where you can [add or vote for new features](http://
 * First public release. Hello World! 
 
 == Upgrade Notice ==
+
+= 1.3.3 =
+* Fixed a bug that caused plugin to overwrite system email templates and action pages during update/activation.
+* Added support of Action Pages on old themes.
 
 = 1.3.2 =
 * Fixed missing list selection dropdown in the WPNewsman widget settings.

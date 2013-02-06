@@ -29,13 +29,9 @@
       </div>
       <div class="feature-section row" style="margin-bottom: .5em">
         <div class="span12">
-          <h3>Change log</h3>
-          <ul>
-            <li>Added: Color and Font buttons to the template HTML editor.</li>
-            <li>Fixed: Missing list selection dropdown in the widget settings.</li>
-            <li>A few minor fixes and improvements.</li>
-          </ul>
-          <p>For the correct work of the plugin, always update WPNewsman and WordPress to the latest versions.</p>
+          <h3>Changed in this version:</h3>
+          <?php $u = newsmanUtils::getInstance(); echo $u->getLastChanges(); ?>
+          <p>For the correct work of the plugin, update WPNewsman and WordPress to the latest versions.</p>
         </div>
       </div>
     </div>

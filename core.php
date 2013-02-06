@@ -110,6 +110,8 @@ class newsman {
 		add_action('admin_init', array($this, 'onAdminInit'));
 		add_action('admin_head', array($this, 'onAdminHead'));
 
+		add_action('template_redirect', array($this, 'onTemplateRedirect'), 1);
+
 		add_action('wpnewsman_update', array($this, 'onActivate'));
 
 		if ( !defined('NEWSMAN_WORKER') ) {
@@ -154,6 +156,17 @@ class newsman {
 
 		add_filter('single_template', array($this, 'set_custom_template_for_action_page'));
 
+	}
+
+	public function onTemplateRedirect() {
+		global $post;
+		if( $post->post_type == 'newsman_ap' ){
+			$categories = get_the_category();
+			if ( count($categories) == 0 ) {
+				//assign a category
+				wp_set_object_terms($post->ID, 'uncategorized','category');
+			}
+		}
 	}
 
 	public function setLocale() {
@@ -752,9 +765,8 @@ class newsman {
 		
 		$this->options->load($options);	
 
-		$this->utils->installActionPages($this->lang, 'REPLACE');
-
-		$this->utils->installSystemEmailTemplates($this->lang, 'REPLACE');
+		$this->utils->installActionPages($this->lang);
+		$this->utils->installSystemEmailTemplates($this->lang);
 
 		$list = newsmanList::findOne('name = %s', array('default'));
 
@@ -1632,7 +1644,9 @@ class newsman {
 			'query_var' => "subscription", // This goes to the WP_Query schema
 			'supports' => array('title', 'excerpt', 'editor' /*,'custom-fields'*/), // Let's use custom fields for debugging purposes only
 			'register_meta_box_cb' => array($this, 'add_shortcode_metabox')
-		));	
+		));
+
+		register_taxonomy_for_object_type('category', 'newsman_ap');
 
 		// these line should stay last 
 		$this->loadScrtipsAndStyles();

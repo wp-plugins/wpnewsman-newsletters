@@ -1116,6 +1116,23 @@ class newsmanUtils {
 		return $res;
 	}
 
+	public function getLastChanges() {
+		$changes = '';
+		$changelog = file_get_contents(NEWSMAN_PLUGIN_PATH.DIRECTORY_SEPARATOR.'readme.txt');
+		if ( preg_match('/==\s*Changelog\s*==[\s\S]*?\=\s*([\d\.]+)\s*\=([\s\S]*?)\=\s+[\d\.]+/i', $changelog, $matches) ) {
+			$changes = "<ul>\n";
+			foreach (explode("\n", $matches[2]) as $str) {
+				$str = trim($str);
+				if ( $str !== '' ) {
+					$str = preg_replace('/^\*\s+/', '', $str);
+					$changes .= "<li>$str</li>\n";
+				}				
+			}
+			$changes .= "</ul>";
+		}
+		return $changes;
+	}
+
 	/* --------------------------------------------------------------------------------------------------------- */
 	/* Shortcode fucntions */	
 	/* --------------------------------------------------------------------------------------------------------- */
