@@ -1233,6 +1233,8 @@
 
 			// start transaction here
 			$wpdb->query('START TRANSACTION');
+			
+			ini_set("auto_detect_line_endings", true);
 
 			if (($handle = @fopen($filePath, "r")) !== FALSE) {
 				while (is_array($data = @fgetcsv($handle, 1000, $delimiter)) /*!== FALSE */) {
@@ -1264,7 +1266,7 @@
 			));
 		}
 
-		public function ajImportFiles() {
+		public function ajImportFiles() {			
 			$imported = 0;
 
 			$files = $this->getUploadedFiles();
@@ -1281,6 +1283,7 @@
 		}
 
 		public function ajGetCSVFields() {
+			ini_set("auto_detect_line_endings", true);
 			$filename	= $this->param('filename');
 
 			$n = newsman::getInstance();			
