@@ -136,7 +136,6 @@ class nuUploadProcessor {
 		
 		if ($this->file->save($uploadDirectory . $filename . '.' . $ext)){
 			return array(
-				'x' => $uploadDirectory . $filename . '.' . $ext,
 				'success' => true,
 				'actualFileName' => $filename.'.'.$ext
 			);

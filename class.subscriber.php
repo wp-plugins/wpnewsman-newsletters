@@ -134,10 +134,12 @@ class newsmanSub {
 	public function save() {
 		global $wpdb;
 
+		$u = newsmanUtils::getInstance();
+
 		$r = $this->rawRec;
 
 		if ( isset($r['fields']) ) {
-			$r['fields'] = json_encode($r['fields']);	
+			$r['fields'] = json_encode( $u->utf8_encode_all($r['fields']) );	
 		}	
 
 		if ( isset($this->rawRec['id']) ) {

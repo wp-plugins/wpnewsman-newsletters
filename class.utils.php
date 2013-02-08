@@ -1186,5 +1186,17 @@ class newsmanUtils {
 		return null;
 	}
 
+	// --------------
 
+	// recursively encodes array strings to UTF8 
+	public function utf8_encode_all($mix) {
+		if ( is_string($mix) ) return mb_check_encoding($mix, 'UTF-8') ? $mix : utf8_encode($mix);
+		if ( !is_array($mix) ) return $mix; 
+		$ret = array(); 
+		foreach($mix as $k=>$v) { 
+			$ret[$k] = $this->utf8_encode_all($v);
+		} 
+		return $ret; 
+	} 	
+	
 }

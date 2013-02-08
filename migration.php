@@ -65,7 +65,7 @@ function newsman_move_title_and_texts_from_list_params_to_form_els() {
 					if ( trim($list->footer) ) {
 						array_push($tmpForm['elements'], array( 'type' => 'html', 'value' => $list->footer ));
 					}
-					$list->form = json_encode($tmpForm);
+					$list->form = json_encode( $u->utf8_encode_all($tmpForm) );
 					$list->save();
 				}
 			}

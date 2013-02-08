@@ -3,7 +3,7 @@
 Plugin Name: G-Lock WPNewsman Lite
 Plugin URI: http://wpnewsman.com
 Description: You get simple yet powerful newsletter solution for WordPress. Now you can easily add double optin subscription forms in widgets, articles and pages, import and manage your lists, create and send beautiful newsletters directly from your WordPress site. You get complete freedom and a lower cost compared to Email Service Providers. Free yourself from paying for expensive email campaigns. WPNewsman plugin updated regularly with new features.
-Version: 1.3.4
+Version: 1.3.5
 Author: Alex Ladyga - G-Lock Software
 Author URI: http://www.glocksoft.com
 */
@@ -28,7 +28,7 @@ Author URI: http://www.glocksoft.com
 //error_reporting(E_ALL);
 
 define('NEWSMAN', 'wpnewsman');
-define('NEWSMAN_VERSION', '1.3.4');
+define('NEWSMAN_VERSION', '1.3.5');
 
 define('NEWSMAN_PLUGIN_URL', get_bloginfo('wpurl').'/'.PLUGINDIR.'/'.basename(dirname(__FILE__)));
 define('NEWSMAN_PLUGIN_PATH', ABSPATH.PLUGINDIR.'/'.basename(dirname(__FILE__)));
@@ -122,12 +122,20 @@ function newsmanCheckCompatibility() {
 		'help'  => __('Doesn\'t work in MultiSite setup.', NEWSMAN)
 	);
 
-	// 3. MCrypt
+	// 2. MCrypt
 
 	$newsman_checklist[] = array(
 		'passed' => function_exists('mcrypt_encrypt'),
 		'name'  => __('MCrypt library', NEWSMAN),
 		'help'  => 'MCrypt library is required to securely store your passwords in the database. Read <a href="http://php.net/manual/en/mcrypt.setup.php">how to Install/Configure</a> or contact your hosting provider if you\'re on a shared hosting.'
+	);
+
+	// 3. MBString module
+
+	$newsman_checklist[] = array(
+		'passed' => function_exists('mb_check_encoding'),
+		'name' => __('MBString extension', NEWSMAN),
+		'help' => 'MBString extension is required for correct processing of non unicode characters. Read <a href="http://www.php.net/manual/en/mbstring.installation.php">how to Install/Configure</a> or contact your hosting provider if you\'re on a shared hosting.'
 	);
 
 	/// ----

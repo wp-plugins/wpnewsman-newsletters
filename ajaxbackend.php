@@ -35,6 +35,8 @@
 		public function respond($state, $msg, $params = array()) {
 			global $db;
 
+			$u = newsmanUtils::getInstance();
+
 			$msg = array(
 				'state' => $state,
 				'msg' => $msg
@@ -57,7 +59,7 @@
 
 			header("Content-type: application/json");
 			
-			echo json_encode($msg);
+			echo json_encode( $u->utf8_encode_all($msg) );
 			//echo "<pre>";
 			//print_r(var_dump($msg),true);
 			//echo "</pre>";    
