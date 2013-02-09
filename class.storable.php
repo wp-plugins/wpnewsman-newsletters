@@ -153,7 +153,7 @@ class newsmanStorable {
 				} else {
 					if ( is_array($this->$name) || is_object($this->$name) ) {					
 						if ( in_array($name, static::$json_serialized) ) {
-							$vals[] = json_encode( $u->utf8_encode_all($this->name) );
+							$vals[] = json_encode( $u->utf8_encode_all($this->$name) );
 						} else {
 							$vals[] = serialize($this->$name);	
 						}

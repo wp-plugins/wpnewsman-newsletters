@@ -2011,7 +2011,7 @@ jQuery(function($){
 			done = done || function(){};
 
 			var edBody = editor.document ? editor.document.getBody().$ : {},
-				to = $('#eml-to').multis('getItems')+'',
+				to = $('#eml-to').multis('getItems'),
 				subj = $('#newsman-email-subj').val(),
 				plain = convertToPlainText(edBody),
 				html = editor.getData();
@@ -2026,7 +2026,7 @@ jQuery(function($){
 				data: {
 					id: NEWSMAN_ENTITY_ID,
 					action: 'newsmanAjSavePlainEmail',
-					to: to,
+					to: JSON.stringify(to),
 					subj: subj,
 					plain: plain,
 					html: html,
@@ -2352,10 +2352,12 @@ jQuery(function($){
 					if ( $.isArray(arr) ) {
 						for (var i = 0; i < arr.length; i++) {
 							arr[i] = '<span class="label label-info">'+arr[i]+'</span>';
-						}						
+						}										
+					} else {
+						arr = [];
 					}
 
-					return arr.join('');	 			
+					return arr.join('');
 				}
 
 
