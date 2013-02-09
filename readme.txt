@@ -4,7 +4,7 @@ Donate Link: http://wpnewsman.com/premium-newsletter-plugin-wordpress/
 Tags: wpnewsman, newsletter, newsletters, newsletter signup, newsletter widget, subscribers, post notification, email subscription, email marketing, email, emailing, subscription
 Requires at least: 3.4
 Tested up to: 3.5
-Stable tag: 1.3.5
+Stable tag: 1.3.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -120,6 +120,9 @@ We got a User Feedback page where you can [add or vote for new features](http://
 
 == Changelog ==
 
+= 1.3.6 =
+* Fixed: problem with saving "To" field in emails created from templates.
+
 = 1.3.5 =
 * Fixed: wrong non-english characters conversion during CSV file import.
 
@@ -205,6 +208,9 @@ We got a User Feedback page where you can [add or vote for new features](http://
 * First public release. Hello World! 
 
 == Upgrade Notice ==
+
+= 1.3.6 =
+* Fixed problem with saving "To" field in emails created from templates.
 
 = 1.3.5 =
 * Fixed wrong non-english characters conversion during CSV file import.

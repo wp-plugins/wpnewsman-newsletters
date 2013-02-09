@@ -2349,8 +2349,10 @@ jQuery(function($){
 					} catch(e) {
 					}
 
-					for (var i = 0; i < arr.length; i++) {
-						arr[i] = '<span class="label label-info">'+arr[i]+'</span>';
+					if ( $.isArray(arr) ) {
+						for (var i = 0; i < arr.length; i++) {
+							arr[i] = '<span class="label label-info">'+arr[i]+'</span>';
+						}						
 					}
 
 					return arr.join('');	 			
@@ -3333,7 +3335,7 @@ jQuery(function($){
 				action: 'newsmanAjSetEmailData',
 				id: NEWSMAN_ENTITY_ID,
 				key: 'to',
-				value: items
+				value: JSON.stringify(items)
 			}
 		}).fail(NEWSMAN.ajaxFailHandler);
 	});	
