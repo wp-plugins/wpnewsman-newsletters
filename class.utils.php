@@ -699,7 +699,6 @@ class newsmanUtils {
 		return $tpl;
 	}	
 
-
 	public function jsArrToMySQLSet($jsArr) {
 		// jsArray =  [1,2,3]
 		// dropping square brackets

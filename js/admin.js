@@ -2343,10 +2343,17 @@ jQuery(function($){
 				}
 
 				function formatTo(to) {
-					var arr = [];
-					try {
-						arr = JSON.parse(to);
-					} catch(e) {
+
+					var arr;
+
+					if ( $.isArray(to) ) {
+						arr = to;
+					} else {
+						arr = [];
+						try {
+							arr = JSON.parse(to);
+						} catch(e) {
+						}						
 					}
 
 					if ( $.isArray(arr) ) {

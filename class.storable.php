@@ -357,7 +357,13 @@ class newsmanStorable {
 				$so = new static();
 
 				foreach ( $row as $key => $value ) {
-					$so->$key = call_user_func(array('newsmanStorable', 'is_serialized'), $value) ? unserialize($value) : $value;			
+					if ( call_user_func(array('newsmanStorable', 'is_serialized'), $value) ) {
+						$so->$key = unserialize($value);
+					} elseif ( in_array($key, static::$json_serialized) ) {
+						$so->$key = json_decode($value, true);
+					} else {
+						$so->$key = $value;
+					}
 				}
 				$storables[] = $so;
 			}			

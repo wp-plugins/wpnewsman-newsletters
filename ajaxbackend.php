@@ -560,14 +560,13 @@
 		}
 
 		public function ajSavePlainEmail() {
+
 			$emlId = $this->param('id', false);
 			$to = $this->param('to');
 			$subj = $this->param('subj');
 			$contentHtml = $this->param('html');
 			$contentPlain = $this->param('plain');
 			$ts = $this->param('ts', 0);
-
-			$to = split(',', $to);
 
 			if ( $emlId ) {
 				$email = newsmanEmail::findOne('id = %d', array( $emlId ) );
@@ -577,7 +576,7 @@
 				$email = new newsmanEmail();	
 			}			
 
-			$email->to = $to;
+			$email->to = json_decode($to);
 
 			$email->subject = $subj;
 			$email->html = $contentHtml;
@@ -611,12 +610,9 @@
 			$send = $this->param('send');
 			$ts = $this->param('ts', 0);
 
-			$to = split(',', $to);
-
-
 			$email = new newsmanEmail();
 
-			$email->to = $to;
+			$email->to = json_decode($to);
 
 			$email->subject = $subj;
 			$email->html = $contentHtml;
