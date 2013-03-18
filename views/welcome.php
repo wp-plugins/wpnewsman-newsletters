@@ -6,6 +6,16 @@
     <div class="about-text">Thank you for installing WPNewsman. We hope you'll like it!</div>
     <?php else: ?>
     <div class="about-text">You updated! We hope you'll like it!</div>
+
+ <h3>Added new email templates store</h3>
+      <div class="feature-section normal">
+        <p>See this quick video tutorial How to Create and Edit Templates and Messages in WPNewsman:</p>
+        <p>
+          <iframe width="640" height="360" src="http://www.youtube.com/embed/uB5YYzhsQuw?rel=0" frameborder="0" allowfullscreen=""></iframe>
+        </p>
+      </div>
+
+
     <?php endif; ?>
     <div class="changelog">
       <?php if ( !$hideVideo ): ?>
