@@ -97,8 +97,10 @@ jQuery(function($){
 				var data = JSON.parse(t.responseText);
 				showMessage(data.msg, 'error');
 			});					
-		});		
+		});  		
 	}
+
+	NEWSMAN.initOutlets = initOutlets;
 
 	function outletTypeSwitched(ev, data) {
 
@@ -691,7 +693,6 @@ jQuery(function($){
 	});
 
 	function initOutlets(document){
-		$('<link rel="stylesheet" href="'+NEWSMAN_PLUGIN_URL+'/css/tpleditor.css" />').appendTo($('head', document));
 		$('[gsedit]', document).each(function(i, el){			
 			var params = { doc: document, typeSwitch: outletTypeSwitched },
 				oType = ( el.nodeName === 'IMG' ) ? 'outletImg' : 'outletHTML';
@@ -1297,7 +1298,10 @@ jQuery(function($){
 		//@tab Page
 	}
 
-	$('#tpl-frame').get(0).newsmanInit = init;
+	var frm = $('#tpl-frame').get(0);
+	if ( frm ) {
+		frm.newsmanInit = init;
+	}
 	
 	$('#tpl-frame').load(init);
 });

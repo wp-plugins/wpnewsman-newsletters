@@ -75,8 +75,7 @@ var CKBUILDER_CONFIG = {
 		'colorbutton' : 1,
 		'font' : 1,
 		'justify' : 1,
-		'liststyle' : 1,
-		'tableresize' : 1
+		'liststyle' : 1
 	},
 	languages : {
 		'en' : 1,

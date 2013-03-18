@@ -1,5 +1,5 @@
 [newsman wp="url"] L'adresse email d'abonnement est mis à jour
---- texte pur ---
+--- plain ---
 Merci! Votre adresse email est changé à  [newsman sub="email"]. 
 
 Vous pouvez modifier votre adresse email d'abonnement par le lien ci-dessous:

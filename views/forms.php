@@ -2,7 +2,7 @@
 <div class="wrap wp_bootstrap">
 	<?php include("_header.php"); ?>
 	<div style="border-bottom: 1px solid #DADADA; overflow: hidden;">
-		<h2><?php _e('Subscription Forms', NEWSMAN); ?></h2>
+		<h2><?php _e('Lists and Forms', NEWSMAN); ?></h2>
 	</div>
 
 	<div class="newsman-tbl-controls">

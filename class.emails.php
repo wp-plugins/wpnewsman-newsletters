@@ -1,8 +1,8 @@
 <?php
 
-require_once("class.utils.php");
-require_once('class.storable.php');
-require_once('lib/emogrifier.php');
+require_once(__DIR__.DIRECTORY_SEPARATOR."class.utils.php");
+require_once(__DIR__.DIRECTORY_SEPARATOR."class.storable.php");
+require_once(__DIR__.DIRECTORY_SEPARATOR."lib/emogrifier.php");
 
 class newsmanEmail extends newsmanStorable {
 	static $table = 'newsman_emails';
@@ -17,7 +17,10 @@ class newsmanEmail extends newsmanStorable {
 
 		'editor' => 'string',
 		'ucode' => 'string', // unique email id
-		'assets' => 'text',
+
+		'assetsURL' => 'string', // URL of the email's assets directory
+		'assetsPath' => 'string', // Path of the email's assets directory
+
 		'particles' => 'text', // addition email parts like repeatable post_blocks
 
 		'created' => 'datetime',
@@ -68,14 +71,19 @@ class newsmanEmail extends newsmanStorable {
 
 		if ( empty($this->html) ) {
 			$this->p_html = $this->html;
-		} else {
-			$emo = new Emogrifier($this->html);
+		} else {			
 
 			if ( !isset($this->editor) || !$this->editor ) {
 				$this->editor = 'html';
 			}
 
-			$this->p_html = $u->normalizeShortcodesInLinks( $emo->emogrify() );			
+
+			if ( trim($this->html) === '' ) {
+				$this->p_html = $this->html;
+			} else {
+				$emo = new Emogrifier($this->html);
+				$this->p_html = $u->normalizeShortcodesInLinks( $emo->emogrify() );
+			}
 		}
 	}
 

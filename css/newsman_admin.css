@@ -18,6 +18,15 @@ input[type="text"], input[type="password"], input[type="number"], input[type="se
 	display: none;
 }
 
+.noselect {
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;	
+}
+
 .multis {
 	margin: 0;
 }
@@ -60,10 +69,29 @@ input[type="text"], input[type="password"], input[type="number"], input[type="se
   /* IE6-9 */
 }
 
-#posts-controls select {
-	width: 240px;
+/*     COMMON table styling     */
+
+.newsman-inline-controls {
+	visibility: hidden;
+	font-size: 12px;
+	margin-top: 2px;	
 }
 
+tr:hover .newsman-inline-controls {
+	visibility: visible;
+}
+
+
+
+/************/
+
+
+
+#posts-controls select {
+	width: 240px;
+	height: auto !important;
+	line-height: 23px;
+}
 
 .fcbkcomplete input,
 .fcbkcomplete input:focus {
@@ -230,8 +258,7 @@ input[type="text"], input[type="password"], input[type="number"], input[type="se
 
 .h-toolbar > .btn-group,
 .h-toolbar > .btn {
-	vertical-align: middle;
-	margin-bottom: 0.5em;
+	vertical-align: bottom;	
 }
 
 
@@ -411,7 +438,7 @@ input[type="text"], input[type="password"], input[type="number"], input[type="se
 #newsman-bcst-posts {
 	overflow-y: auto;
 	position: relative;
-	height: 200px;
+	/*height: 280px;*/
 }
 
 #newsman-bcst-posts .stub-wrap {
@@ -434,9 +461,29 @@ input[type="text"], input[type="password"], input[type="number"], input[type="se
 	margin:0;
 	padding: 8px 10px;
 	overflow: hidden;
-	box-shadow: inset 0 -1px 5px white;
-	border-bottom: 1px solid #CCC;
+	box-shadow: inset 0 0 13px white;
+	border: 1px solid #CCC;
 	position: relative;
+}
+
+/*.newsman-bcst-topbar label {
+	display: inline-block;
+}
+*/
+#newsman-select-buttons {
+	display: inline-block;
+	float: right;
+}
+
+#newsman-select-buttons label {
+	display: inline-block;
+	margin: 0;
+	vertical-align: middle;	
+}
+
+#newsman-select-buttons .btn-group {
+	display: inline-block;
+	vertical-align: middle;
 }
 
 #newsman-btn-compose-bcst {
@@ -840,7 +887,7 @@ select.map-select {
 
 
 #import-files-list a {
-	position: relative;`
+	position: relative;
 }
 
 #import-files-list a > i {
@@ -1015,6 +1062,7 @@ select.map-select {
 
 
 .ui-widget-overlay {
+	background: black !important;
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
 	-khtml-user-select: none;
@@ -1096,7 +1144,7 @@ select.map-select {
 }
 
 .newsman-field-options-html textarea {
-	width: 260px;
+	width: 210px;
 	height: 100px;
 }
 
@@ -1223,5 +1271,176 @@ input.newsman-field-options-radio-opt-input {
 	      box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
 }
 
+/***   Templates table   ***/
+
+.newsman-upl .newsman-upl-filename .btn {
+	visibility: hidden;
+}
+
+.newsman-upl:hover .newsman-upl-filename .btn {
+	visibility: visible;
+}
+
+.newsman-template-name {
+	font-weight: bold;
+}
+
+.newsman-delete-tpl {
+	color: #C0423D !important;
+}
+
+.cke_dialog {
+	top: 32px !important;
+}
+
+.cke_dialog_page_contents {
+	height: 100% !important;
+}
+
+.cke_dialog_contents_body {
+	padding-top: 7px !important;
+	margin-top: 4px !important;
+}
+
+#newsman-private-posts-lbl,
+#newsman-show-thmb-placeholder-lbl  {
+	display: inline-block;
+	margin-left: 10px;
+}
+
+
+/*********   TEMPLATES STORE ************/
+
+#newsman-modal-template-store {
+	width: 895px;
+	max-height: none;
+	height: 570px;
+	margin: -275px 0 0 -447px;
+}
+
+#newsman-modal-template-store .modal-body {
+	height: 436px;
+	overflow-y: auto;
+	position: relative;
+}
+
+#newsman-modal-template-store .modal-footer {
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	left: 0;
+}
+
+ #newsman-modal-template-store .pagination {
+	height: 28px;
+	margin: 0;
+}
+
+#newsman-modal-template-store .pagination a {
+	line-height: 26px;
+	min-width: 43px;
+	min-width: 14px;
+	text-align: center;	
+}
+
+#templates-previews {
+	width: 100%;
+	height: 100%;
+}
+
+#templates-previews td {
+	padding: 10px;
+	line-height: 18px;
+	text-align: left;
+	vertical-align: top;
+	width: 33.333%;
+}
+
+#templates-previews td > img {
+	height: 263px;
+	width: 263px;
+	margin-bottom: 10px;
+	background: url('../img/ajax-loader.gif') center center no-repeat;
+}
+
+#templates-previews .carousel {
+	margin-bottom: 10px;
+	width: 263px;
+}
+
+#templates-previews .carousel-inner > .item {
+	overflow: hidden;
+	max-height: 263px;
+}
+
+#templates-previews .carousel-control {
+	top: 50%;
+	border: none;
+	background: transparent;
+	font-size: 18px;
+	text-shadow: 0 0 1px #AAA;
+}
+
+#templates-previews .carousel-control.right {
+	right: 3px;
+}
+#templates-previews .carousel-control.left {
+	left: 3px;
+}
+
+#templates-previews .carousel-indicators li {	
+	-moz-box-shadow: 0 0 1px #AAA;
+	-webkit-box-shadow: 0 0 1px #AAA;
+	-o-box-shadow: 0 0 1px #AAA;
+	box-shadow: 0 0 1px #AAA;
+}
+
+.newsman-tpl-meta {
+	overflow: hidden;
+}
+
+.newsman-tpl-meta h4 {
+	margin: 0;
+	line-height: 28px;
+}
+
+.newsman-tpl-meta .btn {
+	float: right;
+}
+
+#TB_overlay {
+	z-index: 9995 !important;
+}
+
+#TB_window {
+	z-index: 9996 !important;
+}
+
+.newsman-templates-row {
+	height: 327px;
+}
+
+#eml-to {
+	margin-left: 0 !important;
+}
+#fb-panel {
+	padding-left: 20px;
+}
+
+#templates-previews h3 {
+	margin-top: 0;
+}
+
+.newsman-tpl-meta .btn {
+	font-size: 14px;	
+	line-height: 24px;
+}
+
+.made-for-newsman {
+	height: 24px;
+	height: 24px;
+	margin-right: 3px;
+	margin-left: -3px;
+}
 
 

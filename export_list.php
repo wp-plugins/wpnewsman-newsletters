@@ -2,10 +2,9 @@
 
 //ignore_user_abort(true);
 
-//require_once('../../../wp-config.php');
 require_once('../../../wp-load.php');
-require_once('class.utils.php');
-require_once('class.list.php');
+require_once(__DIR__.DIRECTORY_SEPARATOR."class.utils.php");
+require_once(__DIR__.DIRECTORY_SEPARATOR."class.list.php");
 
 define('NEWSMAN_WORKER', 1);
 

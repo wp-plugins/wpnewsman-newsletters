@@ -3,7 +3,7 @@
 Plugin Name: G-Lock WPNewsman Lite
 Plugin URI: http://wpnewsman.com
 Description: You get simple yet powerful newsletter solution for WordPress. Now you can easily add double optin subscription forms in widgets, articles and pages, import and manage your lists, create and send beautiful newsletters directly from your WordPress site. You get complete freedom and a lower cost compared to Email Service Providers. Free yourself from paying for expensive email campaigns. WPNewsman plugin updated regularly with new features.
-Version: 1.3.8
+Version: 1.4.0
 Author: Alex Ladyga - G-Lock Software
 Author URI: http://www.glocksoft.com
 */
@@ -27,20 +27,29 @@ Author URI: http://www.glocksoft.com
 
 //error_reporting(E_ALL);
 
-define('NEWSMAN', 'wpnewsman');
-define('NEWSMAN_VERSION', '1.3.8');
+// litte helper function to bring some windows love 
+function newsman_ensure_correct_path($path) {
+	return preg_replace('/[\\\\\/]+/', DIRECTORY_SEPARATOR, $path);
+}
 
-define('NEWSMAN_PLUGIN_URL', get_bloginfo('wpurl').'/'.PLUGINDIR.'/'.basename(dirname(__FILE__)));
-define('NEWSMAN_PLUGIN_PATH', ABSPATH.PLUGINDIR.'/'.basename(dirname(__FILE__)));
-define('NEWSMAN_PLUGIN_MAINFILE_PATH', ABSPATH.PLUGINDIR.'/'.basename(dirname(__FILE__)).'/'.basename(__FILE__));
+define('NEWSMAN', 'wpnewsman');
+define('NEWSMAN_VERSION', '1.4.0');
+
+if ( preg_match('/.*?\.dev$/i', $_SERVER['HTTP_HOST']) ) {
+	define('NEWSMAN_DEV_HOST', true);
+}
+
+define('NEWSMAN_PLUGIN_URL', WP_PLUGIN_URL.'/'.basename(dirname(__FILE__)));
+define('NEWSMAN_PLUGIN_PATH', newsman_ensure_correct_path(WP_PLUGIN_DIR.'/'.basename(dirname(__FILE__))) );
 define('NEWSMAN_PLUGIN_MAINFILE', __FILE__);
 define('NEWSMAN_BLOG_ADMIN_URL', get_bloginfo('wpurl').'/wp-admin/');
 
+define('NEWSMAN_PLUGIN_DIRNAME', basename(dirname(__FILE__))); // newsman2/newsman2.php
 define('NEWSMAN_PLUGIN_PATHNAME', basename(dirname(__FILE__)).'/'.basename(__FILE__)); // newsman2/newsman2.php
 define('NEWSMAN_PLUGIN_PRO_PATHNAME', 'newsman-pro/newsman-pro.php');
 
-if ( strpos($_SERVER['REQUEST_URI'], 'frmGetPosts.php') !== false ) {
-	define('INSER_POSTS_FRAME', true);
+if ( strpos($_SERVER['REQUEST_URI'], 'frmGetPosts.php') !== false && !defined('INSERT_POSTS_FRAME') ) {
+	define('INSERT_POSTS_FRAME', true);
 }
 
 function newsmanStopActivation() {
@@ -155,7 +164,7 @@ function newsmanCheckCompatibility() {
 
 function wpnewsmanActivationHook() {
 	if ( newsmanCheckCompatibility() ) {
-		require_once('core.php');
+		require_once(__DIR__.DIRECTORY_SEPARATOR."core.php");
 		$n = newsman::getInstance();
 		$n->onActivate();		
 		
@@ -164,14 +173,14 @@ function wpnewsmanActivationHook() {
 
 function wpnewsmanDeactivationHook() {
 	if ( newsmanCheckCompatibility() ) {
-		require_once('core.php');
+		require_once(__DIR__.DIRECTORY_SEPARATOR."core.php");
 		$n = newsman::getInstance();
 		$n->onDeactivate();
 	}
 }
 
 if ( newsmanCheckCompatibility() ) {
-	require_once('core.php');	
+	require_once(__DIR__.DIRECTORY_SEPARATOR."core.php");	
 	$n = newsman::getInstance();
 	newsman_register_worker('newsmanMailer');	
 }

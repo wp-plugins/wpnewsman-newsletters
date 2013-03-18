@@ -1,5 +1,5 @@
 [newsman wp="blogname"]: S'il vous plaît, confirmez votre adresse email
---- texte pur ---
+--- plain ---
 Bonjour,
 
 Vous allez aimer  [newsman wp="blogname"]! Avant de commencer vous envoyer les bulletins d'information que vous avez demandés, nous voulons être sûrs que nous avons votre permission.

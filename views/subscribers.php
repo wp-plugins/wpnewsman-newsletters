@@ -6,7 +6,7 @@
 	<?php include("_header.php"); ?>
 	<div style="border-bottom: 1px solid #DADADA; overflow: hidden;">
 
-		<h2><?php _e('Manage Subscribers', NEWSMAN); ?><?php do_action('newsman_put_list_select', true); ?> <a href="<?php echo NEWSMAN_BLOG_ADMIN_URL; ?>admin.php?page=newsman-subs&amp;action=editlist" id="btn-edit-form" class="btn">Form &amp; List options</a> <form id="subs-search-form" class="form-search" style="display: inline-block; float: right;">
+		<h2><?php _e('Manage Subscribers', NEWSMAN); ?><?php do_action('newsman_put_list_select', true); ?> <a href="<?php echo NEWSMAN_BLOG_ADMIN_URL; ?>admin.php?page=newsman-forms&amp;sub=subscribers&amp;action=editlist" id="btn-edit-form" class="btn">Form &amp; List options</a> <form id="subs-search-form" class="form-search" style="display: inline-block; float: right;">
 			<input  id="newsman-subs-search" type="text" class="input-medium search-query">
 			<button id="newsman-subs-search-clear" style="display:none;" class="btn"><?php _e('Clear', NEWSMAN); ?></button>
 			<button id="newsman-subs-search-btn" type="submit" class="btn"><?php _e('Search', NEWSMAN); ?></button>
@@ -152,9 +152,9 @@
 					<center class="import-form-info"><?php _e('Please select a file to import.', NEWSMAN); ?></center>
 					<form style="display: none;">
 						<div class="import-controls" style="margin: 10px 0;">
-							<div class="row">
-								<div class="span2">
-									<label>Delimiter  <input id="import-delimiter" style="display: inline-block; vertical-align: baseline;" class="span1" type="text"></label>
+							<div class="row-fluid">
+								<div class="span3">
+									<label>Delimiter  <input id="import-delimiter" style="display: inline-block; vertical-align: baseline;" class="input-mini" type="text"></label>
 								</div>
 								<div class="span3">
 									<label class="checkbox"><input id="skip-first-row" type="checkbox"><?php _e(' Skip first row', NEWSMAN); ?></label>

@@ -1,10 +1,10 @@
 <?php
 
-require_once('class.utils.php');
-require_once('class.emails.php');
-require_once('class.options.php');
-require_once('class.sentlog.php');
-require_once('workers/class.mailer.php');
+require_once(__DIR__.DIRECTORY_SEPARATOR."class.utils.php");
+require_once(__DIR__.DIRECTORY_SEPARATOR."class.emails.php");
+require_once(__DIR__.DIRECTORY_SEPARATOR."class.options.php");
+require_once(__DIR__.DIRECTORY_SEPARATOR."class.sentlog.php");
+require_once(__DIR__.DIRECTORY_SEPARATOR."workers/class.mailer.php");
 
 define('NEWSMAN_ERR_INVALID_EMAIL_ADDR', 10);
 define('NEWSMAN_ERR_TEMP_ERROR', 1);
@@ -56,15 +56,16 @@ class newsmanMailMan {
 
 		foreach ($emails as $email) {
 			newsmanMailer::fork(array(
+				'worker_lock' => $email->id,
 				'email_id' => $email->id
 			));
 		}
-
 
 		$emails = newsmanEmail::findAll('status = "%s" and schedule <= %d', array( 'scheduled', date('U') ));
 
 		foreach ($emails as $email) {
 			newsmanMailer::fork(array(
+				'worker_lock' => $email->id,
 				'email_id' => $email->id
 			));
 		}

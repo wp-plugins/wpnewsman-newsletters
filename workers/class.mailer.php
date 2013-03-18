@@ -2,7 +2,7 @@
 
 class newsmanMailer extends newsmanWorker {
 	
-	function worker() {	
+	function worker() {
 
 		if ( isset($_REQUEST['email_id']) ) {
 			$eml = newsmanEmail::findOne('id = %d', array( $_REQUEST['email_id'] ));
@@ -77,7 +77,6 @@ class newsmanMailer extends newsmanWorker {
 		//foreach ($transmissions as $t) {
 		while ( $t = $tStreamer->getTransmission() ) {
 
-
 			if ( $this->isStopped() ) {
 				$stopped = true;
 				break;
@@ -90,7 +89,7 @@ class newsmanMailer extends newsmanWorker {
 			$data = $t->getSubscriberData();
 
 			$msg = $email->renderMessage($data);
-			$msg['html'] = $u->expandAssetsURLs($msg['html'], $email->assets);
+			$msg['html'] = $u->processAssetsURLs($msg['html'], $email->assets);
 
 			$mail_opts = array(
 				 'to' => $t->email,

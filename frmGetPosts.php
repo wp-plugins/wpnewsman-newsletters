@@ -1,9 +1,9 @@
 <?php
 	define('WP_ADMIN', true);
 	define('IFRAME_REQUEST', true);
-	require_once ('../../../wp-config.php');
-	require_once('class.utils.php');
-	require_once('class.options.php');
+	require_once("../../../wp-load.php");
+	require_once(__DIR__.DIRECTORY_SEPARATOR."class.utils.php");
+	require_once(__DIR__.DIRECTORY_SEPARATOR."class.options.php");
 
 	$o = newsmanOptions::getInstance();
 	$u = newsmanUtils::getInstance();
@@ -15,11 +15,17 @@
 	<title></title>
 	<?php wp_head(); ?>
 	<script type="text/javascript">
-		window.ajaxurl = '<?php echo admin_url( 'admin-ajax.php', 'relative' ); ?>';
+		window.ajaxurl = "<?php echo admin_url( 'admin-ajax.php', 'relative' ); ?>";
 	</script>
 	<style type="text/css">
-		.wrap {
-			padding: 1em;
+
+		html {
+			overflow-y: hidden !important;
+			font-family: Helvetica, Arial, sans-serif !important;
+		}
+
+		hr {
+			margin: 0 0 9px 0 !important;
 		}
 
 		#post-selector {
@@ -59,7 +65,7 @@
 
 		#newsman-bcst-posts {
 			position: absolute;
-			top: 248px;
+			top: 189px;
 			right: 0;
 			bottom: 0;
 			left: 0;
@@ -85,17 +91,18 @@
 					<hr>
 					<div class="newsman-bcst-topbar">
 						<label><span class="text"><?php _e('Post type:', NEWSMAN);?></span>
-							<select name="newsman_post_type" id="newsman-post-type" multiple="multiple">
+							<select name="newsman_post_type" id="newsman-post-type">
 							<?php
 								$u = newsmanUtils::getInstance();
 								$type = $u->getPostTypes();
-								
+
 								foreach ($type as $item) {
-									$sel = $item->selected ? ' selected="selected"' : '';
-									echo '<option value="'.$item->name.'"'.$sel.'>'.$item->name.'</option>';
+									$sel = $item['selected'] ? ' selected="selected"' : '';
+									echo '<option value="'.$item['name'].'"'.$sel.'>'.$item['name'].'</option>';
 								}
 							?>
 							</select>
+							<label class="checkbox" id="newsman-private-posts-lbl" ><input type="checkbox" id="newsman-bcst-include-private"> <?php _e('Show private posts', NEWSMAN); ?></label>
 						</label>						
 						<label><span class="text"><?php _e('Categories:', NEWSMAN);?></span>
 							<select name="newsman_bcst_sel_cat" id="newsman-bcst-sel-cat" multiple="multiple">
@@ -109,6 +116,7 @@
 								}
 							?>
 							</select>
+							<label class="checkbox" id="newsman-show-thmb-placeholder-lbl"><input type="checkbox" id="newsman-show-thmb-placeholder"> <?php _e('Show thumbnails placeholders', NEWSMAN); ?></label>
 						</label>
 						<label><span class="text"><?php _e('Authors:', NEWSMAN) ?></span>
 							<select id="newsman-bcst-sel-auth" name="newsman_bcst_sel_auth"  multiple="multiple">
@@ -120,19 +128,28 @@
 								}
 							?>
 							</select>
-						</label>
-						<label class="checkbox"><input type="checkbox" id="newsman-bcst-include-private"> <?php _e('Show private posts', NEWSMAN); ?></label>
+						</label>						
 						<label><span class="text"><?php _e('Use content:', NEWSMAN); ?></span>
 							<select name="" id="newsman-content-type">
 								<option value="full"><?php _e('Full post'); ?></option>
 								<option value="excerpt"><?php _e('Excerpt'); ?></option>
 								<option value="fancy" selected="selected"><?php _e('Fancy excerpt'); ?></option>
 							</select>
+							
+							<div id="newsman-select-buttons">
+								<label><?php _e('Select post(s) for last:', NEWSMAN); ?></label>
+								<div class="btn-group" data-toggle="buttons-radio">
+									<button class="btn btn-mini" sel="day" ><?php _e('Day', NEWSMAN); ?></button>
+									<button class="btn btn-mini" sel="week" ><?php _e('Week', NEWSMAN); ?></button>
+									<button class="btn btn-mini" sel="month" ><?php _e('Month', NEWSMAN); ?></button>
+								</div>
+								<button class="btn btn-mini" sel="clear" style="vertical-align: top;"><?php _e('Clear Selection', NEWSMAN); ?></button>
+							</div>
 						</label>
 						<h3 id="posts-counter"><?php _e('No posts selected'); ?></h3>
 					</div>
 				</div>
-				<div id="newsman-bcst-posts">
+				<div id="newsman-bcst-posts" class="noselect">
 				</div>
 			</div>	
 		</div>

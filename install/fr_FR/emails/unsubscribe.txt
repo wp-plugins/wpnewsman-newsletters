@@ -1,5 +1,5 @@
 Confirmation de la demande de désabonnement
---- texte pur ---
+--- plain ---
 Bonjour,
 
 Ce message est envoyé pour vous informer que nous avons reçu une demande de supprimer l'enregistrement suivant de notre liste:

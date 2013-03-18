@@ -1,4 +1,408 @@
+var NEWSMAN_HTML_TO_TEXT = (function(){
+	/*
+	Copyright (C) 2006 Google Inc.
+
+	Licensed under the Apache License, Version 2.0 (the "License");
+	you may not use this file except in compliance with the License.
+	You may obtain a copy of the License at
+
+	     http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, software
+	distributed under the License is distributed on an "AS IS" BASIS,
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	See the License for the specific language governing permissions and
+	limitations under the License.
+
+	HTML decoding functionality provided by: http://code.google.com/p/google-trekker/
+	*/
+
+
+	function htmlToText(html, extensions) {
+	    var text = html;
+
+	    if (extensions && extensions['preprocessing'])
+	        text = extensions['preprocessing'](text);
+
+	    text = text
+	        // Remove line breaks
+	        .replace(/(?:\n|\r\n|\r)/ig, " ")
+	        // Remove content in script tags.
+	        .replace(/<\s*script[^>]*>[\s\S]*?<\/script>/mig, "")
+	        // Remove content in style tags.
+	        .replace(/<\s*style[^>]*>[\s\S]*?<\/style>/mig, "")
+	        // Remove content in comments.
+	        .replace(/<!--.*?-->/mig, "")
+	        // Remove !DOCTYPE
+	        .replace(/<!DOCTYPE.*?>/ig, "");
+
+	    /* I scanned http://en.wikipedia.org/wiki/HTML_element for all html tags.
+	    I put those tags that should affect plain text formatting in two categories:
+	    those that should be replaced with two newlines and those that should be
+	    replaced with one newline. */
+
+	    if (extensions && extensions['tagreplacement'])
+	        text = extensions['tagreplacement'](text);
+
+	    var doubleNewlineTags = ['p', 'h[1-6]', 'dl', 'dt', 'dd', 'ol', 'ul',
+	        'dir', 'address', 'blockquote', 'center', 'div', 'hr', 'pre', 'form',
+	        'textarea', 'table'];
+
+	    var singleNewlineTags = ['li', 'del', 'ins', 'fieldset', 'legend',
+	        'tr', 'th', 'caption', 'thead', 'tbody', 'tfoot'];
+
+	    for (i = 0; i < doubleNewlineTags.length; i++) {
+	        var r = RegExp('</?\\s*' + doubleNewlineTags[i] + '[^>]*>', 'ig');
+	        text = text.replace(r, '\n\n');
+	    }
+
+	    for (i = 0; i < singleNewlineTags.length; i++) {
+	        var r = RegExp('<\\s*' + singleNewlineTags[i] + '[^>]*>', 'ig');
+	        text = text.replace(r, '\n');
+	    }
+
+	    // Replace <br> and <br/> with a single newline
+	    text = text.replace(/<\s*br[^>]*\/?\s*>/ig, '\n');
+
+		text = text
+	        // Remove all remaining tags.
+	        .replace(/(<([^>]+)>)/ig,"")
+	        // Trim rightmost whitespaces for all lines
+	        .replace(/([^\n\S]+)\n/g,"\n")
+	        .replace(/([^\n\S]+)$/,"")
+	        // Make sure there are never more than two
+	        // consecutive linebreaks.
+	        .replace(/\n{2,}/g,"\n\n")
+	        // Remove newlines at the beginning of the text.
+	        .replace(/^\n+/,"")
+	        // Remove newlines at the end of the text.
+	        .replace(/\n+$/,"")
+	        // Decode HTML entities.
+	        .replace(/&([^;]+);/g, decodeHtmlEntity);
+
+	    if (extensions && extensions['postprocessing'])
+	        text = extensions['postprocessing'](text);
+
+	    return text;
+	}
+
+	function decodeHtmlEntity(m, n) {
+		// Determine the character code of the entity. Range is 0 to 65535
+		// (characters in JavaScript are Unicode, and entities can represent
+		// Unicode characters).
+		var code;
+
+		// Try to parse as numeric entity. This is done before named entities for
+		// speed because associative array lookup in many JavaScript implementations
+		// is a linear search.
+		if (n.substr(0, 1) == '#') {
+			// Try to parse as numeric entity
+			if (n.substr(1, 1) == 'x') {
+				// Try to parse as hexadecimal
+				code = parseInt(n.substr(2), 16);
+			} else {
+				// Try to parse as decimal
+				code = parseInt(n.substr(1), 10);
+			}
+		} else {
+			// Try to parse as named entity
+			code = ENTITIES_MAP[n];
+		}
+
+		// If still nothing, pass entity through
+		return (code === undefined || code === NaN) ?
+			'&' + n + ';' : String.fromCharCode(code);
+	}
+
+	var ENTITIES_MAP = {
+	  'nbsp' : 160,
+	  'iexcl' : 161,
+	  'cent' : 162,
+	  'pound' : 163,
+	  'curren' : 164,
+	  'yen' : 165,
+	  'brvbar' : 166,
+	  'sect' : 167,
+	  'uml' : 168,
+	  'copy' : 169,
+	  'ordf' : 170,
+	  'laquo' : 171,
+	  'not' : 172,
+	  'shy' : 173,
+	  'reg' : 174,
+	  'macr' : 175,
+	  'deg' : 176,
+	  'plusmn' : 177,
+	  'sup2' : 178,
+	  'sup3' : 179,
+	  'acute' : 180,
+	  'micro' : 181,
+	  'para' : 182,
+	  'middot' : 183,
+	  'cedil' : 184,
+	  'sup1' : 185,
+	  'ordm' : 186,
+	  'raquo' : 187,
+	  'frac14' : 188,
+	  'frac12' : 189,
+	  'frac34' : 190,
+	  'iquest' : 191,
+	  'Agrave' : 192,
+	  'Aacute' : 193,
+	  'Acirc' : 194,
+	  'Atilde' : 195,
+	  'Auml' : 196,
+	  'Aring' : 197,
+	  'AElig' : 198,
+	  'Ccedil' : 199,
+	  'Egrave' : 200,
+	  'Eacute' : 201,
+	  'Ecirc' : 202,
+	  'Euml' : 203,
+	  'Igrave' : 204,
+	  'Iacute' : 205,
+	  'Icirc' : 206,
+	  'Iuml' : 207,
+	  'ETH' : 208,
+	  'Ntilde' : 209,
+	  'Ograve' : 210,
+	  'Oacute' : 211,
+	  'Ocirc' : 212,
+	  'Otilde' : 213,
+	  'Ouml' : 214,
+	  'times' : 215,
+	  'Oslash' : 216,
+	  'Ugrave' : 217,
+	  'Uacute' : 218,
+	  'Ucirc' : 219,
+	  'Uuml' : 220,
+	  'Yacute' : 221,
+	  'THORN' : 222,
+	  'szlig' : 223,
+	  'agrave' : 224,
+	  'aacute' : 225,
+	  'acirc' : 226,
+	  'atilde' : 227,
+	  'auml' : 228,
+	  'aring' : 229,
+	  'aelig' : 230,
+	  'ccedil' : 231,
+	  'egrave' : 232,
+	  'eacute' : 233,
+	  'ecirc' : 234,
+	  'euml' : 235,
+	  'igrave' : 236,
+	  'iacute' : 237,
+	  'icirc' : 238,
+	  'iuml' : 239,
+	  'eth' : 240,
+	  'ntilde' : 241,
+	  'ograve' : 242,
+	  'oacute' : 243,
+	  'ocirc' : 244,
+	  'otilde' : 245,
+	  'ouml' : 246,
+	  'divide' : 247,
+	  'oslash' : 248,
+	  'ugrave' : 249,
+	  'uacute' : 250,
+	  'ucirc' : 251,
+	  'uuml' : 252,
+	  'yacute' : 253,
+	  'thorn' : 254,
+	  'yuml' : 255,
+	  'quot' : 34,
+	  'amp' : 38,
+	  'lt' : 60,
+	  'gt' : 62,
+	  'OElig' : 338,
+	  'oelig' : 339,
+	  'Scaron' : 352,
+	  'scaron' : 353,
+	  'Yuml' : 376,
+	  'circ' : 710,
+	  'tilde' : 732,
+	  'ensp' : 8194,
+	  'emsp' : 8195,
+	  'thinsp' : 8201,
+	  'zwnj' : 8204,
+	  'zwj' : 8205,
+	  'lrm' : 8206,
+	  'rlm' : 8207,
+	  'ndash' : 8211,
+	  'mdash' : 8212,
+	  'lsquo' : 8216,
+	  'rsquo' : 8217,
+	  'sbquo' : 8218,
+	  'ldquo' : 8220,
+	  'rdquo' : 8221,
+	  'bdquo' : 8222,
+	  'dagger' : 8224,
+	  'Dagger' : 8225,
+	  'permil' : 8240,
+	  'lsaquo' : 8249,
+	  'rsaquo' : 8250,
+	  'euro' : 8364
+	};
+
+	return {
+		convert: htmlToText		
+	};
+
+}());
+
 jQuery(function($){
+
+	/******* 	Pagination widget 	********/
+
+	$.widget('newsman.newsmanPagination', {
+		options: {
+			pageCount: 10,
+			currentPage: 1,
+			pageButtons: 5,
+			showPrevNext: true
+		},
+		_create: function() {
+			var o = this.options,
+				ul = $('ul', this.element);
+				ul.empty();
+
+			this.element[ o.pageCount <= 1 ? 'hide' : 'show' ]();
+
+			if ( !ul[0] ) {
+				ul = $('<ul></ul>').appendTo(this.element);
+			}
+
+			if ( !this.element.hasClass('pagination') ) {
+				this.element.addClass('pagination');
+			}
+
+			if ( o.showPrevNext ) {
+				$('<li><a class="newsman-pagination-prev" href="#">&laquo;</a></li>').appendTo(ul)
+			}
+
+			if ( o.showPrevNext ) {
+				$('<li><a class="newsman-pagination-next" href="#">&raquo;</a></li>').appendTo(ul)
+			}
+
+			this._buildPageButtons();			
+
+		},
+		_buildPageButtons: function(silent) {
+			var html = [];
+			this._unbind();
+
+			silent = silent || false;
+
+			$('.newsman-pagination-page', this.element).remove();
+
+			var o = this.options,
+				btnNum = ( o.pageCount < o.pageButtons ) ? o.pageCount : o.pageButtons;
+
+			for (var i = 1; i <= btnNum; i++) {
+				html.push('<li><a class="newsman-pagination-page" href="#">&nbsp;</a></li>');
+			}
+
+			html = html.join('');
+
+			var prevBtn = $('.newsman-pagination-prev', this.element).closest('li')[0],
+				ul = ('ul', this.element);
+
+			if ( prevBtn ) {
+				$(html).insertAfter(prevBtn);
+			} else {
+				$(html).appendTo(ul);
+			}
+
+			this._showPageNumbers();
+			this._bind();
+			this._setActivePageButton(silent);
+		},
+		_unbind: function(){
+			$('a', this.element).unbind('click');
+		},
+		_bind: function() {
+			var that = this;
+			this.btnPrev = $('.newsman-pagination-prev', this.element).click(function(e){
+				e.preventDefault();
+				if ( !$(this).closest('li').hasClass('disabled') ) {
+					that.prev();	
+				}				
+			});
+
+			this.btnNext = $('.newsman-pagination-next', this.element).click(function(e){
+				e.preventDefault();
+				if ( !$(this).closest('li').hasClass('disabled') ) {
+					that.next();
+				}
+			});
+
+			$('.newsman-pagination-page', this.element).click(function(e){
+				e.preventDefault();
+				var p = $(this).attr('page')-0;
+
+				if ( p ) {
+					// fire page change event here
+					that.options.currentPage = p;
+					that._setActivePageButton();					
+				}
+			});
+		},
+		_setActivePageButton: function(silent) {
+			$('.active', this.element).removeClass('active');
+			$('.newsman-pagination-page[page="'+this.options.currentPage+'"]', this.element).closest('li').addClass('active');
+			$('.newsman-pagination-prev', this.element).closest('li').toggleClass('disabled', this.options.currentPage <= 1);
+			$('.newsman-pagination-next', this.element).closest('li').toggleClass('disabled', this.options.currentPage >= this.options.pageCount);
+			if ( !silent ) {
+				this._trigger('pageChanged', {}, { page: this.options.currentPage });	
+			}			
+		},
+		/**
+		 * This function calculates numbers for page buttons
+		 */
+		_showPageNumbers: function() {
+			var o = this.options;
+
+			// calculate what batch( page of page buttons ) to render
+			var batch = Math.ceil(o.currentPage / o.pageButtons);
+
+			var startPage = ((batch-1) * o.pageButtons) + 1; // page number to start with
+
+			$('.newsman-pagination-page', this.element).each(function(i, el){
+
+				var n = startPage+i;
+				if (n > o.pageCount) {
+					$(el).html('&nbsp;').attr('page', '');
+				} else {
+					$(el).text(n).attr('page', n);
+				}
+				
+			});
+		},
+		next: function() {
+			this.options.currentPage += 1;
+			this._showPageNumbers();
+			this._setActivePageButton();
+
+		},
+		prev: function() {
+			this.options.currentPage -= 1;
+			this._showPageNumbers();
+			this._setActivePageButton();
+		},
+		setPage: function(page) {
+			this.options.currentPage = page;
+			this._showPageNumbers();
+			this._setActivePageButton(true);
+		},
+		setPageCount: function(pageCount) {
+			this.options.pageCount = pageCount;
+
+			this.element[ pageCount <= 1 ? 'hide' : 'show' ]();
+
+			this._buildPageButtons(false);
+		}
+	});	
 
 	// php comaptible sprintf function for l10n capabilities
 	// taken from http://phpjs.org/functions/sprintf/
@@ -174,13 +578,14 @@ jQuery(function($){
 
 	var o = {};
 
-	var postsSelector;
+	window.NEWSMAN = $({}); // adding events capability
+	window.NEWSMAN.ajFormReq = {};
 
-	window.NEWSMAN = {
-		ajFormReq: {}
-	};
+	NEWSMAN.postsSelector;
 
 	var showMessage = NEWSMAN.showMessage = function(msg, type, cb, rawError) {
+
+		var wrap = $('<div class="wp_bootstrap"></div>').appendTo(document.body);
 
 		type = type || 'info';
 		var cls = 'alert-'+type;
@@ -188,8 +593,6 @@ jQuery(function($){
 		if ( type === 'error' ) {
 			msg = '<strong>'+newsmanL10n.error+'</strong>'+msg;
 		}
-
-		var wrap = $('.wrap.wp_bootstrap');
 
 		var rawRespLink = '';
 		if ( rawError ) {
@@ -232,8 +635,8 @@ jQuery(function($){
 		}
 
 		function close() {
-			if ( wnd ) {
-				wnd.remove();
+			if ( wrap ) {
+				wrap.remove();
 			}
 			if ( typeof cb === 'function' ) {
 				cb();
@@ -248,6 +651,11 @@ jQuery(function($){
 
 		if ( t.readyState < 3 ) {
 			// if we didn't establish the connection to the server
+			err = 'Cannot connect to the server. Data: '+this.data;
+			showMessage(err, 'error', null, {
+				responseText: t.responseText
+			});
+			console.error(err);
 			return;
 		}
 
@@ -268,7 +676,51 @@ jQuery(function($){
 		if ( !showedError ) {
 			showMessage(err, 'error', null);
 		}
-	};	
+	};
+
+	// global ajax senders
+
+	$(document).on('click','a[href^="http"]', function(e){
+		var handlers = jQuery._data( this, "events" );
+
+		if ( handlers && handlers.click && handlers.click.length ) {
+			// has click handler, we shouldn't interfere
+			return;
+		}
+
+		if ( NEWSMAN.ajaxCnt > 0 ) {
+			e.preventDefault();
+			NEWSMAN.navigate = this.href;
+			showLoading();
+		}
+	});
+
+	NEWSMAN.ajaxCnt = 0;
+	NEWSMAN.navigate = '';
+
+	function requestsDone() {
+		hideLoading();
+		if ( NEWSMAN.navigate && window.location.href !== NEWSMAN.navigate ) {
+			window.location.href = NEWSMAN.navigate;	
+		}		
+	}
+
+	$(document).ajaxSend(function() {
+		NEWSMAN.ajaxCnt += 1;
+	});
+
+	$(document).ajaxComplete(function() {
+		// this is to prevent ajaxCnt go below zero on ajax requests which where initiated before the ajaxSend handler
+		if ( NEWSMAN.ajaxCnt > 0 ) {
+			NEWSMAN.ajaxCnt -= 1;	
+		}		
+
+		if ( NEWSMAN.ajaxCnt === 0 ) {
+			requestsDone();
+		}
+	});
+
+	// -------------------
 
 	function getSystemInfo(callback) {
 		$.ajax({
@@ -336,7 +788,7 @@ jQuery(function($){
 		var lis = [], vars = [];
 
 		$('.newsman-form input, .newsman-form textarea').each(function(i, el){			
-			var n = $(el).attr('name');
+			var n = $(el).prop('name');
 			if ( n && $.inArray(n, vars) === -1 ) {
 				vars.push(n);
 			}			
@@ -369,7 +821,7 @@ jQuery(function($){
 			$('#newsman_smtp_username').val(vals.username);
 			$('#newsman_smtp_password').val(vals.password);
 			$('#newsman_smtp_port').val(vals.port);
-			$('#newsman_smtp_secure_conn .radio input[value="'+vals.ssl+'"]').attr('checked', 'checked');
+			$('#newsman_smtp_secure_conn .radio input[value="'+vals.ssl+'"]').prop('checked', true);
 		}
 
 		var presets = {
@@ -426,16 +878,13 @@ jQuery(function($){
 				f = 'val';
 				if ( typeof o[name] === 'boolean' ) {
 					cb = $('input[name="'+name+'"]'); 
-					if ( o[name] ) {
-						cb.attr('checked', 'checked')
-					} else {
-						cb.removeAttr('checked');
-					}
+
+					cb.prop('checked', !!o[name]);
 					
 				} else {
-					var radios = $('input[name="'+name+'"]').filter('[type="radio"]').removeAttr('checked').length;
+					var radios = $('input[name="'+name+'"]').filter('[type="radio"]').prop('checked', false).length;
 					if ( radios ) {
-						$('input[name="'+name+'"]').filter('input[value="'+o[name]+'"]').attr('checked', 'checked');
+						$('input[name="'+name+'"]').filter('input[value="'+o[name]+'"]').prop('checked', true);
 					} else {
 						$('input[name="'+name+'"], textarea[name="'+name+'"], select[name="'+name+'"]').not('[type="radio"]').val(o[name]);
 						$('input[name="'+name+'"]').filter('[type="hidden"]').change();
@@ -464,9 +913,7 @@ jQuery(function($){
 		$('form[action="ajSwitchLocale"]').closest('.newsman-admin-notification').fadeOut();
 	};
 
-
 	/************************************************/
-
 
 	// initiating tabs if present on the page	
 	$('#tabs').tabs({
@@ -477,7 +924,6 @@ jQuery(function($){
 
 	var href =$('#tabs > ul li.ui-tabs-selected a').attr('href');
 	tryRefreshVars(href);
-
 
 	$('.btn-load-mail-settings').click(function(e){
 		loadMailSettings( $(this).attr('preset') );
@@ -506,7 +952,6 @@ jQuery(function($){
 			}
 		});
 	});
-
 
 	/*******	  Modal Dialogs 	**********/
 
@@ -566,13 +1011,84 @@ jQuery(function($){
 		}
 	}
 
+	function shiftSelector(container, opts) {
+		opts = opts || {};
+		var def = {
+			selectClass: 'active',
+			onSelect: null,
+		},
+		rawContainer = $(container).get(0),
+		startEl = null,
+		lastAction;
+
+		opts = $.extend(def, opts);
+
+		function clickHandler(e) {
+			el = $(this);
+
+			if ( startEl && e.shiftKey ) {
+
+				var startIdx = $(startEl).index(),
+					curIdx = $(this).index(),
+					s, e;
+
+				if ( curIdx < startIdx ) {
+					s = curIdx;
+					e = startIdx;
+				} else {
+					s = startIdx;
+					e = curIdx;
+				}
+
+				var children = $(container).children(),
+					actionFunc = lastAction == 'select' ? 'addClass' : 'removeClass';
+
+				for (var i = s; i <= e; i++) {
+					$(children[i])[actionFunc](def.selectClass);
+				}
+
+			} else {
+				if ( el.hasClass(def.selectClass) ) {
+					el.removeClass(def.selectClass);
+					lastAction = 'deselect';
+				} else {
+					el.addClass(def.selectClass);
+					lastAction = 'select';
+				}
+			}
+
+			if ( opts.onSelect ) { opts.onSelect(); }
+
+			startEl = this;			
+		}
+
+		$(container).children().unbind('click', clickHandler);
+		$(container).children().click(clickHandler);		
+
+		function inWatchBlock(el) {
+			do {
+				if ( el == rawContainer ) {
+					return true;
+				}
+				el = el.parentNode;
+			} while ( el );
+			return false;
+		}
+
+		$(document).click(function(e){
+			if ( !inWatchBlock(e.target) ) {
+				startEl = null;
+			}
+		});
+	}
+
 	/*******	  Post selector iframe 	**********/
 
 	if ( $('#post-selector').get(0) ) {
 		(function(){
 			var ul = $('#newsman-posts').empty();
 
-			postsSelector = {};
+			var postsSelector = NEWSMAN.postsSelector = {};
 
 			var paging = {
 				page: 1,
@@ -602,13 +1118,10 @@ jQuery(function($){
 				$('.newsman-bcst-post.active').removeClass('active');
 			};			
 
-
-
 			function search() {
 				paging.page = 1;
 				refreshPosts();
 			}
-
 
 			var iv;
 
@@ -621,18 +1134,12 @@ jQuery(function($){
 				}, 800);
 			});
 
-
-			$('.newsman-bcst-post').live('click', function(){
-				$(this).toggleClass('active');
-				countSelectedPosts();
-			});
-
-
 			$('#newsman-bcst-sel-cat').multiselect({
 				selectedText: "# of # categories selected",
 				noneSelectedText: 'Select categories',
 				selectedList: 4
 			});
+
 			$('#newsman-bcst-sel-auth').multiselect({
 				selectedText: "# of # authors selected",
 				noneSelectedText: 'Select author(s)',
@@ -655,9 +1162,14 @@ jQuery(function($){
 				refreshPosts('append');
 			}
 
-			$('#newsman-bcst-posts .newsman-bcst-load-button').live('click', loadMore);
+			function selectAllPosts() {
+				$('.newsman-bcst-post').addClass('active');
+				countSelectedPosts();
+			}
 
-			function refreshPosts(append) {
+			$(document).on('click', '#newsman-bcst-posts .newsman-bcst-load-button', loadMore);
+
+			function refreshPosts(append, cb) {
 				append = append == 'append';
 
 				var container = $('#newsman-bcst-posts');
@@ -684,13 +1196,13 @@ jQuery(function($){
 
 				if ( s ) {
 					d.search = s;
+					clearRangeSelection();
 				} else {
 					$.extend(d, {
 						cats: ccats,
 						auths: cauths,
 					});
 				}
-
 
 				$.ajax({
 					type: 'POST',
@@ -734,6 +1246,17 @@ jQuery(function($){
 
 						countSelectedPosts();
 
+						shiftSelector(container.get(0), {
+							onSelect: function() {
+								countSelectedPosts();
+							}
+						});
+
+						if ( paging.select ) {
+							selectAllPosts();
+						}
+
+						if ( cb ) { cb(); }
 					}
 				});
 			}
@@ -759,6 +1282,23 @@ jQuery(function($){
 				});
 				e.preventDefault();
 			});			
+
+			function clearRangeSelection() {
+				$('#newsman-select-buttons button.active').removeClass('active');
+				delete paging.select;
+			}
+
+			$('#newsman-select-buttons button').click(function(e){
+				var sel = $(this).attr('sel');
+				if ( sel === 'clear' ) {
+					clearRangeSelection();
+				} else {
+					paging.select = sel;					
+				}
+
+				refreshPosts(null);
+			});
+
 
 		})();
 		
@@ -823,7 +1363,8 @@ jQuery(function($){
 			$.ajax({
 				url: ajaxurl,
 				data: {
-					action: 'newsmanAjRemoveImportedFile',
+					action: 'newsmanAjRemoveUploadedFile',
+					type: 'csv',
 					fileName: filename
 				}
 			}).done(function(data){				
@@ -1060,12 +1601,12 @@ jQuery(function($){
 		}
 	});
 
-
 	/*******	 Manage Subscribers 	**********/
 
 	if ( $('#newsman-mgr-subscribers').get(0) ) {
 
 		var pageState = {
+			listId: null,
 			pg: 1,
 			ipp: 25,
 			show: 'all'
@@ -1130,9 +1671,9 @@ jQuery(function($){
 	 	function getSubscribers() {
 	 		var q = $.extend({}, pageState);
 	 		q.action = 'newsmanAjGetSubscribers';
-	 		q.listId = $('#newsman-lists').val() || '1';
+	 		//q.listId = $('#newsman-lists').val() || '1';2
 
-	 		$('#newsman-checkall').removeAttr('checked');
+	 		$('#newsman-checkall').prop('checked', false);
 
 	 		var x32 = '1ug';
 
@@ -1164,11 +1705,12 @@ jQuery(function($){
 		 			}
 	 			}
 
+	 			var listId = $('#newsman-lists').val();
 
-	 			$('#newsman-subs-all').text(newsmanL10n.allSubs.replace('#', cnt.all));
-	 			$('#newsman-subs-confirmed').text(newsmanL10n.confirmedSubs.replace('#', cnt.confirmed));
-	 			$('#newsman-subs-unconfirmed').text(newsmanL10n.unconfirmedSubs.replace('#', cnt.unconfirmed));
-	 			$('#newsman-subs-unsubscribed').text(newsmanL10n.unsubscribedSubs.replace('#', cnt.unsubscribed));
+	 			$('#newsman-subs-all').prop('href', '#/'+listId+'/all').text(newsmanL10n.allSubs.replace('#', cnt.all));
+	 			$('#newsman-subs-confirmed').prop('href', '#/'+listId+'/confirmed').text(newsmanL10n.confirmedSubs.replace('#', cnt.confirmed));
+	 			$('#newsman-subs-unconfirmed').prop('href', '#/'+listId+'/unconfirmed').text(newsmanL10n.unconfirmedSubs.replace('#', cnt.unconfirmed));
+	 			$('#newsman-subs-unsubscribed').prop('href', '#/'+listId+'/unsubscribed').text(newsmanL10n.unsubscribedSubs.replace('#', cnt.unsubscribed));
 	 		}
 
 	 		function noData(err) {
@@ -1273,6 +1815,9 @@ jQuery(function($){
 		var uploader = $('<div></div>').neoFileUploader({
 			debug: true,
 			action: NEWSMAN_PLUGIN_URL+'/upload.php',
+			params: {
+				type: 'csv'
+			},
 			button: $('#newsman-modal-import .qq-upload-button').get(0),
 			onAdd: function(e, obj) {	 			
 				iform.importForm('addFile', obj)
@@ -1398,7 +1943,7 @@ jQuery(function($){
 
 		function enableFormEditButton() {
 			var listId = $('#newsman-lists').val();
-			$('#btn-edit-form').attr('href', NEWSMAN_BLOG_ADMIN_URL+'admin.php?page=newsman-subs&action=editlist&id='+listId);
+			$('#btn-edit-form').attr('href', NEWSMAN_BLOG_ADMIN_URL+'admin.php?page=newsman-forms&sub=subscribers&action=editlist&id='+listId);
 		}
 
 		var lastListId = null;
@@ -1443,8 +1988,7 @@ jQuery(function($){
 					return true;
 				});
 			} else {
-				enableFormEditButton();
-				getSubscribers();
+				window.location.hash = '#/'+v+'/all';
 			}			
 		});
 
@@ -1454,11 +1998,7 @@ jQuery(function($){
 
 		// check all checkbox
 		$('#newsman-checkall').change(function(e){
-			if ( $(this).is(':checked') ) {
-				$('#newsman-mgr-subscribers tbody input').attr('checked', 'checked');
-			} else {
-				$('#newsman-mgr-subscribers tbody input').removeAttr('checked');
-			}
+			$('#newsman-mgr-subscribers tbody input').prop('checked', $(this).is(':checked') );
 		});
 
 		// unsubscribe button
@@ -1640,13 +2180,19 @@ jQuery(function($){
 
 	 	var email = $('#newsman-email-search').val();
 
+	 	var defaultListId = $('#newsman-lists').val();
 
-
-	 	function r(type, p) {
+	 	function r(listId, type, p) {
 			type = type || 'all';
 			p = p || 1;
+			listId = listId || defaultListId;
+
+			$('#newsman-lists').val(listId);
+
+			pageState.listId = listId;
 			pageState.pg = parseInt(p, 10);
 			pageState.show = type.toLowerCase();
+
 			getSubscribers();
 
 			if ( type == 'unconfirmed' ) {
@@ -1656,18 +2202,16 @@ jQuery(function($){
 			}
 
 			$('.subsubsub a.current').removeClass('current');
-			$('#newsman-subs-'+type).addClass('current');	
-
+			$('#newsman-subs-'+type).addClass('current');
 	 	}
 
 		var router = new Router({
-			'/:type/:p': r,
-			'/:type': r
+			'/:list/:type/:p': r,
+			'/:list/:type': r
 		});
 
-		router.init('/all/1');	 	
+		router.init('/'+defaultListId+'/all/1');	 	
 	}
-
 
 	/*******	 Manage Options 	**********/
 
@@ -1820,7 +2364,7 @@ jQuery(function($){
 
 		$('#newsman-lists').change(function(e){
 			var listId = $(this).val();
-			window.location = NEWSMAN_BLOG_ADMIN_URL+'admin.php?page=newsman-subs&action=editlist&id='+listId;
+			window.location = NEWSMAN_BLOG_ADMIN_URL+'admin.php?page=newsman-forms&sub=subscribers&action=editlist&id='+listId;
 		});
 
 		// 
@@ -1922,48 +2466,47 @@ jQuery(function($){
 
 	}
 
-	/*******	 Compose Email Page 	**********/
+	/*******	 CKeditor view 	**********/
 
-	if ( $('#newsman-page-compose').get(0) ) {
+	if ( $('#newsman-editor').get(0) ) {
+
+		var actionsMap = {
+			template: {
+				actSave: 'newsmanAjSetTemplate'
+			},
+			email: {
+				actSave: 'newsmanAjSetEmail'
+			}		
+		};
+
+		var actions = actionsMap[NEWSMAN_ENT_TYPE];
+
+		if ( !actions ) {
+			throw new Error('Actions map is not defined for entity type '+NEWSMAN_ENT_TYPE);
+		}
 
 		var editor = CKEDITOR.replace( 'content', {
 			width: 'auto',
-			height: 300
+			height: 700,
+			customConfig: NEWSMAN_PLUGIN_URL+'/js/custom_config.js'
 		});
 
 		function changed(){
-			saveEmail();
+			saveEntity();
 		}
 
 		if ( typeof NEWSMAN_ENT_STATUS !== 'undefined' && ( NEWSMAN_ENT_STATUS === 'stopped' || NEWSMAN_ENT_STATUS === 'error' ) ) {
-			$('#newsman-page-compose input[name="newsman-send"]').change(function(e){
+			$('#newsman-editor input[name="newsman-send"]').change(function(e){
 				$('#newsman-send').text( ( $(this).val() === 'now' ) ? 'Resume' : 'Send');
 			});			
 		}
 
-
-		editor.on("instanceReady", function(){
-			var t = null;
-			this.document.on("keyup", function(){
-				if ( t ) {
-					clearTimeout(t);
-				}
-				t = setTimeout(function() {
-					t = null;
-					changed();
-				}, 500);
-			});
+		editor.on('newsmanSave.ckeditor', function(){
+			changed();
+			editor.fire('afterNewsmanSave.ckeditor');
 		});
 
-		editor.on('mode', function(){
-			changed();
-		});
-
-		editor.on('changed', function(){
-			changed();
-		});		
-
-		$('#newsman-email-subj').change(function(){
+		$('#newsman-email-subj, #newsman-template-name').change(function(){
 			changed();
 		});
 
@@ -1973,7 +2516,7 @@ jQuery(function($){
 				return;
 			}
 
-			saveEmail(function(){
+			saveEntity(function(){
 
 				$.ajax({
 					type: 'POST',
@@ -1990,49 +2533,56 @@ jQuery(function($){
 							window.location = data.redirect;
 						}					
 					});
-				}).fail(NEWSMAN.ajaxFailHandler);				
+				}).fail(NEWSMAN.ajaxFailHandler);
 
 			});
 		}
 
 		function convertToPlainText(el) {
-			var div = document.createElement('div');
-			$(div).html( $(el).html() );
 
-			$('a', div).replaceWith(function(){
-				var a = $(this);
-				return $('<span />', { html: a.text() + '( '+a.attr('href')+' )' });
-			});
+			if ( !el ) { return ''; }
 
-			return div.textContent || div.innerText || '';
+			var text = NEWSMAN_HTML_TO_TEXT.convert($(el).html(), {
+				preprocessing: function(html) {
+					return html.replace(/<a[^>]+href="(.*?)"[^>]*>(.*?)<\/a>/gi, " $2 ( $1 ) ");
+				}
+			});			
+
+			return text;
 		}
 
-		function saveEmail(done) {
+		function saveEntity(done) {
 			done = done || function(){};
 
-			var edBody = editor.document ? editor.document.getBody().$ : {},
-				to = $('#eml-to').multis('getItems'),
-				subj = $('#newsman-email-subj').val(),
-				plain = convertToPlainText(edBody),
-				html = editor.getData();
+			var data = {
+				id: NEWSMAN_ENTITY_ID,
+				action: actions.actSave
+			},
+			edBody = editor.document ? editor.document.getBody().$ : false,
+			plain = convertToPlainText(edBody),
+			html = editor.getData();
 
 			if ( !plain || !html ) {
 				return;
+			}			
+
+			data.html = html;
+			data.plain = plain;
+			data.subj = $('#newsman-email-subj').val();
+
+
+			if ( NEWSMAN_ENT_TYPE === 'template' ) {
+				data.name = $('#newsman-template-name').val();
+			} else { // email
+				data.to = $('#eml-to').multis('getItems')+'';
+				data.send = $('input[name="newsman-send"]:checked').val();
+				data.ts = Math.round( $('#newsman-send-datepicker').datetimepicker('getDate') / 1000 );
 			}
 
 			$.ajax({
 				type: 'POST',
 				url: ajaxurl,
-				data: {
-					id: NEWSMAN_ENTITY_ID,
-					action: 'newsmanAjSavePlainEmail',
-					to: JSON.stringify(to),
-					subj: subj,
-					plain: plain,
-					html: html,
-					send: $('input[name="newsman-send"]:checked').val(),
-					ts: Math.round( $('#newsman-send-datepicker').datetimepicker('getDate') / 1000 )					
-				}
+				data: data
 			}).done(function(data){
 				if ( data.id ) {
 					NEWSMAN_ENTITY_ID = data.id;
@@ -2113,11 +2663,7 @@ jQuery(function($){
 
 
 			$('#newsman-checkall').change(function(e){
-				if ( $(this).is(':checked') ) {
-					$('#newsman-mailbox tbody input').attr('checked', 'checked');
-				} else {
-					$('#newsman-mailbox tbody input').removeAttr('checked');
-				}
+				$('#newsman-mailbox tbody input').prop('checked', $(this).is(':checked'));
 			});
 
 			function showSendingLog(emailId) {
@@ -2266,7 +2812,7 @@ jQuery(function($){
 			function fillCounters(cnt) {
 				$('#newsman-mailbox-all').text( newsmanL10n.vAllEmails + ' ('+cnt.all+')');
 				$('#newsman-mailbox-inprogress').text(newsmanL10n.vInProgress + ' ('+cnt.inprogress+')');
-				$('#newsman-mailbox-drafts').text(newsmanL10n.vDrafts + ' ('+cnt.drafts+')');					
+				$('#newsman-mailbox-draft').text(newsmanL10n.vDrafts + ' ('+cnt.draft+')');					
 				$('#newsman-mailbox-pending').text( newsmanL10n.vPending + ' ('+cnt.pending+')');
 				$('#newsman-mailbox-sent').text( newsmanL10n.vSent + ' ('+cnt.sent+')');
 			}		
@@ -2317,7 +2863,7 @@ jQuery(function($){
 				var q = $.extend({}, pageState);
 				q.action = 'newsmanAjGetEmails';
 
-				$('#newsman-checkall').removeAttr('checked');
+				$('#newsman-checkall').prop('checked', false);
 
 				showLoading();
 
@@ -2414,6 +2960,7 @@ jQuery(function($){
 					runPolling();
 
 				}).fail(NEWSMAN.ajaxFailHandler);
+
 			}
 
 
@@ -2422,18 +2969,22 @@ jQuery(function($){
 				p = p || 1;
 				pageState.pg = parseInt(p, 10);
 				pageState.show = type.toLowerCase();
+
 				getEmails();
 
 				$('.subsubsub a.current').removeClass('current');
 				$('#newsman-mailbox-'+type).addClass('current');	
 			}
 
-			var router = new Router({
-				'/:type/:p': r,
-				'/:type': r
-			});
+			if ( typeof Router !== 'undefined' ) {
+				var router = new Router({
+					'/:type/:p': r,
+					'/:type': r
+				});
 
-			router.init('/all/1');	
+				router.init('/all/1');	
+			}
+
 
 			// --- ui elements
 
@@ -2562,7 +3113,7 @@ jQuery(function($){
 					}
 				}).done(function(data){
 					if ( data.id ) {
-						window.location = NEWSMAN_BLOG_ADMIN_URL+'/admin.php?page=newsman-mailbox&action=edit&type=html&id='+data.id;
+						window.location = NEWSMAN_BLOG_ADMIN_URL+'/admin.php?page=newsman-mailbox&action=edit&type=wp&id='+data.id;
 					} else {
 						getEmails();
 					}
@@ -2585,7 +3136,8 @@ jQuery(function($){
 			var pageState = {
 				show: 'all',
 				pg: 1,
-				ipp: 15
+				ipp: 15,
+				total: null
 			};
 
 			function newTemplate(name, type) {
@@ -2609,6 +3161,151 @@ jQuery(function($){
 
 				}).fail(NEWSMAN.ajaxFailHandler);
 			}
+
+			function setUploadTableLoading() {
+				var tbody = $('#uploaded-files tbody').empty();
+
+				$([
+					'<td colspan="2" class="blank-row">',
+						'<img src="'+NEWSMAN_PLUGIN_URL+'/img/ajax-loader.gif">'+newsmanL10n.loading,
+					'</td>'
+				].join('')).appendTo(tbody);
+			}
+
+			function addFile(fileName, id) {
+				var blank = $('#uploaded-files tbody .blank-row').get(0),
+					tbody = $('#uploaded-files tbody');
+
+				if ( blank ) {
+					tbody.empty();
+				}
+
+				var status = '',
+					rowId;
+
+				if ( typeof id !== 'undefined' ) {
+					rowId = 'newsman-uploaded-'+id;
+					status = [
+						'<div class="progress progress-striped">',
+							'<div class="bar" style="width: 0%;"></div>',
+						'</div>'					
+					].join('');
+				} else {
+					rowId = 'newsman-uploaded-'+fileName.replace(/[^a-z0-9]+/ig, '');
+					status = '<span class="label label-success"><i class="icon-ok icon-white"></i> '+newsmanL10n.done+'</span>';
+				}
+
+				$([
+					'<tr id="'+rowId+'" class="newsman-upl">',
+						'<td class="newsman-upl-filename" style="width: 70%"><span>'+fileName+'</span><button class="newsman-delete-file  pull-right btn btn-mini btn-danger">Delete</button></td>',
+						'<td class="newsman-upl-status" style="width: 30%">',
+							status,	
+						'</td>',
+					'</tr>'
+				].join('')).appendTo(tbody);
+
+				var row = $('#'+rowId);
+
+				$('.newsman-delete-file', row).click(function(e){
+					$.ajax({
+						url: ajaxurl,
+						data: {
+							action: 'newsmanAjRemoveUploadedFile',
+							type: 'template',
+							fileName: fileName
+						}
+					}).done(function(data){
+						row.fadeOut(function(){
+							row.remove();	
+						});						
+					}).fail(NEWSMAN.ajaxFailHandler);
+				});
+			}
+ 
+			$('#btn-import-from-file').click(function(e){
+				e.preventDefault();
+				showModal('#newsman-modal-import-from-file', { 
+					show: function() {
+						setUploadTableLoading();
+						$.ajax({
+							type: 'POST',
+							url: ajaxurl,
+							data: {
+								action: 'newsmanAjGetUploadedFiles',
+								type: 'template'
+							}
+						}).done(function(data){
+							if ( data.files.length ) {
+								$(data.files).each(function(i, file){
+									addFile(file);
+								});
+							} else {
+								$('#uploaded-files tbody .blank-row').html('No files to import.');
+							}
+							
+						}).fail(NEWSMAN.ajaxFailHandler);
+					},
+					result: function(mr){
+						if ( mr === 'ok' ) {
+							$.ajax({
+								type: 'POST',
+								url: ajaxurl,
+								data: {
+									action: 'newsmanAjInstallTemplates'
+								}
+							}).done(function(data){
+								showMessage(data.msg);
+								getTemplates();
+							}).fail(NEWSMAN.ajaxFailHandler);
+						}
+					}
+				});				
+			});
+
+			var uploader = $('<div></div>').neoFileUploader({
+				debug: true,
+				acceptFiles: '.zip',
+				action: NEWSMAN_PLUGIN_URL+'/upload.php',
+				params: {
+					type: 'template'
+				},
+				button: $('#btn-upload-file').get(0),
+				onAdd: function(e, obj) {
+					var blank = $('#uploaded-files tbody .blank-row').get(0),
+						tbody = $('#uploaded-files tbody');
+
+					if ( blank ) {
+						tbody.empty();
+					}
+
+					addFile(obj.fileName, obj.id);
+				},
+				onDone: function(e, obj) {
+					if ( !obj.actualFileName ) { return; }
+
+					var row = $('#newsman-uploaded-'+obj.id).get(0);
+					if ( row ) {
+						$('span', row).text(obj.actualFileName);
+						var st = $('.newsman-upl-status', row).empty();
+						$('<span class="label label-success"><i class="icon-ok icon-white"></i> '+newsmanL10n.done+'</span>').appendTo(st);
+					}
+
+				},
+				onError: function(e, obj) {
+					var row = $('#newsman-uploaded-'+obj.id).get(0);
+					if ( row ) {						
+						var st = $('.newsman-upl-status', row).empty();
+						$('<span class="label label-important" title="'+obj.reason+'"><i class="icon-warning-sign icon-white"></i> '+newsmanL10n.error2+'</span>').appendTo(st);
+					}
+
+				},
+				onProgress: function(e, obj) {
+					var row = $('#newsman-uploaded-'+obj.id).get(0);
+					if ( row ) {
+						$('.bar', row).css({ width: obj.percents+'%' });
+					}
+				}
+			});			
 
 			function showNewTplDialog() {
 				r();
@@ -2665,54 +3362,92 @@ jQuery(function($){
 				});				
 			}
 
-
 			$('#newsman-modal-new-template .tpl-btn').click(function(e){
 				e.preventDefault();
 				$('#newsman-modal-new-template .tpl-btn').removeClass('active');
 				$(this).addClass('active');
 			});
 
-
-			$('#btn-new-tpl').click(function(e){
-				e.preventDefault();
-				showNewTplDialog();
-			});
-
-			$('#btn-delete-tpls').click(function(e){
-				e.preventDefault();
-				// ajDeleteEmailTemplates				
+			function getSelectedTemplates() {
 				var ids = [];
 				$('#newsman-templates tbody input:checked').each(function(i, el){
 					ids.push( parseInt($(el).val(), 10) );
 				});
+				return ids;
+			}
+
+			function haveSharedAssets(cb) {
+				var ids = getSelectedTemplates();
+
+				var err = new Error('Wrong server response');
+
+				$.ajax({
+					type: 'POST',
+					url: ajaxurl,
+					data: {
+						ids: ids+'',
+						action: 'newsmanAjHasSharedAssets'
+					}
+				}).done(function(data){
+
+					if ( typeof data.shared === 'number' ) {
+						cb(null, data.shared > 0);
+					} else {
+						cb(err);
+					}
+
+				}).fail(function(){
+					cb(err);
+					NEWSMAN.ajaxFailHandler.apply(this, arguments);
+				});
+			}
+
+			$('#btn-delete-tpls').click(function(e){
+				e.preventDefault();
+				// ajDeleteEmailTemplates
+
+				var ids = getSelectedTemplates();
 
 				if ( !ids.length ) {
 					showMessage(newsmanL10n.pleaseMarkTemplatesForDeletion);
 				} else {
-					showModal('#newsman-modal-delete', function(mr){
-						if ( mr === 'ok' || mr === 'all' ) {
 
-							$.ajax({
-								type: 'POST',
-								url: ajaxurl,
-								data: {
-									ids: ids+'',
-									all: ( mr === 'all' ) ? 1 : 0,
-									action: 'newsmanAjDeleteEmailTemplates'
+					showLoading();
+
+					haveSharedAssets(function(err, haveShared){
+						hideLoading();
+
+						if ( !err ) {
+
+							showModal('#newsman-modal-delete', {
+								show: function(){
+									$('#info-have-shared-res')[ haveShared ? 'show' : 'hide' ]();
+									$('#btn-del-with-res')[ haveShared ? 'show' : 'hide' ]();
+								},
+								result: function(mr){
+									if ( mr === 'rm' || mr === 'rm_res' ) {
+
+										$.ajax({
+											type: 'POST',
+											url: ajaxurl,
+											data: {
+												ids: ids+'',
+												delSharedAssets: mr === 'rm_res' ? 1 : 0,
+												action: 'newsmanAjDeleteEmailTemplates'
+											}
+										}).done(function(data){
+											showMessage(data.msg, 'success');
+											getTemplates();
+										}).fail(NEWSMAN.ajaxFailHandler);
+									}
+									return true;
 								}
-							}).done(function(data){
-
-								showMessage(data.msg, 'success');
-
-								getTemplates();
-
-							}).fail(NEWSMAN.ajaxFailHandler);
+							});
 						}
-						return true;
-					});				
+					});
+
 				}				
 			});
-
 
 			function getTemplates() {
 				var q = $.extend({}, pageState);
@@ -2781,17 +3516,75 @@ jQuery(function($){
 					return html.join('');
 				}
 
+				function inlineDeleteTemplate(e) {
+					e.preventDefault();
 
+					var id = $(this).closest('tr').find('input[type="checkbox"]').val();
+					if ( id ) {
+						showModal('#newsman-modal-delete-single', function(mr){
+							if ( mr === 'ok' ) {
+								$.ajax({
+									type: 'POST',
+									url: ajaxurl,
+									data: {
+										ids: id,
+										action: 'newsmanAjDeleteEmailTemplates'
+									}
+								}).done(function(data){
+									showMessage(data.msg, 'success');
+									getTemplates();
+								}).fail(NEWSMAN.ajaxFailHandler);
+							}
+							return true;
+						});	
+					}
+				}
+
+				function inlineDuplicateTemplate(e) {
+					e.preventDefault();
+
+					var id = $(this).closest('tr').find('input[type="checkbox"]').val();
+					if ( id ) {
+						showLoading();	
+
+						$.ajax({
+							type: 'POST',
+							url: ajaxurl,
+							data: {
+								id: id,
+								action: 'newsmanAjDuplicateTemplate'
+							}
+						}).done(function(data){
+							hideLoading();
+							showMessage(data.msg, 'success');
+							if ( data.id ) {
+								addTemplateRow(data, 'prepend');
+							}
+						}).fail(NEWSMAN.ajaxFailHandler);
+					}
+				}
+
+				function addTemplateRow(r, prepend) {
+					var tbody = $('#newsman-templates tbody');
+					var icon = r.system ? '<i class="icon-cog" rel="tooltip" title="System Template. Cannot be deleted."></i>' : '';
+					var editURL = NEWSMAN_BLOG_ADMIN_URL+'admin.php?page=newsman-templates&action=edit&id='+r.id;
+					var row = $(['<tr>',
+							'<td><input value="'+r.id+'" type="checkbox"'+(r.system ? ' disabled="disabled"' : '')+'></td>',
+							'<td>',
+								'<a href="'+editURL+'" class="newsman-template-name">'+icon+' '+r.name+'</a>',
+								!r.system ? '<div class="newsman-inline-controls"><a class="newsman-duplicate-tpl" href="#">Copy</a> | <a href="'+editURL+'">Edit</a> | <a class="newsman-delete-tpl" href="#">Delete</a> | <a href="'+NEWSMAN_BLOG_ADMIN_URL+'admin.php?page=newsman-templates&action=download&id='+r.id+'">Export</a></div>':'',
+							'</td>',
+						'</tr>'].join(''))[ prepend ? 'prependTo' : 'appendTo' ](tbody);
+
+					$('.newsman-delete-tpl', row).click(inlineDeleteTemplate);
+					$('.newsman-duplicate-tpl', row).click(inlineDuplicateTemplate);
+				}
 
 				function fillRows(rows) {
 					var tbody = $('#newsman-templates tbody').empty();
 					if (rows.length) {
 						$(rows).each(function(i, r){
-							var icon = r.system ? '<i class="icon-cog" rel="tooltip" title="System Template. Cannot be deleted."></i>' : '';
-							$(['<tr>',
-									'<td><input value="'+r.id+'" type="checkbox"></td>',
-									'<td><a href="'+NEWSMAN_BLOG_ADMIN_URL+'admin.php?page=newsman-templates&action=edit&id='+r.id+'">'+icon+' '+r.name+'</a></td>',
-								'</tr>'].join('')).appendTo(tbody);
+							addTemplateRow(r);
 						});	 				
 					} else {
 						noData();
@@ -2808,11 +3601,32 @@ jQuery(function($){
 
 					//fillCounters(data.count);
 					fillRows(data.rows);
-					// renderPagination(data.count);
 
+					var pageCount = Math.ceil(data.count / pageState.ipp);
+
+					if ( pageState.total === null ) {
+						pageState.total = data.count;
+						buildPagination(pageCount);
+					}  else if ( pageState.total !== data.count ) {
+						pageState.total = data.count
+						$('.newsman-tbl-controls .pagination').newsmanPagination('setPageCount', pageCount);
+					}
+						
 				}).fail(NEWSMAN.ajaxFailHandler);
 			}
 
+			function buildPagination(pageCount) {
+				$('.newsman-tbl-controls .pagination')
+					.newsmanPagination({
+						pageCount: pageCount,
+						currentPage: pageState.pg,
+						pageChanged: function(ev, data) {
+							window.location.hash = '#/'+pageState.show+'/'+data.page
+							// pageState.pg = data.page;
+							// getTemplates();
+						}
+					});
+			}			
 
 			function r(type, p) {
 				type = type || 'all';
@@ -2823,11 +3637,12 @@ jQuery(function($){
 				getTemplates();
 
 				$('.subsubsub a.current').removeClass('current');
-				$('#newsman-mailbox-'+type).addClass('current');	
-
-
-
+				$('#newsman-mailbox-'+type).addClass('current');
 			}
+
+			NEWSMAN.on('reloadTemplates', function(){
+				getTemplates();
+			});
 
 			var router = new Router({
 				'/newtemplate': showNewTplDialog,
@@ -2841,12 +3656,336 @@ jQuery(function($){
 		})();
 	}
 
+
+	/******* 	Templates Store 	********/
+
+	if ( $('#newsman-modal-template-store')[0] ) {
+
+		var currentPage = 1,
+			pageCount = 10;
+
+		var dialogContent = $('#newsman-modal-template-store .modal-body');
+
+		var pagination;
+
+		var stores;
+
+		var disableScrollWatcher = false;
+
+		function scrollToStorePage(page) {
+			var rowEl = $('#newsman-store-p-'+page);
+			if ( rowEl[0] ) {
+				disableScrollWatcher = true;
+				dialogContent.animate({ scrollTop: dialogContent.scrollTop() + rowEl.position().top }, {
+					duration: 400,
+					easing: 'swing',
+					done: function(){
+						setTimeout(function() {
+							disableScrollWatcher = false;	
+						}, 50);						
+					}
+				});	
+			}			
+		}
+
+		function buildPagination() {
+			pagination = $('#newsman-modal-template-store .pagination')
+				.newsmanPagination({
+					pageCount: pageCount,
+					currentPage: currentPage,
+					pageChanged: function(ev, data) {
+						scrollToStorePage(data.page);
+					}
+				});
+		}
+
+		function initDownloadButton(btn) {
+			var $btn = $(btn);
+
+			$btn.click(function(e){
+				e.preventDefault();
+				var url = $(this).attr('href'),
+					tplName = $(this).attr('title');
+ 
+				if ( $btn.attr('disabled') ) {
+					return;
+				}
+
+				var idx = parseInt($btn.attr('data-idx'), 10),
+					storeIdx = parseInt($btn.attr('data-store'), 10),
+					tpl = stores[storeIdx].templates[idx];
+
+				$btn.text('Downloading...').attr('disabled', 'disabled');
+
+				$.ajax({
+					type: 'post',
+					url: ajaxurl,
+					data: {
+						action: 'newsmanAjDownloadTemplate',
+						json: JSON.stringify(tpl)
+					}
+				}).done(function(data){
+					$btn.text('Installed');
+					NEWSMAN.trigger('reloadTemplates');
+				}).fail(function(){
+					$btn.text('Download').removeAttr('disabled');
+					NEWSMAN.ajaxFailHandler.apply(this, arguments);
+				});
+			});
+		}
+
+		function getInstalledTemplates(cb) {
+			$.ajax({
+				type: 'post',
+				url: ajaxurl,
+				data: {
+					action: 'newsmanAjGetInstalledTemplates'
+				}
+			}).done(function(data){
+				cb(null, data.installed);
+			}).fail(function(){
+				cb(new Error('Some error occured, cannot get installed templates.'));
+			});
+		}
+
+		// --- Scroll position tracking to autoswitch to appropriate page
+		var rowsTops = [],			
+			halfRow;
+
+		function findRowsTops() {
+			rowsTops = [];
+			$('#templates-previews tbody .newsman-templates-row').each(function(index, row) {
+				if ( index === 0 ) {
+					halfRow = Math.round($(row).height() / 2);
+				}
+				var t = $(row).position().top;
+				rowsTops.push(t);
+			});
+		}
+
+		$('#store-selector').change(function(){
+			var name = $(this).val();
+			//debugger;
+			var a = $('#store-'+name);
+			var t = a.position().top;
+
+			disableScrollWatcher = true;
+
+			dialogContent.animate({ scrollTop: t }, {
+				duration: 400,
+				easing: 'swing',
+				done: function(){
+					setTimeout(function() {
+						disableScrollWatcher = false;	
+					}, 50);						
+				}
+			});	
+
+			
+		});
+
+		dialogContent.scroll(function(){
+			if ( disableScrollWatcher ) { return; }
+			var scrollTop = dialogContent.scrollTop(),
+				viewedPage;
+
+			for (var i = 0; i < rowsTops.length; i++) {
+				if (scrollTop > rowsTops[i]+halfRow) { 
+					viewedPage = i+2;
+				} else {
+					break;
+				}
+			}
+
+			pagination.newsmanPagination('setPage', viewedPage || 1);
+		});
+		// ---
+
+		function buildTemplatesTable() {
+
+			dialogContent.scrollTop(0);
+
+			getInstalledTemplates(function(err, installedTpls){
+				if ( !err ) {
+
+					function getTplName(url) {					
+						return url.match(/\/([^\/]*?)\.zip$/)[1];
+					}
+
+					function getBadge(tpl) {
+						return tpl.madeForNewsman ? '<img class="made-for-newsman" title="Made for WPNewsman" src="'+NEWSMAN_PLUGIN_URL+'/img/star.png"> ' : '';
+					}
+
+					function getButton(tpl, idx, storeIdx) {
+						var tplName = getTplName(tpl.downloadURL);
+
+						var lite = typeof NEWSMAN_LITE_MODE !== 'undefined' && NEWSMAN_LITE_MODE;
+
+						if ( $.inArray(tplName, installedTpls) > -1 ) {
+							return '<a data-store="'+storeIdx+'" data-idx="'+idx+'" title="'+tpl.name+'" href="'+tpl.downloadURL+'" class="btn btn-info" disabled="disabled">'+getBadge(tpl)+'Installed</a>';
+						} else if ( lite && tpl.type == 'pro' ) {
+							return '<a data-store="'+storeIdx+'" data-idx="'+idx+'" href="'+NEWSMAN_BLOG_ADMIN_URL+'admin.php?page=newsman-pro" class="btn">'+getBadge(tpl)+'Upgrade to Pro</a>';
+						} else {
+							return '<a data-store="'+storeIdx+'" data-idx="'+idx+'" title="'+tpl.name+'" href="'+tpl.downloadURL+'" class="btn btn-info">'+getBadge(tpl)+'Download</a>';
+						}
+					}
+
+					var carouselCnt = 1;
+
+					function getPreviewBlock(preview) {
+
+						var carouselId = 'carousel-'+carouselCnt;
+						carouselCnt += 1;
+
+						if ( $.isArray(preview) ) {
+							var output = [
+								'<div id="'+carouselId+'" class="carousel slide">',
+								'<ol class="carousel-indicators">'
+							];
+
+							$(preview).each(function(i, url){
+								var cls = i === 0 ? ' class="active"' : '';
+								output.push('<li data-target="#'+carouselId+'" data-slide-to="'+i+'"'+cls+'></li>');
+							});
+
+							output.push('</ol>');
+
+							// Carousel items
+
+							output.push('<div class="carousel-inner">');
+
+							$(preview).each(function(i, url){
+								var act = i === 0 ? 'active ' : '';
+								output.push([
+									'<div class="'+act+'item">',
+										'<img src="'+url+'" alt="">',
+									'</div>'
+								].join(''));
+							});
+
+							output.push('</div>');
+
+							output.push('<a class="carousel-control left" href="#'+carouselId+'" data-slide="prev">&#x25C0;</a>');
+							output.push('<a class="carousel-control right" href="#'+carouselId+'" data-slide="next">&#x25b6;</a>');
+
+							// '<a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>'
+							// '<a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>'
+
+							output.push('</div>');
+
+							return output.join('');
+
+						} else {
+							return '<img src="'+preview+'" alt="">';
+						}
+
+					}
+
+					$.ajax({
+						type: 'get',
+						dataType: 'jsonp',
+						//url: 'http://blog.dev/wp-admin/admin.php?page=store.json'
+						url: 'http://wpnewsman.com/store.json.php'
+					}).done(function(data){
+
+						if ( typeof data === 'string' ) {
+							try {
+								data = JSON.parse(data);
+							} catch(e) {
+								return;
+							}
+						}
+
+						// console.warn('!!!!!!!! REMOVE ME BEFOR RELEASE');
+						// data.templates.push({
+						// 	name: 'Color direct',
+						// 	downloadURL: 'http://blog.dev/store/colordirect/colordirect.zip',
+						// 	preview: [
+						// 		'http://blog.dev/store/colordirect/colordirect_full_width.jpg',
+						// 		'http://blog.dev/store/colordirect/colordirect_left_sidebar.jpg',
+						// 		'http://blog.dev/store/colordirect/colordirect_right_sidebar.jpg'								
+						// 	]
+						// });					
+
+						stores = data.stores;
+
+						var tbody = $('#templates-previews tbody').empty(),
+							html = [],
+							r = 0,
+							p = 1;
+
+
+						$(data.stores).each(function(i, store){
+
+							var name = store.title.replace(/[^a-z0-9]+/ig, '').toLowerCase();
+
+							html.push([
+								'<tr>',
+									'<td colspan="3">',
+										'<a name="'+name+'"></a>',
+										'<h3 id="store-'+name+'">'+store.title+'</h3>',
+										'<p>'+store.description+'</p>',
+									'</td>',
+								'</tr>'
+							].join(''));
+
+							$('<option value="'+name+'">'+store.title+'</option>').appendTo($('#store-selector'));
+
+							var lastTplIdx = store.templates.length-1;
+
+							$(store.templates).each(function(j, tpl){
+								if ( r === 0 ) { html.push('<tr class="newsman-templates-row" id="newsman-store-p-'+p+'">') };
+								html.push([
+									'<td>',
+										getPreviewBlock(tpl.preview),									
+										'<div class="newsman-tpl-meta">',
+											getButton(tpl, j, i),
+											'<h4>'+tpl.name+'</h4>',
+										'</div>',
+									'</td>'
+								].join(''));
+
+								r += 1;
+
+								if ( r === 3 || lastTplIdx === j ) { html.push('</tr>'); r = 0; p += 1; }
+							});
+
+							pageCount = p - 1;
+						});
+
+						buildPagination();
+						
+						var rowEl = $(html.join('')).appendTo(tbody);
+
+						$('.made-for-newsman').tooltip();
+
+						$('.carousel').carousel({ interval: false });
+
+						findRowsTops();
+
+						$('#templates-previews .btn-info').each(function(i, btn){
+							initDownloadButton(btn);
+						});
+					}).fail(NEWSMAN.ajaxFailHandler);
+				}
+			});
+
+		}
+
+		$('#btn-open-store').click(function(e){
+
+			showModal('#newsman-modal-template-store', function(mr){ return true; });
+
+			buildTemplatesTable();			
+
+		});			
+	}
+
 	/*******	 Manage Forms/Lists 	**********/
 
 	if ( $('#newsman-forms').get(0) ) {
 		(function(){
 
-			//var email = $('#newsman-email-search').val();
 			var pageState = {
 				// show: 'all',
 				// pg: 1,
@@ -2870,12 +4009,13 @@ jQuery(function($){
 						$([
 							'<tr>',
 								'<td><input value="'+data.id+'" type="checkbox"></td>',
-								'<td><a href="'+NEWSMAN_BLOG_ADMIN_URL+'admin.php?page=newsman-subs&action=editlist&id='+data.id+'">'+data.name+'</a></td>',
+								//'<td><a href="'+NEWSMAN_BLOG_ADMIN_URL+'admin.php?page=newsman-forms&sub=subscribers&action=editlist&id='+data.id+'">'+data.name+'</a></td>',
+								'<td><a href="'+NEWSMAN_BLOG_ADMIN_URL+'admin.php?page=newsman-forms&sub=subscribers#/'+data.id+'/all"><strong>'+data.name+'</strong></a><div class="newsman-inline-controls"><a href="'+NEWSMAN_BLOG_ADMIN_URL+'admin.php?page=newsman-forms&sub=subscribers&action=editlist&id='+data.id+'">Edit Form</a> | <a href="'+NEWSMAN_BLOG_ADMIN_URL+'admin.php?page=newsman-forms&sub=subscribers#/'+data.id+'/all">View Subscribers</a></div></td>',
 								'<td>0</td>',
 								'<td>0</td>',
 								'<td>0</td>',
 							'</tr>'
-						].join()).appendTo(tbody);						
+						].join('')).appendTo(tbody);						
 					} else {
 						showMessage('Some error occured. template id is '+data.id, 'error');
 					}
@@ -2928,7 +4068,7 @@ jQuery(function($){
 								url: ajaxurl,
 								data: {
 									ids: ids+'',
-									action: 'newsmanAjDeleteForms'
+									action: 'newsmanAjRemoveLists'
 								}
 							}).done(function(data) {
 								showMessage(data.msg, 'success');
@@ -2981,7 +4121,7 @@ jQuery(function($){
 						$(lists).each(function(i, l){
 							$(['<tr>',
 									'<td><input value="'+l.id+'" type="checkbox"></td>',
-									'<td><a href="'+NEWSMAN_BLOG_ADMIN_URL+'admin.php?page=newsman-subs&action=editlist&id='+l.id+'">'+l.name+'</a></td>',
+									'<td><a href="'+NEWSMAN_BLOG_ADMIN_URL+'admin.php?page=newsman-forms&sub=subscribers#/'+l.id+'/all"><strong>'+l.name+'</strong></a><div class="newsman-inline-controls"><a href="'+NEWSMAN_BLOG_ADMIN_URL+'admin.php?page=newsman-forms&sub=subscribers&action=editlist&id='+l.id+'">Edit Form</a> | <a href="'+NEWSMAN_BLOG_ADMIN_URL+'admin.php?page=newsman-forms&sub=subscribers#/'+l.id+'/all">View Subscribers</a></div></td>',
 									'<td>'+(l.stats.confirmed || 0)+'</td>',
 									'<td>'+(l.stats.unconfirmed || 0)+'</td>',
 									'<td>'+(l.stats.unsubscribed || 0)+'</td>',
@@ -3032,270 +4172,327 @@ jQuery(function($){
 
 	/*******	 HTML editor 	**********/
 
-	if ( $('#newsman-html-editor').get(0) ) {
+	// if ( $('#newsman-html-editor').get(0) ) {
 
-		if ( typeof NEWSMAN_ENT_STATUS !== 'undefined' && ( NEWSMAN_ENT_STATUS === 'stopped' || NEWSMAN_ENT_STATUS === 'error' ) ) {
-			$('#newsman-html-editor input[name="newsman-send"]').change(function(e){
-				$('#newsman-btn-send').text( ( $(this).val() === 'now' ) ? 'Resume' : 'Send');
-			});			
-		}		
+	// 	if ( typeof NEWSMAN_ENT_STATUS !== 'undefined' && ( NEWSMAN_ENT_STATUS === 'stopped' || NEWSMAN_ENT_STATUS === 'error' ) ) {
+	// 		$('#newsman-html-editor input[name="newsman-send"]').change(function(e){
+	// 			$('#newsman-btn-send').text( ( $(this).val() === 'now' ) ? 'Resume' : 'Send');
+	// 		});			
+	// 	}		
 
-		/***
-		 * Pacth for dialog-fix ckeditor problem [ by ticket #4727 ]
-		 * 	http://dev.jqueryui.com/ticket/4727
-		 */
+	// 	/***
+	// 	 * Pacth for dialog-fix ckeditor problem [ by ticket #4727 ]
+	// 	 * 	http://dev.jqueryui.com/ticket/4727
+	// 	 */
 
-		$.extend($.ui.dialog.overlay, { create: function(dialog){
-			if (this.instances.length === 0) {
-				// prevent use of anchors and inputs
-				// we use a setTimeout in case the overlay is created from an
-				// event that we're going to be cancelling (see #2804)
-				setTimeout(function() {
-					// handle $(el).dialog().dialog('close') (see #4065)
-					if ($.ui.dialog.overlay.instances.length) {
-						$(document).bind($.ui.dialog.overlay.events, function(event) {
-							var parentDialog = $(event.target).parents('.ui-dialog');
-							if (parentDialog.length > 0) {
-								var parentDialogZIndex = parentDialog.css('zIndex') || 0;
-								return parentDialogZIndex > $.ui.dialog.overlay.maxZ;
-							}
+	// 	$.extend($.ui.dialog.overlay, { create: function(dialog){
+	// 		if (this.instances.length === 0) {
+	// 			// prevent use of anchors and inputs
+	// 			// we use a setTimeout in case the overlay is created from an
+	// 			// event that we're going to be cancelling (see #2804)
+	// 			setTimeout(function() {
+	// 				// handle $(el).dialog().dialog('close') (see #4065)
+	// 				if ($.ui.dialog.overlay.instances.length) {
+	// 					$(document).bind($.ui.dialog.overlay.events, function(event) {
+	// 						var parentDialog = $(event.target).parents('.ui-dialog');
+	// 						if (parentDialog.length > 0) {
+	// 							var parentDialogZIndex = parentDialog.css('zIndex') || 0;
+	// 							return parentDialogZIndex > $.ui.dialog.overlay.maxZ;
+	// 						}
 							
-							var aboveOverlay = false;
-							$(event.target).parents().each(function() {
-								var currentZ = $(this).css('zIndex') || 0;
-								if (currentZ > $.ui.dialog.overlay.maxZ) {
-									aboveOverlay = true;
-									return;
-								}
-							});
+	// 						var aboveOverlay = false;
+	// 						$(event.target).parents().each(function() {
+	// 							var currentZ = $(this).css('zIndex') || 0;
+	// 							if (currentZ > $.ui.dialog.overlay.maxZ) {
+	// 								aboveOverlay = true;
+	// 								return;
+	// 							}
+	// 						});
 							
-							return aboveOverlay;
-						});
-					}
-				}, 1);
+	// 						return aboveOverlay;
+	// 					});
+	// 				}
+	// 			}, 1);
 				
-				// allow closing by pressing the escape key
-				$(document).bind('keydown.dialog-overlay', function(event) {
-					(dialog.options.closeOnEscape && event.keyCode
-							&& event.keyCode == $.ui.keyCode.ESCAPE && dialog.close(event));
-				});
+	// 			// allow closing by pressing the escape key
+	// 			$(document).bind('keydown.dialog-overlay', function(event) {
+	// 				(dialog.options.closeOnEscape && event.keyCode
+	// 						&& event.keyCode == $.ui.keyCode.ESCAPE && dialog.close(event));
+	// 			});
 					
-				// handle window resize
-				$(window).bind('resize.dialog-overlay', $.ui.dialog.overlay.resize);
-			}
+	// 			// handle window resize
+	// 			$(window).bind('resize.dialog-overlay', $.ui.dialog.overlay.resize);
+	// 		}
 			
-			var $el = $('<div></div>').appendTo(document.body)
-				.addClass('ui-widget-overlay').css({
-				width: this.width(),
-				height: this.height()
-			});
+	// 		var $el = $('<div></div>').appendTo(document.body)
+	// 			.addClass('ui-widget-overlay').css({
+	// 			width: this.width(),
+	// 			height: this.height()
+	// 		});
 			
-			(dialog.options.stackfix && $.fn.stackfix && $el.stackfix());
+	// 		(dialog.options.stackfix && $.fn.stackfix && $el.stackfix());
 			
-			this.instances.push($el);
-			return $el;
-		}});			
+	// 		this.instances.push($el);
+	// 		return $el;
+	// 	}});			
 
-		$('#newsman-btn-send').click(function(e){
+	// 	$('#newsman-btn-send').click(function(e){
 
-			var toList = $('#eml-to').multis('getItems');
-			if ( !toList.length ) {
-				showMessage(newsmanL10n.pleaseChooseSubscribersList);
-				return;
-			}
+	// 		var toList = $('#eml-to').multis('getItems');
+	// 		if ( !toList.length ) {
+	// 			showMessage(newsmanL10n.pleaseChooseSubscribersList);
+	// 			return;
+	// 		}
 
-			if ( !sendValidation.validate() ) {
-				return;
-			}			
+	// 		if ( !sendValidation.validate() ) {
+	// 			return;
+	// 		}			
 
-			var opt = $('#newsman-send-form input[name="newsman-send"]:checked').val();
-			var datetime = $('#newsman-send-datepicker').datetimepicker('getDate');
+	// 		var opt = $('#newsman-send-form input[name="newsman-send"]:checked').val();
+	// 		var datetime = $('#newsman-send-datepicker').datetimepicker('getDate');
 
-			$.ajax({
-				type: 'POST',
-				url: ajaxurl,
-				data: {
-					action: "newsmanAjScheduleEmail",
-					id: NEWSMAN_ENTITY_ID,
-					send: opt,
-					ts: Math.round(datetime.getTime() / 1000)
-				}
-			}).done(function(data){
-				showMessage(data.msg, 'success', function(){
-					if ( data.redirect ) {
-						window.location = data.redirect;
-					}					
-				});
-			}).fail(NEWSMAN.ajaxFailHandler);
-		});
+	// 		$.ajax({
+	// 			type: 'POST',
+	// 			url: ajaxurl,
+	// 			data: {
+	// 				action: "newsmanAjScheduleEmail",
+	// 				id: NEWSMAN_ENTITY_ID,
+	// 				send: opt,
+	// 				ts: Math.round(datetime.getTime() / 1000)
+	// 			}
+	// 		}).done(function(data){
+	// 			showMessage(data.msg, 'success', function(){
+	// 				if ( data.redirect ) {
+	// 					window.location = data.redirect;
+	// 				}					
+	// 			});
+	// 		}).fail(NEWSMAN.ajaxFailHandler);
+	// 	});
 
-		function setPostTemplateType(callback) {
+	// 	function setPostTemplateType(callback) {
 
-			var newType, et = $('#newsman-content-type').val(),
-				etMap = {
-					'content': 'post_content',
-					'excerpt': 'post_excerpt',
-					'fancy': 'fancy_excerpt'
-				};
-				newType = etMap[et] || 'post_content';
+	// 		var newType, et = $('#newsman-content-type').val(),
+	// 			etMap = {
+	// 				'content': 'post_content',
+	// 				'excerpt': 'post_excerpt',
+	// 				'fancy': 'fancy_excerpt'
+	// 			};
+	// 			newType = etMap[et] || 'post_content';
 
-			$.ajax({
-				url: ajaxurl,
-				data: {
-					action: 'newsmanAjSetPostTemplateType',
-					entType: NEWSMAN_ENT_TYPE,
-					entity: NEWSMAN_ENTITY_ID,
-					postType: $('#newsman-post-type').val(),
-					postTemplateType: newType
-				}
-			}).done(function(e){
-				callback(null);
-			}).fail(function(xhr){
-				callback( new Error(xhr.responseText) );
-			});
-		}
+	// 		$.ajax({
+	// 			url: ajaxurl,
+	// 			data: {
+	// 				action: 'newsmanAjSetPostTemplateType',
+	// 				entType: NEWSMAN_ENT_TYPE,
+	// 				entity: NEWSMAN_ENTITY_ID,
+	// 				postType: $('#newsman-post-type').val(),
+	// 				postTemplateType: newType
+	// 			}
+	// 		}).done(function(e){
+	// 			callback(null);
+	// 		}).fail(function(xhr){
+	// 			callback( new Error(xhr.responseText) );
+	// 		});
+	// 	}
 
-		$('#btn-add-posts').click(function(e){
-			//newsman-modal-add-posts
+	// 	$('#btn-add-posts').click(function(e){
+	// 		//newsman-modal-add-posts
 
-			showModal('#newsman-modal-add-posts', function(mr){
+	// 		showModal('#newsman-modal-add-posts', function(mr){
 				
-				if ( mr == 'cancel' ) {
-					// 
-				} else if ( mr == 'insert' ) {
+	// 			if ( mr == 'cancel' ) {
+	// 				// 
+	// 			} else if ( mr == 'insert' ) {
 
-					showLoading();
+	// 				showLoading();
 
-					// first we update the post template with the type of 
-					// content which we want to insert
-					setPostTemplateType(function(err){
-						if ( err ) { console.error(err); }
+	// 				// first we update the post template with the type of 
+	// 				// content which we want to insert
+	// 				setPostTemplateType(function(err){
+	// 					if ( err ) { console.error(err); }
 
-						$.ajax({
-							type: 'POST',
-							url: ajaxurl,
-							data: {
-								pids: postsSelector.getIDS()+'',
-								entType: NEWSMAN_ENT_TYPE,
-								entity: NEWSMAN_ENTITY_ID,
-								action: 'newsmanAjCompilePostsBlock'
-							}						
-						}).done(function(data){
+	// 					$.ajax({
+	// 						type: 'POST',
+	// 						url: ajaxurl,
+	// 						data: {
+	// 							pids: postsSelector.getIDS()+'',
+	// 							entType: NEWSMAN_ENT_TYPE,
+	// 							entity: NEWSMAN_ENTITY_ID,
+	// 							action: 'newsmanAjCompilePostsBlock',
+	// 							showTmbPlaceholder: $('#newsman-show-thmb-placeholder').is(':checked') ? 1 : 0
+	// 						}						
+	// 					}).done(function(data){
 
-							var idoc = $('#tpl-frame').get(0).contentDocument;
-							$('[gsspecial="posts"]', idoc).html(data.content);
+	// 						var idoc = $('#tpl-frame').get(0).contentDocument;
+	// 						$('[gsspecial="posts"]', idoc).html(data.content);
 
-							$('#tpl-frame').get(0).newsmanInit();
+	// 						$('#tpl-frame').get(0).newsmanInit();
 
-							postsSelector.clearSelection();
+	// 						postsSelector.clearSelection();
 
-						}).fail(NEWSMAN.ajaxFailHandler).always(function(){
-							hideLoading();
-						});
-					});					
+	// 					}).fail(NEWSMAN.ajaxFailHandler).always(function(){
+	// 						hideLoading();
+	// 					});
+	// 				});					
 
-				}
-				return true;
-			});
-		});
+	// 			}
+	// 			return true;
+	// 		});
+	// 	});
 
-		/**
-		 *		Editing template particles
-		 */
+	// 	/**
+	// 	 *		Editing template particles
+	// 	 */
 
-		var currentParticleName = '';
+	// 	var currentParticleName = '';
 
-		function getParticleSource() {
-			$.ajax({
-				type: 'POST',
-				url: ajaxurl,
-				data: {
-					name: currentParticleName,
-					entType: NEWSMAN_ENT_TYPE,
-					entity: NEWSMAN_ENTITY_ID,
-					action: 'newsmanAjGetEntityParticle'
-				}
-			}).done(function(data){
-				var html = data.particle;
+	// 	function getParticleSource() {
+	// 		$.ajax({
+	// 			type: 'POST',
+	// 			url: ajaxurl,
+	// 			data: {
+	// 				name: currentParticleName,
+	// 				entType: NEWSMAN_ENT_TYPE,
+	// 				entity: NEWSMAN_ENTITY_ID,
+	// 				action: 'newsmanAjGetEntityParticle'
+	// 			}
+	// 		}).done(function(data){
+	// 			var html = data.particle;
 
-				$('#dialog').editorDialog({
-					edSelector: '.source-editor',
-					save: function(ev, data) {
-						saveParticleSource(data.html);
-						$('#dialog').editorDialog('close');
-					}
-				}).editorDialog('setData', html)
-				  .editorDialog('open');				
-			}).fail(NEWSMAN.ajaxFailHandler);
-		}
+	// 			$('#dialog').editorDialog({
+	// 				edSelector: '.source-editor',
+	// 				save: function(ev, data) {
+	// 					saveParticleSource(data.html);
+	// 					$('#dialog').editorDialog('close');
+	// 				}
+	// 			}).editorDialog('setData', html)
+	// 			  .editorDialog('open');				
+	// 		}).fail(NEWSMAN.ajaxFailHandler);
+	// 	}
 
-		function saveParticleSource(newContent) {
+	// 	function saveParticleSource(newContent) {
 
-			$.ajax({
-				type: 'POST',
-				url: ajaxurl,
-				data: {
-					name: currentParticleName,
-					entType: NEWSMAN_ENT_TYPE,
-					entity: NEWSMAN_ENTITY_ID,
-					content: newContent,
-					action: 'newsmanAjSetEntityParticle'
-				}
-			}).done(function(data){
-				showMessage(data.msg, 'success');
-			}).fail(NEWSMAN.ajaxFailHandler);
-		}
+	// 		$.ajax({
+	// 			type: 'POST',
+	// 			url: ajaxurl,
+	// 			data: {
+	// 				name: currentParticleName,
+	// 				entType: NEWSMAN_ENT_TYPE,
+	// 				entity: NEWSMAN_ENTITY_ID,
+	// 				content: newContent,
+	// 				action: 'newsmanAjSetEntityParticle'
+	// 			}
+	// 		}).done(function(data){
+	// 			showMessage(data.msg, 'success');
+	// 		}).fail(NEWSMAN.ajaxFailHandler);
+	// 	}
 
-		$('#btn-edit-postblock').click(function(e){
+	// 	$('#btn-edit-postblock').click(function(e){
 
-			currentParticleName = 'post_block';
-			getParticleSource();
+	// 		currentParticleName = 'post_block';
+	// 		getParticleSource();
 
-		});
+	// 	});
 
-		$('#btn-edit-post-divider').click(function(e){
-			currentParticleName = 'post_divider';
-			getParticleSource();
-		});
+	// 	$('#btn-edit-post-divider').click(function(e){
+	// 		currentParticleName = 'post_divider';
+	// 		getParticleSource();
+	// 	});
 
-		$('#btn-save-content').click(function(){
-			saveParticleSource();
-		});		
+	// 	$('#btn-save-content').click(function(){
+	// 		saveParticleSource();
+	// 	});		
 
-		window.newsmanHtmlEditorContentLoaded = function(){
-			var frm = $('#tpl-frame'),
-				w = frm.width();
-			setTimeout(function() {
-				frm.width(w+1);				
-				setTimeout(function() { 
-					frm.width(w);
-				}, 0);
-			}, 0);
-		};
+	// 	window.newsmanHtmlEditorContentLoaded = function(){
+	// 		var frm = $('#tpl-frame'),
+	// 			w = frm.width();
+	// 		setTimeout(function() {
+	// 			frm.width(w+1);				
+	// 			setTimeout(function() { 
+	// 				frm.width(w);
+	// 			}, 0);
+	// 		}, 0);
+	// 	};
 
 
-		// Code to fix iframe redraw bug. not fully fixed, but at least something
-		$(window).load(function(){
-			var t;
+	// 	// Code to fix iframe redraw bug. not fully fixed, but at least something
+	// 	$(window).load(function(){
+	// 		var t;
 
-			$($('#tpl-frame').contents()).scroll(function(e){
-				if ( t ) {
-					clearTimeout(t);
-					t = null;
-				}				
-				t = setTimeout(function() {
-					var h = $('#tpl-frame').height();
+	// 		$($('#tpl-frame').contents()).scroll(function(e){
+	// 			if ( t ) {
+	// 				clearTimeout(t);
+	// 				t = null;
+	// 			}				
+	// 			t = setTimeout(function() {
+	// 				var h = $('#tpl-frame').height();
 
-					$('#tpl-frame').css({ height: (h+1)+'px' });
-					setTimeout(function(){
-						$('#tpl-frame').css({ height: h+'px' });
-					}, 1);
-				}, 100);
-			});
-		});
-	}
+	// 				$('#tpl-frame').css({ height: (h+1)+'px' });
+	// 				setTimeout(function(){
+	// 					$('#tpl-frame').css({ height: h+'px' });
+	// 				}, 1);
+	// 			}, 100);
+	// 		});
+	// 	});
+	// }
 
 	/* Common functionality */
+
+	var currentParticleName;
+
+	function saveParticle(content) {
+		$.ajax({
+			type: 'POST',
+			url: ajaxurl,
+			data: {
+				name: currentParticleName,
+				entType: NEWSMAN_ENT_TYPE,
+				entity: NEWSMAN_ENTITY_ID,
+				content: content,
+				action: 'newsmanAjSetEntityParticle'
+			}
+		}).fail(NEWSMAN.ajaxFailHandler);
+	}
+
+	function editParticle() {
+
+		var dlg;
+
+		showLoading();
+
+		$.ajax({
+			type: 'POST',
+			url: ajaxurl,
+			data: {
+				name: currentParticleName,
+				entType: NEWSMAN_ENT_TYPE,
+				entity: NEWSMAN_ENTITY_ID,
+				action: 'newsmanAjGetEntityParticle'
+			}
+		}).done(function(data){
+			hideLoading();
+			
+			var html = data.particle;
+
+			 $('#dialog').editorDialog({
+				edSelector: 'editor1',
+				save: function(ev, data) {
+					saveParticle(data.html);
+				}
+			}).editorDialog('setData', html).editorDialog('open');
+
+		}).fail(NEWSMAN.ajaxFailHandler);		
+	}
+
+	$('#btn-edit-post-tpl').click(function(){
+		currentParticleName = 'post_block';
+		editParticle();
+	});
+
+	$('#btn-edit-divider-tpl').click(function(){
+		currentParticleName = 'post_divider';
+		editParticle();
+	});
 
 	$('#eml-to').multis({
 		preserveClasses: true,
@@ -3392,7 +4589,7 @@ jQuery(function($){
 		});
 	});	
 
-	// ajax forms
+	/***   ajax forms   ***/ 
 
 	$('.newsman-ajax-from').each(function(i, form){
 		$(form).submit(function(e){
@@ -3428,6 +4625,5 @@ jQuery(function($){
 	if ( typeof NEWSMANEXT !== 'undefined' && NEWSMANEXT.initAnalyticsControls) {
 		NEWSMANEXT.initAnalyticsControls();
 	}
-
 
 });

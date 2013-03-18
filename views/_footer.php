@@ -26,6 +26,9 @@
 			<a href="http://wpnewsman.com/documentation/"><?php echo __("Support & documentation", NEWSMAN); ?></a> | <a href="http://support.glocksoft.net/feedback"><?php _e("Request feature", NEWSMAN); ?></a> | <a href="http://wpnewsman.com/terms-conditions/">
 <?php _e("Terms and Conditions", NEWSMAN); ?></a> | <a href="http://wpnewsman.com/follow-us-and-spread-the-word-about-wpnewsman/"><?php _e("Spread the Word", NEWSMAN); ?></a> | <span><?php _e("WPNewsman Version: ", NEWSMAN); echo nwsmn_get_prop('version'); ?></span>
 		</div>
+		<?php
+			if ( !defined('NEWSMAN_DEV_HOST') ) :
+		?>
 		<div class="buttons">
 			<div>
 				<div class="fb-like" data-href="http://wpnewsman.com/" data-send="false" data-layout="button_count" data-width="80" data-show-faces="true"></div>			
@@ -37,8 +40,14 @@
 				<a href="https://twitter.com/glocksoft" class="twitter-follow-button" data-show-count="true">Follow @glocksoft</a>
 			</div>
 		</div>
+		<?php endif; ?>
 	</div>
 </div>
+
+<?php
+	if ( !defined('NEWSMAN_DEV_HOST') ) :
+?>
+
 <!-- social media scripts -->
 <div id="fb-root"></div>
 <script>(function(d, s, id) {
@@ -60,3 +69,5 @@
   })();
 </script>	
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+
+<?php endif; ?>

@@ -1,12 +1,6 @@
 <?php
 
-require_once('class.utils.php');
-
-/**
- * Text widget class
- *
- * @since 2.8.0
- */
+require_once(__DIR__.DIRECTORY_SEPARATOR."class.utils.php");
 
 class NEWSMAN_Widget_Form extends WP_Widget {
 

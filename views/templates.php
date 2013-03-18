@@ -6,24 +6,34 @@
 	</div>
 
 	<div style="overflow:hidden;">
-<!-- 		<ul class="subsubsub" style="float:left; margin: 5px 0 0 0;">
-			<li><a href="#/all" id="newsman-mailbox-all" class="newsman-flink current"><?php _e('All emails', NEWSMAN); ?></a> |</li>
-			<li><a href="#/inprogress" id="newsman-mailbox-inprogress" class="newsman-flink"><?php _e('In progress', NEWSMAN); ?></a> |</li>			
-			<li><a href="#/pending" id="newsman-mailbox-pending" class="newsman-flink"><?php _e('Pending', NEWSMAN); ?></a> |</li>
-			<li><a href="#/sent" id="newsman-mailbox-sent" class="newsman-flink"><?php _e('Sent', NEWSMAN); ?></a></li>
-		</ul> -->
 		<button style="float:right; display:none;" class="button subsubsub" id="newsman-search-cancel-btn"><?php _e('Remove Search Filter', NEWSMAN); ?></button>
 	</div>
 
-	<div class="newsman-tbl-controls">
-		<div class="pagination" style="display: none;">
-			<ul>
-			</ul>
-		</div>	
+	<div class="newsman-tbl-controls row-fluid">
+		
+		<div class="span6">
+			<a class="btn" href="<?php echo NEWSMAN_BLOG_ADMIN_URL.'admin.php?page=newsman-templates&action=create-template'; ?>" id="btn-new-tpl"><?php _e('New Template', NEWSMAN); ?></a>
+			
+			<div class="btn-group">
+				<button class="btn dropdown-toggle" data-toggle="dropdown">
+					<?php _e('Get More', NEWSMAN); ?>
+					<span class="caret"></span>
+				</button>
+				<ul class="dropdown-menu">
+					<li><a id="btn-open-store" href="#"><?php _e('Browse for templates...'); ?></a></li>
+					<li><a id="btn-import-from-file" href="#"><?php _e('Import from file'); ?></a></li>
+				</ul>
+			</div>
+			
+			<button id="btn-delete-tpls" style="margin: 0 3px;" type="button" class="btn btn-danger"><?php _e('Delete', NEWSMAN); ?></button>
+		</div>
+		<div class="span6" style="text-align: right;">
+			<div class="pagination" style="display: none;">
+				<ul>
+				</ul>
+			</div>
+		</div>
 
-		<a class="btn" href="#" id="btn-new-tpl"><?php _e('New Template', NEWSMAN); ?></a>
-		<button id="btn-delete-tpls" style="margin: 0 3px;" type="button" class="btn btn-danger"><?php _e('Delete', NEWSMAN); ?></button>
-		<button id="newsman-btn-reconfirm" style="margin: 0 3px 0 2em; display: none;" type="button" class="btn"><?php _e('Resend Confirmation Request', NEWSMAN); ?></button>
 	</div>
 
 
@@ -63,13 +73,31 @@
 			<h3><?php _e('Please, confirm...', NEWSMAN); ?></h3>
 		</div>
 		<div class="modal-body">
+			<p id="info-have-shared-res"><?php _e('Some of selected templates have resources shared with other email templates or emails.', NEWSMAN); ?></p>
 			<p><?php _e('Are you sure you want to delete selected templates?', NEWSMAN); ?></p>
+		</div>
+		<div class="modal-footer">
+			<a class="btn" mr="cancel"><?php _e('Close', NEWSMAN); ?></a>
+			<a class="btn btn-danger" mr="rm"><?php _e('Delete', NEWSMAN); ?></a>
+			<a id="btn-del-with-res" class="btn btn-danger" mr="rm_res"><?php _e('Delete with resources', NEWSMAN); ?></a>
+		</div>
+	</div>
+	
+	<div class="modal dlg" id="newsman-modal-delete-single" style="display: none;">
+		<div class="modal-header">
+			<button class="close" data-dismiss="modal">×</button>
+			<h3><?php _e('Please, confirm...', NEWSMAN); ?></h3>
+		</div>
+		<div class="modal-body">
+			<p><?php _e('Are you sure you want to delete this template?', NEWSMAN); ?></p>
 		</div>
 		<div class="modal-footer">
 			<a class="btn" mr="cancel"><?php _e('Close', NEWSMAN); ?></a>
 			<a class="btn btn-danger" mr="ok"><?php _e('Delete', NEWSMAN); ?></a>
 		</div>
-	</div>
+	</div>	
+	
+				
 
 	<div class="modal dlg" id="newsman-modal-chstatus" style="display: none;">
 		<div class="modal-header">
@@ -85,88 +113,61 @@
 		</div>
 	</div>
 
-	<div class="modal dlg" id="newsman-modal-new-template" style="display: none;">
+	<div class="modal dlg" id="newsman-modal-import-from-file" style="display: none;">
 		<div class="modal-header">
 			<button class="close" data-dismiss="modal">×</button>
-			<h3><?php _e('New Template', NEWSMAN); ?></h3>
+			<h3><?php _e('Import Template', NEWSMAN); ?></h3>
 		</div>
 		<div class="modal-body">
-			<div class="form-vertical">
-				<div class="control-group">
-					<label class="control-label" for="ed-tpl-name"><?php _e('Name:', NEWSMAN); ?></label>	
-					<div class="controls">
-						<input type="text" id="ed-tpl-name" />
-						<span style="display:none;" class="help-inline"><?php _e('Please enter the name of a template', NEWSMAN); ?></span>
-					</div>
-				</div>
-			</div>
-			<div class="tpl-buttons">
-				<table>
-					<tr class="tpl-type-error">
-						<td colspan="2" class="error standalone"><?php _e('Please choose a template type', NEWSMAN); ?></td>
-					</tr>					
+			<table id="uploaded-files" class="table table-striped table-bordered">
+				<thead>
 					<tr>
-						<td>
-							<div class="tpl-btn" tplname="basic">
-								<i class="simple"></i>
-								<div>
-									<h3><?php _e('Simple', NEWSMAN); ?></h3>
-								</div>
-							</div>							
-						</td>
-						<td>
-							<div class="tpl-btn" tplname="2cols">
-								<i class="col2"></i>
-								<div>
-									<h3><?php _e('2 columns', NEWSMAN); ?></h3>
-								</div>
-							</div>
-						</td>
+						<td colspan="2"><?php _e('Template file name', NEWSMAN); ?></td>
 					</tr>
+				</thead>
+				<tbody>
 					<tr>
-						<td>
-							<div class="tpl-btn" tplname="3cols">
-								<i class="col3"></i>
-								<div>
-									<h3><?php _e('3 columns', NEWSMAN); ?></h3>
-								</div>
-							</div>
-						</td>
-						<td>
-							<div class="tpl-btn" tplname="gallery">
-								<i class="gallery"></i>
-								<div>
-									<h3><?php _e('Gallery', NEWSMAN); ?></h3>
-								</div>
-							</div>
-						</td>
+						<td colspan="2" class="blank-row"><img src="<?php echo NEWSMAN_PLUGIN_URL; ?>/img/ajax-loader.gif"> <?php _e('Loading...', NEWSMAN); ?></td>
 					</tr>
-					<tr>
-						<td>
-							<div class="tpl-btn" tplname="mobile">
-								<i class="simple"></i>
-								<div>
-									<h3>Mobile</h3>
-								</div>
-							</div>
-						</td>
-						<td>
-							<div class="tpl-btn" tplname="digest">
-								<i class="simple"></i>
-								<div>
-									<h3><?php _e('Digest', NEWSMAN); ?></h3>
-								</div>
-							</div>
-						</td>
-					</tr>
-				</table>
-			</div>
+				</tbody>
+			</table>
 		</div>
 		<div class="modal-footer">
+			<a class="btn pull-left" id="btn-upload-file"><?php _e('Upload a file', NEWSMAN); ?></a>
 			<a class="btn" mr="cancel"><?php _e('Close', NEWSMAN); ?></a>
-			<a class="btn btn-primary" mr="ok"><?php _e('Create', NEWSMAN); ?></a>
+			<a class="btn btn-primary" mr="ok"><?php _e('Import', NEWSMAN); ?></a>
 		</div>
 	</div>	
+
+
+	<div class="modal dlg" id="newsman-modal-template-store" style="display: none;">
+		<div class="modal-header">
+			<button class="close" data-dismiss="modal">×</button>
+			<h3><?php _e('Get more templates', NEWSMAN); ?>
+				<select name="store" id="store-selector" style="margin-left: 10px;">
+				</select>
+			</h3>
+		</div>
+		<div class="modal-body">
+			<table id="templates-previews" class="">
+				<tr>
+					<td class="blank-row">Loading...</td>
+				</tr>			
+			</table>
+		</div>
+		<div class="modal-footer">
+			<div class="pull-left">
+				<div class="pagination">
+					<ul>
+
+					</ul>
+				</div>
+			</div>
+			<a class="btn" mr="ok"><?php _e('Close', NEWSMAN); ?></a>
+		</div>
+	</div>	
+
+
 
 	<?php include("_footer.php"); ?>
 </div>

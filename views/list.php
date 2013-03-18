@@ -65,7 +65,7 @@
 	<div class="newsman-field-options newsman-field-options-text" data-bind="visible: active()">
 		<strong><?php _e('Field options', NEWSMAN); ?></strong><br>
 		<label for="newsman_fb_field_name"><?php _e('Name', NEWSMAN); ?></label>
-		<input class="newsman_fb_field_name span2" type="text" data-bind="value:label">
+		<input class="newsman_fb_field_name input-large" type="text" data-bind="value:label">
 		<label class="checkbox"><input type="checkbox" data-bind="checked: required"> <?php _e('Required', NEWSMAN); ?></label>
 	</div>
 </script>
@@ -82,7 +82,7 @@
 	<div class="newsman-field-options newsman-field-options-text" data-bind="visible: active()">
 		<strong><?php _e('Field options', NEWSMAN); ?></strong><br>
 		<label for="newsman_fb_field_name"><?php _e('Name', NEWSMAN); ?></label>
-		<input class="newsman_fb_field_name span2" type="text" data-bind="value:label">
+		<input class="newsman_fb_field_name input-large" type="text" data-bind="value:label">
 		<label class="checkbox"><input type="checkbox" data-bind="checked: required"> <?php _e('Required', NEWSMAN); ?></label>
 	</div>
 </script>
@@ -117,10 +117,10 @@
 	<div class="newsman-field-options newsman-field-options-text" data-bind="visible: active()">
 		<strong><?php _e('Field options', NEWSMAN); ?></strong><br>
 		<label for="newsman_fb_field_name"><?php _e('Name', NEWSMAN); ?></label>
-		<input class="newsman_fb_field_name span2" type="text" data-bind="value:value">
+		<input class="newsman_fb_field_name input-large" type="text" data-bind="value:value">
 
 		<label><?php _e('Size', NEWSMAN); ?></label>
-		<select class="input-medium" data-bind="value:size">
+		<select class="input-large" data-bind="value:size">
 			<option value="mini"><?php _e('Mini', NEWSMAN); ?></option>
 			<option value="small"><?php _e('Small', NEWSMAN); ?></option>
 			<option value="medium"><?php _e('Medium', NEWSMAN); ?></option>
@@ -128,7 +128,7 @@
 		</select>
 
 		<label><?php _e('Color', NEWSMAN); ?></label>
-		<select class="input-medium" data-bind="value: color">
+		<select class="input-large" data-bind="value: color">
 			<option value="gray"><?php _e('Gray', NEWSMAN); ?></option>
 			<option value="pink"><?php _e('Pink', NEWSMAN); ?></option>
 			<option value="blue"><?php _e('Blue', NEWSMAN); ?></option>
@@ -142,7 +142,7 @@
 		</select>		
 
 		<label><?php _e('Style', NEWSMAN); ?></label>
-		<select class="input-medium" data-bind="value: style">
+		<select class="input-large" data-bind="value: style">
 			<option value="none"><?php _e('None ( Theme native )', NEWSMAN); ?></option>
 			<option value="brick"><?php _e('Brick', NEWSMAN); ?></option>
 			<option value="rounded"><?php _e('Rounded', NEWSMAN); ?></option>
@@ -168,7 +168,7 @@
 	<div class="newsman-field-options newsman-field-options-radio" data-bind="visible: active">
 		<strong><?php _e('Field options', NEWSMAN); ?></strong><br>
 		<label for="newsman_fb_field_name"><?php _e('Name', NEWSMAN); ?></label>
-		<input class="newsman_fb_field_name span2" type="text" data-bind="value: label">
+		<input class="newsman_fb_field_name input-large" type="text" data-bind="value: label">
 		<label class="checkbox"><input type="checkbox" data-bind="checked: required"> <?php _e('Required', NEWSMAN); ?></label>
 		<div class="newsman-opt-sect-header">
 			<strong><?php _e('Radio options', NEWSMAN); ?></strong>
@@ -202,7 +202,7 @@
 	<div class="newsman-field-options newsman-field-options-select" data-bind="visible: active()">
 		<strong><?php _e('Field options', NEWSMAN); ?></strong><br>
 		<label for="newsman_fb_field_name"><?php _e('Name', NEWSMAN); ?></label>
-		<input class="newsman_fb_field_name span2" type="text" data-bind="value: label">
+		<input class="newsman_fb_field_name input-large" type="text" data-bind="value: label">
 		<label class="checkbox"><input type="checkbox" data-bind="checked: required"> <?php _e('Required', NEWSMAN); ?></label>
 		<div class="newsman-opt-sect-header">
 			<strong><?php _e('Select options', NEWSMAN); ?></strong>
@@ -263,7 +263,7 @@
 				</div>
 
 				<div class="row" id="fb-panel">
-					<div class="span5">
+					<div class="span6">
 						<?php
 							$frm = new newsmanForm($id, true);
 						?>
@@ -272,7 +272,7 @@
 						</ul>
 						<input type="hidden" name="serialized-form" id="serialized-form" value="<?php echo htmlspecialchars($frm->raw); ?>">
 					</div>
-					<div class="span4">
+					<div class="span6">
 						<div class="alert newsman-options-panel">
 							<div id="newsman-formbuilder-formoptions" class="">
 								<strong><?php _e('Form options', NEWSMAN); ?></strong><br>

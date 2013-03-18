@@ -1,7 +1,11 @@
 <?php
 
-require_once('class.utils.php');
-require_once('class.options.php');
+require_once(__DIR__.DIRECTORY_SEPARATOR."class.utils.php");
+require_once(__DIR__.DIRECTORY_SEPARATOR."class.options.php");
+
+//require_once(__DIR__.DIRECTORY_SEPARATOR."lib/php-growl/class.growl.php");
+
+// http://cubicspot.blogspot.com/2010/10/forget-flock-and-system-v-semaphores.html
 
 class newsmanWorker {
 
@@ -9,8 +13,13 @@ class newsmanWorker {
 	var $u = null;
 	var $stopped = false;
 	var $pid = null;
+	var $lockfile = null;
 
 	public function __construct() {
+
+		// TODO: remove in production
+		//$this->growl_connection = array('address' => '127.0.0.1', 'password' => 'neuroshok');
+		//$this->oGrowl = new Growl();
 
 		$o = newsmanOptions::getInstance();
 		$this->secret = $o->get('secret');
@@ -25,6 +34,15 @@ class newsmanWorker {
 		$this->u = newsmanUtils::getInstance();
 	}
 
+	// TODO: remove in production
+	public function growl($str) {
+
+		// $this->oGrowl->addNotification('newsman_worker');
+		// $this->oGrowl->register($this->growl_connection);
+		// Sending a notification
+		// $this->oGrowl->notify($this->growl_connection, 'newsman_worker', get_called_class(), $str);
+	}	
+
 	/**
 	 * This function should be implemented in the ancestor
 	 */
@@ -34,6 +52,20 @@ class newsmanWorker {
 
 	public function isStopped() {
 		return $this->isProcessStopped($this->pid);
+	}
+
+	public function run($worker_lock = null) {
+
+		if ( $worker_lock === null ) {
+			$this->worker();
+			$this->clearStopFlag($this->pid);
+		} else {
+			if ( $this->lock($worker_lock) ) {
+				$this->worker();
+				$this->unlock();
+				$this->clearStopFlag($this->pid);
+			}			
+		}
 	}
 
 
@@ -71,14 +103,6 @@ class newsmanWorker {
 		}
 	}
 
-	static function isWorker() {
-		// if we are called by the worker
-		if ( isset( $_REQUEST['newsman_worker_fork'] ) ) {
-			$worker = new static();
-			$worker->worker();
-		}
-	}
-
 	static function isProcessStopped($pid) {
 		$fn = '/tmp/newsman-stopworker-'.$pid;
 
@@ -86,7 +110,7 @@ class newsmanWorker {
 			return true;
 		}
 
-		return false;		
+		return false;
 	}
 
 	static function isProcessRunning($pid) {
@@ -98,4 +122,23 @@ class newsmanWorker {
 			return posix_kill($pid, 0);
 		}
 	}
+
+	// ----------------------
+
+	/**
+	 * Creates lock for some unique value(worker_lock - for example it can be an email id) so other 
+	 * workers will not be able to run without obtaining the lock
+	 */ 
+	public function lock($worker_lock) {
+		$this->lockfile = sys_get_temp_dir().DIRECTORY_SEPARATOR.'newsman-worker-'.$worker_lock.".lock";
+		return @fopen($this->lockfile, "xb");
+	}
+
+	public function unlock() {
+		if ( $this->lockfile ) {
+			unlink($this->lockfile);
+		}
+	}
+
+
 }

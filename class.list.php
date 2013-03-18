@@ -1,13 +1,12 @@
 <?php
 
-require_once("class.utils.php");
-require_once('class.storable.php');
-require_once('class.subscriber.php');
-require_once('class.options.php');
-require_once("class.sentlog.php");
+require_once(__DIR__.DIRECTORY_SEPARATOR."class.utils.php");
+require_once(__DIR__.DIRECTORY_SEPARATOR."class.storable.php");
+require_once(__DIR__.DIRECTORY_SEPARATOR."class.subscriber.php");
+require_once(__DIR__.DIRECTORY_SEPARATOR."class.options.php");
+require_once(__DIR__.DIRECTORY_SEPARATOR."class.sentlog.php");
 
 class newsmanListException extends Exception { }
-
 
 class newsmanList extends newsmanStorable {
 	static $table = 'newsman_lists';
@@ -24,6 +23,10 @@ class newsmanList extends newsmanStorable {
 		'extcss' => 'text'
 	);
 
+	var $form;
+	var $uid;
+	var $name;
+
 	function __construct($listName = 'default', $load = false) {
 		$this->name = $listName;
 		if ( !$load ) {
@@ -31,9 +34,6 @@ class newsmanList extends newsmanStorable {
 			$options = newsmanOptions::getInstance();
 			$defaultForm = $options->get('form');
 
-			$this->title = $defaultForm['title'];
-			$this->header = $defaultForm['header'];
-			$this->footer = $defaultForm['footer'];
 			$this->form = $defaultForm['json'];
 
 			$this->uid = $this->getNewUID();
@@ -94,7 +94,6 @@ class newsmanList extends newsmanStorable {
 					`status` tinyint(3) unsigned NOT NULL default 0,					
 					`ucode` varchar(255) NOT NULL,
 					`fields` TEXT,
-					`emails` TEXT,
 					`bounceStatus` TEXT,
 					UNIQUE (`email`),
 					PRIMARY KEY  (`id`)
@@ -583,6 +582,18 @@ class newsmanList extends newsmanStorable {
 			$this->subsToCSV($out, $fields, $type);
 			@fclose($out);			
 		}
+	}
+
+	public function remove() {
+		global $wpdb;
+		$res = $wpdb->query("DROP TABLE $this->tblSubscribers");
+
+		if ( $res === false ) {
+			static::$lastError = $wpdb->last_error;
+			return false;
+		} else {
+			return parent::remove();	
+		}		
 	}
 
 

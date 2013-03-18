@@ -1,5 +1,5 @@
 Un contact a rejoint votre liste sur [newsman wp="blogname"]
---- texte pur ---
+--- plain ---
 Un contact a rejoint votre liste. Les details du contact sont ci-dessous:
 
 [newsman sub="*"]

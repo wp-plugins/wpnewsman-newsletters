@@ -19,6 +19,7 @@ jQuery(function($){
 	var env = {
 		ie      : navigator.userAgent.indexOf('MSIE') != -1,
 		safari  : navigator.vendor != undefined && navigator.vendor.indexOf("Apple") != -1,
+		opera 	: navigator.appName !== undefined && navigator.appName.indexOf("Opera") != -1,
 		chrome  : navigator.vendor != undefined && navigator.vendor.indexOf('Google') != -1,
 		firefox : (navigator.userAgent.indexOf('Mozilla') != -1 && navigator.vendor != undefined && navigator.vendor == ''),
 		windows : navigator.platform.match(/^Win(32|64)$/i),
@@ -573,7 +574,7 @@ jQuery(function($){
 				// 		});					
 				// }
 
-				if (this.options.acceptFiles) input.setAttribute("accept", this.options.acceptFiles);
+				if (this.options.acceptFiles) input.attr("accept", this.options.acceptFiles);
 
 				input.css({
 					position: 'absolute',
@@ -618,7 +619,7 @@ jQuery(function($){
 
 				// IE and Opera, unfortunately have 2 tab stops on file input
 				// which is unacceptable in our case, disable keyboard access
-				if ( $.browser.opera || $.browser.msie ) {
+				if ( env.opera || env.ie ) {
 					input.attr('tabIndex', "-1");
 				}
 
@@ -947,6 +948,7 @@ jQuery(function($){
 			multiple: true,
 			customHeaders: {},
 			params: {},
+			acceptFiles: null,
 			extensions: [],
 			mimes: null,
 			sizeLimit: 0,
@@ -972,7 +974,7 @@ jQuery(function($){
 				forceMultipart: o.forceMultipart,
 				// validation
 				allowedExtensions: o.extensions,
-				acceptFiles: o.mimes,		// comma separated string of mime-types for browser to display in browse dialog
+				acceptFiles: o.mimes || o.acceptFiles,		// comma separated string of mime-types for browser to display in browse dialog
 				sizeLimit: o.sizeLimit,
 				minSizeLimit: o.minSizeLimit,
 				stopOnFirstInvalidFile: o.stopOnFirstInvalidFile,

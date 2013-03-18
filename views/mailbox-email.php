@@ -33,19 +33,23 @@
 </style>
 
 <script>
-	window.NEWSMAN_ENTITY_ID = '<?php echo isset($email) ? $email->id : ""; ?>' || 0;
-	window.NEWSMAN_ENT_STATUS = '<?php echo isset($email) ? $email->status : ""; ?>';	
-	window.NEWSMAN_ENT_TYPE = 'email';
+	window.NEWSMAN_ENTITY_ID = '<?php echo isset($ent) ? $ent->id : ""; ?>' || 0;
+	window.NEWSMAN_ENT_STATUS = '<?php echo ( isset($ent) && isset($ent->status) ) ? $ent->status : ""; ?>';
+	window.NEWSMAN_ENT_TYPE = '<?php echo NEWSMAN_EDIT_ENTITY; ?>';
 	window.NEWSMAN_LISTS = <?php $g = newsman::getInstance(); echo $g->listNamesAsJSArr(); ?>;
 </script>
 
-<div id="newsman-page-compose" class="wrap wp_bootstrap">
+<div id="newsman-editor" class="wrap wp_bootstrap">
 	<?php include("_header.php"); ?>
 	
 	<div class="row">
 		<div class="span12">
 			<div style="border-bottom: 1px solid #DADADA; overflow: hidden;">
-				<h2><?php _e('Compose email', NEWSMAN); ?></h2>
+				<?php if ( NEWSMAN_EDIT_ENTITY == 'email' ): ?>
+					<h2><?php _e('Edit email', NEWSMAN); ?></h2>
+				<?php else: ?>
+					<h2><?php _e('Edit template', NEWSMAN); ?></h2>
+				<?php endif; ?>
 			</div>			
 		</div>
 	</div>
@@ -55,6 +59,8 @@
 		<div class="row">
 			<div class="span9">
 				<!--	TO	 -->
+				
+				<?php if ( NEWSMAN_EDIT_ENTITY == 'email' ): ?>
 
 				<div class="control-group">
 					<label class="control-label" for="newsman-email-to"><?php _e('To:', NEWSMAN); ?></label>
@@ -65,41 +71,72 @@
 					</div>
 				</div>
 
+				<?php endif; ?>
+				
+				<?php if ( NEWSMAN_EDIT_ENTITY == 'template' ): ?>
+				
+				<!--	Template name	 -->				
+				<div class="control-group">
+					<label class="control-label" for="newsman-template-name"><?php _e('Name:', NEWSMAN); ?></label>
+					<div class="controls">
+						<input type="text" class="span7" id="newsman-template-name" value="<?php echo isset($ent) ? $ent->name : ''; ?>">
+					</div>
+				</div>
+				
+
+				<?php endif; ?>				
+
 				<!--	Subject	 -->
 				<div class="control-group">
 					<label class="control-label" for="newsman-email-subj"><?php _e('Subject:', NEWSMAN); ?></label>
 					<div class="controls">
-						<input type="text" class="span7" id="newsman-email-subj" value="<?php echo isset($email) ? $email->subject : ''; ?>">
+						<input type="text" class="span7" id="newsman-email-subj" value="<?php echo htmlentities( isset($ent) ? $ent->subject : $email->subject ); ?>">
 					</div>
-				</div>				
+				</div>
 
 				<!--	Content	 -->
 				<div id="poststuff">
 
-					<textarea name="content" class="nsmn-type-simple" id="content" cols="30" rows="10"><?php echo isset($email) ? $email->html : ''; ?></textarea>
+					<textarea name="content" class="nsmn-type-simple" id="content" cols="30" rows="10"><?php echo isset($ent) ? $ent->html : ''; ?></textarea>
 				</div>				
 			</div>
 
-			<div class="span4">				
-				<?php if ( isset($email) ) {  do_action('newsman_put_tracking_settings', $email); } ?>
+			<div class="span4">
+				<?php if( NEWSMAN_EDIT_ENTITY == 'email' ): ?>
+				<?php do_action('newsman_put_tracking_settings', $ent); ?>
 				<h3><?php _e('Sending', NEWSMAN); ?></h3>
 				<label for="newsman-send-now" class="radio"><input type="radio" name="newsman-send" value="now" checked="checked" id="newsman-send-now"> <?php echo ( isset($email) && $email->status == 'stopped' ) ? __('Resume', NEWSMAN) : __('Send immediately', NEWSMAN); ?></label>
 				<label for="newsman-schedule" class="radio"><input <?php if ( isset($email) && $email->status === 'scheduled' ) { echo 'checked="checked"'; } ?> type="radio" name="newsman-send" value="schedule" id="newsman-schedule"> <?php _e('Schedule sending on', NEWSMAN); ?></label>
 				<div style="margin: 1em 0;">
-					<input ype="text" id="newsman-send-datepicker" class="span3" value="<?php echo $email->schedule*1000; ?>">
+					<input ype="text" id="newsman-send-datepicker" class="span3" value="<?php echo isset($email) ? $email->schedule*1000 : ''; ?>">
 				</div>				
-				<button type="button" id="newsman-send" class="btn btn-primary"><?php echo ( isset($email) && ( $email->status === 'stopped' || $email->status === 'error' ) ) ? __('Resume', NEWSMAN) : __('Send', NEWSMAN); ?></button>
-				<a type="button" href="<?php echo NEWSMAN_BLOG_ADMIN_URL; ?>admin.php?page=newsman-mailbox" id="newsman-close" class="btn"><?php _e('Close', NEWSMAN); ?></a>
-				<br><br>
+				<button type="button" id="newsman-send" class="btn btn-large btn-success"><?php echo ( isset($email) && ( $email->status === 'stopped' || $email->status === 'error' ) ) ? __('Resume', NEWSMAN) : __('Send', NEWSMAN); ?></button>
+				<br><br>				
+				<?php endif; ?>				
 				<button class="btn btn-info" id="btn-send-test-email"><i class="icon-envelope icon-white"></i> <?php _e('Send test email', NEWSMAN);?></button>
-
+				
+				<?php $parentPage = ( NEWSMAN_EDIT_ENTITY == 'email' ) ? 'newsman-mailbox' : 'newsman-templates'; ?>
+				<a type="button" href="<?php echo NEWSMAN_BLOG_ADMIN_URL; ?>admin.php?page=<?php echo $parentPage; ?>" id="newsman-close" class="btn"><?php _e('Close', NEWSMAN); ?></a>
+				
+				<div style="margin-top: 1em;">
+					<h4 style="margin: 1.5em 0 1em;"><?php echo (NEWSMAN_EDIT_ENTITY == 'email') ? __('Email particles', NEWSMAN) : __('Template particles', NEWSMAN); ?></h4>
+					<p><button id="btn-edit-post-tpl" class="btn"><?php _e('Edit Post Template', NEWSMAN); ?></button></p>
+					<p><button id="btn-edit-divider-tpl" class="btn"><?php _e('Edit Post Divider Template', NEWSMAN); ?></button></p>
+				</div>
+								
 				<h4 style="margin: 1.5em 0 1em;">wpNewsman Shortcodes <a href="http://codex.wordpress.org/Shortcode_API"><i class="icon-question-sign"></i></a></h4>
 				<?php $g = newsman::getInstance(); $g->putApShortcodesMetabox(); ?>
 			</div>
 		</div>
 		
  	</div>
-
+ 	
+	<div id="dialog" style="display: none;">
+		<div class="editor-dialog-title">Content editor <span class="newsman-editor-dlg-close">&times;</span></div>
+		<form>
+			<textarea class="source-editor" name="editor1"></textarea>
+		</form>
+	</div>	
 
 	<div class="modal dlg" id="newsman-modal-send-test" style="display: none;">
 		<div class="modal-header">

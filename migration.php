@@ -1,5 +1,8 @@
 <?php
 
+require_once(__DIR__.DIRECTORY_SEPARATOR.'class.emails.php');
+require_once(__DIR__.DIRECTORY_SEPARATOR.'class.emailtemplates.php');
+
 /*******************************/
 /*      Registration code      */
 /*******************************/
@@ -11,7 +14,7 @@ $newsman_changes = array();
 function newsman_do_migration() {
 	global $newsman_changes;
 	$u = newsmanUtils::getInstance();
-	$oldVersion = $u->versionToNum( get_option('newsman_old_version') );
+	$oldVersion = $u->versionToNum( get_option('newsman_version') );
 	$completed = get_option('newsman_completed_migrations');
 	if ( !$completed || !is_array($completed) ) {
 		$completed = array();
@@ -72,6 +75,33 @@ function newsman_move_title_and_texts_from_list_params_to_form_els() {
 		}
 	}
 }
+
+$newsman_changes[] = array(
+	'introduced_in' => 140,
+	'func' => 'newsman_migrate_emails_and_templates_tables'
+);
+
+function newsman_migrate_emails_and_templates_tables() {
+	newsmanEmail::renameColumn('assets', 'assetsURL');
+	newsmanEmailTemplate::renameColumn('assets', 'assetsURL');
+
+	newsmanEmail::ensureDefinition();
+	newsmanEmailTemplate::ensureDefinition();
+}
+
+$newsman_changes[] = array(
+	'introduced_in' => 140,
+	'func' => 'newsman_install_stock_templates'
+);
+
+function newsman_install_stock_templates() {
+	$u = newsmanUtils::getInstance();
+	$u->installStockTemplates();
+}
+
+
+
+
 
 
 

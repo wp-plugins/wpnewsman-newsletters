@@ -2,9 +2,9 @@
 Contributors: Neocoder, G-Lock Software
 Donate Link: http://wpnewsman.com/premium-newsletter-plugin-wordpress/
 Tags: wpnewsman, newsletter, newsletters, newsletter signup, newsletter widget, subscribers, post notification, email subscription, email marketing, email, emailing, subscription
-Requires at least: 3.4
-Tested up to: 3.5
-Stable tag: 1.3.8
+Requires at least: 3.5
+Tested up to: 3.6
+Stable tag: 1.4.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -36,7 +36,7 @@ http://www.youtube.com/watch?v=NhmAfJQH4EU
 * Easy customization of the Welcome Email and Thank You page
 * Easy mailing list management
 * Ability to quickly re-send a confirmation request
-* Full control and freedom over email newsletter design
+* Full control and freedom over email newsletter design. [See this quick video tutorial](http://wpnewsman.com/how-to-create-and-edit-email-templates-and-messages-in-wpnewsman/ "See Video tutorial")
 * Multiple sending options
 * Automated bounced emails handling -- you keep your mailing lists verified and clean
 * Confirmation when the user unsubscribes
@@ -55,10 +55,11 @@ Compatible with G-Lock EasyMail 6 [The Best Newsletter Software](http://directem
 = Translations in your language =
 
 Translations are included in the plugin: 
-* French
-* German
-* Italian
-* Russian
+
+* French (completed)
+* German (70%)
+* Italian (70%)
+* Russian (completed)
 
 * Your language: [get a Pro license in exchange for your translation](http://support.glocksoft.net/kb/articles/68-translation-of-wpnewsman-in-your-language). Join the translation teams on [our Transifex page](https://www.transifex.com/projects/p/g-lock-wpnewsman/).
 
@@ -119,6 +120,16 @@ We got a User Feedback page where you can [add or vote for new features](http://
 3. Subscriber management.
 
 == Changelog ==
+
+= 1.4.0 =
+* Added: email templates store.
+* Added: ability to import the email template from the .zip file.
+* Added: ability to export templates.
+* Added: ability to select posts for the last day, week or month for insertion into the message with one mouse click.
+* Added: the plugin records the URL of the page where the user subscribed.
+* Changed: email template editor. You can customize all email templates including system templates as you want. 
+* Fixed: on a non-English locale the plugin did not delete the original text from the template during the template editing
+* Other minor fixes and improvements.
 
 = 1.3.8 =
 * Fixed: sending of Quick Messages
@@ -214,6 +225,10 @@ We got a User Feedback page where you can [add or vote for new features](http://
 * First public release. Hello World! 
 
 == Upgrade Notice ==
+
+= 1.4.0 =
+* Added: email templates store.
+* Changed: email template editor. You can customize all email templates including system templates as you want. 
 
 = 1.3.8 =
 * Fixed sending of Quick Messages.

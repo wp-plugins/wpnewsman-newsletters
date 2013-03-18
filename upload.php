@@ -99,6 +99,11 @@ class nuUploadProcessor {
 	 * Returns array('success'=>true) or array('error'=>'error message')
 	 */
 	function handleUpload($uploadDirectory, $replaceOldFile = FALSE){
+
+		// uncomment for error testing
+		// return array('error' => "Server error. Upload directory isn't writable.");
+		//
+
 		if (!is_writable($uploadDirectory)){
 			return array('error' => "Server error. Upload directory isn't writable.");
 		}
@@ -127,7 +132,7 @@ class nuUploadProcessor {
 			return array('error' => 'File has an invalid extension, it should be one of '. $these . '.');
 		}
 		
-		if(!$replaceOldFile){
+		if ( !$replaceOldFile ) {
 			/// don't overwrite previous files that were uploaded
 			while (file_exists($uploadDirectory . $filename . '.' . $ext)) {
 				$filename .= rand(10, 99);
@@ -155,10 +160,17 @@ $sizeLimit = 10 * 1024 * 1024;
 $uploader = new nuUploadProcessor($allowedExtensions, $sizeLimit);
 
 $n = newsman::getInstance();
-$upath = $n->ensureUploadDir();
+
+$type = isset($_REQUEST['type']) ? strtolower($_REQUEST['type']) : false;
+
+$subdir = false;
+
+if ( in_array($type, array('csv', 'template')) ) {
+	$subdir = $type;
+}
+
+$upath = $n->ensureUploadDir($subdir);
 $upath .= DIRECTORY_SEPARATOR;
-
-
 
 $result = $uploader->handleUpload($upath);
 

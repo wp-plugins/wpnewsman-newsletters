@@ -1,11 +1,11 @@
 <?php
 
-	require_once('class.utils.php');
-	require_once('class.options.php');
-	require_once('class.emails.php');
-	require_once('class.list.php');
-	require_once('class.emailtemplates.php');
-	require_once('class.sentlog.php');
+	require_once(__DIR__.DIRECTORY_SEPARATOR.'class.utils.php');
+	require_once(__DIR__.DIRECTORY_SEPARATOR.'class.options.php');
+	require_once(__DIR__.DIRECTORY_SEPARATOR.'class.emails.php');
+	require_once(__DIR__.DIRECTORY_SEPARATOR.'class.list.php');
+	require_once(__DIR__.DIRECTORY_SEPARATOR.'class.emailtemplates.php');
+	require_once(__DIR__.DIRECTORY_SEPARATOR.'class.sentlog.php');
 
 	if ( !defined('NEWSMAN_SS_UNCONFIRMED') )  { define('NEWSMAN_SS_UNCONFIRMED',0);  }
 	if ( !defined('NEWSMAN_SS_CONFIRMED') )    { define('NEWSMAN_SS_CONFIRMED',1);    }
@@ -29,7 +29,6 @@
 					}
 				}
 			}
-
 		}
 
 		public function respond($state, $msg, $params = array()) {
@@ -58,6 +57,8 @@
 			}
 
 			header("Content-type: application/json");
+
+
 			
 			echo json_encode( $u->utf8_encode_all($msg) );
 			//echo "<pre>";
@@ -400,7 +401,7 @@
 			$res['count'] = array(
 				'pending' => 0,
 				'sent' => 0,
-				'drafts' => 0,
+				'draft' => 0,
 				'inprogress' => 0,
 				'all' => 0
 			);
@@ -421,6 +422,10 @@
 			foreach ($emails as $email) {
 				$eml = $email->toJSON();
 				$eml['created'] = strtotime($eml['created']);
+
+				// 1.4.0 hack
+				$emal['editor'] = 'wp'; // forcing to use ckeditor
+
 				$res['rows'][] = $eml;
 			}
 
@@ -446,15 +451,15 @@
 			$cats = json_decode('['.$cats.']');
 
 			$includePrivate = $this->param('includePrivate', 0);
-			$includePrivate = intval($includePrivate) ? true : false;
+			$includePrivate = intval($includePrivate) ? true : false;			
 			
 			$i = 1;
 			$posts = array();
 			
 			$df = get_option('date_format');
-			$tf = get_option('time_format');       
-			
-			$show_full_post = get_option('newsman_show_full_posts') == '1' ? true : false;
+			$tf = get_option('time_format');
+
+			$selectRange = $this->param('select', false);
 
 			//$exlen = get_option('newsman_rss_excerpt_length');
 			
@@ -495,6 +500,29 @@
 				'order' => 'DESC'
 			);
 
+			$today = getdate();
+			if ( $selectRange ) {
+				$args['posts_per_page'] = -1;
+				switch ( $selectRange ) {
+					case 'day':
+						$args['year']		= $today["year"];
+						$args['monthnum']	= $today["mon"];
+						$args['day']		= $today["mday"];
+						break;
+
+					case 'week':
+						$args['year']	= date('Y');
+						$args['w'] 		= date('W');
+						break;
+
+					case 'month':
+						$args['year']		= $today["year"];
+						$args['monthnum']	= $today["mon"];
+						break;
+				}
+			}
+
+
 
 			if ( !empty($cats) ) {
 				$args['category__in'] = $cats;
@@ -521,7 +549,7 @@
 				$query->the_post();
 				$pt = mysql2date('U', $post->post_date); 
 
-				$content = $u->fancyExcerpt($post->post_content, 50);
+				$content = $u->fancyExcerpt($post->post_content, 25);
 
 				//if ('publish' == $post->post_status) {
 					$posts[] =	array(
@@ -550,7 +578,7 @@
 				$listsNames[] = array(
 					'id' => $list->id,
 					'name' => $list->name,
-					'stats' => $list->getStats($q)
+					'stats' => $list->getStats()
 				);
 			}
 
@@ -763,6 +791,10 @@
 		}		
 
 
+		/**
+		 * Replaces the value of the section attribute. for ex. gesdit="html"
+		 * to gsedit="img" where gsedit is "section" and img is new_type
+		 */
 		public function ajChangeTemplateSection() {
 			
 			$u = newsmanUtils::getInstance();
@@ -845,153 +877,131 @@
 			$this->respond(true, __('Saved', NEWSMAN) );
 		}
 
-		public function ajEditEmail() {
+		public function ajSetTemplate() {
 
 			$u = newsmanUtils::getInstance();
 
+			$tplId = $this->param('id');
+			$html = $this->param('html');
+			$plain = $this->param('plain');
+			$name = $this->param('name');
+			$subj = $this->param('subj');
+
+			$tpl = newsmanEmailTemplate::findOne('id = %d', array($tplId));
+
+			if ( !$tpl ) {
+				$this->errTemplateNotFound($tplId);
+				return;
+			}
+
+			$tpl->html = $html;
+			$tpl->plain = $plain;
+			$tpl->name = $name;
+			$tpl->subject = $subj;
+
+			$res = $tpl->save();
+
+			if ( $res === false ) {
+				$this->errCantWriteTemplate($tplId);
+				return;
+			}
+
+			$this->respond(true, __('Saved', NEWSMAN) );
+		}
+
+
+		public function ajSetEmail() {
+			$u = newsmanUtils::getInstance();
+
 			$id = $this->param('id');
-			$section = $this->param('section');
-			$newContent = $this->param('new_content');
+			$html = $this->param('html');
+			$plain = $this->param('plain');
+			$subj = $this->param('subj');
 
 			$eml = newsmanEmail::findOne('id = %d', array($id));
-
 
 			if ( !$eml ) {
 				$this->errEmailNotFound($id);
 				return;
 			}
 
-			$eml->html = $u->replaceSectionContent($eml->html, $section, $newContent);
+			$eml->html = $html;
+			$eml->plain = $plain;
+			$eml->subject = $subj;
 
 			$res = $eml->save();
 
 			if ( $res === false ) {
 				$this->errCantWriteEmail($id);
 				return;
-			}			
+			}
 
 			$this->respond(true, __('Saved', NEWSMAN) );			
 		}
 
-		public function ajCreateEmailTemplate() {
+		public function ajHasSharedAssets() {
 			$u = newsmanUtils::getInstance();
-
-			$name = $this->param('name');
-			$type = $this->param('type');
-
-			if ( !$name ) {
-				$this->respond(false, sprintf(__('"%s" parameter is missing in the request.', NEWSMAN), 'name') );
-				return;
-			}
-
-			if ( !$type ) {
-				$this->respond(false, sprintf(__('"%s" parameter is missing in the request.', NEWSMAN), 'type') );
-				return;
-			}			
-
-			$dir = NEWSMAN_PLUGIN_PATH."/email-templates/$type";
-			$fileName = "$dir/$type.html";
-
-			$particlesFileName = "$dir/_$type.html";
-
-			$tpl = new newsmanEmailTemplate();
-			$tpl->system = false;
-			$tpl->name = $name;
-			$tpl->subject = __('Enter Subject Here', NEWSMAN);
-			$tpl->html = file_get_contents($fileName);
-
-			if ( file_exists($particlesFileName) ) {
-				$tpl->particles = file_get_contents($particlesFileName);
-				$tpl->particles = $u->expandAssetsURLs($tpl->particles, $type);
-
-			}
-
-			$tpl->plain = '';
-			$tpl->assets = $type;
-			$id = $tpl->save();
-
-			$this->respond(true, __("Template was successfully created."), array( 'id' => $id ));
-		}
-
-		public function ajCreateEmailFromBasicTemplate() {
-			$u = newsmanUtils::getInstance();
-			$type = $this->param('type');
-
-			if ( !$type ) {
-				$this->respond(false, sprintf(__('%s" parameter is missing in the request.', NEWSMAN), 'type') );
-				return;
-			}			
-
-			$dir = NEWSMAN_PLUGIN_PATH."/email-templates/$type";
-			$fileName = "$dir/$type.html";
-
-			$particlesFileName = "$dir/_$type.html";
-
-			$eml = new newsmanEmail();
-
-			$eml->subject = __('Enter Subject Here', NEWSMAN);
-			$eml->html = file_get_contents($fileName);
-			$eml->plain = '';
-			$eml->assets = $type;
-
-			if ( file_exists($particlesFileName) ) {
-				$particles = file_get_contents($particlesFileName);
-				$eml->particles = $particles;
-				$eml->particles = $u->expandAssetsURLs($eml->particles, $type);
-			}			
-
-			$id = $eml->save();
-
-			$this->respond(true, __('Email was successfully created.', NEWSMAN), array( 'id' => $id ));
-		}		
-
-		public function ajDeleteEmailTemplates() {
 
 			$ids = $this->param('ids');
+			$set = $u->jsArrToMySQLSet($ids);
 
-			$ids = preg_split('/[\s*,]+/', $ids);
+			$s = 0;
 
-			$s = '(';
-			$del = '';
-			foreach ( $ids as $id ) {
-				$s .= $del.$id;
-				$del = ',';
+			$tpls = newsmanEmailTemplate::findAll('`id` in '.$set.' and `system` != 1');
+
+			foreach ($tpls as $tpl) {
+				if ( $u->hasSharedAssets($tpl->assetsPath) ) {
+					$s += 1;	
+				}				
 			}
-			$s .= ')';
 
-			$r = newsmanEmailTemplate::removeAll('`id` in '.$s.' and `system` != 1');
+			$this->respond(true, 'Success', array('shared' => $s ));
+		}
 
-			if ( $r === false ) {
-				$this->respond(false, newsmanEmailTemplate::$lastError);				
-			} else {
-				$note = ( $r == 0 ) ? __('You can\'t delete system templates marked with a gear icon.', NEWSMAN) : '';
-				$this->respond(true, sprintf( _n("You have successfully deleted %d template.", "You have successfully deleted %d templates.", $r), $r ).$note);
+		public function ajDeleteEmailTemplates() {
+			$u = newsmanUtils::getInstance();
+
+			$ids = $this->param('ids');
+			$deleteSharedAssets = $this->param('delSharedAssets', '0') === '1';
+			$set = $u->jsArrToMySQLSet($ids);
+
+			$r = 0;
+
+			$tpls = newsmanEmailTemplate::findAll('`id` in '.$set.' and `system` != 1');
+
+			foreach ($tpls as $tpl) {
+				$u->tryRemoveTemplateAssets($tpl->assetsPath, $deleteSharedAssets);
+				$tpl->remove();
+				$r += 1;
 			}
+
+			$this->respond(true, sprintf( _n("You have successfully deleted %d template.", "You have successfully deleted %d templates.", $r), $r ));
 		}
 
 		public function ajDeleteEmails() {
 
+			$u = newsmanUtils::getInstance();
+
 			$ids = $this->param('ids');
 			$all = ( $this->param('all', '0') === '1' );
+			$set = $u->jsArrToMySQLSet($ids);
+
+			$r = 0;
 
 			if ( $all ) {
-				$r = newsmanEmail::removeAll();
+				$tpls = newsmanEmail::findAll('`status` != "inprogress"');
 			} else {
-				$ids = preg_split('/[\s*,]+/', $ids);
+				$tpls = newsmanEmail::findAll('`id` in '.$set.' and `status` != "inprogress"');
+			}
 
-				$s = '(';
-				$del = '';
-				foreach ( $ids as $id ) {
-					$s .= $del.$id;
-					$del = ',';
-				}
-				$s .= ')';
-
-				$r = newsmanEmail::removeAll('status <> "inprogress" AND `id` in '.$s);
+			foreach ($tpls as $tpl) {
+				$u->tryRemoveTemplateAssets($tpl->assetsPath);
+				$tpl->remove();
+				$r += 1;
 			}
 
 			if ( !$r ) {
-				$this->respond(false, newsmanEmail::$lastError);				
+				$this->respond(false, newsmanEmail::$lastError);
 			} else {
 				$this->respond(true, __('success', NEWSMAN) );
 			}
@@ -1148,18 +1158,21 @@
 		 * Subscribers import
 		 */
 
-		private function getUploadedFiles() {
+		private function getUploadedFiles($type = false, $fullPath = false) {
 			$files = array();
 
 			$n = newsman::getInstance();
-			$upath = $n->ensureUploadDir();
+			$upath = $n->ensureUploadDir($type);
 
 			if ( $handle = opendir($upath) ) {
 
 			    /* This is the correct way to loop over the directory. */
 			    while (false !== ($entry = readdir($handle))) {
-			    	if ( $entry !== '.' && $entry !== '..' && $entry[0] !== '.' ) {
-			    		$files[] = $entry;	
+			    	if ( $entry !== '.' && $entry !== '..' && $entry[0] !== '.' ) {			    		
+			    		$pathToEntry = $upath.DIRECTORY_SEPARATOR.$entry;
+			    		if ( is_file($pathToEntry) ) {
+			    			$files[] = $fullPath ? $pathToEntry : $entry;
+			    		}
 			    	}			    	
 			    }
 
@@ -1212,7 +1225,7 @@
 
 			$n = newsman::getInstance();
 
-			$filePath = $n->ensureUploadDir().DIRECTORY_SEPARATOR.$importParams['fileName'];
+			$filePath = $n->ensureUploadDir('csv').DIRECTORY_SEPARATOR.$importParams['fileName'];
 
 			$imported = 0;
 
@@ -1259,24 +1272,31 @@
 		}
 
 		public function ajGetUploadedFiles() {
+			$type = $this->param('type', 'csv');			
 			$this->respond(true, __('success', NEWSMAN), array(
-				'files' => $this->getUploadedFiles()
+				'files' => $this->getUploadedFiles($type)
 			));
 		}
 
-		public function ajImportFiles() {			
+		public function ajImportFiles() {
+			$type = 'csv';
 			$imported = 0;
 
-			$files = $this->getUploadedFiles();
+			$files = $this->getUploadedFiles($type);
 
 			$importParams = $this->param('params');
 			$importParams = json_decode($importParams, true);
+
+			if ( !isset($importParams['fileName']) || !$importParams['fileName'] ) {
+				$this->respond(false, __('Please select a file to import', NEWSMAN));
+			}
+
 			$imported += $this->importFile($importParams);
 
 			$msg = sprintf( _n( 'Imported %d subscriber. Make sure you send him confirmation email.', 'Imported %d subscribers. Make sure you send them confirmation email.', $imported, NEWSMAN), $imported);
 
 			$this->respond(true, $msg, array(
-				'files' => $this->getUploadedFiles()
+				'files' => $this->getUploadedFiles($type)
 			));			
 		}
 
@@ -1284,8 +1304,10 @@
 			ini_set("auto_detect_line_endings", true);
 			$filename	= $this->param('filename');
 
+			$u = newsmanUtils::getInstance();
+
 			$n = newsman::getInstance();			
-			$path = $n->ensureUploadDir().DIRECTORY_SEPARATOR.$filename;
+			$path = $n->ensureUploadDir('csv').DIRECTORY_SEPARATOR.$filename;
 
 			$maxLines = 3; 
 			$count = 0;
@@ -1302,6 +1324,7 @@
 				}
 				fclose($handle);
 			}
+
 			$this->respond(true, __('success', NEWSMAN), array(
 				'filename' => $filename,
 				'header' => $lines
@@ -1324,6 +1347,37 @@
 				$this->respond(true, __('success', NEWSMAN), array(
 					'fields' => $fields
 				));
+			}
+		}
+
+		public function ajInstallTemplates() {
+			$u = newsmanUtils::getInstance();
+			$installed = 0;
+
+			$files = $this->getUploadedFiles('template', true);
+			if ( $files ) {
+				foreach ($files as $file) {
+					if ( $u->installTemplate($file) ) {
+						$installed += 1;
+					}
+				}
+			}
+			$this->respond(true, sprintf( _n('Imported %d template.', 'Imported %d templates.', $installed, NEWSMAN), $installed) );
+		}
+
+		public function ajDuplicateTemplate() {
+			$u = newsmanUtils::getInstance();			
+			$id = $this->param('id');
+
+			$tpl = $u->duplicateTemplate($id);
+
+			if ( $tpl ) {
+				$this->respond(true, 'Success', array(
+					'name' => $tpl->name,
+					'id'   => $tpl->id	
+				));
+			} else {
+				$this->errTemplateNotFound();
 			}
 		}
 
@@ -1368,16 +1422,11 @@
 		 * Gets a particle(post block tempalte or posts divider) of an
 		 * entity ( email or template )
 		 */
-		// private function getEntityParticle($entityId, $entType, $particleName) {			
-
+		// private function getEntityParticle($entityId, $entType, $particleName) {
 		// 	$u = newsmanUtils::getInstance();
-
 		// 	$ent = $this->getEntityById($entityId, $entType);
-
 		// 	$particles = $ent->particles;
-
 		// 	$content = $u->getSectionContent($particles, 'gsedit', $particleName);
-
 		// 	return $content;
 		// }
 
@@ -1405,7 +1454,8 @@
 
 			global $newsman_post_tpl;
 			global $newsman_loop_post;
-			global $newsman_loop_post_nr;			
+			global $newsman_loop_post_nr;
+			global $newsman_show_thumbnail_placeholders;
 
 			$u = newsmanUtils::getInstance();
 
@@ -1414,6 +1464,8 @@
 
 			$entityId = $this->param('entity');
 			$entType = $this->param('entType');
+
+			$newsman_show_thumbnail_placeholders = intval($this->param('showTmbPlaceholder', 0)) ? true : false;
 
 			if ( !in_array($entType, array('email', 'template')) ) {
 				$this->respond(false, sprintf(__('"entType" parameter value "%s" should be "email" or "template".', NEWSMAN), $entType) );
@@ -1433,7 +1485,7 @@
 				if ( $ptype ) {
 					$postType = $ptype;
 				}
-			}	
+			}
 
 			$args = array(
 				'nopaging' => true,
@@ -1461,10 +1513,7 @@
 				$output .= do_shortcode(preg_replace('/(gsedit=")([^"]+)(")/i', '$1$2_'.$post->ID.'$3', $postBlockTpl));
 			}
 
-			$ent->html = $u->replaceSectionContent($ent->html, 'posts', $output, 'gsspecial');
-
-			$ent->save();
-
+			$output = $u->processAssetsURLs($output, $ent->assetsURL);
 
 			$this->respond(true, __('Posts block successfully compiled', NEWSMAN), array('content' => $output ));
 		}
@@ -1665,7 +1714,7 @@
 
 
 			$msg = $email->renderMessage($data);
-			$msg['html'] = $u->expandAssetsURLs($msg['html'], $ent->assets);
+			$msg['html'] = $u->processAssetsURLs($msg['html'], $ent->assetsURL);
 
 			$r = $u->mail($msg, array( 'to' => $toEmail) );
 
@@ -1726,18 +1775,23 @@
 			));			
 		}
 
-		public function ajRemoveImportedFile() {
+		public function ajRemoveUploadedFile() {
 			$fileName = $this->param('fileName');
+			$type = $this->param('type');
+
+			if ( !in_array($type, array('template', 'csv'))  ) {
+				$this->respond(false, __('Wrong "type" parameter. Must be "csv" or "template"', NEWSMAN));
+			}
 
 			$n = newsman::getInstance();
 
-			$filePath = $n->ensureUploadDir().DIRECTORY_SEPARATOR.$fileName;
+			$filePath = $n->ensureUploadDir($type).DIRECTORY_SEPARATOR.$fileName;
 
 			if ( file_exists($filePath) ) {
 				unlink($filePath);
 				$this->respond(true, 'Successfully deleted');
 			} else {
-				$this->respond(false, 'Error: File not found');
+				$this->respond(false, 'Error: File not found', array('x' => $filePath));
 			}
 		}
 
@@ -1812,19 +1866,22 @@
 			$this->respond(true, 'success');			
 		}
 
-		public function ajDeleteForms() {
+		public function ajRemoveLists() {
 			$u = newsmanUtils::getInstance();
 
 			$ids = $this->param('ids');
 			$set = $u->jsArrToMySQLSet($ids);
 
-			$r = newsmanList::removeAll('`id` in '.$set);
+			$r = newsmanList::findAll('`id` in '.$set);
 
-			if ( !$r ) {
-				$this->respond(false, newsmanList::$lastError);
-			} else {
+			if ( is_array($r) ) {
+				foreach ($r as $lst) {
+					$lst->remove();
+				}
 				$this->respond(true, __('success', NEWSMAN) );
-			}			
+			} else {
+				$this->respond(false, newsmanList::$lastError);
+			}
 		}
 
 		public function ajSetEmailAnalytics() {
@@ -1842,6 +1899,63 @@
 			} else {
 				$this->errEmailNotFound($emlId);				
 			}
+		}
+
+		public function ajDownloadTemplate() {
+			$n = newsman::getInstance();
+			$u = newsmanUtils::getInstance();
+
+			$json = $this->param('json');
+
+			$tpl = json_decode($json, true);
+
+			$url = $tpl['downloadURL'];
+
+			$res = wp_remote_get($url, array(
+				'haeders' => array(
+					'Pragma' => 'no-cache',
+					'Cache-Control' => 'no-cache'
+				)
+			));
+
+			if ( is_wp_error( $res ) ) {
+				$this->respond(false, $response->get_error_message());
+			} else {
+				$filePath = $n->ensureUploadDir('template').DIRECTORY_SEPARATOR.basename($url);
+
+				if ( $res['body'] ) {
+					$length = file_put_contents($filePath, $res['body']);
+
+					$u->installTemplate($filePath, $tpl);
+					$this->respond(true, $filePath);					
+				} else {
+					$this->respond(false, 'Some error occured. Downloaded file size is 0.');
+				}
+			}
+		}
+
+		public function ajGetInstalledTemplates() {
+			$templates = array();
+
+			$n = newsman::getInstance();
+			$upath = $n->ensureUploadDir('template');
+
+			if ( $handle = opendir($upath) ) {
+
+			    /* This is the correct way to loop over the directory. */
+			    while (false !== ($entry = readdir($handle))) {
+			    	if ( $entry !== '.' && $entry !== '..' && $entry[0] !== '.' ) {			    		
+			    		$pathToEntry = $upath.DIRECTORY_SEPARATOR.$entry;
+			    		if ( is_dir($pathToEntry) ) {
+			    			$templates[] = $entry;
+			    		}
+			    	}			    	
+			    }
+
+			    closedir($handle);
+			}
+
+			$this->respond(true, 'Success', array( 'installed' => $templates ));
 		}
 
 	}

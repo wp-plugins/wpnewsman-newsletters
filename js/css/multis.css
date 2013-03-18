@@ -46,10 +46,10 @@ ul.multis-items {
 li.multis-input,
 li.multis-input input,
 li.multis-input input:focus {
-	background: none;   
-	border: none;
-	box-shadow: none;
-	margin: 0;
+	background: none !important;   
+	border: none !important;
+	box-shadow: none !important;
+	margin: 0 !important;
 }
 
 li.multis-input input {

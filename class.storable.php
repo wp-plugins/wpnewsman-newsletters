@@ -1,6 +1,6 @@
 <?php
 
-require_once('class.utils.php');
+require_once(__DIR__.DIRECTORY_SEPARATOR."class.utils.php");
 
 global $wpdb;
 
@@ -421,7 +421,8 @@ class newsmanStorable {
 
 		$u = newsmanUtils::getInstance();
 
-		return $wpdb->get_results($sql, ARRAY_A);
+		$r =  $wpdb->get_results($sql, ARRAY_A);
+		return $r;
 	}
 
 	static function findOne($selector  = null, $args = array()){
@@ -479,15 +480,16 @@ class newsmanStorable {
 			}
 		}	
 
-		foreach ($modDefs as $i => $md) {
+		for ($i=0; $i < count($modDefs); $i++) { 
+			$md = $modDefs[$i];
 			$afterCol = ($prevColum === null) ? NEWSMAN_COLUMN_POS_FIRST : $prevColum;
 
 			if ( !in_array($md['name'], $tblCols) ) { // new column
 				static::addColumn($md['name'], $md['type'], $afterCol);
-			} elseif ( $modDefs[$i]['name'] !== $tblDefs[$i]['name'] ) { // order changed
+			} elseif ( $md['name'] !== $tblDefs[$i]['name'] ) { // order changed
 				static::modColumn($md['name'], $md['type'], $afterCol);
 			}
-			$prevColum = $md['name'];
+			$prevColum = $md['name'];			
 		}
 	}
 
@@ -533,6 +535,18 @@ class newsmanStorable {
 
 		return $wpdb->query($sql);
 	}
+
+	static function renameColumn($oldName, $newName) {
+		global $wpdb;
+		$tbl = $wpdb->prefix.static::$table;
+
+		$type = static::$props[$newName];
+		$nativeType = static::getNativeType($type);
+
+		$sql = "ALTER TABLE $tbl CHANGE COLUMN `$oldName` `$newName` $nativeType";
+
+		return $wpdb->query($sql);
+	}	
 
 	static function getDefinition() {
 		static::ensureTable();

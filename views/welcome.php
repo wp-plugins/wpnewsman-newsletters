@@ -2,7 +2,11 @@
   <?php include("_header.php"); ?>
   <div class="newsman-welcome">
     <h1>Welcome to WPNewsman <?php echo NEWSMAN_VERSION; ?></h1>
+    <?php if ( !get_option('newsman_old_version') ): ?>
     <div class="about-text">Thank you for installing WPNewsman. We hope you'll like it!</div>
+    <?php else: ?>
+    <div class="about-text">You updated! We hope you'll like it!</div>
+    <?php endif; ?>
     <div class="changelog">
       <?php if ( !$hideVideo ): ?>
       <h3>Trying for the First Time?</h3>
@@ -16,20 +20,15 @@
     </div>
     <div class="changelog">
       <div class="feature-section row" style="margin-bottom: .5em">
-        <div class="span12">
-          <h3>We love you and your kind words!</h3>
-          <p>We love reviews because they encourage and inspire us. <a href="http://wordpress.org/support/view/plugin-reviews/wpnewsman-newsletters" target="_blank" title="Rate WPNewsman!">Add your own review</a> and make our day.</p>
+      <div class="span8">
+          <h3>Spread the word</h3>
+          <h4 style="font-size: 18px;">Love puppies?</h4>
+          <p> <img src="http://wpnewsman.com/images/hello-puppies.jpg" align="left" style="margin: 0 15px 0 0;" />Each time one of our users forgets to write a review, a puppy dies. It's sad and breaks our hearts. <a href="http://wordpress.org/support/view/plugin-reviews/wpnewsman-newsletters" target="_blank" title="Rate WPNewsman!">Add your own review</a> and save a puppy today.</p>
         </div>
       </div>
-      <div class="feature-section row" style="margin-bottom: .5em">
+      <div class="feature-section row" style="margin: 35px 0 .5em 0;">
         <div class="span12">
-          <h3>Help us understand your needs</h3>
-          <p>Give us your top suggestion on how we can improve your experience with WPNewsman newsletter plugin <a href="http://support.glocksoft.net/feedback" target="_blank" title="Feedback">here</a>. So that we can effectively help your business gain better results from email marketing</p>
-        </div>
-      </div>
-      <div class="feature-section row" style="margin-bottom: .5em">
-        <div class="span12">
-          <h3>Changed in this version:</h3>
+          <h3>Changes in this version:</h3>
           <?php $u = newsmanUtils::getInstance(); echo $u->getLastChanges(); ?>
           <p>For the correct work of the plugin, update WPNewsman and WordPress to the latest versions.</p>
         </div>

@@ -47,7 +47,7 @@ class newsmanShortCode {
 	}
 
 	function get($name) {
-		return $this->params[$name];
+		return isset($this->params[$name]) ? $this->params[$name] : null;
 	}
 
 	function toString() {
@@ -77,11 +77,11 @@ class newsmanShortCode {
 	function matchParams($search) {
 		foreach ($search as $key => $value) {
 			if ( is_array($value) ) {
-				if ( !in_array($this->params[$key], $value) ) {
+				if ( !isset($this->params[$key]) || !in_array($this->params[$key], $value) ) {
 					return false;
 				}
 			} else {
-				if ( $this->params[$key] !== $value ) {
+				if ( !isset($this->params[$key]) || $this->params[$key] !== $value ) {
 					return false;
 				}				
 			}

@@ -1,14 +1,20 @@
 /* TEMPLATE EDITOR STYLES */
 
-.highlight-gsedit [gsedit] {
-	border: 1px dashed transparent;
+.cke_editable [gsedit] {
+	border: 1px solid transparent;
 	min-width: 10px;
 	min-height: 10px;
 }
 
-.highlight-gsedit:hover [gsedit] {
-	border: 1px dashed gray;
+.cke_editable.highlight-newsman-outlet-buttons [gsedit] {
+	border: 1px dashed #d8d8d8;
+	min-width: 10px;
+	min-height: 10px;
 }
+
+/*.cke_editable:hover [gsedit] {
+	border: 1px dashed #e1e1e1;
+}*/
 
 /*.outlet:hover .outlet-buttons {
 	visibility: visible;
@@ -30,6 +36,7 @@
 }*/
 
 .outlet-buttons,
+.outlet-buttons *,
 .outlet-handle {
 	list-style: none;   
 
@@ -37,6 +44,9 @@
 	line-height: 14px;
 	font-weight: bold !important;  
 	font-family:"Helvetica Neue",Helvetica,Arial,Verdana,sans-serif !important;
+	color: black;
+	font-style: normal !important;
+	text-decoration: none !important;
 
 /*	padding: 3px;
 	position: absolute;

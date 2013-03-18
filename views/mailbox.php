@@ -20,7 +20,7 @@
 		<div class="span12">
 			<ul class="subsubsub" style="float:left; margin: 5px 0 0 0;">
 				<li><a href="#/all" id="newsman-mailbox-all" class="newsman-flink current"><?php _e('All emails', NEWSMAN); ?></a> |</li>
-				<li><a href="#/drafts" id="newsman-mailbox-drafts" class="newsman-flink"><?php _e('Drafts', NEWSMAN); ?></a> |</li>
+				<li><a href="#/draft" id="newsman-mailbox-draft" class="newsman-flink"><?php _e('Drafts', NEWSMAN); ?></a> |</li>
 				<li><a href="#/inprogress" id="newsman-mailbox-inprogress" class="newsman-flink"><?php _e('In progress', NEWSMAN); ?></a> |</li>
 				<li><a href="#/pending" id="newsman-mailbox-pending" class="newsman-flink"><?php _e('Pending', NEWSMAN); ?></a> |</li>
 				<li><a href="#/sent" id="newsman-mailbox-sent" class="newsman-flink"><?php _e('Sent', NEWSMAN); ?></a></li>
@@ -130,80 +130,8 @@
 			<h3><?php _e('Select template:', NEWSMAN); ?></h3>
 		</div>
 		<div class="modal-body scrollable" style="height: 300px;">
-
-			<ul class="nav nav-tabs" id="myTab">
-				<li class="active"><a href="#my-tpls" data-toggle="tab"><?php _e('My Templates', NEWSMAN); ?></a></li>
-				<li><a href="#basic-tpls" data-toggle="tab"><?php _e('Basic Templates', NEWSMAN); ?></a></li>
-			</ul>
-
-			<div class="tab-content">
-				<div class="tab-pane active" id="my-tpls">
-					<table id="dlg-templates-tbl" class="table table-striped table-bordered">
-					</table>					
-				</div>
-				<div class="tab-pane" id="basic-tpls">
-					<div class="tpl-buttons">
-						<table>
-							<tr>
-								<td>
-									<div mr="ok" class="tpl-btn" tplname="basic">
-										<i class="simple"></i>
-										<div>
-											<h3><?php _e('Simple', NEWSMAN); ?></h3>
-										</div>
-									</div>							
-								</td>
-								<td>
-									<div mr="ok" class="tpl-btn" tplname="2cols">
-										<i class="col2"></i>
-										<div>
-											<h3><?php _e('2 columns', NEWSMAN); ?></h3>
-										</div>
-									</div>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<div mr="ok" class="tpl-btn" tplname="3cols">
-										<i class="col3"></i>
-										<div>
-											<h3><?php _e('3 columns', NEWSMAN); ?></h3>
-										</div>
-									</div>
-								</td>
-								<td>
-									<div mr="ok" class="tpl-btn" tplname="gallery">
-										<i class="gallery"></i>
-										<div>
-											<h3><?php _e('Gallery', NEWSMAN); ?></h3>
-										</div>
-									</div>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<div mr="ok" class="tpl-btn" tplname="mobile">
-										<i class="simple"></i>
-										<div>
-											<h3><?php _e('Mobile', NEWSMAN); ?></h3>
-										</div>
-									</div>
-								</td>
-								<td>
-									<div mr="ok" class="tpl-btn" tplname="digest">
-										<i class="simple"></i>
-										<div>
-											<h3><?php _e('Digest', NEWSMAN); ?></h3>
-										</div>
-									</div>
-								</td>
-							</tr>
-						</table>
-					</div>
-				</div>
-			</div>			
-
-
+			<table id="dlg-templates-tbl" class="table table-striped table-bordered">
+			</table>					
 		</div>
 		<div class="modal-footer">
 			<a class="btn" mr="cancel"><?php _e('Close', NEWSMAN); ?></a>

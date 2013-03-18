@@ -1,10 +1,10 @@
 <?php
 
-require_once('class.options.php');
-require_once('class.list.php');
-require_once('class.shortcode.php');
+require_once(__DIR__.DIRECTORY_SEPARATOR."class.options.php");
+require_once(__DIR__.DIRECTORY_SEPARATOR."class.list.php");
+require_once(__DIR__.DIRECTORY_SEPARATOR."class.shortcode.php");
 
-require_once(ABSPATH.'/wp-includes/class-phpmailer.php');
+require_once(ABSPATH.DIRECTORY_SEPARATOR.'wp-includes'.DIRECTORY_SEPARATOR.'class-phpmailer.php');
 
 define('KEY', "\xa3\xb4\xef\xda\x24\xd5\xcc\x3b");
 
@@ -24,7 +24,7 @@ class newsmanUtils {
 	} 
 
 	function emailFromFile($fileName, $lang = 'en_US') {
-		$filePath = NEWSMAN_PLUGIN_PATH.'/install/'.$lang.'/emails/'.$fileName;
+		$filePath = NEWSMAN_PLUGIN_PATH.DIRECTORY_SEPARATOR.'install'.DIRECTORY_SEPARATOR.$lang.DIRECTORY_SEPARATOR.'emails'.DIRECTORY_SEPARATOR.$fileName;
 		
 		$eml = array(
 			'subject' => '',
@@ -69,14 +69,14 @@ class newsmanUtils {
 
 			// we are on the last symbol
 			if ( $i == ($c-1) ) {
-				$eml[$state] = $b;
+				$eml[$state] = $this->utf8_encode_all($b);
 			}
 		}
 		return $eml;
 	}
 
 	function loadTpl($fileName, $lang = 'en_US') {
-		$path = NEWSMAN_PLUGIN_PATH.'/install/'.$lang.'/templates/'.$fileName; 
+		$path = NEWSMAN_PLUGIN_PATH.DIRECTORY_SEPARATOR.'install'.DIRECTORY_SEPARATOR.$lang.DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.$fileName; 
 		$tpl = '';
 		if ( file_exists($path) ) {
 			$tpl = file_get_contents($path);
@@ -85,7 +85,7 @@ class newsmanUtils {
 	}
 
 	private function installLangExists($lang = 'en_US') {
-		return is_dir(NEWSMAN_PLUGIN_PATH.'/install/'.$lang);
+		return is_dir(NEWSMAN_PLUGIN_PATH.DIRECTORY_SEPARATOR.'install'.DIRECTORY_SEPARATOR.$lang);
 	}
 
 	/*
@@ -137,9 +137,6 @@ class newsmanUtils {
 		if ( isset($opts['sender']) ) {
 			$s = $opts['sender'];
 		}
-
-		//newsman_log('newsman_Mail: Email from: '.$newsman_email_from);
-		//newsman_log('newsman_Mail: Name from: '.$newsman_name_from);	
 
 		if ( defined('NEWSMAN_TESTS') && !defined('NEWSMAN_TESTS_ENABLE_MAIL') ) {
 			// Here the actual email will be sent
@@ -251,7 +248,7 @@ class newsmanUtils {
 
 	public function log($msg) {		
 		$msg = '['.date('Y-m-d H:i:s').'] '.$msg."\n";
-		file_put_contents(NEWSMAN_PLUGIN_PATH.'/newsmanlog.txt', $msg, FILE_APPEND);
+		file_put_contents(NEWSMAN_PLUGIN_PATH.DIRECTORY_SEPARATOR.'newsmanlog.txt', $msg, FILE_APPEND);
 		// if (get_option('newsman_write_debug_log') != '1') {
 		// 	return;
 		// }
@@ -383,9 +380,10 @@ class newsmanUtils {
 		return $wpdb->get_var("show tables like '".$tableName."'") === $tableName;
 	}
 
-	function addTrSlash($url) {
-		if (substr($url,strlen($url)-1,1) != '/') {
-			$url .= '/';
+	function addTrSlash($url, $dir = false) {
+		$sep = $dir ? DIRECTORY_SEPARATOR : '/';
+		if (substr($url,strlen($url)-1,1) != $sep) {
+			$url .= $sep;
 		}		
 		return $url;
 	}
@@ -679,22 +677,54 @@ class newsmanUtils {
 
 
 	public function expandAssetsURLsCallback($matches) {		
-		global $NEWSMAN_CURRENT_ASSETS_DIR;
+		global $NEWSMAN_CURRENT_ASSETS_URL;
 		$url = $matches[3];
 
 		if ( !(strpos($url, '[') === 0) && !( strpos($url, 'http') === 0 ) ) {
-			$url = $NEWSMAN_CURRENT_ASSETS_DIR.$url;
+			$url = $NEWSMAN_CURRENT_ASSETS_URL.$url;
 		}
 
 		return $matches[1].$url.$matches[4];
 	}
 
-	public function expandAssetsURLs($tpl, $assetsDir) {
-		global $NEWSMAN_CURRENT_ASSETS_DIR;
-		$NEWSMAN_CURRENT_ASSETS_DIR = NEWSMAN_PLUGIN_URL.'/email-templates/'.$assetsDir.'/';
+	public function shrinkAssetsURLsCallback($matches) {
+		global $NEWSMAN_CURRENT_ASSETS_URL;
+		$url = $matches[3];
 
-		$rx = '/(\b(?:src|url|placehold|gssource|gsdefault)=(\\\'|"))(.*?)(\2)/i';
-		$tpl = preg_replace_callback($rx, array($this, 'expandAssetsURLsCallback'), $tpl);		
+		$urlStart = strpos($url, $NEWSMAN_CURRENT_ASSETS_URL);
+
+		$relPath = false;
+
+		if ( $urlStart !== false  ) {
+			$relPath = substr($url, strlen($NEWSMAN_CURRENT_ASSETS_URL));
+		}
+
+		if ( $relPath !== false ) {
+			return $matches[1].$relPath.$matches[4];
+		} else {
+			return $matches[0];
+		}
+	}
+
+	// TODO: This function was changed in 1.4.0. make sure the second param is URL everywhere 
+	/**
+	 * This function transforms assets urls in the code to full URL's or relative paths
+	 * @param $tpl (String) HTML source
+	 * @param $assetsURL (String) URL to the assets directory
+	 * @param $operation (String) = (expand || shrink) - operation to perform to the found url
+	 */
+	public function processAssetsURLs($tpl, $assetsURL, $operation = 'expand') {
+		global $NEWSMAN_CURRENT_ASSETS_URL;
+		$NEWSMAN_CURRENT_ASSETS_URL = $this->addTrSlash($assetsURL);
+
+		$op = $operation === 'expand' ? 'expandAssetsURLsCallback' : 'shrinkAssetsURLsCallback';
+
+		$rx = '/(\b(?:src|url|background|placehold|gssource|gsdefault)=(\\\'|"))(.*?)(\2)/i';
+		$tpl = preg_replace_callback($rx, array($this, $op), $tpl);
+
+		// for css urls expansion
+		$rx = '/(\burl\(([\\\'"]{0,1}))(.*?)(\2\))/i';
+		$tpl = preg_replace_callback($rx, array($this, $op), $tpl);
 
 		return $tpl;
 	}	
@@ -817,6 +847,258 @@ class newsmanUtils {
 		//return preg_replace_callback('/<img[^>]*?gsfinal[^>]*?\>/i', array($this, 'compileThumbnailsCallback'), $tpl);
 	}
 
+	/**
+	 * Unpacks and registers template
+	 * @param $uploadedZip (String) Path to uploaded template archive
+	 * @param $tplDef (String|Array) template name or template definition
+	 */
+	public function installTemplate($uploadedZip, $tplDef = false) {
+		// $uploadedZip = .../wp-content/uploads/newsman/templates/sometemplate.zip
+		$extractDir = dirname($uploadedZip); // .../wp-content/uploads/newsman/templates
+
+		$tplDirName = basename($uploadedZip, '.zip'); // sometemplate
+		$tplDir = $extractDir.DIRECTORY_SEPARATOR.$tplDirName; // .../wp-content/uploads/newsman/templates/sometemplate
+		$tplUrl = $this->getTemplateDirURL($tplDirName);
+
+		$firstZipContentFileName = file_get_contents($uploadedZip, false, null, 30, 255);
+		
+
+		if ( strpos($firstZipContentFileName, $tplDirName.'/') !== false ) {
+			// packed directory
+		} else {			
+			// need to create directory
+			$extractDir .= DIRECTORY_SEPARATOR.$tplDirName;
+		}
+
+		WP_Filesystem();
+		$res = unzip_file($uploadedZip, $extractDir);
+
+		if ( is_wp_error($res) ) {
+			$this->log($res->get_error_message());
+		}
+
+		if ( $res === true ) {
+			unlink($uploadedZip);
+
+			if ( is_string($tplDef) || is_bool($tplDef) ) {
+				$this->registerTemplate($tplDir, $tplUrl, $tplDef);				
+			} else {
+				$this->registerTemplateWithDef($tplDir, $tplUrl, $tplDef);	
+			}
+
+			return true;
+		} else {
+			return false;
+		}
+
+		return ( $res === true );
+	}
+
+	/**
+	 * Registers template in the plugin(Writes it to the database). 
+	 */
+	public function registerTemplate($templatePath, $templateURL, $templateName = false) {
+
+		if ( !is_dir($templatePath) ) {
+			return;
+		}
+
+		$templatePath = $this->addTrSlash($templatePath, 'path');
+		$templateURL = $this->addTrSlash($templateURL);
+
+		$n = newsman::getInstance();
+
+		$name = basename($templatePath);
+
+		$templateName = $templateName ? $templateName : $name;
+
+		$fileName = $templatePath."$name.html";
+		$particlesFileName = $templatePath."_$name.html";
+
+		$tpl = new newsmanEmailTemplate();
+		$tpl->system = false;
+		$tpl->name = $templateName;
+		$tpl->subject = __('Enter Subject Here', NEWSMAN);
+		$tpl->html = $this->processAssetsURLs(file_get_contents($fileName), $templateURL);
+
+		if ( file_exists($particlesFileName) ) {
+			$tpl->particles = $this->processAssetsURLs(file_get_contents($particlesFileName), $templateURL);
+		} else {
+			$defParticles = $this->getDefaultTemplateParticles();
+			$tpl->particles = $defParticles ? $defParticles : '';
+		}
+
+		$tpl->plain = '';
+		$tpl->assetsURL = $templateURL;
+		$tpl->assetsPath = $templatePath;
+
+		$id = $tpl->save();
+
+		return $id;
+	}
+
+	/**
+	 * Registers template with the template definition as defined in the templates store 
+	 */
+	public function registerTemplateWithDef($templatePath, $templateURL, $tplDef) {
+
+		if ( !is_dir($templatePath) ) {
+			return;
+		}
+
+		$templatePath = $this->addTrSlash($templatePath, 'path');
+		$templateURL = $this->addTrSlash($templateURL);
+
+		$n = newsman::getInstance();
+
+		$templatesToInstall = array();
+
+		if ( isset($tplDef['templates']) && is_array($tplDef['templates']) ) {
+			$templatesToInstall = $tplDef['templates'];
+		} else {
+			$templatesToInstall[] = array(
+				'file' => basename($templatePath).".html",
+				'name' => $tplDef['name']
+			);
+		}
+
+		foreach ($templatesToInstall as $tplObj) {
+			$fileName = $templatePath.$tplObj['file'];
+			$particlesFileName = $templatePath."_".$tplObj['file'];
+
+			$tpl = new newsmanEmailTemplate();
+			$tpl->system = false;
+			$tpl->name = $tplObj['name'];
+			$tpl->subject = __('Enter Subject Here', NEWSMAN);
+			$tpl->html = $this->processAssetsURLs(file_get_contents($fileName), $templateURL);
+
+			if ( file_exists($particlesFileName) ) {
+				$tpl->particles = $this->processAssetsURLs(file_get_contents($particlesFileName), $templateURL);
+			} else {
+				$defParticles = $this->getDefaultTemplateParticles();
+				$tpl->particles = $defParticles ? $defParticles : '';
+			}
+
+			$tpl->plain = '';
+			$tpl->assetsURL = $templateURL;
+			$tpl->assetsPath = $templatePath;
+
+			$tpl->save();
+		}
+	}	
+
+	public function delTree($dir) { 
+		$files = array_diff(scandir($dir), array('.','..')); 
+		foreach ($files as $file) { 
+			(is_dir($dir.DIRECTORY_SEPARATOR.$file)) ? $this->delTree($dir.DIRECTORY_SEPARATOR.$file) : unlink($dir.DIRECTORY_SEPARATOR.$file);
+		} 
+		return rmdir($dir); 
+	} 	
+
+	public function assetsDeletable($assetsPath) {
+		// we delete only the assetes of uploaded templates
+		$assetsPath = newsman_ensure_correct_path($assetsPath);
+		$comparePath = DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'wpnewsman';
+		return strpos($assetsPath, $comparePath) > -1;
+	}
+
+	public function hasSharedAssets($assetsPath) {
+		$n = newsmanEmailTemplate::count('`assetsPath` = %s', array($assetsPath));
+		$n += newsmanEmail::count('`assetsPath` = %s', array($assetsPath));
+
+		return $n > 1;
+	}
+
+	public function tryRemoveTemplateAssets($assetsPath, $deleteSharedAssets = false) {
+		if ( $this->assetsDeletable($assetsPath) ) {
+
+			if ( $this->hasSharedAssets($assetsPath) ) {
+				return $deleteSharedAssets ? $this->delTree($assetsPath) : false;
+			} else {
+				return $this->delTree($assetsPath);	
+			}
+			
+		}
+		return false;
+	}
+
+	public function getTemplateDirURL($tplDir) {
+		$dirs = wp_upload_dir();
+		$url = $dirs['baseurl']."/wpnewsman/template/$tplDir/";
+
+		return $url;
+	}	
+
+	/* get particles from the stock digest template */
+	public function getDefaultTemplateParticles() {
+		$particlesFile =
+			NEWSMAN_PLUGIN_PATH.
+			DIRECTORY_SEPARATOR.
+			'email-templates'.
+			DIRECTORY_SEPARATOR.
+			'digest'.
+			DIRECTORY_SEPARATOR.
+			'_digest.html';
+
+		return file_get_contents($particlesFile);
+	}
+
+	/**
+	 * Installes templates bundled with the plugin
+	 */
+	public function installStockTemplates() {
+		$o = newsmanOptions::getInstance();
+
+		$basicTplId = $o->get('basicTemplate');
+
+		if ( $basicTplId ) { return; }
+
+		$dir = NEWSMAN_PLUGIN_PATH.DIRECTORY_SEPARATOR.'email-templates'.DIRECTORY_SEPARATOR;
+		$url = NEWSMAN_PLUGIN_URL.'/email-templates/';
+
+		if ( $handle = opendir($dir) ) {
+			while (false !== ($entry = readdir($handle))) {
+				if ( $entry != "." && $entry != ".." && $entry !== 'newsman-system' ) {
+					$id = $this->registerTemplate($dir.$entry, $url.$entry);
+					if ( $entry === 'basic' ) {
+						$o->set('basicTemplate', $id);
+					}				
+				}
+			}
+			closedir($handle);
+		}
+	}
+
+	/**
+	 * Duplicates template
+	 * @param {Integer} Original Template Id
+	 * @param [String] New Template name
+	 * @return {newsmanEmailTemplate} Copy template object
+	 */
+	public function duplicateTemplate($origianTplId, $name = false) {
+		$tpl = newsmanEmailTemplate::findOne('id = %d', array( $origianTplId ) );
+
+		if ( $tpl ) {
+
+			$newTpl = new newsmanEmailTemplate();
+
+			$newTpl->system 	= false;
+			$newTpl->name 		= $name ? $name : $tpl->name.' '.__('Copy', NEWSMAN);
+			$newTpl->subject 	= $tpl->subject;
+			$newTpl->html 		= $tpl->html;
+			$newTpl->plain 		= $tpl->plain;
+			$newTpl->assetsURL 	= $tpl->assetsURL;
+			$newTpl->assetsPath	= $tpl->assetsPath;
+			$newTpl->particles 	= $tpl->particles;
+
+			$newTpl->save();
+
+			return $newTpl;
+
+		} else {
+			return null;
+		}
+	}
 
 	/* --------------------------------------------------------------------------------------------------------- */
 	/* Modified Base64 to create email addres beacon */	
@@ -849,28 +1131,45 @@ class newsmanUtils {
 	/* Plugin version transformations */	
 	/* --------------------------------------------------------------------------------------------------------- */
 
-	public function versionToNum($ver) {
-		$s = preg_replace('/\D+/', '', $ver);
+	function versionToNum($ver) {
+		if ( preg_match('/^(\d+)\.(\d+)\.(\d+)(.*?)$/', $ver, $matches) ) {
+			$a = $matches[1];
+			$b = $matches[2];
+			$c = $matches[3];
+			$d = preg_replace('/\D+/', '', $matches[4]);
+		}
+
+		$s = $a.
+			 str_pad($b, 2, '0', STR_PAD_LEFT).
+			 str_pad($c, 2, '0', STR_PAD_LEFT).
+			 str_pad($d, 3, '0', STR_PAD_LEFT);
+
 		return is_numeric($s) ? intval($s) : 0;
 	}
 
-	public function isUpdate($writeNewVersion = true) {
-		$update = false;
+	public function canUpdate() {
+
+		$codeVersion = $this->versionToNum(NEWSMAN_VERSION);
+		$storedVersion = $this->versionToNum(get_option('newsman_version'));
+
+		return $codeVersion > $storedVersion;
+	}
+
+	public function runUpdate() {
+		$updated = false;
 		$codeVersion = $this->versionToNum(NEWSMAN_VERSION);
 		$storedVersion = $this->versionToNum(get_option('newsman_version'));
 		if ( $codeVersion > $storedVersion ) {
-			$update = true;
-			if ( $writeNewVersion ) {
-				require_once('migration.php');
-				if ( function_exists('newsman_do_migration') ) {
-					newsman_do_migration();
-				}		
-				do_action('wpnewsman_update');		
-				update_option('newsman_old_version', get_option('newsman_version'));
-				update_option('newsman_version', NEWSMAN_VERSION);
-			}			
+			$updated = true;
+			require_once(__DIR__.DIRECTORY_SEPARATOR."migration.php");
+			if ( function_exists('newsman_do_migration') ) {
+				newsman_do_migration();
+			}		
+			do_action('wpnewsman_update');
+			update_option('newsman_old_version', get_option('newsman_version'));	
+			update_option('newsman_version', NEWSMAN_VERSION);
 		}
-		return $update;
+		return $updated;
 	}
 
 
@@ -890,7 +1189,7 @@ class newsmanUtils {
 		$info[] = "\n";
 
 		$info[] = str_pad('WordPress URL:', $col).get_bloginfo('wpurl');
-		$info[] = str_pad('Site URL:', $col).get_bloginfo('siteurl');
+		$info[] = str_pad('Site URL:', $col).get_bloginfo('url');
 
 		$info[] = "\n";
 
@@ -918,7 +1217,7 @@ class newsmanUtils {
 			$data['theme_version'] = $theme->get('Version');
 			$data['theme_uri'] = $theme->get('AuthorURI');
 		} else {
-			$theme_data = get_theme_data( TEMPLATEPATH.'/style.css' );
+			$theme_data = get_theme_data( newsman_ensure_correct_path(TEMPLATEPATH.DIRECTORY_SEPARATOR.'style.css') );
 			$data['theme_name'] = $theme_data['Name'];
 			$data['theme_version'] = $theme_data['Version'];
 			$data['theme_uri'] = isset($theme_data['Theme URI']) ? $theme_data['Theme URI'] : $theme_data['Autor URI'] ;
@@ -936,7 +1235,7 @@ class newsmanUtils {
 
 		foreach ($plugins as $plugin) {
 
-			$pluginFile = ABSPATH.PLUGINDIR.'/'.$plugin;
+			$pluginFile = newsman_ensure_correct_path(ABSPATH.WP_PLUGIN_DIR.DIRECTORY_SEPARATOR.$plugin);
 			$pluginData = get_plugin_data( $pluginFile );
 
 			$info[] = "  ".$pluginData['Name']." ".$pluginData['Version'];
@@ -960,6 +1259,24 @@ class newsmanUtils {
 			return $matches[1];
 		}
 		return null;
+	}
+
+	public function getPostFeaturedImageThumbnail($post) {
+		$post_thumbnail_id = get_post_thumbnail_id( $post->ID );
+		$attrs = wp_get_attachment_image_src( $post_thumbnail_id, 'thumbnail', false );
+		return $attrs[0];
+	}
+
+	/**
+	 * Gets posts featured image on any first image it can find in the post
+	 */
+	public function getPostThumbnail($post) {
+		$url = $this->getPostFeaturedImageThumbnail($post);
+
+		if ( !$url ) {
+			$url = $this->getFirstImage($post);	
+		}
+		return $url;
 	}
 
 	/* --------------------------------------------------------------------------------------------------------- */
@@ -1056,7 +1373,7 @@ class newsmanUtils {
 			'welcome' => array( __('Welcome letter, thanks for subscribing', NEWSMAN), 'welcome.txt')
 		);
 
-		$tplFileName = NEWSMAN_PLUGIN_PATH."/email-templates/newsman-system/newsman-system.html";
+		$tplFileName = NEWSMAN_PLUGIN_PATH.DIRECTORY_SEPARATOR."email-templates".DIRECTORY_SEPARATOR."newsman-system".DIRECTORY_SEPARATOR."newsman-system.html";
 		$baseTpl = file_get_contents($tplFileName);
 
 		foreach ($emailTemplates as $key => $v) {
@@ -1197,5 +1514,4 @@ class newsmanUtils {
 		} 
 		return $ret; 
 	} 	
-	
 }

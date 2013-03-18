@@ -15,6 +15,6 @@ if ( isset( $_REQUEST['newsman_worker_fork'] ) && !empty($_REQUEST['newsman_work
 	}
 
 	$worker = new $workerClass();
-	$worker->worker();
-	$worker->clearStopFlag(getmypid());
+	$worker_lock = isset($_REQUEST['worker_lock']) ? $_REQUEST['worker_lock'] : null;
+	$worker->run($worker_lock);
 }

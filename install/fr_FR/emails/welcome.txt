@@ -1,5 +1,5 @@
 Bienvenue de [newsman me="name"]
---- texte pur ---
+--- plain ---
 Bonjour,
 
 Merci de votre abonnement. Vous êtes maintenant inscrits à nos bulletins d'information, et vous recevrez d'excellent conseils, astuces et stratégies quelques fois par mois. Nous espèrons que vous allez avoir une valeur hors de nos bulletins! C'est là que TOUS nos meilleurs articles vont!

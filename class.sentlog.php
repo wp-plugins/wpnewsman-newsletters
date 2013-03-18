@@ -1,7 +1,7 @@
 <?php
 
-require_once('class.subscriber.php');
-require_once('class.utils.php');
+require_once(__DIR__.DIRECTORY_SEPARATOR."class.subscriber.php");
+require_once(__DIR__.DIRECTORY_SEPARATOR."class.utils.php");
 
 
 /**

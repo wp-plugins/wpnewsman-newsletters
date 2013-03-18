@@ -1,5 +1,5 @@
 Un contact s'est désabonné de votre liste à [newsman wp="url"]
---- texte pur ---
+--- plain ---
 Un contact s'est désabonné de votre liste. Les details du contact sont ci-dessous:
 
 [newsman sub="*"]

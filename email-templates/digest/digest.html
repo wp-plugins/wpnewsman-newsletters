@@ -12,6 +12,8 @@
 		@section Background
 		*/
 
+
+
 body {
 	margin: 0;
 	padding: 0;
@@ -178,6 +180,14 @@ body {
 	/*@editable*/line-height: 20px;
 	/*@editable*/font-weight: bold;
 }
+/*
+@tab Story
+@section Text Link
+*/
+.story-snippet a {
+	/*@editable*/color: #0084b4;
+	/*@editable*/text-decoration: none;
+}
 /*  template styling  */
 
 .padding {
@@ -220,7 +230,7 @@ body {
                   <tbody>
                     <tr>
                       <td style="width: 19px; height: 77px;"></td>
-                      <td height="94" width="46" valign="top" rowspan="2" style="background-color: #ffffff; line-height: 100%;"><a href="[newsman wp='wpurl']" style="border: none; color: #0084b4; text-decoration: none;"> <img src="ribbon.png" gssource="ribbon.psd" gsdefault="ribbon.png" gsedit="digest_header_image" gsblock="image" placehold="46x94.gif" width="46" height="94" style="border: 0; background-color: #fff; line-height: 100%;border: 0;"></a></td>
+                      <td height="94" width="46" valign="top" rowspan="2" style="background-color: #ffffff; line-height: 100%;"><a href="[newsman wp='wpurl']" style="border: none; color: #0084b4; text-decoration: none;"><img src="ribbon.png" gssource="ribbon.psd" width="46" height="94" style="border: 0; background-color: #fff; line-height: 100%;border: 0;"></a></td>
                       <td width="10"></td>
                       <td height="77" width="490" class="main_header" gsedit="header"><span class="title">Hi [newsman sub="first-name"]</span><br>
                         <span class="subtitle"> Here's what's happening on [newsman wp="blogname"]</span></td>
@@ -243,8 +253,7 @@ body {
                               <td style="padding: 0px 0 0 0px !important;" valign="top" class="bodyContent"><table width="100%" border="0" cellspacing="0" cellpadding="0">
                                   <tbody>
                                     <tr>
-                                      <td valign="top">
-                                      <div gsedit="std_content00">
+                                      <td valign="top"><div gsedit="std_content00">
                                           <p>Some introduction text here. You can write your welcome words here or clear this section.</p>
                                         </div></td>
                                     </tr>
@@ -288,13 +297,13 @@ body {
                       <td gsspecial="posts"><!-- story padding --> 
                         
                         <!--                        
-                        <table width="500" border="0" align="center" cellpadding="0" cellspacing="0" class="story-padding padding">
-                          <tbody>
-                            <tr>
-                              <td width="500" height="20"></td>
-                            </tr>
-                          </tbody>
-                        </table>--> 
+												<table width="500" border="0" align="center" cellpadding="0" cellspacing="0" class="story-padding padding">
+													<tbody>
+														<tr>
+															<td width="500" height="20"></td>
+														</tr>
+													</tbody>
+												</table>--> 
                         
                         <!-- /story padding --> 
                         
@@ -311,63 +320,30 @@ body {
                                     </tr>
                                   </tbody>
                                 </table>
-                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                <table gsedit="info_pane" width="100%" border="0" cellspacing="0" cellpadding="0">
                                   <tbody>
                                     <tr>
                                       <td width="10" style="font-size: 1px;">&nbsp;</td>
                                       <td style="padding: 0px 0 0 0px !important; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #333333; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #333333;"><table width="100%" border="0" cellspacing="0" cellpadding="0">
                                           <tbody>
                                             <tr>
-                                              <td valign="top" class="image-holder"><table align="right" border="0" cellspacing="0" cellpadding="0" class="down">
-                                                  <tbody>
-                                                    <tr>
-                                                      <td class="story-image-wrapper"><a href="[newsman post='permalink']" title="[newsman post='post_title']"> <img alt="" src="[newsman post='thumbnail']" gsedit="story_image" gsblock="image,html" placehold="200x144.gif" width="200" height="144" class="story-image" border="0"> </a></td>
-                                                    </tr>
-                                                  </tbody>
-                                                </table>
-                                                
-                                                <!-- / image --> 
-                                                
-                                                <a href="[newsman post='permalink']" title="[newsman post='post_title']" class="story-title"> <span style="margin: 4px 0 8px 0;" gsedit="story_title" gsblock="html">How to Create and Edit Digest Templates</span> </a>
-                                                <div class="story-snippet" gsedit="story_title" gsblock="html">
-                                                  <p><strong>To add blog posts to the template:</strong></p>
-                                                  <p>1. Click on "Add Post" at the right side.<br>
-                                                    2. Select "Full post", "Excerpt" or "Fancy excerpt" in the "Use Content" menu.</p>
-                                                  <ul>
-                                                    <li><em>"Full post"</em> includes the entire posts into the message.</li>
-                                                    <li><em>"Excerpt"</em> includes your own excerpt you wrote when publishing the post.</li>
-                                                    <li><em>"Fancy excerpt"</em> includes an automatically generated excerpt (50 first words by default).</li>
-                                                  </ul>
-                                                  <p>3. Click on the posts you want to add to the message to select them.<br>
-                                                    4. Click "Insert".</p>
-                                                  <p><strong>To edit the template title, posts' titles or excerpts:</strong></p>
-                                                  <ol>
-                                                    <li> Hover the mouse over the item you want to edit.</li>
-                                                    <li> Click "Edit".</li>
-                                                    <li> Click "Clear" to clear the text.</li>
-                                                  </ol>
-                                                  <p><strong>To insert images into the template:</strong></p>
-                                                  <ol>
-                                                    <li> Hover the mouse over the image placeholder.</li>
-                                                    <li> Click "Select image".</li>
-                                                    <li> Select the image either from your computer, from the URL or from the media library.</li>
-                                                    <li> Click "Insert into post".</li>
-                                                  </ol>
-                                                  <p><strong>To edit the template header, footer or story (excerpts):</strong></p>
-                                                  <p>Use the settings under the appropriate tabs: Header, Footer, Story.</p>
-                                                  <p><strong>To edit the template layout:</strong></p>
-                                                  <ol>
-                                                    <li> Click on "Edit post template" at the right side</li>
-                                                    <li> Make the changes to the template layout.</li>
-                                                    <li> Click on the "Save" icon.</li>
-                                                  </ol>
-                                                  <p><strong>To edit the post divider</strong>:</p>
-                                                  <ol>
-                                                    <li> Click on "Edit post divider" at the right side.</li>
-                                                    <li> Edit the divider.</li>
-                                                    <li> Click on the "Save" icon.</li>
-                                                  </ol>
-                                                </div></td>
+                                              <td valign="top"><a href="[newsman post='permalink']" title="[newsman post='post_title']" class="story-title"> <span style="margin: 4px 0 8px 0;" gsblock="html">How to Create and Edit Digest Templates</span> </a>
+                                                <div class="story-snippet">
+                                                <p><strong>To add blog posts to the template:</strong></p>
+                                                <p>1. Use the options in the editor to modify the template as you need.<br>
+                                                  2. Click "Close" at the right side to save the template.</p>
+                                                <ul>
+                                                  <li>Put the mouse at the place where the first post will start.</li>
+                                                  <li>Click on the "<strong>Insert Posts</strong>" button on the editor.</li>
+                                                  <li>Select the post type, categories, authors, content ("Full post", "Excerpt" or "Fancy excerpt").</li>
+                                                  <li>Click on the posts you want to add to the template to select them. Click on "Day", "Week" or "Month" button if you want to select the posts for the specified time period.</li>
+                                                </ul>
+                                                <p><strong>To delete inserted blog posts from the template:</strong>
+                                                <ul>
+                                                  <li>Hold <strong>Ctrl</strong> and hover the mouse over the post excerpt.</li>
+                                                  <li>Click on the "<strong>Remove</strong>" button.</li>
+                                                  </p>
+                                                </ul></td>
                                             </tr>
                                           </tbody>
                                         </table></td>
@@ -385,43 +361,37 @@ body {
                             <tr>
                               <td style="width: 85px; width: 75px;">&nbsp;</td>
                               <td style="padding: 0px 0 0 0px !important;" valign="top" class="bodyContent">
-                              <!--<div gsedit="post_divider">
-                                  <hr width="520" height="1" class="story-separator" style="border: 0; margin: 0 auto; color: #e8e8e8; background-color: #e8e8e8; height: 1px;" />
-                                </div></td>--> 
                               <td style="width: 85px;">&nbsp;</td>
                             </tr>
                           </tbody>
                         </table>
                         
-                        <!-- /story --> 
-                        </td>
-                    </tr>              
+                        <!-- /story --></td>
+                    </tr>
                   </tbody>
                 </table>
-                
-<table cellpadding="0" cellspacing="0" border="0" width="670">
+                <table cellpadding="0" cellspacing="0" border="0" width="670">
                   <tbody>
                     <tr>
                       <td width="75" style="background-color: #ffffff;">&nbsp;</td>
-                      
-                      <td width="490" height="17" style="border-top: 1px solid #dddddd;background-color: #ffffff;">
-                      <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                      <td width="490" height="17" style="border-top: 0px solid #dddddd;background-color: #ffffff;"><table width="100%" border="0" cellspacing="0" cellpadding="0">
                           <tbody>
                             <tr>
                               <td height="18" style="font-size: 1px;">&nbsp;</td>
                             </tr>
                           </tbody>
                         </table>
+                        <div gsedit="post_divider">
+	<hr width="100%" height="1" class="story-separator" style="border: 0; margin: 0 auto; color: #e8e8e8; background-color: #e8e8e8; height: 1px;" />	
+</div>
                         <table width="100%" border="0" cellspacing="0" cellpadding="0">
                           <tbody>
                             <tr>
                               <td width="10" style="font-size: 1px;">&nbsp;</td>
-                              <td style="padding: 0px 0 0 0px !important;" valign="top" class="bodyContent">
-                              <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                              <td style="padding: 0px 0 0 0px !important;" valign="top" class="bodyContent"><table width="100%" border="0" cellspacing="0" cellpadding="0">
                                   <tbody>
                                     <tr>
-                                      <td valign="top">
-                                      <div gsedit="std_content01">
+                                      <td valign="top"><div gsedit="std_content01">
                                           <p>Some closing words here. You can write your signature here or clear this section.</p>
                                         </div></td>
                                     </tr>
@@ -439,8 +409,7 @@ body {
                       <td width="85" style="background-color: #ffffff;">&nbsp;</td>
                     </tr>
                   </tbody>
-                </table>                
-                
+                </table>
                 
                 <!-- Footer -->
                 

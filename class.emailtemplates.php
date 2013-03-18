@@ -1,8 +1,8 @@
 <?php
 
-require_once("class.utils.php");
-require_once('class.storable.php');
-require_once('lib/emogrifier.php');
+require_once(__DIR__.DIRECTORY_SEPARATOR."class.utils.php");
+require_once(__DIR__.DIRECTORY_SEPARATOR."class.storable.php");
+require_once(__DIR__.DIRECTORY_SEPARATOR."lib/emogrifier.php");
 
 class newsmanEmailTemplate extends newsmanStorable {
 	static $table = 'newsman_email_templates';
@@ -21,7 +21,8 @@ class newsmanEmailTemplate extends newsmanStorable {
 		'p_html' => 'text',
 		'p_plain' =>'text',
 
-		'assets' => 'string', // assets directory name, for imported themes
+		'assetsURL' => 'string', // URL of the theme's assets directory
+		'assetsPath' => 'string', // Path of the theme's assets directory
 		'particles' => 'text' // addition email parts like repeatable post_blocks
 	);
 
@@ -30,10 +31,13 @@ class newsmanEmailTemplate extends newsmanStorable {
 
 		$u = newsmanUtils::getInstance();
 
-		$emo = new Emogrifier($this->html);		
-
-		$this->p_html = $u->normalizeShortcodesInLinks( $emo->emogrify() );
-
+		if ( trim($this->html) === '' ) {
+			$this->p_html = $this->html;
+		} else {
+			$emo = new Emogrifier($this->html);
+			$this->p_html = $u->normalizeShortcodesInLinks( $emo->emogrify() );
+		}
+		
 		return parent::save();
 	}
 

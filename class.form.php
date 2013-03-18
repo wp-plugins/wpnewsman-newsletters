@@ -1,7 +1,7 @@
 <?php
 
-require_once('class.options.php');
-require_once('class.list.php');
+require_once(__DIR__.DIRECTORY_SEPARATOR."class.options.php");
+require_once(__DIR__.DIRECTORY_SEPARATOR."class.list.php");
 
 class newsmanForm {
 
@@ -239,9 +239,11 @@ class newsmanForm {
 	public function parse() {
 		$parsed = array();
 		foreach ($this->decodedForm as $item) {
-			$n = $item['name'];
-			if ( isset($_POST[$n]) ) {
-				$parsed[$n] = $_POST[$n];
+			if ( isset($item['name']) ) {
+				$n = $item['name'];
+				if ( isset($_POST[$n]) ) {
+					$parsed[$n] = $_POST[$n];
+				}				
 			}
 		}
 		$parsed['email'] = $_POST['newsman-email'];
@@ -249,6 +251,7 @@ class newsmanForm {
 	}
 
 	public function getForm($use_excerpts = false) {
+		global $post;
 		if ( !is_array($this->decodedForm) ) {
 			echo '<p class="error">The form settings are corrupted.</p>';
 			return;
@@ -281,6 +284,7 @@ class newsmanForm {
 		}
 
 		$formHtml .= '<input type="hidden" name="uid" value="'.htmlspecialchars($this->uid).'">';
+		$formHtml .= '<input class="newsman-form-url" type="hidden" name="newsman-form-url" value="'.$_SERVER['REQUEST_URI'].'">';
 
 		if ( $use_excerpts ) {
 			$formHtml .= '<input type="hidden" name="newsman_use_excerpts" value="1">';
