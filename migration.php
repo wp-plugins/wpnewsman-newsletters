@@ -2,6 +2,7 @@
 
 require_once(__DIR__.DIRECTORY_SEPARATOR.'class.emails.php');
 require_once(__DIR__.DIRECTORY_SEPARATOR.'class.emailtemplates.php');
+require_once(__DIR__.DIRECTORY_SEPARATOR.'class.utils.php');
 
 /*******************************/
 /*      Registration code      */
@@ -27,16 +28,17 @@ function newsman_do_migration() {
 			update_option('newsman_completed_migrations', $completed);
 		}
 	}
-	
 }
 
 /*******************************/
 /*      Migration functions    */
 /*******************************/
 
+$u = newsmanUtils::getInstance();
+
 
 $newsman_changes[] = array(
-	'introduced_in' => 120,
+	'introduced_in' => $u->versionToNum('1.2.0'),
 	'func' => 'newsman_move_title_and_texts_from_list_params_to_form_els'
 );
 
@@ -77,7 +79,7 @@ function newsman_move_title_and_texts_from_list_params_to_form_els() {
 }
 
 $newsman_changes[] = array(
-	'introduced_in' => 140,
+	'introduced_in' => $u->versionToNum('1.4.1'),
 	'func' => 'newsman_migrate_emails_and_templates_tables'
 );
 
@@ -90,7 +92,7 @@ function newsman_migrate_emails_and_templates_tables() {
 }
 
 $newsman_changes[] = array(
-	'introduced_in' => 140,
+	'introduced_in' => $u->versionToNum('1.4.1'),
 	'func' => 'newsman_install_stock_templates'
 );
 

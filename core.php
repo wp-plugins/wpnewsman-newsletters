@@ -829,6 +829,7 @@ class newsman {
 		delete_option('newsman_options');
 		delete_option('newsman_version');
 		delete_option('newsman_old_version');
+		delete_option('newsman_completed_migrations');
 		delete_option('newsman_bh_pid');
 		delete_option('newsman_bh_pid');
 		delete_option('newsman_bh_last_stats');

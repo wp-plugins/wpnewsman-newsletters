@@ -4,7 +4,7 @@ Donate Link: http://wpnewsman.com/premium-newsletter-plugin-wordpress/
 Tags: wpnewsman, newsletter, newsletters, newsletter signup, newsletter widget, subscribers, post notification, email subscription, email marketing, email, emailing, subscription
 Requires at least: 3.5
 Tested up to: 3.6
-Stable tag: 1.4.0
+Stable tag: 1.4.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -121,6 +121,9 @@ We got a User Feedback page where you can [add or vote for new features](http://
 
 == Changelog ==
 
+= 1.4.1 =
+* Fixed: Database migration bug.
+
 = 1.4.0 =
 * Added: email templates store.
 * Added: ability to import the email template from the .zip file.
@@ -225,6 +228,9 @@ We got a User Feedback page where you can [add or vote for new features](http://
 * First public release. Hello World! 
 
 == Upgrade Notice ==
+
+= 1.4.1 =
+* Fixed database migration bug.
 
 = 1.4.0 =
 * Added: email templates store.
