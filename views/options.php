@@ -94,7 +94,7 @@
 				<div class="row-fluid">
 					<div class="span8">
 						<h3 style="margin-bottom: 10px;"><input style="vertical-align: middle;" name="newsman-mailer-throttling-on" type="checkbox"> <?php _e("Throttling", NEWSMAN); ?></h3>
-						<span class="form-line"><?php _e("Limit sending to ", NEWSMAN); ?><input class="span1" name="newsman-mailer-throttling-limit" type="text"> <?php _e("emails per", NEWSMAN); ?> <select style="width: 100px;" name="newsman-mailer-throttling-period"><option value="min"><?php _e("Minute", NEWSMAN); ?></option><option value="hour"><?php _e("Hour", NEWSMAN); ?></option><option value="day"><?php _e("Day", NEWSMAN); ?></option></select> </span>
+						<span class="form-line"><?php _e("Limit sending to ", NEWSMAN); ?><input class="input-small" name="newsman-mailer-throttling-limit" type="text"> <?php _e("emails per", NEWSMAN); ?> <select style="width: 100px;" name="newsman-mailer-throttling-period"><option value="min"><?php _e("Minute", NEWSMAN); ?></option><option value="hour"><?php _e("Hour", NEWSMAN); ?></option><option value="day"><?php _e("Day", NEWSMAN); ?></option></select> </span>
 					</div>
 				</div>
 

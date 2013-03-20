@@ -18,8 +18,8 @@ class newsmanWorker {
 	public function __construct() {
 
 		// TODO: remove in production
-		//$this->growl_connection = array('address' => '127.0.0.1', 'password' => 'neuroshok');
-		//$this->oGrowl = new Growl();
+		// $this->growl_connection = array('address' => '127.0.0.1', 'password' => 'neuroshok');
+		// $this->oGrowl = new Growl();
 
 		$o = newsmanOptions::getInstance();
 		$this->secret = $o->get('secret');
@@ -32,6 +32,8 @@ class newsmanWorker {
 
 		$this->pid = getmypid();
 		$this->u = newsmanUtils::getInstance();
+
+		static::cleanStaleFlagFiles();
 	}
 
 	// TODO: remove in production
@@ -39,7 +41,7 @@ class newsmanWorker {
 
 		// $this->oGrowl->addNotification('newsman_worker');
 		// $this->oGrowl->register($this->growl_connection);
-		// Sending a notification
+
 		// $this->oGrowl->notify($this->growl_connection, 'newsman_worker', get_called_class(), $str);
 	}	
 
@@ -93,24 +95,41 @@ class newsmanWorker {
 	}
 
 	static function stop($pid) {
-		file_put_contents('/tmp/newsman-stopworker-'.$pid, 'STOP');
+		file_put_contents(sys_get_temp_dir().'newsman-worker-stop-'.$pid, $pid);
 	}
 
 	static function clearStopFlag($pid) {
-		$fn = '/tmp/newsman-stopworker-'.$pid;
+		$fn = sys_get_temp_dir().'newsman-worker-stop-'.$pid;
 		if ( file_exists($fn) ) {
 			unlink($fn);
 		}
 	}
 
 	static function isProcessStopped($pid) {
-		$fn = '/tmp/newsman-stopworker-'.$pid;
+		$fn = sys_get_temp_dir().'newsman-worker-stop-'.$pid;
 
 		if ( file_exists($fn) ) {
 			return true;
 		}
 
 		return false;
+	}
+
+	static function cleanStaleFlagFiles() {
+		$u = newsmanUtils::getInstance();
+
+		$tmpdir = sys_get_temp_dir();		
+		if ( $handle = opendir( $tmpdir ) ) {
+			while (false !== ($entry = readdir($handle))) {
+				if ( preg_match('/^newsman-worker/i', $entry) ) {
+					$pid = file_get_contents($tmpdir.$entry);
+					if ( $pid && is_numeric($pid) && !static::isProcessRunning($pid) ) {
+						unlink($tmpdir.$entry);
+					}
+				}
+			}
+			closedir($handle);
+		}
 	}
 
 	static function isProcessRunning($pid) {
@@ -130,8 +149,12 @@ class newsmanWorker {
 	 * workers will not be able to run without obtaining the lock
 	 */ 
 	public function lock($worker_lock) {
-		$this->lockfile = sys_get_temp_dir().DIRECTORY_SEPARATOR.'newsman-worker-'.$worker_lock.".lock";
-		return @fopen($this->lockfile, "xb");
+		$this->lockfile = sys_get_temp_dir().'newsman-worker-'.$worker_lock.".lock";
+		$r = @fopen($this->lockfile, "xb");
+		if ( $r ) {
+			fwrite($r, $this->pid);
+		}
+		return $r;
 	}
 
 	public function unlock() {

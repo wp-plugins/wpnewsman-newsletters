@@ -1727,6 +1727,8 @@ jQuery(function($){
 	 		function renderButtons(start, num, current, count) {
 	 			var cl ,el = $('.pagination ul').empty();	
 
+	 			var listId = $('#newsman-lists').val();
+
 	 			if ( count < 2 ) {
 					$('.pagination').hide();
 	 			} else {
@@ -1739,16 +1741,16 @@ jQuery(function($){
 
 	 			// prev button
 	 			if ( current > 1 ) {
-	 				$('<li><a href="#/'+pageState.show+'/'+(current-1)+'">«</a></li>').appendTo(el);
+	 				$('<li><a href="#/'+listId+'/'+pageState.show+'/'+(current-1)+'">«</a></li>').appendTo(el);
 	 			}
 
 	 			for (var i = start; i <= end; i++) {
 	 				cl = ( i === current ) ? 'class="active"' : '';
-	 				$('<li '+cl+'><a href="#/'+pageState.show+'/'+i+'">'+i+'</a></li>').appendTo(el);
+	 				$('<li '+cl+'><a href="#/'+listId+'/'+pageState.show+'/'+i+'">'+i+'</a></li>').appendTo(el);
 	 			}
 
 	 			if ( current < count ) {
-	 				$('<li><a href="#/'+pageState.show+'/'+(current+1)+'">»</a></li>').appendTo(el);
+	 				$('<li><a href="#/'+listId+'/'+pageState.show+'/'+(current+1)+'">»</a></li>').appendTo(el);
 	 			}
 	 		}
 
