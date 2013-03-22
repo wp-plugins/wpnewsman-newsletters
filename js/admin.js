@@ -2812,11 +2812,13 @@ jQuery(function($){
 
 
 			function fillCounters(cnt) {
-				$('#newsman-mailbox-all').text( newsmanL10n.vAllEmails + ' ('+cnt.all+')');
-				$('#newsman-mailbox-inprogress').text(newsmanL10n.vInProgress + ' ('+cnt.inprogress+')');
-				$('#newsman-mailbox-draft').text(newsmanL10n.vDrafts + ' ('+cnt.draft+')');					
-				$('#newsman-mailbox-pending').text( newsmanL10n.vPending + ' ('+cnt.pending+')');
-				$('#newsman-mailbox-sent').text( newsmanL10n.vSent + ' ('+cnt.sent+')');
+				if ( cnt ) {
+					$('#newsman-mailbox-all').text( newsmanL10n.vAllEmails + ' ('+cnt.all+')');
+					$('#newsman-mailbox-inprogress').text(newsmanL10n.vInProgress + ' ('+cnt.inprogress+')');
+					$('#newsman-mailbox-draft').text(newsmanL10n.vDrafts + ' ('+cnt.draft+')');					
+					$('#newsman-mailbox-pending').text( newsmanL10n.vPending + ' ('+cnt.pending+')');
+					$('#newsman-mailbox-sent').text( newsmanL10n.vSent + ' ('+cnt.sent+')');					
+				}
 			}		
 
 			function renderButtons(start, num, current, count) {

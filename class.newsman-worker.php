@@ -94,19 +94,24 @@ class newsmanWorker {
 		);
 	}
 
+	static function getTmpDir() {
+		$u = newsmanUtils::getInstance();		
+		return $u->addTrSlash(sys_get_temp_dir(), 'path');
+	}
+
 	static function stop($pid) {
-		file_put_contents(sys_get_temp_dir().'newsman-worker-stop-'.$pid, $pid);
+		file_put_contents(static::getTmpDir().'newsman-worker-stop-'.$pid, $pid);
 	}
 
 	static function clearStopFlag($pid) {
-		$fn = sys_get_temp_dir().'newsman-worker-stop-'.$pid;
+		$fn = static::getTmpDir().'newsman-worker-stop-'.$pid;
 		if ( file_exists($fn) ) {
 			unlink($fn);
 		}
 	}
 
 	static function isProcessStopped($pid) {
-		$fn = sys_get_temp_dir().'newsman-worker-stop-'.$pid;
+		$fn = static::getTmpDir().'newsman-worker-stop-'.$pid;
 
 		if ( file_exists($fn) ) {
 			return true;
@@ -118,7 +123,7 @@ class newsmanWorker {
 	static function cleanStaleFlagFiles() {
 		$u = newsmanUtils::getInstance();
 
-		$tmpdir = sys_get_temp_dir();		
+		$tmpdir = static::getTmpDir();		
 		if ( $handle = opendir( $tmpdir ) ) {
 			while (false !== ($entry = readdir($handle))) {
 				if ( preg_match('/^newsman-worker/i', $entry) ) {
@@ -149,7 +154,7 @@ class newsmanWorker {
 	 * workers will not be able to run without obtaining the lock
 	 */ 
 	public function lock($worker_lock) {
-		$this->lockfile = sys_get_temp_dir().'newsman-worker-'.$worker_lock.".lock";
+		$this->lockfile = static::getTmpDir().'newsman-worker-'.$worker_lock.".lock";
 		$r = @fopen($this->lockfile, "xb");
 		if ( $r ) {
 			fwrite($r, $this->pid);
