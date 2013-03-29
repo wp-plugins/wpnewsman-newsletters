@@ -271,7 +271,13 @@ class newsmanList extends newsmanStorable {
 		$sl = newsmanSentlog::getInstance();
 		$slTbl = $sl->tableName;
 
-		$sql = "SELECT * FROM $this->tblSubscribers WHERE status = ".NEWSMAN_SS_CONFIRMED." AND `id` NOT IN ( SELECT `recipientId` from $slTbl WHERE $slTbl.`emailId` = %d AND $slTbl.`listId` = %d ) LIMIT %d";
+		$sql = "SELECT * FROM $this->tblSubscribers WHERE status = ".NEWSMAN_SS_CONFIRMED." AND NOT EXISTS (
+					SELECT 1 from $slTbl WHERE
+						 $slTbl.`emailId` = %d AND
+						 $slTbl.`listId` = %d AND
+						 $slTbl.`recipientId` = $this->tblSubscribers.`id`
+					) LIMIT %d";
+
 		$sql = $wpdb->prepare($sql, $emailId, $this->id, $limit);
 
 		$rows = $wpdb->get_results($sql, ARRAY_A);

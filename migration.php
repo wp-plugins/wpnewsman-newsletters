@@ -101,6 +101,17 @@ function newsman_install_stock_templates() {
 	$u->installStockTemplates();
 }
 
+$newsman_changes[] = array(
+	'introduced_in' => $u->versionToNum('1.4.4'),
+	'func' => 'newsman_migration_add_index_to_sentlog'
+);
+
+function newsman_migration_add_index_to_sentlog() {
+	global $wpdb;
+	$sql = 'ALTER TABLE `'.$wpdb->prefix.'newsman_sentlog` ADD INDEX ( `recipientId` )';
+	$wpdb->query($sql);
+}
+
 
 
 
