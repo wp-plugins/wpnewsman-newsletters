@@ -705,18 +705,16 @@ jQuery(function($){
 		}		
 	}
 
-	$(document).ajaxSend(function() {
+	$(document).ajaxSend(function(e, aj, options) {
+		aj.newsmanCall = true;
 		NEWSMAN.ajaxCnt += 1;
 	});
 
-	$(document).ajaxComplete(function() {
-		// this is to prevent ajaxCnt go below zero on ajax requests which where initiated before the ajaxSend handler
-		if ( NEWSMAN.ajaxCnt > 0 ) {
-			NEWSMAN.ajaxCnt -= 1;	
-		}		
-
-		if ( NEWSMAN.ajaxCnt === 0 ) {
-			requestsDone();
+	$(document).ajaxComplete(function(e, aj, options) {
+		if ( aj.newsmanCall ) {
+			if ( NEWSMAN.ajaxCnt <= 0 ) {
+				requestsDone();
+			}			
 		}
 	});
 
