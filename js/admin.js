@@ -680,9 +680,13 @@ jQuery(function($){
 
 	// global ajax senders
 
-	$(document).on('click','a[href^="http"]', function(e){
-		var handlers = jQuery._data( this, "events" );
+	$(document).on('click','a', function(e){
+		var href = $(this).prop('href') || '';
+		if ( !href.match(/^http/) ) {
+			return;
+		}
 
+		var handlers = jQuery._data( this, "events" );
 		if ( handlers && handlers.click && handlers.click.length ) {
 			// has click handler, we shouldn't interfere
 			return;
@@ -712,6 +716,7 @@ jQuery(function($){
 
 	$(document).ajaxComplete(function(e, aj, options) {
 		if ( aj.newsmanCall ) {
+			NEWSMAN.ajaxCnt -= 1;
 			if ( NEWSMAN.ajaxCnt <= 0 ) {
 				requestsDone();
 			}			
