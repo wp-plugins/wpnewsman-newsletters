@@ -2,7 +2,7 @@
 	var NEWSMAN_PHP_VERSION = '<?php echo phpversion(); ?>';
 	var NEWSMAN_VERSION = '<?php echo NEWSMAN_VERSION; ?>';
 </script>
-		<div class="modal dlg" id="newsman-modal-debugmsg" style="display: none;">
+	<div class="modal dlg" id="newsman-modal-debugmsg" style="display: none;">
 		<div class="modal-header">
 			<button class="close" data-dismiss="modal">×</button>
 			<h3><?php _e('Debug Messages', NEWSMAN); ?></h3>
@@ -23,9 +23,15 @@
 <div class="row-fluid common-footer">
 	<div class="span12">
 		<div class="newsman-links">
-			<a href="http://wpnewsman.com/documentation/"><?php echo __("Support & documentation", NEWSMAN); ?></a> | <a href="http://support.glocksoft.net/feedback"><?php _e("Request feature", NEWSMAN); ?></a> | <a href="http://wpnewsman.com/terms-conditions/">
-<?php _e("Terms and Conditions", NEWSMAN); ?></a> | <a href="http://wpnewsman.com/follow-us-and-spread-the-word-about-wpnewsman/"><?php _e("Spread the Word", NEWSMAN); ?></a> | <span><?php _e("WPNewsman Version: ", NEWSMAN); echo nwsmn_get_prop('version'); ?></span>
-		</div>
+			<?php
+				$nwsmn_rateURL = '<a target="_blank" href="http://wordpress.org/support/view/plugin-reviews/wpnewsman-newsletters">★★★★★</a>';
+				$nwsmn_pluginURL = '<a target="_blank" href="http://wordpress.org/support/view/plugin-reviews/wpnewsman-newsletters">wordpress.org</a>';
+
+				$nwsmn_rateStr = __('Rate (%s) WPNewsman on %s and make it even more awesome', NEWSMAN);
+			?>			
+			<span><?php printf($nwsmn_rateStr, $nwsmn_rateURL, $nwsmn_pluginURL); ?></span> | <a href="http://wpnewsman.com/documentation/"><?php echo __("Support & documentation", NEWSMAN); ?></a> | <a href="http://support.glocksoft.net/feedback"><?php _e("Request feature", NEWSMAN); ?></a> | <span><?php _e("WPNewsman: ", NEWSMAN); echo nwsmn_get_prop('version'); ?></span>
+
+</div>
 		<?php
 			if ( !defined('NEWSMAN_DEV_HOST') ) :
 		?>

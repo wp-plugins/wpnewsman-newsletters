@@ -3,6 +3,8 @@
 require_once(__DIR__.DIRECTORY_SEPARATOR.'class.emails.php');
 require_once(__DIR__.DIRECTORY_SEPARATOR.'class.emailtemplates.php');
 require_once(__DIR__.DIRECTORY_SEPARATOR.'class.utils.php');
+require_once(__DIR__.DIRECTORY_SEPARATOR.'class.options.php');
+require_once(__DIR__.DIRECTORY_SEPARATOR.'class.list.php');
 
 /*******************************/
 /*      Registration code      */
@@ -13,6 +15,7 @@ global $newsman_changes;
 $newsman_changes = array();
 
 function newsman_do_migration() {
+
 	global $newsman_changes;
 	$u = newsmanUtils::getInstance();
 	$oldVersion = $u->versionToNum( get_option('newsman_version') );
@@ -22,7 +25,8 @@ function newsman_do_migration() {
 	}
 
 	foreach ($newsman_changes as $change) {
-		if ( $oldVersion < $change['introduced_in'] && !in_array($change['func'], $completed) ) {
+		if ( $oldVersion < $change['introduced_in'] && ( !in_array($change['func'], $completed) || $change['repeat'] ) ) {
+
 			call_user_func($change['func']);
 			$completed[] = $change['func'];
 			update_option('newsman_completed_migrations', $completed);
@@ -102,19 +106,175 @@ function newsman_install_stock_templates() {
 }
 
 $newsman_changes[] = array(
-	'introduced_in' => $u->versionToNum('1.4.4'),
-	'func' => 'newsman_migration_add_index_to_sentlog'
+	'introduced_in' => $u->versionToNum('1.5.0'),
+	'func' => 'newsman_add_api_key'
 );
 
-function newsman_migration_add_index_to_sentlog() {
-	global $wpdb;
-	$sql = 'ALTER TABLE `'.$wpdb->prefix.'newsman_sentlog` ADD INDEX ( `recipientId` )';
-	$wpdb->query($sql);
+function newsman_add_api_key() {
+	$o = newsmanOptions::getInstance();
+	$key = $o->get('apiKey');
+	if ( !$key ) {
+		$o->set('apiKey', sha1(sha1(microtime()).'newsman_api_key_salt'));
+	}
 }
 
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+$newsman_changes[] = array(
+	'introduced_in' => $u->versionToNum('1.5.0-pre-alpha-9'),
+	'func' => 'newsman_migrating_eml_tpl'
+);
+
+function newsman_migrating_eml_tpl() {
 
 
+	// updating Email Template DB structure
+	newsmanEmailTemplate::ensureDefinition();
+
+	// defining email template type for each system email template
+	$tplsTypeMap = array(
+		'addressChanged' 		 => NEWSMAN_ET_ADDRESS_CHANGED,
+		'adminSubscriptionEvent' => NEWSMAN_ET_ADMIN_SUB_NOTIFICATION,
+		'adminUnsubscribeEvent'  => NEWSMAN_ET_ADMIN_UNSUB_NOTIFICATION,
+		'confirmation' 			 => NEWSMAN_ET_CONFIRMATION,
+		'unsubscribe' 			 => NEWSMAN_ET_UNSUBSCRIBE,
+		'welcome' 				 => NEWSMAN_ET_WELCOME
+	);
+
+	$o = newsmanOptions::getInstance();
+	$templates = $o->get('emailTemplates');
+	if ( $templates ) {
+		foreach ($templates as $tplName => $tplId) {
+			$tpl = newsmanEmailTemplate::findOne('`id` = %d', array($tplId));
+			if ( $tpl ) {
+				$tpl->system_type = $tplsTypeMap[$tplName];
+				$tpl->save();
+			}
+		}
+	}
+
+	// copying system email templates for each list
+
+	$u = newsmanUtils::getInstance();
+
+	$lists = newsmanList::findAll();
+	if ( $lists ) {
+		foreach ($lists as $list) {
+			$u->copySystemTemplatesForList($list->id);
+		}
+	}
+}
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+//*
+$newsman_changes[] = array(
+	'introduced_in' => $u->versionToNum('1.5.0-pre-alpha-25'),
+	'func' => 'newsman_migration_add_double_opt_out'
+);
+//*/
+function newsman_migration_add_double_opt_out() {
+	$data = array(
+		'slug' => 'unsubscribe-confirmation-required',
+		'title' => __('Please confirm your unsubscribe decision', NEWSMAN),
+		'template' => 'unsubscribe-confirmation-required.html',
+		'excerpt' => 'unsubscribe-confirmation-required-ex.html'
+	);
+
+	$o = newsmanOptions::getInstance();
+	$u = newsmanUtils::getInstance();
+
+	$o->set('useDoubleOptout', false);
+
+	$pageId = $o->get('activePages.unsubscribeConfirmation');
+	
+
+	if ( !$pageId ) {
+		$new_page = array(
+			'post_type' => 'newsman_ap',
+			'post_title' => $data['title'],
+			'post_name' => $data['slug'],
+			'post_content' => $u->loadTpl($data['template']),
+			'post_excerpt' => $u->loadTpl($data['excerpt']),
+			'post_status' => 'publish',
+			'post_author' => 1
+		);
+		$pageId = wp_insert_post($new_page);
+
+		$o->set('activePages.unsubscribeConfirmation', $pageId);
+	}
+
+	// -- email template
+
+	$tplDef = array(
+		'type' => NEWSMAN_ET_UNSUBSCRIBE_CONFIRMATION,
+		'name' => __('Unsubscribe confirmation', NEWSMAN),
+		'file' => 'unsubscribe-confirmation.txt'
+	);
+
+	$tplFileName = NEWSMAN_PLUGIN_PATH.DIRECTORY_SEPARATOR."email-templates".DIRECTORY_SEPARATOR."newsman-system".DIRECTORY_SEPARATOR."newsman-system.html";
+	$baseTpl = file_get_contents($tplFileName);
+
+	$eml = $u->emailFromFile($tplDef['file']);
+
+	$tpl = newsmanEmailTemplate::findOne('`system` = 1 AND `assigned_list` = %d AND `system_type` = %d', array(0, $tplDef['type']));
+
+	if ( !$tpl ) {
+		$tpl = new newsmanEmailTemplate();
+
+		$tpl->name = $tplDef['name'];
+		$tpl->subject = $eml['subject'];
+		$tpl->html = $u->replaceSectionContent($baseTpl, 'std_content', $eml['html']);
+		$tpl->plain = $eml['plain'];
+		$tpl->system = true;
+		$tpl->system_type = $tplDef['type'];
+
+		$tpl->save();			
+	}
+
+	$lists = newsmanList::findAll();
+
+	foreach ($lists as $list) {
+		$u->duplicateTemplate($tpl->id, false, $list->id);
+	}
+}
+
+$newsman_changes[] = array(
+	'introduced_in' => $u->versionToNum('1.5.0-pre-alpha-29'),
+	'func' => 'newsman_migration_add_double_opt_out_2'
+);
 
 
+function newsman_migration_add_double_opt_out_2() {
+	$o = newsmanOptions::getInstance();
+	$u = newsmanUtils::getInstance();
+
+	$pageId = $o->get('activePages.changeSubscription');
+
+	if ( $pageId ) {
+		$r = wp_delete_post(intval($pageId), true);
+		$o->set('activePages.changeSubscription', NULL);
+	}
+}
+
+$newsman_changes[] = array(
+	'introduced_in' => $u->versionToNum('1.5.0-beta-4'),
+	'func' => 'newsman_migration_add_index_to_sentlog2'
+);
+
+function newsman_migration_add_index_to_sentlog2() {
+	global $wpdb;
+
+	// add status key to all lists tables
+	$lists = newsmanList::findAll();
+
+	foreach ($lists as $list) {
+		$sql = 'ALTER TABLE `'.$list->tblSubscribers.'` ADD INDEX status ( `status` )';
+		$wpdb->query($sql);
+	}
+	
+	$sql = 'ALTER TABLE `'.$wpdb->prefix.'newsman_sentlog` ADD INDEX recipientIdIdx ( `recipientId`, `emailId`, `listId` )';
+	$wpdb->query($sql);
+}
 
 

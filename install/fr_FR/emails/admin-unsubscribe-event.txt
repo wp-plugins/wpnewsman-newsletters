@@ -8,7 +8,7 @@ Raison:
 $u_reason
 
 --
-[newsman wp="url"]/wp-admin/ -> Settings -> WPNewsman
+[newsman wp="url"]/wp-admin/ -> Paramètres -> WPNewsman
 --- html ---
 <p>Un contact s'est désabonné de votre liste. Les details du contact sont ci-dessous:</p>
 <ul>[newsman sub="*" tag="li"]</ul>

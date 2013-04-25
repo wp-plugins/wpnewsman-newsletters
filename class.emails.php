@@ -113,22 +113,24 @@ class newsmanEmail extends newsmanStorable {
 			$to = explode(',', $to);
 		}
 
-		foreach ($to as $dest) {
-			$dest = trim($dest);
-			if ( preg_match("/^[^@]*@[^@]*\.[^@]*$/", $dest) ) { 
-				// email
-				$this->plainAddresses[] = $dest;				
-			} else {
-				$list = newsmanList::findOne('name = %s', array($dest));
-				if ( $list ) {
-					$lists[] = $list;
+		if ( is_array($to) ) {
+			foreach ($to as $dest) {
+				$dest = trim($dest);
+				if ( preg_match("/^[^@]*@[^@]*\.[^@]*$/", $dest) ) { 
+					// email
+					$this->plainAddresses[] = $dest;				
+				} else {
+					$list = newsmanList::findOne('name = %s', array($dest));
+					if ( $list ) {
+						$lists[] = $list;
+					}
 				}
-			}
+			}			
 		}
 		return $lists;
 	}
 
-	public function renderMessage($data) {
+	public function renderMessage($data, $compileThumbnails = true) {
 		$u = newsmanUtils::getInstance();
 
 		global $newsman_current_subscriber;
@@ -148,7 +150,9 @@ class newsmanEmail extends newsmanStorable {
 			'plain' => do_shortcode( $this->plain )
 		);
 
-		$rendered['html'] = $u->compileThumbnails($rendered['html']);
+		if ( $compileThumbnails ) {
+			$rendered['html'] = $u->compileThumbnails($rendered['html']);	
+		}	
 
 		return $rendered;
 	}	

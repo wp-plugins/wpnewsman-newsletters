@@ -38,10 +38,6 @@ class newsmanForm {
 
 		$this->elId = 0;
 
-		// echo '<pre>';
-		// print_r($list->form);
-		// echo '</pre>';
-
 		$this->uid = $list->uid;
 
 		// make sure submit button is present in form
@@ -85,7 +81,7 @@ class newsmanForm {
 
 		$lblSt = $this->useInlineLabels ? 'style="display: none;"' : '';
 
-		$lbl = '<label '.$lblSt.' >'.htmlentities($item['label']).'</label>';
+		$lbl = '<label class="newsman-form-item-label" '.$lblSt.' >'.htmlentities($item['label']).'</label>';
 		$ph = $this->useInlineLabels ? 'placeholder="'.htmlspecialchars($item['label']).'"' : '';
 
 		$elId = $this->getElId();
@@ -105,7 +101,7 @@ class newsmanForm {
 
 		$lblSt = $this->useInlineLabels ? 'style="display: none;"' : '';
 
-		$lbl = '<label '.$lblSt.'>'.htmlentities($item['label']).'</label>';
+		$lbl = '<label class="newsman-form-item-label" '.$lblSt.'>'.htmlentities($item['label']).'</label>';
 		$ph = $this->useInlineLabels ? 'placeholder="'.htmlspecialchars($item['label']).'"' : '';
 
 		$elId = $this->getElId();
@@ -126,7 +122,7 @@ class newsmanForm {
 		$elId = $this->getElId();
 
 		return "<div $type class=\"newsman-form-item $req $it $elId\">".
-					'<label class="checkbox">'.
+					'<label class="checkbox newsman-form-item-label">'.
 						'<input type="checkbox" '.$chkd.' name="'.htmlspecialchars($item['name']).'" value="'.htmlspecialchars($item['value']).'"> '.
 						htmlentities($item['label']).
 					'</label>'.
@@ -162,7 +158,7 @@ class newsmanForm {
 		$elId = $this->getElId();
 
 		return "<div $type class=\"newsman-form-item $req $it $elId\">".
-					'<label>'.$item['label'].'</label>'.
+					'<label class="newsman-form-item-label">'.$item['label'].'</label>'.
 					'<span style="display:none;" class="newsman-required-msg radio">'.__('Required', NEWSMAN).'</span>'.
 					'<div class="newsman-radio-options">'.
 					$radios.
@@ -228,7 +224,7 @@ class newsmanForm {
 			$btn = '<button type="submit" class="'.$btnClasses.'" name="nwsmn-subscribe" value="1">'.htmlentities($item['value']).'</button>';
 
 		} else {
-			$btn = '<input type="submit" class="button btn" name="nwsmn-subscribe" value="'.htmlspecialchars($item['value']).'">';
+			$btn = '<input type="submit" class="newsman-button-default button btn" name="nwsmn-subscribe" value="'.htmlspecialchars($item['value']).'">';
 		}
 
 		$elId = $this->getElId();

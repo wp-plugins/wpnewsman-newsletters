@@ -36,7 +36,7 @@ class newsmanUtils {
 			return $eml;
 		}
 
-		$emailSource = file_get_contents($filePath);
+		$emailSource = $this->file_get_contents_utf8($filePath);
 
 		$b = '';
 		$state = 'subject';
@@ -79,7 +79,7 @@ class newsmanUtils {
 		$path = NEWSMAN_PLUGIN_PATH.DIRECTORY_SEPARATOR.'install'.DIRECTORY_SEPARATOR.$lang.DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.$fileName; 
 		$tpl = '';
 		if ( file_exists($path) ) {
-			$tpl = file_get_contents($path);
+			$tpl = $this->file_get_contents_utf8($path);
 		}
 		return $tpl;
 	}
@@ -844,7 +844,6 @@ class newsmanUtils {
 
 	public function compileThumbnails($tpl) {
 		return preg_replace_callback('/<img[^>]*\>/i', array($this, 'compileThumbnailsCallback'), $tpl);
-		//return preg_replace_callback('/<img[^>]*?gsfinal[^>]*?\>/i', array($this, 'compileThumbnailsCallback'), $tpl);
 	}
 
 	/**
@@ -919,10 +918,10 @@ class newsmanUtils {
 		$tpl->system = false;
 		$tpl->name = $templateName;
 		$tpl->subject = __('Enter Subject Here', NEWSMAN);
-		$tpl->html = $this->processAssetsURLs(file_get_contents($fileName), $templateURL);
+		$tpl->html = $this->processAssetsURLs($this->file_get_contents_utf8($fileName), $templateURL);
 
 		if ( file_exists($particlesFileName) ) {
-			$tpl->particles = $this->processAssetsURLs(file_get_contents($particlesFileName), $templateURL);
+			$tpl->particles = $this->processAssetsURLs($this->file_get_contents_utf8($particlesFileName), $templateURL);
 		} else {
 			$defParticles = $this->getDefaultTemplateParticles();
 			$tpl->particles = $defParticles ? $defParticles : '';
@@ -970,10 +969,10 @@ class newsmanUtils {
 			$tpl->system = false;
 			$tpl->name = $tplObj['name'];
 			$tpl->subject = __('Enter Subject Here', NEWSMAN);
-			$tpl->html = $this->processAssetsURLs(file_get_contents($fileName), $templateURL);
+			$tpl->html = $this->processAssetsURLs($this->file_get_contents_utf8($fileName), $templateURL);
 
 			if ( file_exists($particlesFileName) ) {
-				$tpl->particles = $this->processAssetsURLs(file_get_contents($particlesFileName), $templateURL);
+				$tpl->particles = $this->processAssetsURLs($this->file_get_contents_utf8($particlesFileName), $templateURL);
 			} else {
 				$defParticles = $this->getDefaultTemplateParticles();
 				$tpl->particles = $defParticles ? $defParticles : '';
@@ -1040,7 +1039,7 @@ class newsmanUtils {
 			DIRECTORY_SEPARATOR.
 			'_digest.html';
 
-		return file_get_contents($particlesFile);
+		return $this->file_get_contents_utf8($particlesFile);
 	}
 
 	/**
@@ -1075,21 +1074,29 @@ class newsmanUtils {
 	 * @param [String] New Template name
 	 * @return {newsmanEmailTemplate} Copy template object
 	 */
-	public function duplicateTemplate($origianTplId, $name = false) {
+	public function duplicateTemplate($origianTplId, $name = false, $newAssignedList = false) {
 		$tpl = newsmanEmailTemplate::findOne('id = %d', array( $origianTplId ) );
 
 		if ( $tpl ) {
 
 			$newTpl = new newsmanEmailTemplate();
 
-			$newTpl->system 	= false;
-			$newTpl->name 		= $name ? $name : $tpl->name.' '.__('Copy', NEWSMAN);
-			$newTpl->subject 	= $tpl->subject;
-			$newTpl->html 		= $tpl->html;
-			$newTpl->plain 		= $tpl->plain;
-			$newTpl->assetsURL 	= $tpl->assetsURL;
-			$newTpl->assetsPath	= $tpl->assetsPath;
-			$newTpl->particles 	= $tpl->particles;
+			$newTpl->system 		= $tpl->system;
+			$newTpl->system_type 	= $tpl->system_type;
+			$newTpl->assigned_list	= ($newAssignedList !== false) ? $newAssignedList : $tpl->assigned_list;
+
+			if ( $newAssignedList !== false ) { // copying system templates for a new list
+				$newTpl->name 		= $tpl->name;
+			} else {
+				$newTpl->name		= $name ? $name : $tpl->name.' '.__('Copy', NEWSMAN);
+			}			
+
+			$newTpl->subject 		= $tpl->subject;
+			$newTpl->html 			= $tpl->html;
+			$newTpl->plain 			= $tpl->plain;
+			$newTpl->assetsURL 		= $tpl->assetsURL;
+			$newTpl->assetsPath		= $tpl->assetsPath;
+			$newTpl->particles 		= $tpl->particles;
 
 			$newTpl->save();
 
@@ -1132,16 +1139,42 @@ class newsmanUtils {
 	/* --------------------------------------------------------------------------------------------------------- */
 
 	function versionToNum($ver) {
-		if ( preg_match('/^(\d+)\.(\d+)\.(\d+)(.*?)$/', $ver, $matches) ) {
+		if ( preg_match('/^(\d+)\.(\d+)\.(\d+)(.*?)$/', $ver, $matches) ) {		
 			$a = $matches[1];
 			$b = $matches[2];
 			$c = $matches[3];
-			$d = preg_replace('/\D+/', '', $matches[4]);
+			$prefix = $matches[4];
+			$d = preg_replace('/\D+/', '', $prefix);
+		} else {
+			return null;
+		}	
+
+		// a bb cc prefixNumber ddd
+		// prefixNumber = alpha = 1
+		// prefixNumber = beta  = 2
+		// prefixNumber = gamma = 3
+		// prefixNumber = rc    = 3
+
+		$prefixNumber = 0;
+
+		if ( $prefix === '' ) {
+			$prefixNumber = 9; // release
+		} else {
+			if ( preg_match('/\bpre-alpha\b/i', $prefix) ) {
+				$prefixNumber = 0;
+			} else if ( preg_match('/\balpha\b/i', $prefix) ) {
+				$prefixNumber = 1;
+			} else if ( preg_match('/\bbeta\b/i', $prefix) ) {
+				$prefixNumber = 2;
+			} else if ( preg_match('/\b(gamma|rc)\b/i', $prefix) ) {
+				$prefixNumber = 3;
+			}
 		}
 
 		$s = $a.
 			 str_pad($b, 2, '0', STR_PAD_LEFT).
 			 str_pad($c, 2, '0', STR_PAD_LEFT).
+			 $prefixNumber.
 			 str_pad($d, 3, '0', STR_PAD_LEFT);
 
 		return is_numeric($s) ? intval($s) : 0;
@@ -1300,12 +1333,6 @@ class newsmanUtils {
 				'template' => 'bad-email.html',
 				'excerpt' => 'bad-email-ex.html'
 			),
-			'changeSubscription' => array(
-				'slug' => 'change-subscription',
-				'title' => __('Change Subscription', NEWSMAN),
-				'template' => 'change-subscription.html',
-				'excerpt' => 'change-subscription-ex.html'
-			),
 			'confirmationRequired' => array(
 				'slug' => 'confirmation-required',
 				'title' => __('Confirmation Required', NEWSMAN),
@@ -1329,6 +1356,12 @@ class newsmanUtils {
 				'title' => __('Successfully unsubscribed', NEWSMAN),
 				'template' => 'unsubscribe-succeed.html',
 				'excerpt' => 'unsubscribe-succeed-ex.html'
+			),
+			'unsubscribeConfirmation' => array(
+				'slug' => 'unsubscribe-confirmation-required',
+				'title' => __('Please confirm your unsubscribe decision', NEWSMAN),
+				'template' => 'unsubscribe-confirmation-required.html',
+				'excerpt' => 'unsubscribe-confirmation-required-ex.html'
 			)
 		);
 
@@ -1365,54 +1398,79 @@ class newsmanUtils {
 		// loading email templates
 
 		$emailTemplates = array(
-			'addressChanged' => array( __('Email address updated', NEWSMAN),'address-changed.txt'),
-			'adminSubscriptionEvent' => array( __('Administrator notification - new subscriber', NEWSMAN), 'admin-subscription-event.txt'),
-			'adminUnsubscribeEvent' => array(  __('Administrator notification - user unsubscribed', NEWSMAN), 'admin-unsubscribe-event.txt'),
-			'confirmation' => array( __('Subscription confirmation', NEWSMAN), 'confirmation.txt'),
-			'unsubscribe' => array( __('Unsubscribe notification', NEWSMAN), 'unsubscribe.txt'),
-			'welcome' => array( __('Welcome letter, thanks for subscribing', NEWSMAN), 'welcome.txt')
+			array(
+				'type' => NEWSMAN_ET_ADDRESS_CHANGED,
+				'name' => __('Email address updated', NEWSMAN),
+				'file' => 'address-changed.txt'
+			),
+			array(
+				'type' => NEWSMAN_ET_ADMIN_SUB_NOTIFICATION,
+				'name' => __('Administrator notification - new subscriber', NEWSMAN),
+				'file' =>  'admin-subscription-event.txt'
+			),
+			array(
+				'type' => NEWSMAN_ET_ADMIN_UNSUB_NOTIFICATION,
+				'name' => __('Administrator notification - user unsubscribed', NEWSMAN),
+				'file' =>  'admin-unsubscribe-event.txt'
+			),
+			array(
+				'type' => NEWSMAN_ET_CONFIRMATION,
+				'name' => __('Subscription confirmation', NEWSMAN),
+				'file' =>  'confirmation.txt'
+			),
+			array(
+				'type' => NEWSMAN_ET_UNSUBSCRIBE,
+				'name' => __('Unsubscribe notification', NEWSMAN),
+				'file' =>  'unsubscribe.txt'
+			),
+			array(
+				'type' => NEWSMAN_ET_WELCOME,
+				'name' => __('Welcome letter, thanks for subscribing', NEWSMAN),
+				'file' =>  'welcome.txt'
+			),
+			array(
+				'type' => NEWSMAN_ET_UNSUBSCRIBE_CONFIRMATION,
+				'name' => __('Unsubscribe confirmation', NEWSMAN),
+				'file' => 'unsubscribe-confirmation.txt'
+			)
 		);
 
 		$tplFileName = NEWSMAN_PLUGIN_PATH.DIRECTORY_SEPARATOR."email-templates".DIRECTORY_SEPARATOR."newsman-system".DIRECTORY_SEPARATOR."newsman-system.html";
-		$baseTpl = file_get_contents($tplFileName);
+		$baseTpl = $this->file_get_contents_utf8($tplFileName);
 
-		foreach ($emailTemplates as $key => $v) {
+		foreach ($emailTemplates as $tplDef) {
 
-			$name = $v[0];
-			$fileName = $v[1];
+			$name = $tplDef['name'];
+			$fileName = $tplDef['file'];
 
-			$tplId = $options->get('emailTemplates.'.$key);
 			$eml = $this->emailFromFile($fileName, $lang);
 
-			if ( !$tplId ) {				
+			$tpl = newsmanEmailTemplate::findOne('`system` = 1 AND `assigned_list` = %d AND `system_type` = %d', array(0, $tplDef['type']));
 
+			if ( !$tpl ) {
 				$tpl = new newsmanEmailTemplate();
+			} else if ( !$replace || !$this->installLangExists($lang) ) {
+				continue;
+			}
 
-				$tmp_base = $baseTpl;
+			$tmp_base = $baseTpl;
 
-				$tpl->name = $name;
-				$tpl->subject = $eml['subject'];
-				$tpl->html = $this->replaceSectionContent($tmp_base, 'std_content', $eml['html']);
-				$tpl->plain = $eml['plain'];
-				$tpl->system = true;
+			$tpl->name = $name;
+			$tpl->subject = $eml['subject'];
+			$tpl->html = $this->replaceSectionContent($tmp_base, 'std_content', $eml['html']);
+			$tpl->plain = $eml['plain'];
+			$tpl->system = true;
+			$tpl->system_type = $tplDef['type'];
 
-				$tplId = $tpl->save();
+			$tpl->save();
+		}
+	}
 
-				$options->set('emailTemplates.'.$key, $tplId);
-			} else if ( $replace && $this->installLangExists($lang) ) {
-				$tpl = newsmanEmailTemplate::findOne('id = %d', array($tplId));
-
-				if ( $tpl ) {
-					$tmp_base = $baseTpl;
-
-					$tpl->name = $name;
-					$tpl->subject = $eml['subject'];
-					$tpl->html = $this->replaceSectionContent($tmp_base, 'std_content', $eml['html']);
-					$tpl->plain = $eml['plain'];
-					$tpl->system = true;
-
-					$tpl->save();
-				}
+	public function copySystemTemplatesForList($listId) {
+		$tpls = newsmanEmailTemplate::findAll('`system` = 1 AND `assigned_list` = 0');
+		if ( $tpls ) {
+			foreach ($tpls as $tpl) {
+				$this->duplicateTemplate($tpl->id, false, $listId);
 			}
 		}
 	}
@@ -1434,7 +1492,7 @@ class newsmanUtils {
 
 	public function getLastChanges() {
 		$changes = '';
-		$changelog = file_get_contents(NEWSMAN_PLUGIN_PATH.DIRECTORY_SEPARATOR.'readme.txt');
+		$changelog = $this->file_get_contents_utf8(NEWSMAN_PLUGIN_PATH.DIRECTORY_SEPARATOR.'readme.txt');
 		if ( preg_match('/==\s*Changelog\s*==[\s\S]*?\=\s*([\d\.]+)\s*\=([\s\S]*?)\=\s+[\d\.]+/i', $changelog, $matches) ) {
 			$changes = "<ul>\n";
 			foreach (explode("\n", $matches[2]) as $str) {
@@ -1509,9 +1567,15 @@ class newsmanUtils {
 		if ( is_string($mix) ) return mb_check_encoding($mix, 'UTF-8') ? $mix : utf8_encode($mix);
 		if ( !is_array($mix) ) return $mix; 
 		$ret = array(); 
-		foreach($mix as $k=>$v) { 
+		foreach($mix as $k=>$v) {
 			$ret[$k] = $this->utf8_encode_all($v);
 		} 
 		return $ret; 
 	} 	
+
+	public function file_get_contents_utf8($fn) {
+		$content = file_get_contents($fn);
+		return mb_convert_encoding($content, 'UTF-8',
+			mb_detect_encoding($content, 'UTF-8, ISO-8859-1', true));
+	}	
 }

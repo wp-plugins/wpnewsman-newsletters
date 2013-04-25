@@ -34,7 +34,7 @@
 			<div class="form-vertical">
 				<label for="eml-to"><h3><?php _e('To:', NEWSMAN); ?></h3></label>
 				<div id="eml-to" type="text" class="multis span9">
-					<?php $g = newsman::getInstance(); echo $g->getEmailToAsOptions(); ?>
+					<?php $g = newsman::getInstance(); echo $g->getEmailToAsTags('li'); ?>
 				</div>
 			</div>
 		</div>

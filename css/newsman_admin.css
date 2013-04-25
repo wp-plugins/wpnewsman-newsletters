@@ -18,6 +18,14 @@ input[type="text"], input[type="password"], input[type="number"], input[type="se
 	display: none;
 }
 
+.newsman-shortcode-menu {
+	height: 190px !important;
+}
+
+.email.editable.editable-click {
+	cursor: pointer;
+}
+
 .noselect {
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
@@ -84,8 +92,11 @@ tr:hover .newsman-inline-controls {
 
 
 /************/
+ 
 
-
+#posts-controls {
+	height: 223px;
+}
 
 #posts-controls select {
 	width: 240px;
@@ -426,6 +437,8 @@ tr:hover .newsman-inline-controls {
 	right: 10px;
 	width: 150px;
 	text-align: right;	
+
+	font-size: 
 }
 
 #newsman-bcst-posts-pv {
@@ -437,8 +450,10 @@ tr:hover .newsman-inline-controls {
 
 #newsman-bcst-posts {
 	overflow-y: auto;
-	position: relative;
-	/*height: 280px;*/
+	position: absolute;
+	top: 223px;
+	bottom: 0;
+	width: 100%;
 }
 
 #newsman-bcst-posts .stub-wrap {
@@ -448,7 +463,7 @@ tr:hover .newsman-inline-controls {
 }
 
 
-#newsman-bcst-posts .stub {
+#newsman-bcst-posts .stub {	
 	width: 100%;
 	height: 100%;
 	display: table-cell;
@@ -496,8 +511,33 @@ tr:hover .newsman-inline-controls {
 	background: #F6F6F6;	
 }
 
+.newsman-bcst-topbar table tr {
+	height: 2.3em;
+}
+
+.newsman-bcst-topbar table tr > td {
+	padding-right: 10px;
+	white-space: nowrap;
+	width: 100px;
+}
+
+.newsman-bcst-topbar table tr > td + td {
+	width: 245px;
+}
+
+.newsman-bcst-topbar table tr > td + td + td {
+	width: 100%;
+}
+
+.newsman-bcst-topbar table td {
+	vertical-align: middle;
+}
+
+.newsman-bcst-topbar label {
+	margin: 0;
+}
+
 .newsman-bcst-topbar label .text {
-	width: 85px;
 	display: inline-block;
 }
 
@@ -1285,6 +1325,10 @@ input.newsman-field-options-radio-opt-input {
 	font-weight: bold;
 }
 
+#newsman-templates .label {
+	margin-left: 5px;
+}
+
 .newsman-delete-tpl {
 	color: #C0423D !important;
 }
@@ -1305,9 +1349,8 @@ input.newsman-field-options-radio-opt-input {
 #newsman-private-posts-lbl,
 #newsman-show-thmb-placeholder-lbl  {
 	display: inline-block;
-	margin-left: 10px;
+	/*margin-left: 10px;*/
 }
-
 
 /*********   TEMPLATES STORE ************/
 

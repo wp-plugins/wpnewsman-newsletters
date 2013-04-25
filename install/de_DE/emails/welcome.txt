@@ -7,7 +7,7 @@ Um zu gewährleisten, dass sie künftig tolle Tipps, Tricks und Angebote erhalten,
 [newsman wp="url"]
 
 --Sie erhalten diese email, da sich sich bei [newsman sub="ts"] auf [newsman wp="url"] als Newletterabonnent angemeldet haben. Sie können ihren Abonnentenstatus unter den nachstehend angeführten Link ändern: 
-[newsman link="update-subscription"]
+[newsman link='unsubscribe']
 --- html ---
 <p>Hallo,</p>
 <p>danke, dass sie unseren Newsletter abonniert haben. Sie sind jetzt bei unserem Newsletter angemeldet und werden tolle Tipps, Tricks und Aktionen ein paar mal im Monat zugesendet bekommen.</p>
@@ -36,7 +36,7 @@ Um zu gewährleisten, dass sie künftig tolle Tipps, Tricks und Angebote erhalten,
 		</div> 
 		<div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 11px; line-height: 17px; color: #666; text-shadow: 0 1px 0 #ffffff;">
 		 Sie können ihren Abonnentenstatus unter den nachstehend angeführten Link ändern: 
-		 <a href="[newsman link='update-subscription']" style="border: none; color: #0084b4; text-decoration: none;">Email-Adresse ändern oder Abmeldung unter</a>.</div> 
+		 <a href="[newsman link='unsubscribe']" style="border: none; color: #0084b4; text-decoration: none;">Email-Adresse ändern oder Abmeldung unter</a>.</div> 
 		<div>
 		 <a href="#" style="border: none; color: #0084b4; text-decoration: none; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; text-decoration: none; font-size: 11px; line-height: 17px; color: #999999; text-shadow: 0 1px 0 #ffffff;">Copyright (C) [newsman wp="blogname"]. <span style="white-space: nowrap;">Alle Rechte vorbehalten.</span></a>
 		</div> </td> 

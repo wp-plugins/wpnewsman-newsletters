@@ -479,6 +479,10 @@ jQuery(function($){
 				var protocol = this.options.demoMode ? "GET" : "POST",
 					form = $('<form method="' + protocol + '" enctype="multipart/form-data"></form>');
 
+				for ( var p in params ) {
+					$('<input type="hidden" name="'+p+'" value="'+params[p]+'">').appendTo(form);
+				}
+
 				form.attr({
 					//'action': addQuerystring(this.options.action, params),
 					'action': this.options.action,
@@ -981,7 +985,6 @@ jQuery(function($){
 				// events
 				// return false to cancel submit
 				onSubmit: function(id, fileName){
-					// console.log('onSubmit: '+fileName);
 					that._trigger('onAdd', 0, { id: id, fileName: fileName });
 				},
 				onComplete: function(id, fileName, responseJSON){					
@@ -991,19 +994,14 @@ jQuery(function($){
 						responseJSON: responseJSON,
 						actualFileName: responseJSON.actualFileName						
 					});
-					// console.log('onComplete: '+fileName);
-					// console.log('responseJSON: '+responseJSON);
 				},
 				onCancel: function(id, fileName){
-					// console.log('onCancel: '+fileName);
 					that._trigger('onCancel', 0, { id: id, fileName: fileName });
 				},
 				onUpload: function(id, fileName, xhr){
-					// console.log('onUpload: '+fileName);
 					that._trigger('onUpload', 0, { id: id, fileName: fileName });
 				},
 				onProgress: function(id, fileName, loaded, total){
-					// console.log('onProgress: '+fileName);
 					that._trigger('onProgress', 0, {
 						id: id,
 						fileName: fileName,
@@ -1013,7 +1011,6 @@ jQuery(function($){
 					});
 				},
 				onError: function(id, fileName, reason) {
-					// console.log('onError: '+fileName);
 					that._trigger('onError', 0, { id: id, fileName: fileName, reason: reason });
 				},
 				// messages

@@ -4,7 +4,7 @@ Un contact a rejoint votre liste. Les details du contact sont ci-dessous:
 
 [newsman sub="*"]
 --
-[newsman wp="url"]/wp-admin/ -> Settings -> WPNewsman
+[newsman wp="url"]/wp-admin/ -> Paramètres -> WPNewsman
 --- html ---
 <p>Un contact a rejoint votre liste. Les details du contact sont ci-dessous:</p>
 <ul>[newsman sub="*" tag="li"]</ul>

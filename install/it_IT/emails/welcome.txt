@@ -17,7 +17,7 @@ Cordialmente,
 Stai ricevendo questa email poiché il [newsman sub="ts"] all'indirizzo [newsman wp="url"] hai accettato di iscriverti alla nostra newsletter.
 						 
 Puoi modificare o cancellare la tua iscrizione al seguente link:
-[newsman link="update-subscription"]
+[newsman link='unsubscribe']
 --- html ---
 <p>Ciao,</p>
 <p>Grazie per la tua iscrizione. Sei ora iscritto alla nostra newsletter, dove riceverai consigli, informazioni, aggiornamenti e strategie alcune volte al mese. Speriamo che siano apprezzati e che siano preziosi per te! </p>
@@ -44,7 +44,7 @@ Puoi modificare o cancellare la tua iscrizione al seguente link:
 		</div> 
 		<div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 11px; line-height: 17px; color: #666; text-shadow: 0 1px 0 #ffffff;">
 		 You can also 
-		 <a href="[newsman link='update-subscription']" style="border: none; color: #0084b4; text-decoration: none;">modifica la tua email or disiscriviti qui</a>.</div> 
+		 <a href="[newsman link='unsubscribe']" style="border: none; color: #0084b4; text-decoration: none;">modifica la tua email or disiscriviti qui</a>.</div> 
 		<div>
 		 <a href="#" style="border: none; color: #0084b4; text-decoration: none; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; text-decoration: none; font-size: 11px; line-height: 17px; color: #999999; text-shadow: 0 1px 0 #ffffff;">Copyright (C) [newsman wp="blogname"]. <span style="white-space: nowrap;">All rights reserved.</span></a>
 		</div> </td> 

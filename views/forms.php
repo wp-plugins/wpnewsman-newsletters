@@ -19,11 +19,11 @@
 	<table id="newsman-forms" class="table table-striped table-bordered">
 		<thead>
 			<tr>
-				<th class="check-column"><input id="newsman-checkall" type="checkbox"></th>
-				<th><?php _e('Name', NEWSMAN); ?></th>
-				<th><?php _e('Confirmed', NEWSMAN); ?></th>
-				<th><?php _e('Unconfirmed', NEWSMAN); ?></th>
-				<th><?php _e('Unsubscribed', NEWSMAN); ?></th>
+				<th class="check-column"><input id="newsman-checkall" type="checkbox"></th>				
+				<th><?php /* translators: lists and forms table header */ _e('Name', NEWSMAN); ?></th>
+				<th><?php /* translators: lists and forms table header */ _e('Confirmed', NEWSMAN); ?></th>
+				<th><?php /* translators: lists and forms table header */ _e('Unconfirmed', NEWSMAN); ?></th>
+				<th><?php /* translators: lists and forms table header */ _e('Unsubscribed', NEWSMAN); ?></th>
 			</tr>
 		</thead>
 		<tbody>

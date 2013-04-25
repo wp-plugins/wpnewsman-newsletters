@@ -12,29 +12,6 @@
 	min-height: 10px;
 }
 
-/*.cke_editable:hover [gsedit] {
-	border: 1px dashed #e1e1e1;
-}*/
-
-/*.outlet:hover .outlet-buttons {
-	visibility: visible;
-}
-
-.has-content {
-	min-height: 0;
-	background: transparent;
-}
-.has-content:after {
-	display: none;			
-}
-.outlet-handle {
-	display: none;
-}
-
-.container .outlet-handle {
-	display: block;
-}*/
-
 .outlet-buttons,
 .outlet-buttons *,
 .outlet-handle {
@@ -47,11 +24,6 @@
 	color: black;
 	font-style: normal !important;
 	text-decoration: none !important;
-
-/*	padding: 3px;
-	position: absolute;
-	top: 2px;
-	right: 2px;*/
 
 	background: rgba(80,80,80,0.3);
 	border-radius: 3px;         
@@ -72,6 +44,8 @@
 .outlet-buttons li {
 	margin-left: 3px;
 	margin-bottom: 2px;
+	min-width: 50px;
+	word-wrap: none;
 }
 .outlet-buttons li:first-child {
 	margin-left: 0;
@@ -82,7 +56,7 @@
 	background: rgba(255,255,255,0.8);
 	border-radius: 3px;
 	padding: 2px 4px;           
-	cursor: pointer;
+	cursor: pointer !important;
 }
 .outlet-buttons li:hover {
 	background: white;

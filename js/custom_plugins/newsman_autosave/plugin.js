@@ -12,18 +12,37 @@
 			editor.ui.addNewsmanLabel( 'newsmanSavingState', {
 				label : '',
 				toolbar: 'newsmanSavingState'
-			});			
+			});
+
+			function getFunkKeys(e) {
+				if ( e.originalEvent ) {
+					e = e.originalEvent;
+				} else if ( e.data && e.data.$ ) {
+					e = e.data.$;
+				}
+				return {
+					metaKey: 	e.keyCode === 91 || e.keyCode === 92 || e.metaKey,
+					shiftKey: 	e.keyCode === 16 || e.shiftKey,
+					ctrlKey: 	e.keyCode === 17 || e.ctrlKey,
+					altKey: 	e.keyCode === 18 || e.altKey
+				};
+			}
 
 			editor.on('instanceReady', function(){
 				label = editor.ui.get('newsmanSavingState');				
 
 				// keyup handler
 				var t = null;
+				this.document.on("keydown", function(e){
+					if ( t ) { clearTimeout(t); }
+				});
 				this.document.on("keyup", function(e){
 					if ( t ) {
 						clearTimeout(t);
 					}
-					if ( !e.metaKey && !e.ctrlKey && !e.shiftKey && !e.altKey ) {
+					var ev = getFunkKeys(e);
+
+					if ( !ev.metaKey && !ev.ctrlKey && !ev.shiftKey && !ev.altKey ) {
 						t = setTimeout(function() {
 							t = null;
 							editor.fire('newsmanSave.ckeditor');
@@ -47,7 +66,8 @@
 
 			editor.on('newsmanSave.ckeditor', function(){
 				if ( label ) {
-					label.set('Saved at '+(new Date()).toLocaleTimeString());
+					var lbl = (typeof newsmanL10n !== 'undefined' && newsmanL10n.savedAt) || 'Saved at'
+					label.set(lbl+' '+(new Date()).toLocaleTimeString());
 				}				
 			});
 		}

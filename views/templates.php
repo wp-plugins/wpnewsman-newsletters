@@ -20,8 +20,8 @@
 					<span class="caret"></span>
 				</button>
 				<ul class="dropdown-menu">
-					<li><a id="btn-open-store" href="#"><?php _e('Browse for templates...'); ?></a></li>
-					<li><a id="btn-import-from-file" href="#"><?php _e('Import from file'); ?></a></li>
+					<li><a id="btn-open-store" href="#"><?php _e('Browse for templates...', NEWSMAN); ?></a></li>
+					<li><a id="btn-import-from-file" href="#"><?php _e('Import from file', NEWSMAN); ?></a></li>
 				</ul>
 			</div>
 			
@@ -37,19 +37,72 @@
 	</div>
 
 
-	<table id="newsman-templates" class="table table-striped table-bordered">
-		<thead>
-			<tr>
-				<th scope="col" class="check-column"><input id="newsman-checkall" type="checkbox"></th>
-				<th scope="col"><?php _e('Name', NEWSMAN); ?></th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td colspan="6" class="blank-row"><img src="<?php echo NEWSMAN_PLUGIN_URL; ?>/img/ajax-loader.gif"> <?php _e('Loading...', NEWSMAN); ?></td>
-			</tr>
-		</tbody>
-	</table>
+	<div class="bs-docs-example">
+		<ul id="tabs-header" class="nav nav-tabs">
+			<li class="active"><a href="#my-templates" data-toggle="tab"><?php _e('My Templates', NEWSMAN); ?></a></li>
+			<!-- <li><a href="#system-templates" data-toggle="tab">System Templates</a></li> -->
+			<li class="dropdown">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown"><?php _e('System Templates', NEWSMAN); ?> <b class="caret"></b></a>
+				<ul class="dropdown-menu">
+<!-- 					<li><a href="#default-system-templates" data-toggle="tab">Default System Templates</a></li>
+					<li><a href="#wp-users-system-templates" data-toggle="tab">wp-users System Templates</a></li> -->
+				</ul>
+			</li>			
+		</ul>
+		<div id="tabs-container" class="tab-content">
+			<div class="tab-pane fade in active" id="my-templates">
+				<table id="newsman-templates" class="table table-striped table-bordered">
+					<thead>
+						<tr>
+							<th scope="col" class="check-column"><input id="newsman-checkall" class="newsman-cb-selectall" type="checkbox"></th>
+							<th scope="col"><?php _e('Name', NEWSMAN); ?></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td colspan="6" class="blank-row"><img src="<?php echo NEWSMAN_PLUGIN_URL; ?>/img/ajax-loader.gif"> <?php _e('Loading...', NEWSMAN); ?></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="tab-pane fade" id="default-system-templates">
+				<h4>Default System Templates</h4>
+				<table id="newsman-templates" class="table table-striped table-bordered">
+					<thead>
+						<tr>
+							<th scope="col" class="check-column"><input id="newsman-checkall" type="checkbox"></th>
+							<th scope="col"><?php _e('Name', NEWSMAN); ?></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td colspan="6" class="blank-row"><img src="<?php echo NEWSMAN_PLUGIN_URL; ?>/img/ajax-loader.gif"> <?php _e('Loading...', NEWSMAN); ?></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="tab-pane fade" id="wp-users-system-templates">
+				<h4><span class="label label-info">WP-USERS</span> system templates</h4>
+				<table id="newsman-templates" class="table table-striped table-bordered">
+					<thead>
+						<tr>
+							<th scope="col" class="check-column"><input id="newsman-checkall" type="checkbox"></th>
+							<th scope="col"><?php _e('Name', NEWSMAN); ?></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td colspan="6" class="blank-row"><img src="<?php echo NEWSMAN_PLUGIN_URL; ?>/img/ajax-loader.gif"> <?php _e('Loading...', NEWSMAN); ?></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
+
+
+
 
 	<!--		 MODALS 		-->
 

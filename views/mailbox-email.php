@@ -66,7 +66,7 @@
 					<label class="control-label" for="newsman-email-to"><?php _e('To:', NEWSMAN); ?></label>
 					<div class="controls">
 						<div id="eml-to" type="text" class="multis span7" name="newsman_email_to">
-							<?php $g = newsman::getInstance(); echo $g->getEmailToAsOptions(); ?>
+							<?php $g = newsman::getInstance(); echo $g->getEmailToAsTags('li'); ?>
 						</div>
 					</div>
 				</div>

@@ -17,6 +17,21 @@ jQuery(function($){
 		return false;
 	});
 
+	ko.bindingHandlers.placeholder = {
+	    init: function(element, valueAccessor, allBindingsAccessor, viewModel) {
+	      //init logic
+	      	$(element).placeholder();
+        	var underlyingObservable = valueAccessor();
+        	//ko.applyBindingsToNode(element, { attr: { placeholder: underlyingObservable } } );
+	    },
+	    update: function(element, valueAccessor, allBindingsAccessor, viewModel) {
+	       //update logic
+	       var val = ko.utils.unwrapObservable(valueAccessor());	       
+	       $(element).attr('placeholder', val);
+	       $(element).val('');
+	    }
+	};	
+
 	function buildForm(formDef) {
 		var that = {},
 			formUl = $('ul.newsman-form').empty().get(0),
@@ -35,9 +50,12 @@ jQuery(function($){
 
 		// Addes knockout handlers and observables to the form element definition
 		function addHandlers(el) {
+
 			el.name = ko.computed(function() {				
-				var v = this.value && this.value();
-				return v ? fieldName(v) : fieldName(this.label());
+				var v = this.value && this.value(),
+					lbl = this.label && this.label();
+
+				return lbl ? fieldName( lbl ) : fieldName(v || 'unnamed') ;
 			}, el);
 
 			var elType = el.type();
@@ -153,6 +171,12 @@ jQuery(function($){
 					return classes;
 				};
 			}
+
+			el.ph = ko.computed(function(){
+				return viewModel.useInlineLabels() ? (this.label && this.label()) || this.name() : '';
+			}, el);
+
+
 		}
 
 		function normalizeDefinition(el) {

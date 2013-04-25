@@ -3,7 +3,7 @@
 Plugin Name: G-Lock WPNewsman Lite
 Plugin URI: http://wpnewsman.com
 Description: You get simple yet powerful newsletter solution for WordPress. Now you can easily add double optin subscription forms in widgets, articles and pages, import and manage your lists, create and send beautiful newsletters directly from your WordPress site. You get complete freedom and a lower cost compared to Email Service Providers. Free yourself from paying for expensive email campaigns. WPNewsman plugin updated regularly with new features.
-Version: 1.4.5
+Version: 1.5.0
 Author: Alex Ladyga - G-Lock Software
 Author URI: http://www.glocksoft.com
 */
@@ -25,15 +25,13 @@ Author URI: http://www.glocksoft.com
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-//error_reporting(E_ALL);
-
 // litte helper function to bring some windows love 
 function newsman_ensure_correct_path($path) {
 	return preg_replace('/[\\\\\/]+/', DIRECTORY_SEPARATOR, $path);
 }
 
 define('NEWSMAN', 'wpnewsman');
-define('NEWSMAN_VERSION', '1.4.5');
+define('NEWSMAN_VERSION', '1.5.0');
 
 if ( preg_match('/.*?\.dev$/i', $_SERVER['HTTP_HOST']) ) {
 	define('NEWSMAN_DEV_HOST', true);
@@ -47,6 +45,14 @@ define('NEWSMAN_BLOG_ADMIN_URL', get_bloginfo('wpurl').'/wp-admin/');
 define('NEWSMAN_PLUGIN_DIRNAME', basename(dirname(__FILE__))); // newsman2/newsman2.php
 define('NEWSMAN_PLUGIN_PATHNAME', basename(dirname(__FILE__)).'/'.basename(__FILE__)); // newsman2/newsman2.php
 define('NEWSMAN_PLUGIN_PRO_PATHNAME', 'newsman-pro/newsman-pro.php');
+
+define('NEWSMAN_ET_WELCOME', 1);
+define('NEWSMAN_ET_ADDRESS_CHANGED', 2);
+define('NEWSMAN_ET_ADMIN_SUB_NOTIFICATION', 3);
+define('NEWSMAN_ET_ADMIN_UNSUB_NOTIFICATION', 4);
+define('NEWSMAN_ET_CONFIRMATION', 5);
+define('NEWSMAN_ET_UNSUBSCRIBE', 6);
+define('NEWSMAN_ET_UNSUBSCRIBE_CONFIRMATION', 7);
 
 if ( strpos($_SERVER['REQUEST_URI'], 'frmGetPosts.php') !== false && !defined('INSERT_POSTS_FRAME') ) {
 	define('INSERT_POSTS_FRAME', true);
@@ -136,7 +142,7 @@ function newsmanCheckCompatibility() {
 	$newsman_checklist[] = array(
 		'passed' => function_exists('mcrypt_encrypt'),
 		'name'  => __('MCrypt library', NEWSMAN),
-		'help'  => 'MCrypt library is required to securely store your passwords in the database. Read <a href="http://php.net/manual/en/mcrypt.setup.php">how to Install/Configure</a> or contact your hosting provider if you\'re on a shared hosting.'
+		'help'  => __('MCrypt library is required to securely store your passwords in the database. Read <a href="http://php.net/manual/en/mcrypt.setup.php">how to Install/Configure</a> or contact your hosting provider if you\'re on a shared hosting.', NEWSMAN)
 	);
 
 	// 3. MBString module
@@ -144,8 +150,18 @@ function newsmanCheckCompatibility() {
 	$newsman_checklist[] = array(
 		'passed' => function_exists('mb_check_encoding'),
 		'name' => __('MBString extension', NEWSMAN),
-		'help' => 'MBString extension is required for correct processing of non unicode characters. Read <a href="http://www.php.net/manual/en/mbstring.installation.php">how to Install/Configure</a> or contact your hosting provider if you\'re on a shared hosting.'
+		'help' => __('MBString extension is required for correct processing of non unicode characters. Read <a href="http://www.php.net/manual/en/mbstring.installation.php">how to Install/Configure</a> or contact your hosting provider if you\'re on a shared hosting.', NEWSMAN)
 	);
+
+	if ( !stristr(PHP_OS, 'WIN') ) {
+		// 4. Posix kill
+		$newsman_checklist[] = array(
+			'passed' => function_exists('posix_kill'),
+			'name' => __('posix_kill function', NEWSMAN),
+			'help' => __('posix_kill() function is used by the plugin to manage the senders processes. Make sure it\'s not disabled in your php.ini file.', NEWSMAN)
+		);
+	}
+
 
 	/// ----
 

@@ -27,9 +27,9 @@ jQuery(function($){
 		v = el.val();
 		v = v.replace(/^\s+/).replace(/\s+$/);
 		if ( !v ) {			
-			err('Please fill all the required fields.', el);
+			err(newsmanformL10n.pleaseFillAllTheRequiredFields, el);
 		} else if ( !v.match(/^\S+@\S+\.\S+$/) ) {
-			err('Please check your email address.', el);
+			err(newsmanformL10n.pleaseCheckYourEmailAddress, el);
 		}
 
 		// text validation
@@ -37,7 +37,7 @@ jQuery(function($){
  			el = $('input[type="text"]', block);
 			v = el.val();		
 			if ( !v ) {
-				err('Please fill all the required fields.', el);
+				err(newsmanformL10n.pleaseFillAllTheRequiredFields, el);
 			} 			
 		});
 
@@ -46,7 +46,7 @@ jQuery(function($){
 		$('.newsman-form-item.newsman-form-item-checkbox.newsman-required', form).each(function(i, block){
 			 el = $('input[type="checkbox"]', block);
 			if ( !el.is(':checked') ) {
-				err('Please fill all the required fields.', block);
+				err(newsmanformL10n.pleaseFillAllTheRequiredFields, block);
 			}					 
 		});		
 
@@ -55,7 +55,7 @@ jQuery(function($){
 			el = $('input[type="radio"]:checked', block).get(0);
 
 			if ( !el ) {
-				err('Please fill all the required fields.', block);
+				err(newsmanformL10n.pleaseFillAllTheRequiredFields, block);
 			}				
 		});
 
@@ -65,7 +65,7 @@ jQuery(function($){
 			v = $('select', block).val();
 
 			if ( !v || v === 'null' ) {
-				err('Please fill all the required fields.', block);
+				err(newsmanformL10n.pleaseFillAllTheRequiredFields, block);
 			}				
 		});
 

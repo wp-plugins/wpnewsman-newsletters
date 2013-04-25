@@ -16,8 +16,8 @@
 --
 Вы получили это письмо, так как [newsman sub="ts"] на сайте [newsman wp="url"] вы подписались на нашу рассылку.
 						 
-Вы можете изменить Ваш адрес электронной почты или отписаться по этой ссылке: 
-[newsman link="update-subscription"]
+Вы можете в любое время отписаться по этой ссылке: 
+[newsman link="unsubscribe"]
 --- html ---
 <p>Здравствуйте,</p>
 <p>Спасибо за Вашу подписку. Вы подписались на нашу рассылку и будете получать от нас письма несколько раз в месяц. Мы надеемся, что в них Вы найдете полезную и нужную информацию! Все наши лучшие статьи мы размещаем на этом сайте!</p>
@@ -43,8 +43,8 @@
 			Вы подписались на [newsman sub="ts"] at <a href="[newsman wp='url']" style="border: none; color: #0084b4; text-decoration: none;">[newsman wp="blogname"]</a> с IP адреса: [newsman sub="ip"]
 		</div> 
 		<div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 11px; line-height: 17px; color: #666; text-shadow: 0 1px 0 #ffffff;">
-		 Вы можете 
-		 <a href="[newsman link='update-subscription']" style="border: none; color: #0084b4; text-decoration: none;">изменить Ваш адрес электронной почты или отписаться по этой ссылке</a>.</div> 
+		 Вы можете в любое время
+		 <a href="[newsman link='unsubscribe']" style="border: none; color: #0084b4; text-decoration: none;">отписаться по этой ссылке</a>.</div> 
 		<div>
 		 <a href="#" style="border: none; color: #0084b4; text-decoration: none; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; text-decoration: none; font-size: 11px; line-height: 17px; color: #999999; text-shadow: 0 1px 0 #ffffff;">Copyright (C) [newsman wp="blogname"]. <span style="white-space: nowrap;">Все права сохранены.</span></a>
 		</div> </td> 

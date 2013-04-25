@@ -25,7 +25,7 @@
 			if ( !editor.element.$.className.match('nsmn-type-simple') ) {
 
 				editor.ui.addButton( 'newsmanSave', {
-					label : 'Save',
+					label : (typeof newsmanL10n !== 'undefined' && newsmanL10n.save) || 'Save',
 					command : pluginName,
 					toolbar: 'newsmanSave'
 					//className: 'cke_button_save'

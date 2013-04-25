@@ -51,14 +51,14 @@
 <script type="text/html" id="tpl-newsman-form-el-text">
 	<li gstype="text" class="newsman-form-item text" data-bind="css: { selected: active, 'newsman-required': required }, click: $parent.elClick">
 		<label class="newsman-form-item-label" style="display: none;" data-bind="text: label, visible: !$parent.useInlineLabels()"></label>
-		<input type="text" name="" value="" placeholder="" data-bind="value: value, attr: { placeholder: label, name: name() }">
+		<input type="text" name="" value="" placeholder="" data-bind="value: value, placeholder: ph(), attr: { name: name() }">
 		<button class="close" data-bind="click: removeFormItem">×</button>
 	</li>
 </script>
 <script type="text/html" id="tpl-newsman-form-el-email">
 	<li gstype="text" class="newsman-form-item text" data-bind="css: { selected: active, 'newsman-required': required }, click: $parent.elClick">
 		<label class="newsman-form-item-label" style="display: none;" data-bind="text: label, visible: !$parent.useInlineLabels()"></label>
-		<input type="text" name="" value="" placeholder="" data-bind="value: value, attr: { placeholder: label, name: name() }">
+		<input type="text" name="" value="" placeholder="" data-bind="value: value, placeholder: ph(), attr: { name: name() }">
 	</li>
 </script>
 <script type="text/html" id="tpl-newsman-options-text">
@@ -287,13 +287,17 @@
 
 				<input type="hidden" id="newsman_form_json" name="newsman-form-json" value="" />					
 			</div>
-			<div class="span4 ext-form-block">
-				<?php do_action_ref_array('newsman_get_ext_form_options', array( $list )); ?>
+			<div class="span4 ext-form-block">				
+				<h3><?php _e('This form on external sites? Sure!', NEWSMANP); ?></h3>
+				<p><?php _e('Copy the code below and paste it into any other site that you have.', NEWSMANP); ?></p>
+				<pre><code>&lt;iframe src="<?php echo NEWSMAN_PLUGIN_URL; ?>/form.php?uid=<?php echo $list->uid; ?>" style="border: none; min-height: 400px;"&gt;&lt;/iframe&gt;</code></pre>
+				<h4><?php _e('Custom CSS for external form.', NEWSMANP); ?></h4>
+				<p><?php _e('This CSS will only affect the external form', NEWSMANP); ?></p>
+				<textarea id="newsman_form_extcss" name="newsman-form-extcss"></textarea>
+				
 				
 				<h3><?php _e('Here are the unsubscribe links', NEWSMAN); ?></h3>
 				<p><?php _e('if your are using 3rd party software to send emails:', NEWSMAN); ?></p>
-				<p><strong><?php _e('Link to "update subscription" form:', NEWSMAN); ?></strong></p>
-				<pre><code><?php echo get_bloginfo('wpurl')."/?newsman=update-subscription&code=".$list->uid.':[ucode]'; ?></code></pre>
 				<p><strong><?php _e('Link to instant unsubscribe:', NEWSMAN); ?></strong></p>
 				<pre><code><?php echo get_bloginfo('wpurl')."/?newsman=unsubscribe&code=".$list->uid.':[ucode]'; ?></code></pre>
 				

@@ -64,7 +64,7 @@ class nuFileForm {
 	 * @return boolean TRUE on success
 	 */
 	function save($path) {
-		if(!move_uploaded_file($_FILES['nufile']['tmp_name'], $path)){
+		if ( !move_uploaded_file($_FILES['nufile']['tmp_name'], $path) ) {
 			return false;
 		}
 		return true;

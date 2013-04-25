@@ -21,19 +21,38 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 		  		codeBefore: '<a href="[newsman link=\'unsubscribe\']">',
 		  		codeAfter: '</a>'
 		  	},
-		  	'update-subscription': {
-		  		title: 'Update Subscription',
-		  		code: '<a href="[newsman link=\'update-subscription\']">Update Subscription</a>',
-		  		codeBefore: '<a href="[newsman link=\'update-subscription\']">',
-		  		codeAfter: '</a>'
-		  	},
 		  	'view-email-online': {
 		  		title: 'View Email Online',
 		  		code: "<a href=\"[newsman link='email']\">View email online</a>",
 		  		codeBefore: "<a href=\"[newsman link='email']\">",
 		  		codeAfter: "</a>"
+		  	},
+		  	'hr1': true,
+		  	'follow-on-twitter': {
+		  		title: 'Follow on Twitter',
+		  		code: "<a href=\"[newsman profileurl='twitter']\">Follow on Twitter</a>",
+		  		codeBefore: "<a href=\"[newsman profileurl='twitter']\">",
+		  		codeAfter: "</a>"
+		  	},
+		  	'friend-on-facebook': {
+		  		title: 'Friend on Facebook',
+		  		code: "<a href=\"[newsman profileurl='facebook']\">Friend on Facebook</a>",
+		  		codeBefore: "<a href=\"[newsman profileurl='facebook']\">",
+		  		codeAfter: "</a>"
+		  	},
+		  	'linkedin-shortcode': {
+		  		title: 'Connect via LinkedIn',
+		  		code: "<a href=\"[newsman profileurl='linkedin']\">Connect via LinkedIn</a>",
+		  		codeBefore: "<a href=\"[newsman profileurl='linkedin']\">",
+		  		codeAfter: "</a>"
+		  	},
+		  	'add-on-googleplus': {
+		  		title: 'Add on Google+',
+		  		code: "<a href=\"[newsman profileurl='googleplus']\">Add on Google+</a>",
+		  		codeBefore: "<a href=\"[newsman profileurl='googleplus']\">",
+		  		codeAfter: "</a>"
 		  	}
-		  };
+		  };  
 
 			function htmlEntities(str) {
 				return (str+'').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -73,12 +92,20 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 				   //voiceLabel : lang.panelVoiceLabel
 				},
 
+				onOpen : function() {
+					this._.panel.element.$.className += ' newsman-shortcode-menu';	
+				},
+
 				init : function()
 				{
 				   this.startGroup( "Insert Shortcode" );
 
 				   for ( var val in sCodes ) {
-				   		this.add(val, sCodes[val].title);
+				   		if ( sCodes[val] === true ) {
+							this.add('-', '<hr>');
+				   		} else {
+				   			this.add(val, sCodes[val].title);	
+				   		}				   		
 				   }
 				},
 

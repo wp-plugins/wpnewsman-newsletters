@@ -1,5 +1,6 @@
 <div class="wrap wp_bootstrap" id="newsman-page-options">
 	<?php include("_header.php"); ?>
+	
 	<div class="row-fluid" style="border-bottom: 1px solid #DADADA; height: 63px;">
 		<div class="span12">
 			<h2><?php _e('Settings', NEWSMAN); ?></h2>
@@ -19,6 +20,8 @@
 				/* translators: Options page tab title */
 				array( 'title' => __('Delivery Settings', NEWSMAN), 'id' => 'delivery' ),
 				/* translators: Options page tab title */
+				array( 'title' => __('API', NEWSMAN), 'id' => 'api' ),				
+				/* translators: Options page tab title */
 				array( 'title' => __('Uninstallation', NEWSMAN), 'id' => 'uninstall' )
 			)); ?> 		
 	 	</ul>
@@ -29,6 +32,7 @@
 				<div class="row-fluid">
 					<div class="span8">
 						<label class="checkbox" for="newsman_cron_clean_unsubscribed_every_week"><input type="checkbox" name="newsman-cleanUnconfirmed" value="1" /> <?php _e("Delete subscribers who didn't confirm their subscription within 7 days", NEWSMAN); ?></label>
+						<label class="checkbox" for="newsman_use_double_optout"><input type="checkbox" name="newsman-useDoubleOptout" value="1" /> <?php _e("Use double opt-out procedure", NEWSMAN); ?></label>
 						<div style="margin-top: 10px;">
 							<h3 style="margin-bottom: 5px;"><?php _e('Plugin statistics on the dashboard', NEWSMAN); ?></h3>
 							<label class="radio"><input type="radio" name="newsman-dashboardStats" value="off" /> <?php _e('Do not show', NEWSMAN); ?></label>					
@@ -46,9 +50,6 @@
 							<label>LinkedIn</label>
 							<input type="text" name="newsman-social-linkedin">
 						</div>
-<!-- 						<h3><?php _e('Other', NEWSMAN); ?></h3>
-						<label class="checkbox" for="newsman-hideWelcomePage"><input type="checkbox" name="newsman-hideWelcomePage" value="1" /> Hide plugin welcome page.</label>
- -->						
 					</div>
 					<div class="span4">
 						<!--   			 Info column  			 -->
@@ -159,6 +160,25 @@
 				</div>	
 				<!--												/Delivery Settings	 	 							-->
 			</div>
+			<div class="tab-pane" id="api">
+				<!--												General	 	 							-->
+				<div class="row-fluid">
+					<div class="span8">
+						<h3 style="margin-bottom: 5px;"><?php _e('API key', NEWSMAN); ?></h3>
+						<input type="text" name="newsman-apiKey" style="width: 320px" readonly="readonly">
+							
+						<h3 style="margin-bottom: 5px;"><?php _e('API endpoint', NEWSMAN); ?></h3>
+						<p><code><?php echo NEWSMAN_PLUGIN_URL;?>/api.php</code></p>
+							
+					</div>
+					<div class="span4">
+						<!--   			 Info column  			 -->
+						<h3><?php _e('API description', NEWSMAN); ?></h3>
+						<a href="http://wpnewsman.com/documentation/use-wpnewsman-api/">WPNewsman API</a>
+					</div>
+				</div>
+				<!--												/General	 	 							-->		
+			</div>			
 			<div class="tab-pane" id="uninstall">
 				<!--												Uninstall	 	 							-->
 				<h2 style="color: #B94A48;"><?php _e('Uninstallation', NEWSMAN); ?></h2>

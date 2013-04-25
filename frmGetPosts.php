@@ -8,8 +8,22 @@
 	$o = newsmanOptions::getInstance();
 	$u = newsmanUtils::getInstance();
 
-?>
+	// post type translations
 
+	function newsman_get_posttype_title($type) {
+		$arr = array(
+			'post' => __('Post', NEWSMAN),
+			'page' => __('Page', NEWSMAN),
+			'attachment' => __('Attachment', NEWSMAN),		
+			'newsman_ap' => __('Action Page', NEWSMAN)
+		);
+		return isset($arr[$type]) ? $arr[$type] : $type;
+	}
+
+	header("Content-type: text/html; charset=UTF-8");
+
+?>
+<!DOCTYPE html>
 <html>
 <head>
 	<title></title>
@@ -26,6 +40,10 @@
 
 		hr {
 			margin: 0 0 9px 0 !important;
+		}
+
+		html, body {
+			height:  100%;
 		}
 
 		#post-selector {
@@ -59,7 +77,7 @@
 			height: auto;			
 		}
 
-		#posts-controls {
+/*		#posts-controls {
 			height: 225px;
 		}
 
@@ -70,6 +88,7 @@
 			bottom: 0;
 			left: 0;
 		}
+*/
 
 		.ui-multiselect-menu, .ui-datepicker-div {
 			display: none;
@@ -90,7 +109,95 @@
 					<input type="text" id="newsman-search" placeholder="<?php esc_attr_e('Search...', NEWSMAN);?>">
 					<hr>
 					<div class="newsman-bcst-topbar">
-						<label><span class="text"><?php _e('Post type:', NEWSMAN);?></span>
+						<table style="width: 100%;">
+							<tbody>
+								<tr>
+									<td><label><span class="text"><?php _e('Post type:', NEWSMAN);?></span></td>
+									<td>
+										<select name="newsman_post_type" id="newsman-post-type">
+										<?php
+											$u = newsmanUtils::getInstance();
+											$type = $u->getPostTypes();
+
+											foreach ($type as $item) {
+												$sel = $item['selected'] ? ' selected="selected"' : '';
+												echo '<option value="'.$item['name'].'"'.$sel.'>'.newsman_get_posttype_title($item['name']).'</option>';
+											}
+										?>
+										</select>										
+									</td>
+									<td><label class="checkbox" id="newsman-private-posts-lbl" ><input type="checkbox" id="newsman-bcst-include-private"> <?php _e('Show private posts', NEWSMAN); ?></label></td>
+								</tr>
+								<tr>
+									<td>
+										<label><span class="text"><?php _e('Categories:', NEWSMAN);?></span></label>
+									</td>
+									<td>
+										<select name="newsman_bcst_sel_cat" id="newsman-bcst-sel-cat" multiple="multiple">
+										<?php
+											$u = newsmanUtils::getInstance();
+											$categories = $u->getCategories();
+											
+											foreach ($categories as $item) {
+												$sel = $item->selected ? ' selected="selected"' : '';
+												echo '<option value="'.$item->cat_ID.'"'.$sel.'>'.$item->name.'</option>';
+											}
+										?>
+										</select>									
+									</td>
+									<td>
+										<label class="checkbox" id="newsman-show-thmb-placeholder-lbl"><input type="checkbox" id="newsman-show-thmb-placeholder"> <?php _e('Show thumbnails placeholders', NEWSMAN); ?></label>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<label><span class="text"><?php _e('Authors:', NEWSMAN) ?></span></label>
+									</td>
+									<td>
+										<select id="newsman-bcst-sel-auth" name="newsman_bcst_sel_auth"  multiple="multiple">
+										<?php
+											 $authors = $u->getAuthors();
+											foreach ($authors as $item) {
+												$sel = $item['selected'] ? ' selected="selected"': '';
+												echo '<option value="'.$item['ID'].'"'.$sel.'>'.$item['user_nicename'].'</option>';			
+											}
+										?>
+										</select>
+									</td>
+									<td>
+									
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<label><span class="text"><?php _e('Use content:', NEWSMAN); ?></span>
+									</td>
+									<td>
+										<select name="" id="newsman-content-type">
+											<option value="full"><?php _e('Full post', NEWSMAN); ?></option>
+											<option value="excerpt"><?php _e('Excerpt', NEWSMAN); ?></option>
+											<option value="fancy" selected="selected"><?php _e('Fancy excerpt', NEWSMAN); ?></option>
+										</select>
+									</td>
+									<td></td>
+								</tr>
+								<tr>
+									<td colspan="3">
+										<div id="newsman-select-buttons">
+											<label><?php _e('Select post(s) for last:', NEWSMAN); ?></label>
+											<div class="btn-group" data-toggle="buttons-radio">
+												<button class="btn btn-mini" sel="day" ><?php _e('Day', NEWSMAN); ?></button>
+												<button class="btn btn-mini" sel="week" ><?php _e('Week', NEWSMAN); ?></button>
+												<button class="btn btn-mini" sel="month" ><?php _e('Month', NEWSMAN); ?></button>
+											</div>
+											<button class="btn btn-mini" sel="clear" style="vertical-align: top;"><?php _e('Clear Selection', NEWSMAN); ?></button>
+										</div>
+									</td>
+								</tr>								
+							</tbody>
+						</table>						
+						
+<!-- 						<label><span class="text"><?php _e('Post type:', NEWSMAN);?></span>
 							<select name="newsman_post_type" id="newsman-post-type">
 							<?php
 								$u = newsmanUtils::getInstance();
@@ -98,13 +205,13 @@
 
 								foreach ($type as $item) {
 									$sel = $item['selected'] ? ' selected="selected"' : '';
-									echo '<option value="'.$item['name'].'"'.$sel.'>'.$item['name'].'</option>';
+									echo '<option value="'.$item['name'].'"'.$sel.'>'.newsman_get_posttype_title($item['name']).'</option>';
 								}
 							?>
 							</select>
 							<label class="checkbox" id="newsman-private-posts-lbl" ><input type="checkbox" id="newsman-bcst-include-private"> <?php _e('Show private posts', NEWSMAN); ?></label>
-						</label>						
-						<label><span class="text"><?php _e('Categories:', NEWSMAN);?></span>
+						</label> -->						
+<!-- 						<label><span class="text"><?php _e('Categories:', NEWSMAN);?></span>
 							<select name="newsman_bcst_sel_cat" id="newsman-bcst-sel-cat" multiple="multiple">
 							<?php
 								$u = newsmanUtils::getInstance();
@@ -117,8 +224,8 @@
 							?>
 							</select>
 							<label class="checkbox" id="newsman-show-thmb-placeholder-lbl"><input type="checkbox" id="newsman-show-thmb-placeholder"> <?php _e('Show thumbnails placeholders', NEWSMAN); ?></label>
-						</label>
-						<label><span class="text"><?php _e('Authors:', NEWSMAN) ?></span>
+						</label> -->
+<!-- 						<label><span class="text"><?php _e('Authors:', NEWSMAN) ?></span>
 							<select id="newsman-bcst-sel-auth" name="newsman_bcst_sel_auth"  multiple="multiple">
 							<?php
 								 $authors = $u->getAuthors();
@@ -128,12 +235,12 @@
 								}
 							?>
 							</select>
-						</label>						
-						<label><span class="text"><?php _e('Use content:', NEWSMAN); ?></span>
+						</label>						 -->
+<!-- 						<label><span class="text"><?php _e('Use content:', NEWSMAN); ?></span>
 							<select name="" id="newsman-content-type">
-								<option value="full"><?php _e('Full post'); ?></option>
-								<option value="excerpt"><?php _e('Excerpt'); ?></option>
-								<option value="fancy" selected="selected"><?php _e('Fancy excerpt'); ?></option>
+								<option value="full"><?php _e('Full post', NEWSMAN); ?></option>
+								<option value="excerpt"><?php _e('Excerpt', NEWSMAN); ?></option>
+								<option value="fancy" selected="selected"><?php _e('Fancy excerpt', NEWSMAN); ?></option>
 							</select>
 							
 							<div id="newsman-select-buttons">
@@ -145,8 +252,7 @@
 								</div>
 								<button class="btn btn-mini" sel="clear" style="vertical-align: top;"><?php _e('Clear Selection', NEWSMAN); ?></button>
 							</div>
-						</label>
-						<h3 id="posts-counter"><?php _e('No posts selected'); ?></h3>
+						</label> -->
 					</div>
 				</div>
 				<div id="newsman-bcst-posts" class="noselect">

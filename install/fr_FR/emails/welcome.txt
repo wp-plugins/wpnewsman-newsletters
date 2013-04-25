@@ -2,7 +2,7 @@ Bienvenue de [newsman me="name"]
 --- plain ---
 Bonjour,
 
-Merci de votre abonnement. Vous êtes maintenant inscrits à nos bulletins d'information, et vous recevrez d'excellent conseils, astuces et stratégies quelques fois par mois. Nous espèrons que vous allez avoir une valeur hors de nos bulletins! C'est là que TOUS nos meilleurs articles vont!
+Merci de votre abonnement. Vous êtes maintenant inscrits à nos bulletins d'information, et vous recevrez d'excellent conseils, astuces et stratégies quelques fois par mois. Nous espérons que vous allez avoir une valeur hors de nos bulletins! C'est là que TOUS nos meilleurs articles vont!
 
 Nous n'allons pas partager votre adresse email avec des parties tierces et nous allons garder vos données personnelles confidentielles et sécurisées.
 
@@ -16,11 +16,11 @@ Cordialement,
 --
 Vous recevez ce message parce que [newsman sub="ts"] sur [newsman wp="url"] vous vous êtes abonnés à recevoir nos bulletins d'information.
 						 
-Vous pouvez modifier votre address email d'abonnement par le lien ce-dessous:
-[newsman link="update-subscription"]
+Vous pouvez vous désabonner par le lien ce-dessous:
+[newsman link='unsubscribe']
 --- html ---
 <p>Bonjour,</p>
-<p>Merci de votre abonnement. Vous êtes maintenant inscrits à nos bulletins d'information, et vous recevrez d'excellent conseils, astuces et stratégies quelques fois par mois. Nous espèrons que vous allez avoir une valeur hors de nos bulletins! C'est là que TOUS nos meilleurs articles vont!</p>
+<p>Merci de votre abonnement. Vous êtes maintenant inscrits à nos bulletins d'information, et vous recevrez d'excellent conseils, astuces et stratégies quelques fois par mois. Nous espérons que vous allez avoir une valeur hors de nos bulletins! C'est là que TOUS nos meilleurs articles vont!</p>
 <p>Nous n'allons pas partager votre adresse email avec des parties tierces et nous allons garder vos données personnelles confidentielles et sécurisées.</p>
 <p>Pour vous assurer de recevoir les futurs conseils, astuces, et offres destinés à nos abonnés seulement, s'il vous plaît ajouter [newsman me="email"] à votre carnet d'adresses email ou à votre liste d'expéditeurs sûrs.</p>
 <p>&nbsp;</p>
@@ -43,8 +43,8 @@ Vous pouvez modifier votre address email d'abonnement par le lien ce-dessous:
 			Vous vous êtes abonnés à [newsman sub="ts"] sur <a href="[newsman wp='url']" style="border: none; color: #0084b4; text-decoration: none;">[newsman wp="blogname"]</a> de IP: [newsman sub="ip"]
 		</div> 
 		<div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 11px; line-height: 17px; color: #666; text-shadow: 0 1px 0 #ffffff;">
-		 Vous pouvez aussi 
-		 <a href="[newsman link='update-subscription']" style="border: none; color: #0084b4; text-decoration: none;">changer votre adresse email d'abonnement ou vous désabonner ici</a>.</div> 
+		 Vous pouvez  
+		 <a href="[newsman link='unsubscribe']" style="border: none; color: #0084b4; text-decoration: none;">vous désabonner ici</a>.</div> 
 		<div>
 		 <a href="#" style="border: none; color: #0084b4; text-decoration: none; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; text-decoration: none; font-size: 11px; line-height: 17px; color: #999999; text-shadow: 0 1px 0 #ffffff;">Droit d'auteur (C) [newsman wp="blogname"]. <span style="white-space: nowrap;">Tous droits réservés.</span></a>
 		</div> </td> 

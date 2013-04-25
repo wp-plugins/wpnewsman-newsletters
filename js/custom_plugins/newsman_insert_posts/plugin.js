@@ -6,10 +6,6 @@
 
 	var initOutlets;
 
-	function saveNewContent(editor) {
-		editor.fire('newsmanSave.ckeditor');
-	}
-
 	var hookStateKey = ( window.navigator.platform.indexOf('Mac') > -1 ) ? 'metaKey' : 'ctrlKey';
 
 	var globalKeyHandler;	
@@ -22,8 +18,24 @@
 			var callbacks = [];
 			var bindedDocs = [];
 
+			function getFunkKeys(e) {
+				if ( e.originalEvent ) {
+					e = e.originalEvent;
+				} else if ( e.data && e.data.$ ) {
+					e = e.data.$;
+				}
+				return {
+					// 93 code is actually a right context menu key on PC keyboards, but it's a right command on a mac
+					metaKey: 	e.keyCode === 91 || e.keyCode === 92 || e.keyCode === 93 || e.metaKey,
+					shiftKey: 	e.keyCode === 16 || e.shiftKey,
+					ctrlKey: 	e.keyCode === 17 || e.ctrlKey,
+					altKey: 	e.keyCode === 18 || e.altKey
+				};
+			}			
+
 			function keydownHandler(e) {
-				if ( e[hookStateKey] ) {
+				var keys = getFunkKeys(e);
+				if ( keys[hookStateKey] ) {
 					for (var i = 0; i < callbacks.length; i++) {
 						callbacks[i](true, e);
 					}
@@ -31,7 +43,8 @@
 			}
 
 			function keyupHandler(e) {
-				if ( !e[hookStateKey] ) {
+				var keys = getFunkKeys(e);
+				if ( keys[hookStateKey] ) {
 					for (var i = 0; i < callbacks.length; i++) {
 						callbacks[i](false, e);
 					}
@@ -86,7 +99,7 @@
 				this.ckeditor = this.options.editor;
 
 				this.gsedit = $(el).attr('gsedit');
-				this.buttons = $('<ul class="outlet-buttons"></ul>');
+				this.buttons = $('<ul class="outlet-buttons" contenteditable="false" style="width: 60px; position: absolute; top: 0; left: 0;"></ul>');
 
 				this.isImage = $(el).is('img');
 
@@ -136,11 +149,11 @@
 					};
 
 				//$('<li class="ob-clear">clear</li>').appendTo(this.buttons);
-				$('<li class="ob-remove">&times; remove</li>').appendTo(this.buttons);
+				$('<li contenteditable="false" class="ob-remove">&times; remove</li>').appendTo(this.buttons);
 
 				$(this.blocktypes).each(function(i, type){
 					if ( type !== that.type ) {
-						$('<li class="ob-insert-'+type+'">'+( switchButtonsMap[type] || 'insert '+type )+'</li>').appendTo(that.buttons);	
+						$('<li contenteditable="false" class="ob-insert-'+type+'">'+( switchButtonsMap[type] || 'insert '+type )+'</li>').appendTo(that.buttons);	
 					}				
 				});
 			},
@@ -176,7 +189,7 @@
 						posCode;
 
 					/*
-						the element rectangle is divided into quarters numbered from 1 from left top corner
+						the element rectangle is divided into quarters numbered from 1 from left top corner.
 						posCode is the number of active quarter
 					*/
 
@@ -196,18 +209,18 @@
 					}
 				};
 
-				this.element.bind('mousemove', this._moveHandler);
+				this.element.on('mousemove', this._moveHandler);
 
 				// also binding the doc keydown handler here
-				$(this.doc).bind('keydown', this._keydown);
+				$(this.doc).on('keydown', this._keydown);
 			},
 			_unbindMoves: function() {
 				if ( this._moveHandler ) {
-					this.element.unbind('mousemove', this._moveHandler);	
+					this.element.off('mousemove', this._moveHandler);	
 				}			
 				this._moveHandler = null;
 				// also binding the doc keydown handler here
-				$(this.doc).unbind('keydown', this._keydown);				
+				$(this.doc).off('keydown', this._keydown);				
 			},
 
 			/////// STATE KEY HANDLER FUNCTIONS
@@ -291,18 +304,24 @@
 
 				if ( !this.buttonsVisible && !this.inTree(this.buttons) ) {
 					this.buttonsVisible = true;
+
 					this.buttons.appendTo(this.doc.body);
 
+					if ( !this._moveHandler ) {
+						this._bindMoves();	
+					}					
+
+					this._bind();
 					this._setButtonsPosition();
 
 					this.buttons.show();
-					this._bind();
-					this._bindMoves();
 				}
 			},
 			hide: function() {
 				if ( this.buttonsVisible ) {
 					this.buttons.remove();
+					//this.buttons.remove();
+					//this._unbindMoves();
 					this.buttonsVisible = false;					
 				}
 			},
@@ -361,7 +380,6 @@
 					edSelector: '.source-editor',
 					save: function(ev, data) {
 						that.setContent(data.html);
-						saveNewContent(data.html, that);
 						$('#dialog').editorDialog('close');
 					}
 				}).editorDialog('setData', this.element.html())
@@ -398,7 +416,23 @@
 
         	var $ = jQuery;
 
+			function insertCSS() {
+				var editable = editor.editable();
+
+				if ( editable && editable.$ ) {
+
+					var body = editable.$,
+						head = $(body).closest('html').find('head');
+
+					if ( !$('#newsman-tpleditor-css', head)[0] ) {
+						$('<link id="newsman-tpleditor-css" rel="stylesheet" href="'+NEWSMAN_PLUGIN_URL+'/css/tpleditor.css?'+NEWSMAN_VERSION+'" />').appendTo(head);
+					}
+				}				
+			}
+
 			editor.on('initOutlets.ckeditor', function(){
+
+				insertCSS();
 
 				var doc = CKEDITOR.instances[editor.name].document;
 				if ( globalKeyHandler.registerDoc(doc.$) ) {
@@ -408,25 +442,18 @@
 
 				if ( editable && editable.$ ) {
 
-					var body = editable.$,
-						head = $(body).closest('html').find('head');
+					var body = editable.$;
 
-					if ( !$('#newsman-tpleditor-css', body)[0] ) {
-						$('<link id="newsman-tpleditor-css" rel="stylesheet" href="'+NEWSMAN_PLUGIN_URL+'/css/tpleditor.css" />').appendTo(head);
-					}
-					
 					$('[gsedit]', body).each(function(i, el){
 						var $el = $(el);
-						if ( !$el.data('outletHTML') && el.nodeName !== 'IMG' ) {
+						if ( !$el.data('glockOutletHTML') && el.nodeName !== 'IMG' ) {
 							$el.outletHTML({ doc: body, editor: editor });
 						}
-					});	
-					//initRemoveOutlets(doc);
+					});
 				}
 			});   
 
 			editor.on('removeOutlets.ckeditor', function(){
-
 
 				var doc = CKEDITOR.instances[editor.name].document;
 				var body = editor.editable().$;
@@ -442,37 +469,16 @@
 
 				$('[gsedit]', body).each(function(i, el){
 					var $el = $(el);
-					if ( !$el.data('outletHTML') ) {
-						$el.outletHTML({ doc: body, editor: editor });
-					} else {
-						if ( el.nodeName !== 'IMG' ) {
-							$el.outletHTML('setDoc', doc.$);
-							$el.outletHTML('hide');
-						}
+					if ( $el.data('glockOutletHTML') && el.nodeName !== 'IMG' ) {
+						$el.outletHTML('setDoc', doc.$);
+						$el.outletHTML('hide');
 					}
 				});
 
-				// var editable = editor.editable();
-
-				// if ( editable && editable.$ ) {
-				// 	console.log(' ::: removing outlets');
-				// 	$('[gsedit]', editable.$).each(function(i, el){
-				// 		var $el = $(el);
-				// 		if ( $el.data('outletHTML') && el.nodeName !== 'IMG' ) {
-				// 			$el.outletHTML('destroy');
-				// 		}
-				// 	});
-				// }
 			});
 
-			editor.on('contentDom', function(){
+			editor.on('contentDom', function(){				
 				editor.fire('initOutlets.ckeditor');
-				// var doc = CKEDITOR.instances[editor.name].document;
-				// if ( globalKeyHandler.registerDoc(doc.$) ) {
-				// 	console.log('... new doc registered');
-				// } else {
-				// 	console.log('doc is already registered');
-				// }
 			});
 
 			globalKeyHandler.on(function(down){
@@ -485,18 +491,14 @@
 
 					$('[gsedit]', body).each(function(i, el){
 						var $el = $(el);
-						if ( el.nodeName !== 'IMG' ) {
+
+						if ( $el.data('glockOutletHTML') && el.nodeName !== 'IMG' ) {
 							$el.outletHTML('setDoc', doc.$);
 							$el.outletHTML( down ? 'show' : 'hide' );
 						}
 					});
 				}
 			});
-
-			// to make sure the highlighting class is removed if the editor loses focus
-			editor.on('blur', function(){
-				editor.fire('removeOutlets.ckeditor');
-			});			
 
         	editor.on('instanceReady', function(){
 				var editable = editor.editable();
@@ -510,9 +512,8 @@
 				}, null, null, 1 );
 
 				editable.attachListener( editor, 'afterNewsmanSave.ckeditor', function(){
-					//console.warn('>>>>>> afterNewsmanSave.ckeditor');
-					//editor.fire('initOutlets.ckeditor');
-				}, null, null, 1 )
+					editor.fire('initOutlets.ckeditor');
+				}, null, null, 1 );
 
 				// Remove the box before an undo image is created.
 				// This is important. If we didn't do that, the *undo thing* would revert the box into an editor.
@@ -521,8 +522,16 @@
 					editor.fire('removeOutlets.ckeditor');
 				});
 
+				editable.attachListener( editor, 'afterUndoImage', function() {
+					editor.fire('initOutlets.ckeditor');
+				});				
+
 				editor.fire('initOutlets.ckeditor');
         	});
+
+			editor.commands.undo.on('afterUndo', function(){
+				editor.fire('initOutlets.ckeditor');
+			});
 
 			editor.addCommand('newsmanRemoveBlock', {
 				exec: function(editor, outlet) {
@@ -541,7 +550,7 @@
 
 			var dialog = CKEDITOR.dialog.addIframe(
 				'newsmanInsertPostsDlg',
-				'Insert Posts',
+				newsmanL10n.insertPosts,
 				NEWSMAN_PLUGIN_URL+'/frmGetPosts.php', width, height,
 				function(){
 					// Iframe loaded callback.	
@@ -562,11 +571,16 @@
 									ids.push(parseInt($(el).val(), 10));
 								});
 
+								var insertPostType = $('#newsman-post-type', frameDoc).val();
+								var contentType = $('#newsman-content-type', frameDoc).val();
+
 								$.ajax({
 									type: 'POST',
 									url: ajaxurl,
 									data: {
 										pids: ids+'',
+										type: insertPostType,
+										ctype: contentType,
 										entType: NEWSMAN_ENT_TYPE,
 										entity: NEWSMAN_ENTITY_ID,
 										action: 'newsmanAjCompilePostsBlock',
@@ -606,7 +620,7 @@
 
             editor.ui.addButton( 'newsman_btn_insert_posts',
             {
-                label: 'Insert posts',
+                label: newsmanL10n.insertPosts,
                 command: 'newsmanOpenInsertPostDlg',
                 icon: iconPath + 'wpmini-blue.png',
                 toolbar: 'newsmanBar'

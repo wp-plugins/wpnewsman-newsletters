@@ -5,16 +5,15 @@
     <?php if ( !get_option('newsman_old_version') ): ?>
     <div class="about-text">Thank you for installing WPNewsman. We hope you'll like it!</div>
     <?php else: ?>
-    <div class="about-text">You updated! We hope you'll like it!</div>
+    <div class="about-text">You updated and have better newsletter gadget!</div>
 
- <h3>Added new email templates store</h3>
-      <div class="feature-section normal">
-        <p>See this quick video tutorial How to Create and Edit Templates and Messages in WPNewsman:</p>
-        <p>
-          <iframe width="640" height="360" src="http://www.youtube.com/embed/uB5YYzhsQuw?rel=0" frameborder="0" allowfullscreen=""></iframe>
-        </p>
+<div class="changelog">
+      <div class="feature-section row" style="margin-bottom: .5em">
+      <div class="span8">
+          <h3>Spread the word and keep this plugin essentially free</h3>
+          <p><A href="http://wordpress.org/support/view/plugin-reviews/wpnewsman-newsletters"><img src="http://s-plugins.wordpress.org/wpnewsman-newsletters/assets/hello-puppies.png" align="left" style="margin: 0 15px 0 0;" /></a><p style="font-size: 18px; font-weight: bold;">Love puppies?</p>We love reviews and ★★★★★ because they encourage and inspire us.  <a href="http://wordpress.org/support/view/plugin-reviews/wpnewsman-newsletters" target="_blank" title="Rate WPNewsman!">Add your own review</a> on <a target="_blank" href="http://wordpress.org/support/view/plugin-reviews/wpnewsman-newsletters">wordpress.org</a> and make it even more awesome.</p>
+        </div>
       </div>
-
 
     <?php endif; ?>
     <div class="changelog">
@@ -28,14 +27,16 @@
       </div>
       <?php endif; ?>
     </div>
-    <div class="changelog">
-      <div class="feature-section row" style="margin-bottom: .5em">
-      <div class="span8">
-          <h3>Spread the word</h3>
-          <h4 style="font-size: 18px;">Love puppies?</h4>
-          <p> <img src="http://wpnewsman.com/images/hello-puppies.jpg" align="left" style="margin: 0 15px 0 0;" />Each time one of our users forgets to write a review, a puppy dies. It's sad and breaks our hearts. <a href="http://wordpress.org/support/view/plugin-reviews/wpnewsman-newsletters" target="_blank" title="Rate WPNewsman!">Add your own review</a> and save a puppy today.</p>
-        </div>
+<!--    
+ <h3 style="margin-top: 40px;">Added new email templates store</h3>
+      <div class="feature-section normal">
+        <p>See this quick video tutorial How to Create and Edit Templates and Messages in WPNewsman:</p>
+        <p>
+          <iframe width="640" height="360" src="http://www.youtube.com/embed/uB5YYzhsQuw?rel=0" frameborder="0" allowfullscreen=""></iframe>
+        </p>
       </div>
+
+-->
       <div class="feature-section row" style="margin: 35px 0 .5em 0;">
         <div class="span12">
           <h3>Changes in this version:</h3>
@@ -44,5 +45,5 @@
         </div>
       </div>
     </div>
-    <a class="btn btn-primary btn-large" href="admin.php?page=newsman-settings">Thanks! Now bring me to WPNewsman</a> </div>
+    <a class="btn btn-primary btn-large" href="admin.php?page=newsman-settings">Thanks! Now take me to WPNewsman</a> </div>
 </div>

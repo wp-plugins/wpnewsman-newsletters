@@ -16,8 +16,8 @@ Sincerely,
 --
 You are receiving this email because on [newsman sub="ts"] at [newsman wp="url"] you subscribed to receive our e-newsletters.
 						 
-You can modify your subscription via the link below:
-[newsman link="update-subscription"]
+You can unsubscribe via the link below:
+[newsman link="unsubscribe"]
 --- html ---
 <p>Hi,</p>
 <p>Thank you for your subscription. You are now signed up to my newsletter, and will get great tips, tricks, and strategies a few times a month.  Hope you get some value out of it!  It's where ALL of my best posts go!</p>
@@ -44,7 +44,7 @@ You can modify your subscription via the link below:
 		</div> 
 		<div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 11px; line-height: 17px; color: #666; text-shadow: 0 1px 0 #ffffff;">
 		 You can also 
-		 <a href="[newsman link='update-subscription']" style="border: none; color: #0084b4; text-decoration: none;">change your subscription email or unsubscribe here</a>.</div> 
+		 <a href="[newsman link='unsubscribe']" style="border: none; color: #0084b4; text-decoration: none;">unsubscribe here</a>.</div> 
 		<div>
 		 <a href="#" style="border: none; color: #0084b4; text-decoration: none; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; text-decoration: none; font-size: 11px; line-height: 17px; color: #999999; text-shadow: 0 1px 0 #ffffff;">Copyright (C) [newsman wp="blogname"]. <span style="white-space: nowrap;">All rights reserved.</span></a>
 		</div> </td> 

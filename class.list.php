@@ -23,6 +23,8 @@ class newsmanList extends newsmanStorable {
 		'extcss' => 'text'
 	);
 
+	static $linkFields = array('confirmation-link', 'resend-confirmation-link', 'unsubscribe-link');
+
 	var $form;
 	var $uid;
 	var $name;
@@ -273,7 +275,7 @@ class newsmanList extends newsmanStorable {
 
 		$sql = "SELECT * FROM $this->tblSubscribers WHERE status = ".NEWSMAN_SS_CONFIRMED." AND NOT EXISTS (
 					SELECT 1 from $slTbl WHERE
-						 $slTbl.`emailId` = %d AND
+						 $slTbl.`emailId` = %d AND 
 						 $slTbl.`listId` = %d AND
 						 $slTbl.`recipientId` = $this->tblSubscribers.`id`
 					) LIMIT %d";
@@ -314,10 +316,15 @@ class newsmanList extends newsmanStorable {
 	}	
 
 	public function getPage($p = 1, $ipp = 15, $type = 'all', $q = false) {
-		global $wpdb;
 
-		$start = ($p-1)*$ipp;
-		$end = $ipp;
+		$offset = ($p-1)*$ipp;
+		$limit = $ipp;
+
+		return $this->getSubscribers($offset, $limit, $type, $q);
+	}	
+
+	public function getSubscribers($offset = 0, $limit = 100, $type = 'all', $q = false) {
+		global $wpdb;
 
 		$sel = '';
 
@@ -348,11 +355,7 @@ class newsmanList extends newsmanStorable {
 		}
 
 		$sql = "SELECT * FROM $this->tblSubscribers ".$sel." ORDER BY `ts` DESC LIMIT %d, %d";
-		$sql = $wpdb->prepare($sql, $start, $end);
-
-		// echo '<pre>';
-		// echo $sql;
-		// echo '</pre>';
+		$sql = $wpdb->prepare($sql, $offset, $limit);
 
 		$rows = $wpdb->get_results($sql, ARRAY_A);
 
@@ -366,6 +369,7 @@ class newsmanList extends newsmanStorable {
 
 		return $res;
 	}	
+
 
 	public function getFieldsPaged($p = 1, $ipp = 15, $type = 'all') {
 		global $wpdb;
@@ -527,10 +531,22 @@ class newsmanList extends newsmanStorable {
 	}
 
 	private function subToCSVRow($sub, $fields) {
+		global $newsman_current_subscriber;
+		global $newsman_current_list;
+		
 		$row = $sub->toJSON();
 
+		$newsman_current_list = $this;
+		$newsman_current_subscriber = $row;
+
+		$n = newsman::getInstance();
+
 		$r = '';
+
 		foreach ($fields as $field) {
+			if ( in_array($field, static::$linkFields) ) {
+				$row[$field] = $n->getActionLink(str_replace('-link', '', $field));
+			}
 			if ( $r !== '' ) { $r .= ','; }
 			$r .= $this->escapeCol( isset($row[$field]) ? $row[$field] : '' );
 		}
@@ -562,10 +578,26 @@ class newsmanList extends newsmanStorable {
 	 * Fetches subscribers in batches and conver them to csv rows
 	 */
 	private function subsToCSV($file, $fields, $type = 'all') {
+
+		if ( defined('newsman_csv_export_limit') || defined('newsman_csv_export_offset') ) {
+			$offset = defined('newsman_csv_export_offset') ? newsman_csv_export_offset : 0;
+			$limit  = defined('newsman_csv_export_limit') ? newsman_csv_export_limit : 100;
+
+			$res = $this->getSubscribers($offset, $limit, $type);
+			if ( is_array($res) && !empty($res)  ) {
+				foreach ($res as $sub) {
+					fputs($file, $this->subToCSVRow($sub, $fields)."\n");
+				}
+				$p += 1;
+			}
+
+			return;			
+		}
+
 		$p = 1;
 		$done = false;
 		do {
-			$res = $this->getPage($p, 500, $type);
+			$res = $this->getPage($p, 1000, $type);
 			if ( is_array($res) && !empty($res)  ) {
 				foreach ($res as $sub) {
 					fputs($file, $this->subToCSVRow($sub, $fields)."\n");
@@ -577,13 +609,16 @@ class newsmanList extends newsmanStorable {
 		} while ( !$done );
 	}
 
-	public function exportToCSV($filename, $type = 'all') {
+	public function exportToCSV($filename, $type = 'all', $linksFields = array()) {
 		header( 'Content-Type: text/csv' );
 		header( 'Content-Disposition: attachment;filename='.$filename);
 
 		$out = fopen('php://output', 'w');
 		if ( $out ) {
 			$fields = $this->getAllFields();
+
+			$fields = array_merge($fields, $linksFields);
+
 			fputcsv($out, $fields, ',', '"');
 			$this->subsToCSV($out, $fields, $type);
 			@fclose($out);			
@@ -598,6 +633,12 @@ class newsmanList extends newsmanStorable {
 			static::$lastError = $wpdb->last_error;
 			return false;
 		} else {
+			$tpls = newsmanEmailTemplate::findAll($wpdb->prepare('`system` = 1 AND `assigned_list` = %d', array($this->id)));
+			if ( $tpls ) {
+				foreach ($tpls as $tpl) {
+					$tpl->remove();
+				}
+			}			
 			return parent::remove();	
 		}		
 	}

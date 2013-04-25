@@ -114,7 +114,8 @@ class newsmanSentlog {
 				`statusMsg` TEXT NOT NULL DEFAULT '',
 				`errorCode` int(10) unsigned NOT NULL  DEFAULT 0,
 				PRIMARY KEY  (`id`),
-				KEY (`emailId`,`listId`)
+				KEY (`emailId`,`listId`),
+				KEY (`recipientId`)
 				) CHARSET=utf8";
 		$result = $this->db->query($sql);
 	}
@@ -237,7 +238,7 @@ class newsmanSentlog {
 			'' as 'listName',
 			`$slTbl`.`recipientId`,
 			`$slTbl`.`statusMsg`,
-			`$slTbl`.`recipientAddr` as 'email',
+			`$slTbl`.`recipientAddr` as 'email'
 			FROM `$slTbl`
 			WHERE 
 			`$slTbl`.`emailId` = %d AND

@@ -8,8 +8,12 @@ class newsmanEmailTemplate extends newsmanStorable {
 	static $table = 'newsman_email_templates';
 	static $props = array(
 		'id' => 'autoinc',
-		'system' => 'bool', // system template could not be deleted
+		'system' => 'int', // system template cannot be deleted
+
+		'system_type' => 'int',
 		
+		'assigned_list' => 'int',
+
 		'name' => 'text',
 
 		'subject' => 'text',

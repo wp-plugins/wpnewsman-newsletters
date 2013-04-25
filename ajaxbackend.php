@@ -208,7 +208,7 @@
 			}
 		}
 
-		public 	function ajTestMailer() {
+		public function ajTestMailer() {
 
 			$utils = newsmanUtils::getInstance();
 			
@@ -666,6 +666,7 @@
 			}
 		}
 
+
 		public function ajGetTemplates() {
 			global $wpdb;
 
@@ -681,27 +682,81 @@
 			$selector = '';
 			$args = array();
 
-			if ( $show != 'all' ) {
-				$selector = 'system = %d';
-				$args[] = ( $show == 'system' );
-			} else {
-				$selector = '1';
-			}
+			$selector = 'system = %d';
+			$args[] = 0;
 
-			$selector .= ' ORDER BY id DESC';
-			
+			$selector .= ' ORDER BY id DESC';			
 
 			$tpls = newsmanEmailTemplate::findAllPaged($pg, $ipp, $selector, $args);
 			
 			$res['count'] = newsmanEmailTemplate::count($selector, $args);
 			$res['rows'] = array();
 
+			$listIds = array();
+			$lists = array();
+
 			foreach ($tpls as $tpl) {
-				$res['rows'][] = $tpl->toJSON();
+				$jsonTpl = $tpl->toJSON();
+				if ( $tpl->assigned_list > 0 ) {
+					if ( !in_array($tpl->assigned_list, $listIds) ) {
+						$list = newsmanList::findOne('id = %d', array($tpl->assigned_list));
+						if ( $list ) {
+							$lists[$tpl->assigned_list] = $list;
+						}
+					} else {
+						$list = $listIds[$tpl->assigned_list];
+					}
+
+					$jsonTpl['assigned_list_name'] = $list->name;
+				}
+				$res['rows'][] = $jsonTpl;
 			}
 
 			$this->respond(true, 'success', $res);
 		}
+
+		public function ajGetSystemTemplates() {
+			global $wpdb;
+
+			$res = array(
+			);
+
+			// getting default templates
+
+			$tpls = newsmanEmailTemplate::findAll('`system` = 1 AND `assigned_list` = 0');
+			$lst = array(
+				'default' => true,
+				'templates' => array()
+			);
+			if ( $tpls ) {
+				foreach ($tpls as $tpl) {
+					$lst['templates'][] = $tpl->toJSON();
+				}
+			}
+			$res[] = $lst;	
+
+			// getting other list templates
+
+			$lists = newsmanList::findAll();
+
+			foreach ($lists as $list) {
+				$lst = array(
+					'listId' 	=> $list->id,
+					'listName' 	=> $list->name,
+					'templates' => array()
+				);
+				$tpls = newsmanEmailTemplate::findAll('`system` = 1 AND `assigned_list` = %d', array($list->id));
+				if ( $tpls ) {
+					foreach ($tpls as $tpl) {
+						$lst['templates'][] = $tpl->toJSON();
+					}
+				}
+				$res[] = $lst;
+			}		
+			
+			$this->respond(true, 'success', array('lists' => $res));
+		}
+
 
 		public function ajGetEmailData() {
 			$emlId = $this->param('id');
@@ -947,7 +1002,7 @@
 
 			$s = 0;
 
-			$tpls = newsmanEmailTemplate::findAll('`id` in '.$set.' and `system` != 1');
+			$tpls = newsmanEmailTemplate::findAll('`id` in '.$set.' and `system` = 0');
 
 			foreach ($tpls as $tpl) {
 				if ( $u->hasSharedAssets($tpl->assetsPath) ) {
@@ -967,7 +1022,7 @@
 
 			$r = 0;
 
-			$tpls = newsmanEmailTemplate::findAll('`id` in '.$set.' and `system` != 1');
+			$tpls = newsmanEmailTemplate::findAll('`id` in '.$set.' and ( `system` = 0 OR `assigned_list` = 0 )');
 
 			foreach ($tpls as $tpl) {
 				$u->tryRemoveTemplateAssets($tpl->assetsPath, $deleteSharedAssets);
@@ -1304,8 +1359,6 @@
 			ini_set("auto_detect_line_endings", true);
 			$filename	= $this->param('filename');
 
-			$u = newsmanUtils::getInstance();
-
 			$n = newsman::getInstance();			
 			$path = $n->ensureUploadDir('csv').DIRECTORY_SEPARATOR.$filename;
 
@@ -1485,6 +1538,25 @@
 				if ( $ptype ) {
 					$postType = $ptype;
 				}
+
+				// content type
+				$ctype = $this->param('ctype', false);
+				$typesMap = array(
+					'full' 		=> 'post_content',
+					'excerpt' 	=> 'post_excerpt',
+					'fancy'		=> 'fancy_excerpt'
+				);
+
+				if ( $ctype && $sc->get('post') ) {
+					$sc->set('post', $typesMap[$ctype]);
+					$postBlockTpl = $sc->updateSource();					
+				}
+				// ----				
+			}
+
+			$t = $this->param('type', false);
+			if ( $t ) {
+				$postType = $t;
 			}
 
 			$args = array(
@@ -1608,7 +1680,7 @@
 
 				$newsman = newsman::getInstance();
 
-				$newsman->sendEmail('confirmation');
+				$newsman->sendEmail($list->id, NEWSMAN_ET_CONFIRMATION);
 			}
 
 			// ajax responce
@@ -1651,7 +1723,7 @@
 				// $list->header = $header;
 				$list->form = $json;
 
-				do_action('newsman_set_ext_from_options', $this, $list);
+				$list->extcss = $this->param('extcss');
 
 				$list->save();
 
@@ -1660,6 +1732,8 @@
 		}
 
 		public function ajCreateList() {
+			$u = newsmanUtils::getInstance();
+
 			$name = $this->param('name');
 			$name = trim($name);
 
@@ -1670,6 +1744,9 @@
 			} else {
 				$list = new newsmanList($name);
 				$list->save();
+
+				$u->copySystemTemplatesForList($list->id);
+
 				$this->respond(true, __('Created', NEWSMAN), array(
 					'name' => $list->name,
 					'id' => $list->id
@@ -1725,7 +1802,22 @@
 			}			
 		}
 
+		public function ajSetSubscriberEmail() {
+			$email = $this->param('value');
+			$id = $this->param('pk');
+			$listId = $this->param('list');
 
+			$list = newsmanList::findOne('id = %d', array($listId));
+
+			$s = $list->findSubscriber("id = %d", array($id));
+			if ( $s ) {
+				$s->email = $email;
+				$s->save();
+				$this->respond(true, 'Updated.');
+			} else {
+				$this->respond(false, 'Subscriber is not found.');
+			}
+		}
 
 		/**
 		 * External app API

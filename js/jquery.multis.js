@@ -45,9 +45,9 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 			this.options.preFillItems = this.options.preFillItems || [];
 			var that = this;
-
-			$('option', this.element).each(function(i, el){
-				that.options.preFillItems.push( $(el).attr('value') );
+			//debugger;
+			$('li[data-value]', this.element).each(function(i, el){
+				that.options.preFillItems.push( $(el).attr('data-value') );
 				$(el).hide();
 			});
 

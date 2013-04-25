@@ -152,11 +152,11 @@ class newsmanSub {
 						fields='%s'
 					WHERE id=%d";
 		} else {
-
 			$sql = "INSERT HIGH_PRIORITY IGNORE into 
 					$this->tableName (ts, ip, email, status, ucode, fields)
 					VALUES('%s','%s','%s','%s','%s','%s');"; //" ON DUPLICATE KEY UPDATE `status`=`status`;";
 		}
+
 		$sql = $wpdb->prepare(
 					$sql,
 					isset($r['ts']) 	? $r['ts'] : null,
@@ -166,16 +166,18 @@ class newsmanSub {
 					isset($r['ucode'])	? $r['ucode'] : null,
 					isset($r['fields']) ? $r['fields'] : null,
 					isset($r['id'])		? $r['id'] : null
-				);		
-
-		//echo '<pre>'.$sql.'</pre>';
+				);
 
 		$r = $wpdb->query($sql);
 
 		if ( $r === false ) {
 			return $wpdb->last_error;
+		} else {
+			if ( !isset($this->rawRec['id']) ) {
+				$this->rawRec['id'] = $wpdb->insert_id;				
+			}
+			return $this->id;
 		}
-		return -1;
 	}
 
 	public function meta($name, $val = NULL) {

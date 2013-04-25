@@ -581,8 +581,9 @@ jQuery(function($){
 	window.NEWSMAN = $({}); // adding events capability
 	window.NEWSMAN.ajFormReq = {};
 
-	NEWSMAN.postsSelector;
+	window.NEWSMAN.sprintf = sprintf;
 
+	NEWSMAN.postsSelector;
 	var showMessage = NEWSMAN.showMessage = function(msg, type, cb, rawError) {
 
 		var wrap = $('<div class="wp_bootstrap"></div>').appendTo(document.body);
@@ -655,7 +656,9 @@ jQuery(function($){
 			showMessage(err, 'error', null, {
 				responseText: t.responseText
 			});
-			console.error(err);
+			if ( typeof console !== 'undefined' ) {
+				console.error(err);	
+			}			
 			return;
 		}
 
@@ -721,6 +724,13 @@ jQuery(function($){
 				requestsDone();
 			}			
 		}
+	});
+
+	// -------------------
+
+	$(document).on('change', '.newsman-cb-selectall', function(e){
+		var tbody = $(this).closest('table').find('tbody');
+		$('input[type="checkbox"]', tbody).prop('checked', $(this).prop('checked'));
 	});
 
 	// -------------------
@@ -1098,17 +1108,6 @@ jQuery(function($){
 				ipp: 15
 			};
 
-			function countSelectedPosts() {
-				var cnt = $('.newsman-bcst-post.active').length,
-					p = ( cnt == 1 ) ? 'post' : 'posts',
-					lbl = 'No posts selected';
-
-				if ( cnt ) { 
-					lbl = cnt+' '+p+' selected';
-				}
-				$('#posts-counter').text(lbl);
-			}
-
 			postsSelector.getIDS = function(){
 				var ids = [];
 				$('.newsman-bcst-post.active input').each(function(i, el){
@@ -1138,14 +1137,14 @@ jQuery(function($){
 			});
 
 			$('#newsman-bcst-sel-cat').multiselect({
-				selectedText: "# of # categories selected",
-				noneSelectedText: 'Select categories',
+				selectedText: newsmanL10n.nOfNCategoriesSelected,
+				noneSelectedText: newsmanL10n.selectCategories,
 				selectedList: 4
 			});
 
 			$('#newsman-bcst-sel-auth').multiselect({
-				selectedText: "# of # authors selected",
-				noneSelectedText: 'Select author(s)',
+				selectedText: newsmanL10n.nOFNAuthorsSelected,
+				noneSelectedText: newsmanL10n.selectAuthors,
 				selectedList: 4
 			});	
 
@@ -1167,7 +1166,6 @@ jQuery(function($){
 
 			function selectAllPosts() {
 				$('.newsman-bcst-post').addClass('active');
-				countSelectedPosts();
 			}
 
 			$(document).on('click', '#newsman-bcst-posts .newsman-bcst-load-button', loadMore);
@@ -1247,12 +1245,9 @@ jQuery(function($){
 							$('<div class="stub-wrap"><div class="stub">'+newsmanL10n.sorryNoPostsMathedCriteria+'</div></div>').appendTo(container);
 						}
 
-						countSelectedPosts();
 
 						shiftSelector(container.get(0), {
-							onSelect: function() {
-								countSelectedPosts();
-							}
+							onSelect: function() { }
 						});
 
 						if ( paging.select ) {
@@ -1784,15 +1779,27 @@ jQuery(function($){
 				var tbody = $('#newsman-mgr-subscribers tbody').empty();
 				if (rows.length) {
 					$(rows).each(function(i, r){
-						$(['<tr>',
+						var row = $(['<tr>',
 								'<td><input value="'+r.id+'" type="checkbox"></td>',
-								'<td>'+r.email+'</td>',
+								'<td><span class="email">'+r.email+'</span></td>',
 								'<td>'+r.ts+'</td>',
 								'<td>'+r.ip+'</td>',
 								'<td>'+statusToText(r.status, r.status == 2 ? r.bounceStatus : '')+'</td>',
 								'<td>'+fieldsToHTML(r.fields)+'</td>',
 							'</tr>'].join('')).appendTo(tbody);
-					});	 				
+							
+							$('.email', row).editable({
+		                       type:  'text',
+		                       pk:    r.id,
+		                       name:  'email',
+		                       url:   ajaxurl,
+		                       params: {
+		                           action: 'newsmanAjSetSubscriberEmail',
+		                           list: pageState.listId
+		                       },
+		                       title: 'Enter email address'
+		                    });
+					});
 				} else {
 					noData();
 				}
@@ -2806,7 +2813,13 @@ jQuery(function($){
 					return data.msg;
 				} else {
 					if ( data.recipients > 0 )	{
-						return 'Sent '+data.sent+' of '+data.recipients+' emails';
+							var values = [
+								data.sent,
+								data.recipients
+							];
+						return newsmanL10n.sentXofXemails.replace(/\%d/ig, function(match){
+								return values.shift();
+						});
 					} else {
 						return '';
 					}
@@ -3575,11 +3588,15 @@ jQuery(function($){
 					var tbody = $('#newsman-templates tbody');
 					var icon = r.system ? '<i class="icon-cog" rel="tooltip" title="System Template. Cannot be deleted."></i>' : '';
 					var editURL = NEWSMAN_BLOG_ADMIN_URL+'admin.php?page=newsman-templates&action=edit&id='+r.id;
+
+					var assignedListLbl = ( r.assigned_list > 0 && r.assigned_list_name ) ? '<span class="label label-info">'+r.assigned_list_name+'</span>' : '';
+
 					var row = $(['<tr>',
 							'<td><input value="'+r.id+'" type="checkbox"'+(r.system ? ' disabled="disabled"' : '')+'></td>',
 							'<td>',
 								'<a href="'+editURL+'" class="newsman-template-name">'+icon+' '+r.name+'</a>',
-								!r.system ? '<div class="newsman-inline-controls"><a class="newsman-duplicate-tpl" href="#">Copy</a> | <a href="'+editURL+'">Edit</a> | <a class="newsman-delete-tpl" href="#">Delete</a> | <a href="'+NEWSMAN_BLOG_ADMIN_URL+'admin.php?page=newsman-templates&action=download&id='+r.id+'">Export</a></div>':'',
+								assignedListLbl,
+								!r.system ? '<div class="newsman-inline-controls"><a class="newsman-duplicate-tpl" href="#">'+newsmanL10n.copy+'</a> | <a href="'+editURL+'">'+newsmanL10n.sEdit+'</a> | <a class="newsman-delete-tpl" href="#">'+newsmanL10n.sDelete+'</a> | <a href="'+NEWSMAN_BLOG_ADMIN_URL+'admin.php?page=newsman-templates&action=download&id='+r.id+'">'+newsmanL10n.sExport+'</a></div>':'',
 							'</td>',
 						'</tr>'].join(''))[ prepend ? 'prependTo' : 'appendTo' ](tbody);
 
@@ -3622,6 +3639,82 @@ jQuery(function($){
 				}).fail(NEWSMAN.ajaxFailHandler);
 			}
 
+			// SYSTEM TEMPLATES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+			function getSystemTemplates() {
+				var data = {
+					action: 'newsmanAjGetSystemTemplates'
+				};
+
+				$.ajax({
+					type: 'POST',
+					url: ajaxurl,
+					data: data
+				}).done(function(data){
+
+					$('#tabs-header .dropdown-menu').empty();
+
+					if ( data.lists && data.lists.length ) {
+						$(data.lists).each(function(i, list){
+							addSysemTemplatesTab(list);
+						});
+					}
+						
+				}).fail(NEWSMAN.ajaxFailHandler);
+			}
+
+			function makeTabId(listName) {
+				return 'tab-'+listName
+								.replace(/^[^a-z0-9]*/ig, '')
+								.replace(/[^a-z0-9]*$/ig, '')
+								.replace(/[^a-z0-9]+/ig, '-')
+								.toLowerCase();
+			}
+
+			function capitalize(str) {
+				return str[0].toUpperCase()+str.substr(1);
+			}
+
+			function addSysemTemplatesTab(list) {
+				var menuUl = $('#tabs-header .dropdown-menu'),
+					tc = $('#tabs-container');
+
+				var listName = list.default ? newsmanL10n.defaultSystemTemplates : capitalize(list.listName);
+
+				var id = makeTabId(listName);
+
+				$('#'+id).remove();
+
+				function getTabelBody() {
+					var out = [],
+						icon = '<i class="icon-cog" rel="tooltip" title="'+newsmanL10n.systemTemplateCannotBeDeleted+'"></i>';
+
+					$(list.templates).each(function(i, lst){
+						var editURL = NEWSMAN_BLOG_ADMIN_URL+'admin.php?page=newsman-templates&action=edit&id='+lst.id;
+						out.push('<tr><td><a href="'+editURL+'" class="newsman-template-name">'+icon+' '+lst.name+'</a></td></tr>');
+					});
+					return out.join('');
+				}
+
+				$('<li><a href="#'+id+'" data-toggle="tab">'+listName+'</a></li>').appendTo(menuUl);
+
+				$(['<div class="tab-pane fade" id="'+id+'">',
+					'<h4>'+listName+'</h4>',
+					'<table class="table table-striped table-bordered">',
+						'<thead>',
+							'<tr>',
+								'<th scope="col">'+newsmanL10n.name+'</th>',
+							'</tr>',
+						'</thead>',
+						'<tbody>',
+							getTabelBody(),
+						'</tbody>',
+					'</table>',
+				'</div>'].join('')).appendTo(tc);
+			}
+
+			// /SYSTEM TEMPLATES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 			function buildPagination(pageCount) {
 				$('.newsman-tbl-controls .pagination')
 					.newsmanPagination({
@@ -3642,6 +3735,8 @@ jQuery(function($){
 				pageState.pg = parseInt(p, 10);
 				pageState.show = type.toLowerCase();
 				getTemplates();
+
+				getSystemTemplates();
 
 				$('.subsubsub a.current').removeClass('current');
 				$('#newsman-mailbox-'+type).addClass('current');
@@ -3903,17 +3998,6 @@ jQuery(function($){
 							}
 						}
 
-						// console.warn('!!!!!!!! REMOVE ME BEFOR RELEASE');
-						// data.templates.push({
-						// 	name: 'Color direct',
-						// 	downloadURL: 'http://blog.dev/store/colordirect/colordirect.zip',
-						// 	preview: [
-						// 		'http://blog.dev/store/colordirect/colordirect_full_width.jpg',
-						// 		'http://blog.dev/store/colordirect/colordirect_left_sidebar.jpg',
-						// 		'http://blog.dev/store/colordirect/colordirect_right_sidebar.jpg'								
-						// 	]
-						// });					
-
 						stores = data.stores;
 
 						var tbody = $('#templates-previews tbody').empty(),
@@ -4017,7 +4101,7 @@ jQuery(function($){
 							'<tr>',
 								'<td><input value="'+data.id+'" type="checkbox"></td>',
 								//'<td><a href="'+NEWSMAN_BLOG_ADMIN_URL+'admin.php?page=newsman-forms&sub=subscribers&action=editlist&id='+data.id+'">'+data.name+'</a></td>',
-								'<td><a href="'+NEWSMAN_BLOG_ADMIN_URL+'admin.php?page=newsman-forms&sub=subscribers#/'+data.id+'/all"><strong>'+data.name+'</strong></a><div class="newsman-inline-controls"><a href="'+NEWSMAN_BLOG_ADMIN_URL+'admin.php?page=newsman-forms&sub=subscribers&action=editlist&id='+data.id+'">Edit Form</a> | <a href="'+NEWSMAN_BLOG_ADMIN_URL+'admin.php?page=newsman-forms&sub=subscribers#/'+data.id+'/all">View Subscribers</a></div></td>',
+								'<td><a href="'+NEWSMAN_BLOG_ADMIN_URL+'admin.php?page=newsman-forms&sub=subscribers#/'+data.id+'/all"><strong>'+data.name+'</strong></a><div class="newsman-inline-controls"><a href="'+NEWSMAN_BLOG_ADMIN_URL+'admin.php?page=newsman-forms&sub=subscribers&action=editlist&id='+data.id+'">'+newsmanL10n.editForm+'</a> | <a href="'+NEWSMAN_BLOG_ADMIN_URL+'admin.php?page=newsman-forms&sub=subscribers#/'+data.id+'/all">'+newsmanL10n.viewSubscribers+'</a></div></td>',
 								'<td>0</td>',
 								'<td>0</td>',
 								'<td>0</td>',
@@ -4128,7 +4212,7 @@ jQuery(function($){
 						$(lists).each(function(i, l){
 							$(['<tr>',
 									'<td><input value="'+l.id+'" type="checkbox"></td>',
-									'<td><a href="'+NEWSMAN_BLOG_ADMIN_URL+'admin.php?page=newsman-forms&sub=subscribers#/'+l.id+'/all"><strong>'+l.name+'</strong></a><div class="newsman-inline-controls"><a href="'+NEWSMAN_BLOG_ADMIN_URL+'admin.php?page=newsman-forms&sub=subscribers&action=editlist&id='+l.id+'">Edit Form</a> | <a href="'+NEWSMAN_BLOG_ADMIN_URL+'admin.php?page=newsman-forms&sub=subscribers#/'+l.id+'/all">View Subscribers</a></div></td>',
+									'<td><a href="'+NEWSMAN_BLOG_ADMIN_URL+'admin.php?page=newsman-forms&sub=subscribers#/'+l.id+'/all"><strong>'+l.name+'</strong></a><div class="newsman-inline-controls"><a href="'+NEWSMAN_BLOG_ADMIN_URL+'admin.php?page=newsman-forms&sub=subscribers&action=editlist&id='+l.id+'">'+newsmanL10n.editForm+'</a> | <a href="'+NEWSMAN_BLOG_ADMIN_URL+'admin.php?page=newsman-forms&sub=subscribers#/'+l.id+'/all">'+newsmanL10n.viewSubscribers+'</a></div></td>',
 									'<td>'+(l.stats.confirmed || 0)+'</td>',
 									'<td>'+(l.stats.unconfirmed || 0)+'</td>',
 									'<td>'+(l.stats.unsubscribed || 0)+'</td>',
@@ -4176,272 +4260,6 @@ jQuery(function($){
 
 		})();
 	}
-
-	/*******	 HTML editor 	**********/
-
-	// if ( $('#newsman-html-editor').get(0) ) {
-
-	// 	if ( typeof NEWSMAN_ENT_STATUS !== 'undefined' && ( NEWSMAN_ENT_STATUS === 'stopped' || NEWSMAN_ENT_STATUS === 'error' ) ) {
-	// 		$('#newsman-html-editor input[name="newsman-send"]').change(function(e){
-	// 			$('#newsman-btn-send').text( ( $(this).val() === 'now' ) ? 'Resume' : 'Send');
-	// 		});			
-	// 	}		
-
-	// 	/***
-	// 	 * Pacth for dialog-fix ckeditor problem [ by ticket #4727 ]
-	// 	 * 	http://dev.jqueryui.com/ticket/4727
-	// 	 */
-
-	// 	$.extend($.ui.dialog.overlay, { create: function(dialog){
-	// 		if (this.instances.length === 0) {
-	// 			// prevent use of anchors and inputs
-	// 			// we use a setTimeout in case the overlay is created from an
-	// 			// event that we're going to be cancelling (see #2804)
-	// 			setTimeout(function() {
-	// 				// handle $(el).dialog().dialog('close') (see #4065)
-	// 				if ($.ui.dialog.overlay.instances.length) {
-	// 					$(document).bind($.ui.dialog.overlay.events, function(event) {
-	// 						var parentDialog = $(event.target).parents('.ui-dialog');
-	// 						if (parentDialog.length > 0) {
-	// 							var parentDialogZIndex = parentDialog.css('zIndex') || 0;
-	// 							return parentDialogZIndex > $.ui.dialog.overlay.maxZ;
-	// 						}
-							
-	// 						var aboveOverlay = false;
-	// 						$(event.target).parents().each(function() {
-	// 							var currentZ = $(this).css('zIndex') || 0;
-	// 							if (currentZ > $.ui.dialog.overlay.maxZ) {
-	// 								aboveOverlay = true;
-	// 								return;
-	// 							}
-	// 						});
-							
-	// 						return aboveOverlay;
-	// 					});
-	// 				}
-	// 			}, 1);
-				
-	// 			// allow closing by pressing the escape key
-	// 			$(document).bind('keydown.dialog-overlay', function(event) {
-	// 				(dialog.options.closeOnEscape && event.keyCode
-	// 						&& event.keyCode == $.ui.keyCode.ESCAPE && dialog.close(event));
-	// 			});
-					
-	// 			// handle window resize
-	// 			$(window).bind('resize.dialog-overlay', $.ui.dialog.overlay.resize);
-	// 		}
-			
-	// 		var $el = $('<div></div>').appendTo(document.body)
-	// 			.addClass('ui-widget-overlay').css({
-	// 			width: this.width(),
-	// 			height: this.height()
-	// 		});
-			
-	// 		(dialog.options.stackfix && $.fn.stackfix && $el.stackfix());
-			
-	// 		this.instances.push($el);
-	// 		return $el;
-	// 	}});			
-
-	// 	$('#newsman-btn-send').click(function(e){
-
-	// 		var toList = $('#eml-to').multis('getItems');
-	// 		if ( !toList.length ) {
-	// 			showMessage(newsmanL10n.pleaseChooseSubscribersList);
-	// 			return;
-	// 		}
-
-	// 		if ( !sendValidation.validate() ) {
-	// 			return;
-	// 		}			
-
-	// 		var opt = $('#newsman-send-form input[name="newsman-send"]:checked').val();
-	// 		var datetime = $('#newsman-send-datepicker').datetimepicker('getDate');
-
-	// 		$.ajax({
-	// 			type: 'POST',
-	// 			url: ajaxurl,
-	// 			data: {
-	// 				action: "newsmanAjScheduleEmail",
-	// 				id: NEWSMAN_ENTITY_ID,
-	// 				send: opt,
-	// 				ts: Math.round(datetime.getTime() / 1000)
-	// 			}
-	// 		}).done(function(data){
-	// 			showMessage(data.msg, 'success', function(){
-	// 				if ( data.redirect ) {
-	// 					window.location = data.redirect;
-	// 				}					
-	// 			});
-	// 		}).fail(NEWSMAN.ajaxFailHandler);
-	// 	});
-
-	// 	function setPostTemplateType(callback) {
-
-	// 		var newType, et = $('#newsman-content-type').val(),
-	// 			etMap = {
-	// 				'content': 'post_content',
-	// 				'excerpt': 'post_excerpt',
-	// 				'fancy': 'fancy_excerpt'
-	// 			};
-	// 			newType = etMap[et] || 'post_content';
-
-	// 		$.ajax({
-	// 			url: ajaxurl,
-	// 			data: {
-	// 				action: 'newsmanAjSetPostTemplateType',
-	// 				entType: NEWSMAN_ENT_TYPE,
-	// 				entity: NEWSMAN_ENTITY_ID,
-	// 				postType: $('#newsman-post-type').val(),
-	// 				postTemplateType: newType
-	// 			}
-	// 		}).done(function(e){
-	// 			callback(null);
-	// 		}).fail(function(xhr){
-	// 			callback( new Error(xhr.responseText) );
-	// 		});
-	// 	}
-
-	// 	$('#btn-add-posts').click(function(e){
-	// 		//newsman-modal-add-posts
-
-	// 		showModal('#newsman-modal-add-posts', function(mr){
-				
-	// 			if ( mr == 'cancel' ) {
-	// 				// 
-	// 			} else if ( mr == 'insert' ) {
-
-	// 				showLoading();
-
-	// 				// first we update the post template with the type of 
-	// 				// content which we want to insert
-	// 				setPostTemplateType(function(err){
-	// 					if ( err ) { console.error(err); }
-
-	// 					$.ajax({
-	// 						type: 'POST',
-	// 						url: ajaxurl,
-	// 						data: {
-	// 							pids: postsSelector.getIDS()+'',
-	// 							entType: NEWSMAN_ENT_TYPE,
-	// 							entity: NEWSMAN_ENTITY_ID,
-	// 							action: 'newsmanAjCompilePostsBlock',
-	// 							showTmbPlaceholder: $('#newsman-show-thmb-placeholder').is(':checked') ? 1 : 0
-	// 						}						
-	// 					}).done(function(data){
-
-	// 						var idoc = $('#tpl-frame').get(0).contentDocument;
-	// 						$('[gsspecial="posts"]', idoc).html(data.content);
-
-	// 						$('#tpl-frame').get(0).newsmanInit();
-
-	// 						postsSelector.clearSelection();
-
-	// 					}).fail(NEWSMAN.ajaxFailHandler).always(function(){
-	// 						hideLoading();
-	// 					});
-	// 				});					
-
-	// 			}
-	// 			return true;
-	// 		});
-	// 	});
-
-	// 	/**
-	// 	 *		Editing template particles
-	// 	 */
-
-	// 	var currentParticleName = '';
-
-	// 	function getParticleSource() {
-	// 		$.ajax({
-	// 			type: 'POST',
-	// 			url: ajaxurl,
-	// 			data: {
-	// 				name: currentParticleName,
-	// 				entType: NEWSMAN_ENT_TYPE,
-	// 				entity: NEWSMAN_ENTITY_ID,
-	// 				action: 'newsmanAjGetEntityParticle'
-	// 			}
-	// 		}).done(function(data){
-	// 			var html = data.particle;
-
-	// 			$('#dialog').editorDialog({
-	// 				edSelector: '.source-editor',
-	// 				save: function(ev, data) {
-	// 					saveParticleSource(data.html);
-	// 					$('#dialog').editorDialog('close');
-	// 				}
-	// 			}).editorDialog('setData', html)
-	// 			  .editorDialog('open');				
-	// 		}).fail(NEWSMAN.ajaxFailHandler);
-	// 	}
-
-	// 	function saveParticleSource(newContent) {
-
-	// 		$.ajax({
-	// 			type: 'POST',
-	// 			url: ajaxurl,
-	// 			data: {
-	// 				name: currentParticleName,
-	// 				entType: NEWSMAN_ENT_TYPE,
-	// 				entity: NEWSMAN_ENTITY_ID,
-	// 				content: newContent,
-	// 				action: 'newsmanAjSetEntityParticle'
-	// 			}
-	// 		}).done(function(data){
-	// 			showMessage(data.msg, 'success');
-	// 		}).fail(NEWSMAN.ajaxFailHandler);
-	// 	}
-
-	// 	$('#btn-edit-postblock').click(function(e){
-
-	// 		currentParticleName = 'post_block';
-	// 		getParticleSource();
-
-	// 	});
-
-	// 	$('#btn-edit-post-divider').click(function(e){
-	// 		currentParticleName = 'post_divider';
-	// 		getParticleSource();
-	// 	});
-
-	// 	$('#btn-save-content').click(function(){
-	// 		saveParticleSource();
-	// 	});		
-
-	// 	window.newsmanHtmlEditorContentLoaded = function(){
-	// 		var frm = $('#tpl-frame'),
-	// 			w = frm.width();
-	// 		setTimeout(function() {
-	// 			frm.width(w+1);				
-	// 			setTimeout(function() { 
-	// 				frm.width(w);
-	// 			}, 0);
-	// 		}, 0);
-	// 	};
-
-
-	// 	// Code to fix iframe redraw bug. not fully fixed, but at least something
-	// 	$(window).load(function(){
-	// 		var t;
-
-	// 		$($('#tpl-frame').contents()).scroll(function(e){
-	// 			if ( t ) {
-	// 				clearTimeout(t);
-	// 				t = null;
-	// 			}				
-	// 			t = setTimeout(function() {
-	// 				var h = $('#tpl-frame').height();
-
-	// 				$('#tpl-frame').css({ height: (h+1)+'px' });
-	// 				setTimeout(function(){
-	// 					$('#tpl-frame').css({ height: h+'px' });
-	// 				}, 1);
-	// 			}, 100);
-	// 		});
-	// 	});
-	// }
 
 	/* Common functionality */
 

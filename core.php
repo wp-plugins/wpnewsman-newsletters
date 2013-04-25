@@ -61,7 +61,7 @@ class newsman {
 
 	var $registeredWorkers = array();
 
-	var $linkTypes = array('confirmation', 'resend-confirmation', 'unsubscribe', 'update-subscription', 'email');
+	var $linkTypes = array('confirmation', 'resend-confirmation', 'unsubscribe', 'email', 'unsubscribe-confirmation');
 
 	// singleton instance 
 	private static $instance; 
@@ -140,10 +140,6 @@ class newsman {
 			add_shortcode('newsman-form', array($this, 'shortCode'));
 			add_shortcode('newsman', array($this, 'newsmanShortCode'));
 			add_shortcode('newsman_loop', array($this, 'newsmanShortcodeLoop'));
-
-			add_shortcode('newsman_change_email_form', array($this, 'formChangeEmail'));
-
-			add_shortcode('newsman_unsubscribe_form', array($this, 'formUnsubscribeEmail'));
 
 			add_shortcode('newsman_on_web', array($this, 'newsmanShortCodeOnWeb'));
 			add_shortcode('newsman_not_on_web', array($this, 'newsmanShortCodeNotOnWeb'));
@@ -361,6 +357,8 @@ class newsman {
 
 		extract($attr);
 
+		//newsmanShortCode
+
 		if ( isset($profileurl) ) {
 			switch ( $profileurl ) {
 				case 'twitter':
@@ -531,44 +529,11 @@ class newsman {
 		return $this->putForm(false, $attrs['id'], $horizontal);
 	}
 
-	public function formChangeEmail($attr) {
-		global $newsman_current_subscriber;
-
-		extract($attr);
-
-		$new_email = isset($title) ? $title : __('New Email', NEWSMAN);
-		$btn = isset($button) ? $button : __('Change my email', NEWSMAN);
-
-		$form = '
-		<form class="newsman-change-subscription" style="text-align: left;" action="" method="POST">
-		<label class="newsman-change-subscription-label" for="nwsmn-chsub-newemail">'.$new_email.':</label>
-		<input class="newsman-change-subscription-newemail" type="text" name="nwsmn-chsub-newemail" />
-		<input class="newsman-change-subscription-submit" type="submit" name="nwsmn-chsub" value="'.$btn.'" />
-		</form>';
-
-		return $form;		
-	}
-
-	public function formUnsubscribeEmail($attr) {
-		global $newsman_current_subscriber;
-
-		extract($attr);
-		$btn = isset($button) ? $button : __('Change my email', NEWSMAN);
-
-		$form = '
-		<form class="newsman-unsubscribe-form" style="text-align: left;" action="" method="post">
-		<input class="newsman-unsubscribe-form-submit" type="submit" name="nwsmn-unsubscribe" value="'.$btn.'" />
-		</form>';
-
-		return $form;
-	}
-
 	// links
 
 	public function getActionLink($type, $only_code = false) {
 		global $newsman_current_subscriber;
 		global $newsman_current_email;
-		global $newsman_current_ucode;
 		global $newsman_current_list;
 
 		$ucode = $newsman_current_subscriber['ucode'];
@@ -583,12 +548,11 @@ class newsman {
 
 			$link = "$blogurl/?newsman=$type&code=".$newsman_current_list->uid.':'.$ucode;
 
-			if ( $type == 'email' ) {
+			if ( $type === 'email' ) {
 				$link.='&email='.$newsman_current_email->ucode;
 			}
 
 			$link = apply_filters('newsman_apply_analytics', $link);
-			//$link = $this->utils->linkAddAnalytics($link);
 
 			return $link;
 		} else {
@@ -640,33 +604,54 @@ class newsman {
 						$s->confirm();
 						$s->save();
 						if ( $this->options->get('sendWelcome') ) {
-							$this->sendEmail('welcome');	
+							$this->sendEmail($list->id, NEWSMAN_ET_WELCOME);
 						}
 						if ( $this->options->get('notifyAdmin') ) {
-							$this->notifyAdmin('adminSubscriptionEvent');	
+							$this->notifyAdmin($list->id, NEWSMAN_ET_ADMIN_SUB_NOTIFICATION);
 						}						
 						$this->redirect( $this->getLink('confirmationSucceed', array('u' => $_REQUEST['code'] ) ) );
 					}
 					break;					
 				case 'resend-confirmation':					
-					$this->sendEmail('confirmation');
+					$this->sendEmail($list->id, NEWSMAN_ET_CONFIRMATION);
 					$this->redirect( $this->getLink('confirmationRequired', array('u' => $_REQUEST['code'] ) ) );
 					break;
 				case 'unsubscribe':
-					$s->unsubscribe();
-					$s->save();
-					if ( $this->options->get('notifyAdmin') ) {
-						$this->notifyAdmin('adminUnsubscribeEvent');
-					}
 
-					if ( $this->options->get('sendUnsubscribed') ) {
-						$this->sendEmail('unsubscribe');
-					}
+					if ( $this->options->get('useDoubleOptout') ) {
 
-					$this->redirect( $this->getLink('unsubscribeSucceed', array('u' => $_REQUEST['code'] ) ) );					
+						$this->sendEmail($list->id, NEWSMAN_ET_UNSUBSCRIBE_CONFIRMATION);
+						$this->redirect( $this->getLink('unsubscribeConfirmation', array('u' => $_REQUEST['code'] ) ) );
+
+					} else {
+						$s->unsubscribe();
+						$s->save();						
+
+						if ( $this->options->get('notifyAdmin') ) {
+							$this->notifyAdmin($list->id, NEWSMAN_ET_ADMIN_UNSUB_NOTIFICATION);
+						}
+
+						if ( $this->options->get('sendUnsubscribed') ) {
+							$this->sendEmail($list->id, NEWSMAN_ET_UNSUBSCRIBE);
+						}
+
+						$this->redirect( $this->getLink('unsubscribeSucceed', array('u' => $_REQUEST['code'] ) ) );
+					}
 					break;
-				case 'update-subscription':
-					$this->redirect( $this->getLink('changeSubscription', array('u' => $_REQUEST['code'] ) ) );
+
+				case 'unsubscribe-confirmation':
+						$s->unsubscribe();
+						$s->save();						
+
+						if ( $this->options->get('notifyAdmin') ) {
+							$this->notifyAdmin($list->id, NEWSMAN_ET_ADMIN_UNSUB_NOTIFICATION);
+						}
+
+						if ( $this->options->get('sendUnsubscribed') ) {
+							$this->sendEmail($list->id, NEWSMAN_ET_UNSUBSCRIBE);
+						}
+
+						$this->redirect( $this->getLink('unsubscribeSucceed', array('u' => $_REQUEST['code'] ) ) );
 					break;
 
 				case 'email':
@@ -679,6 +664,7 @@ class newsman {
 							wp_die( sprintf( __('Email with unique code %s is not found.', NEWSMAN), htmlentities($_REQUEST['email']) ) );
 						} else {							
 							define('EMAIL_WEB_VIEW', true);
+							header("Content-type: text/html; charset=UTF-8");
 							$r = $eml->renderMessage($newsman_current_subscriber);
 							echo $this->utils->processAssetsURLs($r['html'], $eml->assetsURL);
 							exit();
@@ -686,7 +672,6 @@ class newsman {
 					}
 					$newsman_current_email;
 					break;
-
 			}
 
 		}
@@ -735,25 +720,19 @@ class newsman {
 			),
 			'dashboardStats' => 'off', // abox, widget
 
+			'useDoubleOptout' => false,
+
 			'secret' => md5(get_option('blogname').get_option('admin_email').time()),
+			'apiKey' => sha1(sha1(microtime()).'newsman_api_key_salt'.get_option('admin_email')),
 
 			'activePages' => array(
 				'alreadySubscribedAndVerified' => 0,
 				'badEmail' => 0,
-				'changeSubscription' => 0,
 				'confirmationRequired' => 0,
 				'confirmationSucceed' => 0,
 				'emailSubscribedNotConfirmed' => 0,
-				'unsubscribeSucceed' => 0
-			),
-
-			'emailTemplates' => array(
-				'addressChanged' => 0,
-				'adminSubscriptionEvent' => 0,
-				'adminUnsubscribeEvent' => 0,
-				'confirmation' => 0,
-				'unsubscribe' => 0,
-				'welcome' => 0
+				'unsubscribeSucceed' => 0,
+				'unsubscribeConfirmation' => 0
 			),
 
 			'bounced' => array(
@@ -836,30 +815,33 @@ class newsman {
 	}
 
 
-	public function getEmail($name) {
+	public function getTemplate($listId, $tplType) {
 		$email = array();
 		$emlId = $this->options->get('emailTemplates.'.$name);
 
-		$tpl = newsmanEmailTemplate::findOne('id=%d', array($emlId));
+		$tpl = newsmanEmailTemplate::findOne('`assigned_list` = %d AND `system_type` = %d', array($listId, $tplType));
 
-		$email['subject'] = do_shortcode( $tpl->subject );
+		if ( $tpl ) {
+			$email['subject'] = do_shortcode( $tpl->subject );
 
-		$content = $this->defineLoop($tpl->p_html);
+			$content = $this->defineLoop($tpl->p_html);
 
-		$email['html'] = do_shortcode( $content );
+			$email['html'] = do_shortcode( $content );
 
+			$content = $tpl->plain;
+			$email['plain'] = $this->defineLoop($content);
+			$email['plain'] = do_shortcode( $email['plain'] );
 
-		$content = $tpl->plain;
-		$email['plain'] = $this->defineLoop($content);
-		$email['plain'] = do_shortcode( $email['plain'] );
+			return $email;
+		}
 
-		return $email;
+		return null;
 	}
 
-	public function sendEmail($name) {
+	public function sendEmail($listId, $tplType) {
 		global $newsman_current_subscriber;
 
-		$eml = $this->getEmail($name);
+		$eml = $this->getTemplate($listId, $tplType);
 
 		$this->utils->mail($eml, array(
 			'vars' => $newsman_current_subscriber
@@ -868,10 +850,10 @@ class newsman {
 		return $eml;
 	}
 
-	public function notifyAdmin($tplName) {
+	public function notifyAdmin($listId, $tplType) {
 		global $newsman_current_subscriber;
 
-		$eml = $this->getEmail($tplName);
+		$eml = $this->getTemplate($listId, $tplType);
 
 		$this->utils->mail($eml, array(
 			'to' => $this->options->get('sender.email'),
@@ -892,6 +874,15 @@ class newsman {
 		$NEWSMAN_PAGE = strpos($page, 'newsman') !== false;
 
 		wp_register_script('newsmanform', NEWSMAN_PLUGIN_URL.'/js/newsmanform.js', array('jquery'), NEWSMAN_VERSION);
+		wp_enqueue_script('newsman-jquery-placeholder', NEWSMAN_PLUGIN_URL.'/js/jquery.placeholder.js', array('jquery'), NEWSMAN_VERSION);		
+
+		wp_localize_script( 'newsmanform', 'newsmanformL10n', array(
+			'pleaseFillAllTheRequiredFields' => __('Please fill all the required fields.', NEWSMAN),
+			'pleaseCheckYourEmailAddress' => __('Please check your email address.', NEWSMAN)
+		) );		
+
+
+		wp_enqueue_script('newsman-jquery-1.9.1-ie-fix', NEWSMAN_PLUGIN_URL.'/js/jquery-1.9.1.mod.js', array('jquery'), NEWSMAN_VERSION);
 
 		if ( function_exists('wp_enqueue_script') ) {
 
@@ -924,14 +915,13 @@ class newsman {
 					wp_enqueue_style('fileuploader-css');
 					wp_enqueue_script('fileuploader-js');
 
-					if ( $action === 'editlist' ) {
-						wp_enqueue_script('newsman-jquery-placeholder', NEWSMAN_PLUGIN_URL.'/js/jquery.placeholder.js', array('jquery'), NEWSMAN_VERSION);
+					if ( $action === 'editlist' ) {	
 						wp_enqueue_script('newsman-formbuilder', NEWSMAN_PLUGIN_URL.'/js/newsman-formbuilder.js', array('jquery', 'jquery-ui-widget'), NEWSMAN_VERSION);
 					}
 				}
 
 				if ( isset($_GET['action']) && $_GET['action'] === 'editlist' ) {
-					wp_enqueue_script('newsman-ko', NEWSMAN_PLUGIN_URL.'/js/knockout-2.2.0.js', array('jquery'));
+					wp_enqueue_script('newsman-ko', NEWSMAN_PLUGIN_URL.'/js/knockout-2.2.1.js', array('jquery'));
 					wp_enqueue_script('newsman-ko-mapping', NEWSMAN_PLUGIN_URL.'/js/knockout.mapping.js', array('newsman-ko'));
 					wp_enqueue_script('newsman-ko-sortable', NEWSMAN_PLUGIN_URL.'/js/knockout-sortable.min.js', array('newsman-ko'));
 				}
@@ -955,6 +945,9 @@ class newsman {
 					wp_enqueue_script('neouploader-js', NEWSMAN_PLUGIN_URL.'/js/neoUploader.js', array('jquery', 'jquery-ui-widget') );
 
 					wp_enqueue_script('newsman-holder-js', NEWSMAN_PLUGIN_URL.'/js/holder.js');
+
+					wp_register_script('bootstrap-editable', NEWSMAN_PLUGIN_URL.'/js/bootstrap-editable.js', array('bootstrapjs'));
+					wp_register_style('bootstrap-editable-css', NEWSMAN_PLUGIN_URL.'/css/bootstrap-editable.css', array('bootstrap'));
 
 					// ----
 		
@@ -1033,8 +1026,8 @@ class newsman {
 						'stPending' => __('Pending', NEWSMAN),
 						'stDraft' => __('Draft', NEWSMAN),
 						'stError' => __('Error', NEWSMAN),
-						'stInprogress' => __('Sending...'),
-						'stStopped' => __('Stopped'),
+						'stInprogress' => __('Sending...', NEWSMAN),
+						'stStopped' => __('Stopped', NEWSMAN),
 						'stScheduledOn' => __('Scheduled on', NEWSMAN),
 						'youDontHaveAnyTemplates' => __('You don\'t have any templates yet.', NEWSMAN),
 						'createOne' => __('Create one?', NEWSMAN),
@@ -1072,7 +1065,27 @@ class newsman {
 						'loadMore' => __('Load more...', NEWSMAN),
 						'sorryNoPostsMathedCriteria' => __('Sorry, no posts matched your criteria.', NEWSMAN),
 						'warnCloseToLimit' => __('Warning! You are close to the limit of %d subscribers you can send emails to in the Lite version of the plugin. Please, <a href="%s">upgrade to the Pro version</a> to send emails without limitations.', NEWSMAN),
-						'warnExceededLimit' => __('Warning! You exceeded the limit of %d subscribers you can send emails to in the Lite version of the plugin. Please, <a href="%s">upgrade to the Pro version</a> to send emails without limitations.', NEWSMAN)
+						'warnExceededLimit' => __('Warning! You exceeded the limit of %d subscribers you can send emails to in the Lite version of the plugin. Please, <a href="%s">upgrade to the Pro version</a> to send emails without limitations.', NEWSMAN),
+						'name' => __('Name', NEWSMAN),
+						'editForm' => __('Edit Form', NEWSMAN),
+						'viewSubscribers' => __('View Subscribers', NEWSMAN),
+						'copy' => __('Copy', NEWSMAN),
+						'sEdit' => __('Edit', NEWSMAN),
+						'sDelete' => __('Delete', NEWSMAN),
+						'sExport' => __('Export', NEWSMAN),
+						'defaultSystemTemplates' => __('Default System Templates', NEWSMAN),
+						'systemTemplateCannotBeDeleted' => __('System Template. Cannot be deleted.', NEWSMAN),
+						'insertPosts' => __('Insert Posts', NEWSMAN),
+						'postsSelected' => __('Post(s) selected: %d', NEWSMAN),
+						'selectCategories' => __('Select categories', NEWSMAN),
+						'nOfNCategoriesSelected' => __('# of # categories selected', NEWSMAN),
+						'selectAuthors' => __('Select author(s)', NEWSMAN),
+						'nOFNAuthorsSelected' => __('# of # authors selected', NEWSMAN),
+						'save' => __('Save', NEWSMAN),
+						'savedAt' => __('Saved at', NEWSMAN),
+
+						'pleaseFillAllTheRequiredFields' => __('Please fill all the required fields.', NEWSMAN),
+						'pleaseCheckYourEmailAddress' => __('Please check your email address.', NEWSMAN)
 					) );
 				}
 
@@ -1088,12 +1101,6 @@ class newsman {
 					wp_enqueue_script('jquery-ui-timepicker-js');
 				}
 
-				if ( $page === 'newsman-templates' && $action == 'edit' ) {
-					//wp_enqueue_script('newsman-outlets', NEWSMAN_PLUGIN_URL.'/js/newsman-html-editor.js', array('jquery'));
-					wp_enqueue_style('newsman-tpl-editor', NEWSMAN_PLUGIN_URL.'/css/tpleditor.css', array(), NEWSMAN_VERSION);
-				}
-
-			
 				if  ( (strpos($page, 'newsman') !== false) || defined('INSERT_POSTS_FRAME') ) {
 					wp_enqueue_script(array('jquery', 'editor', 'thickbox', 'media-upload'));
 					wp_enqueue_style('thickbox');
@@ -1102,6 +1109,9 @@ class newsman {
 					wp_enqueue_style('newsman-jquery-ui-smoothness', $url, false, $ui->ver);
 				  
 				  	wp_enqueue_script('jquery-multiselect');									
+
+				  	wp_enqueue_script('bootstrap-editable');
+				  	wp_enqueue_style('bootstrap-editable-css');
 				}
 			}
 		}
@@ -1155,32 +1165,7 @@ class newsman {
 
 			$newsman_current_subscriber = $s->toJSON();
 		}
-		
-		if ( isset($_REQUEST['nwsmn-chsub']) ) {
-			if ( !isset($s) ) {
-				wp_die( sprintf( __('Cannot change subscriber email. Subscriber with unique code %s is not found.', NEWSMAN ), htmlentities($_REQUEST['u'])) );
-			}
-
-			$newEmail = strtolower($_REQUEST['nwsmn-chsub-newemail']);
-
-			$this->utils->emailValid($newEmail, 'DIE_ON_FAILURE');
-
-			if ( $list->findSubscriber("email = %s", $newEmail) ) {
-				$newsman_error_message = sprintf(__('Email address %s is already subscribed to the list.', NEWSMAN), $newEmail);
-			} else {
-				$newsman_success_message = sprintf(__('Your email address %s was successfully changed.', NEWSMAN), $s->email);
-				$s->email = $newEmail;
-				$s->save();
-				$newsman_current_subscriber = $s->toJSON();
-			}
-
-			if ( $use_excerpts ) {
-				$this->showActionExcerpt('changeSubscription');
-			} else {
-				//$this->redirect( $this->getLink('changeSubscription', array('u' => $_REQUEST['u'] ) ) );
-			}
-		}    
-		
+				
 		if ( isset($_REQUEST['nwsmn-unsubscribe']) ) {
 			if ( !isset($s) ) {
 				wp_die( sprintf( __('Cannot unsubscribe email. Subscriber with unique code %s is not found.', NEWSMAN ), htmlentities($_REQUEST['u'])) );
@@ -1190,11 +1175,11 @@ class newsman {
 				$s->save();
 
 				if ( $this->options->get('notifyAdmin') ) {
-					$this->notifyAdmin('adminUnsubscribeEvent');
+					$this->notifyAdmin($list->id, NEWSMAN_ET_ADMIN_UNSUB_NOTIFICATION);
 				}
 
 				if ( $this->options->get('sendUnsubscribed') ) {
-					$this->sendEmail('unsubscribe');
+					$this->sendEmail($list->id, NEWSMAN_ET_UNSUBSCRIBE);
 				}				
 
 				if ( $use_excerpts ) {
@@ -1241,7 +1226,7 @@ class newsman {
 
 			switch ( $res ) {
 				case -1:
-					$this->sendEmail('confirmation');
+					$this->sendEmail($list->id, NEWSMAN_ET_CONFIRMATION);
 					if ( $use_excerpts ) {
 						$this->showActionExcerpt('confirmationRequired');
 					} else {
@@ -1269,7 +1254,7 @@ class newsman {
 					$s->subscribe();
 					$s->save();
 
-					$this->sendEmail('confirmation');
+					$this->sendEmail($list->id, NEWSMAN_ET_CONFIRMATION);
 
 					if ( $use_excerpts ) {
 						$this->showActionExcerpt('confirmationRequired');
@@ -1387,6 +1372,7 @@ class newsman {
 			}
 
 			$this->utils->runUpdate();
+			
 			delete_option('NEWSMAN_DOING_UPDATE');
 			if ( $doRedirect ) {
 				wp_redirect(NEWSMAN_BLOG_ADMIN_URL.'admin.php?page=newsman-mailbox&welcome=1');	
@@ -1402,8 +1388,10 @@ class newsman {
 	}
 
 	public function onAdminInit() {
-
+		
 		$this->tryUpdate();
+
+		$this->configureW3TC();
 
 		// page=newsman-mailbox&action=compose&type=wp
 		$page = isset($_REQUEST['page']) ? $_REQUEST['page'] : null;
@@ -1943,15 +1931,18 @@ class newsman {
 		die();
 	}	
 
-	private function zipDirectory($zip, $path, $archPath) {
+	private function zipDirectory($zip, $path, $archPath, $excludeFilename = false) {
 
 		if ( $handle = opendir($path) ) {
 			while (false !== ($entry = readdir($handle))) {
 				if ($entry != "." && $entry != "..") {
 					$entPath = $path.DIRECTORY_SEPARATOR.$entry;
 					if ( is_dir( $entPath ) ) {
-						$this->zipDirectory($zip, $entPath, $archPath.DIRECTORY_SEPARATOR.$entry);
+						$this->zipDirectory($zip, $entPath, $archPath.DIRECTORY_SEPARATOR.$entry, $excludeFilename);
 					} else {
+						if ( $excludeFilename && $entry == $excludeFilename ) {
+							continue;
+						}
 						$zip->addFile( file_get_contents($entPath), $archPath.DIRECTORY_SEPARATOR.$entry );	
 					}					
 				}
@@ -1975,7 +1966,7 @@ class newsman {
 			if ( $tpl->assetsPath ) {
 				$dir = $tpl->assetsPath;
 
-				$this->zipDirectory($zip, $dir, $fileName);
+				$this->zipDirectory($zip, $dir, $fileName, $fileName.'.html');
 			}
 			//*/
 
@@ -1987,7 +1978,7 @@ class newsman {
 		die();
 	}
 
-	public function getEmailToAsOptions() {
+	public function getEmailToAsTags($tag = 'option') {
 		$options = '';
 
 		$eml = newsmanEmail::findOne('id = %d', array($_REQUEST['id']));
@@ -1995,7 +1986,7 @@ class newsman {
 		if ( $eml ) {
 			if ( is_array($eml->to) ) {
 				foreach ($eml->to as $to) {
-					$options .= "<option selected=\"selected\" value=\"$to\">$to</option>";
+					$options .= "<$tag data-value=\"$to\">$to</$tag>";
 				}
 			}
 		}
@@ -2136,10 +2127,9 @@ class newsman {
 		$link = '<a href="http://wpnewsman.com/documentation/short-codes-for-email-messages/">'.__('Click here', NEWSMAN).'</a>';
 
 		?>	
-		<p><?php _e('You can use these shortcode macros to add the unsubscribe and update subscription links to your message:', NEWSMAN); ?></p>
+		<p><?php _e('You can use this shortcode macro to add the unsubscribe link to your message:', NEWSMAN); ?></p>
 		<ul class="unstyled shortcodes-list">
 		<li><code>[newsman link='unsubscribe']</code></li>
-		<li><code>[newsman link='update-subscription']</code></li>
 		</ul>
 		<p><?php _e('and these shortcode macros to add links to your social profiles (enter the URLs of your social profiles in the plugin Settings):', NEWSMAN);  ?></p>
 		<ul class="unstyled shortcodes-list">
@@ -2198,8 +2188,33 @@ class newsman {
 			include('views/_an_locale_changed.php');	
 		}
 
+		if ( $this->options->get('showW3TCConfigNotice') ) {
+			$this->options->set('showW3TCConfigNotice', false);
+			include('views/_an_w3tc_configured.php');
+		}
+
 		if ( $hideForLang != $this->wplang ) {
 			$this->options->set('hideLangNotice', false);			
+		}
+	}
+
+	public function configureW3TC() {
+		global $wpdb;
+
+		$ignoreStem = $wpdb->prefix.'newsman_';
+
+		if ( defined('W3TC_DIR') ) {
+			require_once W3TC_DIR . '/inc/define.php';
+
+			$config = w3_instance('W3_Config');
+
+			$arr = $config->get_array('dbcache.reject.sql');
+			if ( is_array($arr) && !in_array($ignoreStem, $arr) ) {
+				$arr[] = $ignoreStem;
+				$config->set('dbcache.reject.sql', $arr);
+				$config->save();
+				$this->options->set('showW3TCConfigNotice', true);
+			}		
 		}
 	}
 

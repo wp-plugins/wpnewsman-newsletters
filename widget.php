@@ -17,10 +17,6 @@ class NEWSMAN_Widget_Form extends WP_Widget {
 		extract($args);
 		$listId = $instance['list'];
 
-		// echo '<pre>';
-		// print_r($args);
-		// echo '</pre>';
-
 		$list = newsmanList::findOne('id = %d', array($listId));
 
 		$form = new newsmanForm($listId);
