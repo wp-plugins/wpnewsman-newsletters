@@ -435,47 +435,6 @@ class newsmanUtils {
 		return preg_replace('@<script>.*?</script>@i', '', $src);
 	}	
 
-	function cutPostBlock(&$content, $newContent = '') {
-		$res = preg_match('/<(\w+)[^>]*?gspost[^>]*?>/i', $content, $matches, PREG_OFFSET_CAPTURE);
-
-		if ( $res && !empty($matches) ) {
-			// firstChart offset  +  matched str length'
-			$openTag = $matches[0][0];
-			$contentStart = $matches[0][1]+strlen($matches[0][0]);
-			$tag = $matches[1][0];
-		}
-
-		// searching for close tag
-		$pos = $contentStart;
-		$lvl = 1;
-
-		while ( preg_match('/<(\/|)'.$tag.'[^>]*>/i', $content, $matches, PREG_OFFSET_CAPTURE, $pos) ) {
-
-			$pos = $matches[0][1]+strlen($matches[0][0]);
-
-			if ( $matches[1][0] == '/' ) { // found close tag
-				$lvl -= 1;
-			} else { // found open tag
-				$lvl += 1; 
-			}
-
-			if ( $lvl == 0 ) { // this is our close tag
-				$contentEnd = $matches[0][1];
-				break;
-			}
-		}	
-
-		$contentReplacement = $newContent;
-
-		$contLen = $contentEnd-$contentStart;
-
-		$cutted = substr($content, $contentStart, $contLen);
-
-		$content = substr_replace($content, $contentReplacement, $contentStart, $contLen);
-
-		return $cutted;
-	}
-
 	function str_insert($insertstring, $intostring, $offset) {
 	   $part1 = substr($intostring, 0, $offset);
 	   $part2 = substr($intostring, $offset);
@@ -1268,7 +1227,7 @@ class newsmanUtils {
 
 		foreach ($plugins as $plugin) {
 
-			$pluginFile = newsman_ensure_correct_path(ABSPATH.WP_PLUGIN_DIR.DIRECTORY_SEPARATOR.$plugin);
+			$pluginFile = newsman_ensure_correct_path(WP_PLUGIN_DIR.DIRECTORY_SEPARATOR.$plugin);
 			$pluginData = get_plugin_data( $pluginFile );
 
 			$info[] = "  ".$pluginData['Name']." ".$pluginData['Version'];

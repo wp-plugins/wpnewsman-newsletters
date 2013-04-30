@@ -3867,7 +3867,6 @@ jQuery(function($){
 
 		$('#store-selector').change(function(){
 			var name = $(this).val();
-			//debugger;
 			var a = $('#store-'+name);
 			var t = a.position().top;
 

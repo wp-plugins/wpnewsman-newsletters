@@ -4,7 +4,7 @@ Donate Link: http://wpnewsman.com/premium-newsletter-plugin-wordpress/
 Tags: wpnewsman, newsletter, newsletters, newsletter signup, newsletter widget, subscribers, post notification, email subscription, email marketing, email, emailing, subscription
 Requires at least: 3.5
 Tested up to: 3.6
-Stable tag: 1.5.0
+Stable tag: 1.5.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -121,17 +121,17 @@ We got a User Feedback page where you can [add or vote for new features](http://
 
 == Changelog ==
 
-= 1.5.0 = 
+= 1.5.1 = 
+* Fixed: sticky posts bug in system email messages.
 
+= 1.5.0 = 
 * Added: WPNewsman API.
 * Added: "Use double opt-out procedure" option to the Settings.
 * Added: ability to have unique system email templates for each list.
 * Added: ability to edit the subscriber's email address by the admin.
-
 * Fixed: insertion of full posts into the message.
 * Fixed: work of the plugin in the Internet Explorer 9.
 * Fixed: work of the plugin on a non-English locale. 
-
 * Changed: ability to use opt-in forms on external sites is available in the Lite version.
 * Removed: ability to change the email address by the subscriber.
 
@@ -253,9 +253,9 @@ We got a User Feedback page where you can [add or vote for new features](http://
 
 == Upgrade Notice ==
 
-= 1.5.0 = 
+= 1.5.1 = 
 
-* Highly recomended upgrade. Lots of stability and speed improvements. Better support of IE and new double opt-out procedure.
+* Highly recomended upgrade. Lots of stability and speed improvements. Better support of IE and new double opt-out procedure, fixed sticky posts bug
 
 = 1.4.4 =
 * Highly recommended upgrade. Fixed sending performance degradation on large lists.

@@ -321,32 +321,6 @@ class newsman {
     	}
     }    
 
-
-    public function loopReplaceCallback($matches) {
-		global $newsman_post_tpl;
-		if ( isset($matches[1]) ) {
-			$newsman_post_tpl = $matches[1];
-		}
-		return '';
-    }
-
-    private function defineLoop($content) {
-		global $newsman_post_tpl;
-
-		$ids = ''; $del = '';
-		if ( $pos ) {
-			foreach ($pos as $p) {
-				$ids .= $del.$p->id;
-				$del = ',';
-			}
-		}
-		$query = '[newsman_loop post__in="'.$ids.'"]';
-
-		$newsman_post_tpl = $this->utils->cutPostBlock($content, $query);
-
-		return $content;
-	}
-
 	public function newsmanShortCode($attr, $content = null) {
 		global $newsman_current_subscriber;
 		global $newsman_post_tpl;
@@ -823,14 +797,8 @@ class newsman {
 
 		if ( $tpl ) {
 			$email['subject'] = do_shortcode( $tpl->subject );
-
-			$content = $this->defineLoop($tpl->p_html);
-
-			$email['html'] = do_shortcode( $content );
-
-			$content = $tpl->plain;
-			$email['plain'] = $this->defineLoop($content);
-			$email['plain'] = do_shortcode( $email['plain'] );
+			$email['html'] = do_shortcode( $tpl->p_html );
+			$email['plain'] = do_shortcode( $tpl->plain );
 
 			return $email;
 		}
@@ -2181,7 +2149,8 @@ class newsman {
 	}
 
 	public function showAdminNotifications() {
-
+		global $wpdb;
+		
 		$hideForLang = $this->options->get('hideLangNotice');
 
 		if ( $this->lang !== $this->wplang && $this->wplang != $hideForLang ) {
@@ -2190,6 +2159,7 @@ class newsman {
 
 		if ( $this->options->get('showW3TCConfigNotice') ) {
 			$this->options->set('showW3TCConfigNotice', false);
+			$ignoreStem = $wpdb->prefix.'newsman_';
 			include('views/_an_w3tc_configured.php');
 		}
 
