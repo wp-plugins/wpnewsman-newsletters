@@ -39,9 +39,9 @@
 
 	<div class="bs-docs-example">
 		<ul id="tabs-header" class="nav nav-tabs">
-			<li class="active"><a href="#my-templates" data-toggle="tab"><?php _e('My Templates', NEWSMAN); ?></a></li>
+			<li class="active" id="newsman-tab-my-templates"><a href="#my-templates" data-toggle="tab"><?php _e('My Templates', NEWSMAN); ?></a></li>
 			<!-- <li><a href="#system-templates" data-toggle="tab">System Templates</a></li> -->
-			<li class="dropdown">
+			<li class="dropdown" id="newsman-tab-system-templates">
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown"><?php _e('System Templates', NEWSMAN); ?> <b class="caret"></b></a>
 				<ul class="dropdown-menu">
 <!-- 					<li><a href="#default-system-templates" data-toggle="tab">Default System Templates</a></li>

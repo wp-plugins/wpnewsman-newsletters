@@ -805,12 +805,41 @@ class newsmanUtils {
 		return preg_replace_callback('/<img[^>]*\>/i', array($this, 'compileThumbnailsCallback'), $tpl);
 	}
 
+	public function getRelativePath($from, $to)	{
+		$from     = explode(DIRECTORY_SEPARATOR, $from);
+		$to       = explode(DIRECTORY_SEPARATOR, $to);
+		$relPath  = $to;
+
+		foreach($from as $depth => $dir) {
+			// find first non-matching dir
+			if($dir === $to[$depth]) {
+				// ignore this directory
+				array_shift($relPath);
+			} else {
+				// get number of remaining dirs to $from
+				$remaining = count($from) - $depth;
+				if($remaining > 1) {
+					// add traversals up to first matching dir
+					$padLength = (count($relPath) + $remaining - 1) * -1;
+					$relPath = array_pad($relPath, $padLength, '..');
+					break;
+				} else {
+					$relPath[0] = './' . $relPath[0];
+				}
+			}
+		}
+		return implode('/', $relPath);
+	}
+
 	/**
 	 * Unpacks and registers template
 	 * @param $uploadedZip (String) Path to uploaded template archive
 	 * @param $tplDef (String|Array) template name or template definition
 	 */
 	public function installTemplate($uploadedZip, $tplDef = false) {
+
+		$newsman_wpfs_creds = request_filesystem_credentials(NEWSMAN_BLOG_ADMIN_URL, '', false, false, null);
+
 		// $uploadedZip = .../wp-content/uploads/newsman/templates/sometemplate.zip
 		$extractDir = dirname($uploadedZip); // .../wp-content/uploads/newsman/templates
 
@@ -820,7 +849,6 @@ class newsmanUtils {
 
 		$firstZipContentFileName = file_get_contents($uploadedZip, false, null, 30, 255);
 		
-
 		if ( strpos($firstZipContentFileName, $tplDirName.'/') !== false ) {
 			// packed directory
 		} else {			
@@ -828,7 +856,12 @@ class newsmanUtils {
 			$extractDir .= DIRECTORY_SEPARATOR.$tplDirName;
 		}
 
-		WP_Filesystem();
+		WP_Filesystem($newsman_wpfs_creds);
+
+		if ( $newsman_wpfs_creds['connection_type'] == 'ftp' ) {
+			$extractDir = $this->getRelativePath(ABSPATH, $extractDir);	
+		}		
+
 		$res = unzip_file($uploadedZip, $extractDir);
 
 		if ( is_wp_error($res) ) {
@@ -1358,11 +1391,6 @@ class newsmanUtils {
 
 		$emailTemplates = array(
 			array(
-				'type' => NEWSMAN_ET_ADDRESS_CHANGED,
-				'name' => __('Email address updated', NEWSMAN),
-				'file' => 'address-changed.txt'
-			),
-			array(
 				'type' => NEWSMAN_ET_ADMIN_SUB_NOTIFICATION,
 				'name' => __('Administrator notification - new subscriber', NEWSMAN),
 				'file' =>  'admin-subscription-event.txt'
@@ -1391,7 +1419,12 @@ class newsmanUtils {
 				'type' => NEWSMAN_ET_UNSUBSCRIBE_CONFIRMATION,
 				'name' => __('Unsubscribe confirmation', NEWSMAN),
 				'file' => 'unsubscribe-confirmation.txt'
-			)
+			),
+			array(
+				'type' => NEWSMAN_ET_RECONFIRM,
+				'name' => __('Re-subscription confirmation', NEWSMAN),
+				'file' => 'reconfirm.txt'
+			)			
 		);
 
 		$tplFileName = NEWSMAN_PLUGIN_PATH.DIRECTORY_SEPARATOR."email-templates".DIRECTORY_SEPARATOR."newsman-system".DIRECTORY_SEPARATOR."newsman-system.html";
@@ -1467,7 +1500,7 @@ class newsmanUtils {
 	}
 
 	/* --------------------------------------------------------------------------------------------------------- */
-	/* Shortcode fucntions */	
+	/* Shortcode fucntions */
 	/* --------------------------------------------------------------------------------------------------------- */
 
 	public function modifyShortCode(&$content, $name, $searchParams = array(), $replaceParams = array()) {
@@ -1520,6 +1553,30 @@ class newsmanUtils {
 	}
 
 	// --------------
+
+	public function parseListName($fullListName) {
+		$ln = array(
+			'name' => $fullListName,
+			'selectionType' => NEWSMAN_SS_CONFIRMED
+		);
+
+		$listNameArr = explode('/', $fullListName);
+		$listNameArrCnt = count($listNameArr);
+
+		if ( $listNameArrCnt == 2 ) {
+			$ln['name'] = $listNameArr[0];
+			switch ( strtoupper($listNameArr[1]) ) {
+				case 'CONFIRMED':
+					$ln['selectionType'] = NEWSMAN_SS_CONFIRMED;
+					break;
+				case 'UNCONFIRMED':
+					$ln['selectionType'] = NEWSMAN_SS_UNCONFIRMED;
+					break;
+			}
+		}
+
+		return (object)$ln;
+	}
 
 	// recursively encodes array strings to UTF8 
 	public function utf8_encode_all($mix) {

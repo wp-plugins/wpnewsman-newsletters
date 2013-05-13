@@ -1,6 +1,17 @@
 <script type="text/javascript">
 	var NEWSMAN_PLUGIN_URL = '<?php echo NEWSMAN_PLUGIN_URL;?>';
 </script>
+<style>
+
+	.status-radio {
+		line-height: 42px;
+	}
+	.status-radio label.radio {
+		display: inline-block;
+		margin-bottom: 0;
+		margin-left: 10px;
+	}	
+</style>
 <!-- proto-->
 <div class="wrap wp_bootstrap">
 	<?php include("_header.php"); ?>
@@ -41,12 +52,17 @@
 				<li><a id="newsman-btn-chToSubscribed"><?php _e('Change to Unconfirmed', NEWSMAN); ?></a></li>
 				<li><a id="newsman-btn-chToConfirmed"><?php _e('Change to Confirmed', NEWSMAN); ?></a></li>
 			</ul>
-		</div>				
+		</div>
+		<button class="btn newsman-btn-reconfirm-group" id="btn-resend-confirmation-req">Resend Confirmation request</button>			
 		<button id="newsman-btn-delete" style="margin: 0 3px;" type="button" class="btn btn-danger"><?php _e('Delete', NEWSMAN); ?></button>
-		<button id="newsman-btn-reconfirm" style="margin: 0 3px 0 2em; display: none;" type="button" class="btn"><?php _e('Resend Confirmation Request', NEWSMAN); ?></button>
-
-		<button id="newsman-btn-export" style="float: right;" type="button" class="btn"><i class="icon-download"></i> <?php _e('Export to CSV', NEWSMAN); ?></button>
-		<button id="newsman-btn-import" style="float: right; margin-right: 5px;" type="button" class="btn"><i class="icon-upload"></i> <?php _e('Import from CSV', NEWSMAN); ?></button>
+	
+		<button id="newsman-btn-export" type="button" class="btn pull-right"><i class="icon-download"></i> <?php _e('Export to CSV', NEWSMAN); ?></button>
+		<button id="newsman-btn-import" style="margin-right: 5px;" type="button" class="btn pull-right"><i class="icon-upload"></i> <?php _e('Import from CSV', NEWSMAN); ?></button>
+		
+		<div class="newsman-btn-reconfirm-group pull-right">
+			<span class="pull-right button-row-divider">|</span>
+			<button id="newsman-btn-resubscribe" style="margin: 0 3px 0 2em;" type="button" class="btn pull-right"><?php _e('Send Re-Subscribe Request', NEWSMAN); ?></button>
+		</div>
 	</div>
 
 	<table id="newsman-mgr-subscribers" class="table table-striped table-bordered">
@@ -78,7 +94,7 @@
 			<p><?php _e('Are you sure you want to unsubscribe selected people?', NEWSMAN); ?></p>
 		</div>
 		<div class="modal-footer">
-			<a class="btn pull-left" mr="all" title="Apply to all subscribers in the list"><?php _e('Unsubscribe all', NEWSMAN); ?></a>
+			<label class="checkbox pull-left" title="Apply to all subscribers in the list"><input type="checkbox" xmr="all"> <?php _e('Unsubscribe all', NEWSMAN); ?></label>
 			<a class="btn" mr="cancel"><?php _e('Close', NEWSMAN); ?></a>
 			<a class="btn btn-warning" mr="ok"><?php _e('Unsubscribe', NEWSMAN); ?></a>
 		</div>
@@ -93,7 +109,8 @@
 			<p><?php _e('Are you sure you want to delete selected subscribers?', NEWSMAN); ?></p>
 		</div>
 		<div class="modal-footer">
-			<a class="btn pull-left" mr="all" title="Apply to all subscribers in the list"><?php _e('Delete all', NEWSMAN); ?></a>
+			<label class="checkbox pull-left" title="Apply to all subscribers in the list"><input type="checkbox" xmr="all"> <?php _e('Delete all', NEWSMAN); ?></label>
+<!-- 			<a class="btn pull-left" mr="all" title="Apply to all subscribers in the list"><?php _e('Delete all', NEWSMAN); ?></a> -->
 			<a class="btn" mr="cancel"><?php _e('Close', NEWSMAN); ?></a>
 			<a class="btn btn-danger" mr="ok"><?php _e('Delete', NEWSMAN); ?></a>
 		</div>
@@ -108,34 +125,47 @@
 			<p><?php printf( __('Are you sure you want to change status of selected subscribers to %s?', NEWSMAN), '<strong class="newsman-status"></strong>'); ?></p>
 		</div>
 		<div class="modal-footer">
-			<a class="btn pull-left" mr="all" title="Apply to all subscribers in the list"><?php _e('Change all', NEWSMAN); ?></a>
+			<label class="checkbox pull-left" title="Apply to all subscribers in the list"><input type="checkbox" xmr="all"> <?php _e('Change all', NEWSMAN); ?></label>
+		<!-- 	<a class="btn pull-left" mr="all" title="Apply to all subscribers in the list"><?php _e('Change all', NEWSMAN); ?></a> -->
 			<a class="btn" mr="cancel"><?php _e('Close', NEWSMAN); ?></a>
 			<a class="btn btn-warning" mr="ok"><?php _e('Change', NEWSMAN); ?></a>
 		</div>
 	</div>
 
-	<div class="modal dlg" id="newsman-modal-reconfirm" style="display: none;">
+	<div class="modal dlg" id="newsman-modal-resubscribe" style="display: none;">
+		<div class="modal-header">
+			<button class="close" data-dismiss="modal">×</button>
+			<h3><?php _e('Warning!', NEWSMAN); ?></h3>
+		</div>
+		<div class="modal-body">
+			<p><?php _e('This action will send re-subscribe request <strong>to all unconfirmed subscribers</strong> in the list.', NEWSMAN); ?></p>
+		</div>
+		<div class="modal-footer">
+			<a class="btn" mr="cancel"><?php _e('Cancel', NEWSMAN); ?></a>
+			<a class="btn btn-primary" mr="ok"><?php _e('Send re-subscribe request', NEWSMAN); ?></a>
+		</div>
+	</div>	
+
+	<div class="modal dlg" id="newsman-modal-resend-confirmation" style="display: none;">
 		<div class="modal-header">
 			<button class="close" data-dismiss="modal">×</button>
 			<h3><?php _e('Please, confirm...', NEWSMAN); ?></h3>
 		</div>
 		<div class="modal-body">
-			<p><?php _e('Are you sure you want to send confirmation emails to selected subscribers?', NEWSMAN); ?></p>
+			<p><?php _e('Are you sure you want to re-send confirmation emails to selected subscribers?', NEWSMAN); ?></p>
 		</div>
 		<div class="modal-footer">
-			<a class="btn pull-left" mr="to_all" title="Sends confirmation request to all subscribers in the list"><?php _e('Send to all', NEWSMAN); ?></a>
 			<a class="btn" mr="cancel"><?php _e('Close', NEWSMAN); ?></a>
 			<a class="btn btn-primary" mr="ok"><?php _e('Send', NEWSMAN); ?></a>
 		</div>
-	</div>	
-
+	</div>
 
 	<div class="modal dlg" id="newsman-modal-import" style="display: none;">
 		<div class="modal-header">
 			<button class="close" data-dismiss="modal">×</button>
 			<h3>Import subscribers into <span id="import-list-name"></span><?php _e(' list:', NEWSMAN); ?></h3>
 		</div>
-		<div class="modal-body" style="height: 300px;">	
+		<div class="modal-body" style="height: 330px;">	
 			<div class="row-fluid" id="import-form-titles">
 				<div class="span3">
 					<h4><?php _e('Uploaded files', NEWSMAN); ?></h4>					
@@ -158,6 +188,9 @@
 								</div>
 								<div class="span3">
 									<label class="checkbox"><input id="skip-first-row" type="checkbox"><?php _e(' Skip first row', NEWSMAN); ?></label>
+								</div>
+								<div class="span5 status-radio">
+									<span>Status: <label for="st-confirmed" class="radio"><input id="st-confirmed" type="radio" name="apply-status" value="confirmed" checked="checked"> Confirmed</label>  <label for="st-unconfirmed" class="radio"><input id="st-unconfirmed" type="radio" name="apply-status" value="unconfirmed"> Unconfirmed</label></span>
 								</div>
 							</div>
 						</div>			

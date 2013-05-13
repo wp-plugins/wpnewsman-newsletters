@@ -29,14 +29,17 @@ class newsmanList extends newsmanStorable {
 	var $uid;
 	var $name;
 
+	// main selection type used in major queries,
+	// this value is modifed by the sender to get "unconfirmed" subset of the list
+	var $selectionType = NEWSMAN_SS_CONFIRMED;
+
 	function __construct($listName = 'default', $load = false) {
 		$this->name = $listName;
 		if ( !$load ) {
 
 			$options = newsmanOptions::getInstance();
-			$defaultForm = $options->get('form');
 
-			$this->form = $defaultForm['json'];
+			$this->form = newsmanGetDefaultForm();
 
 			$this->uid = $this->getNewUID();
 
@@ -273,7 +276,7 @@ class newsmanList extends newsmanStorable {
 		$sl = newsmanSentlog::getInstance();
 		$slTbl = $sl->tableName;
 
-		$sql = "SELECT * FROM $this->tblSubscribers WHERE status = ".NEWSMAN_SS_CONFIRMED." AND NOT EXISTS (
+		$sql = "SELECT * FROM $this->tblSubscribers WHERE status = ".$this->selectionType." AND NOT EXISTS (
 					SELECT 1 from $slTbl WHERE
 						 $slTbl.`emailId` = %d AND 
 						 $slTbl.`listId` = %d AND
@@ -287,7 +290,7 @@ class newsmanList extends newsmanStorable {
 		$res = array();
 
 		foreach ( $rows as $row ) {
-			$s = new newsmanSub($this->tableName);
+			$s = new newsmanSub($this->tblSubscribers);
 			$s->fromDBRow($row);
 			$res[] = $s;
 		}
@@ -301,7 +304,7 @@ class newsmanList extends newsmanStorable {
 		$sl = newsmanSentlog::getInstance();
 		$slTbl = $sl->tableName;
 
-		$sql = "SELECT count(*) FROM $this->tblSubscribers WHERE status = ".NEWSMAN_SS_CONFIRMED." AND `id` NOT IN ( SELECT `recipientId` from $slTbl WHERE $slTbl.`emailId` = %d AND $slTbl.`listId` = %d )";
+		$sql = "SELECT count(*) FROM $this->tblSubscribers WHERE status = ".$this->selectionType." AND `id` NOT IN ( SELECT `recipientId` from $slTbl WHERE $slTbl.`emailId` = %d AND $slTbl.`listId` = %d )";
 		$sql = $wpdb->prepare($sql, $emailId, $this->id, $limit);
 
 		return intval($wpdb->get_var($sql));
@@ -310,7 +313,7 @@ class newsmanList extends newsmanStorable {
 	public function getTotal() {
 		global $wpdb;
 
-		$sql = "SELECT count(*) FROM $this->tblSubscribers WHERE status = ".NEWSMAN_SS_CONFIRMED;
+		$sql = "SELECT count(*) FROM $this->tblSubscribers WHERE status = ".$this->selectionType;
 
 		return intval($wpdb->get_var($sql));
 	}	

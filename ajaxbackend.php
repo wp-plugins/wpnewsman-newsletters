@@ -652,7 +652,7 @@
 				$email->status = 'pending';
 			} elseif ( $send == 'schedule' ) {
 				$email->schedule = intval($ts);
-				$email->status = 'scheduled';				
+				$email->status = 'scheduled';
 			}		
 
 			$r = $email->save();
@@ -665,7 +665,6 @@
 				$this->respond(false, $email->lastError);
 			}
 		}
-
 
 		public function ajGetTemplates() {
 			global $wpdb;
@@ -1248,7 +1247,7 @@
 			return $csvArr;
 		}
 
-		private function importSubscriber($list, $fields, $row) {
+		private function importSubscriber($list, $fields, $status, $row) {
 			$form = array();
 
 			$s = $list->newSub();
@@ -1258,7 +1257,12 @@
 			}
 
 			$s->fill($form);
-			$s->confirm();
+			if ( $status === 'unconfirmed' ) {
+				$s->unconfirm();	
+			} else {
+				$s->confirm();
+			}
+			
 			
 			return $s->save();
 		}
@@ -1292,6 +1296,8 @@
 			//$csv = $this->parseCSVfile($filePath, $importParams['delimiter']);
 			$delimiter = $importParams['delimiter'];
 
+			$st = $importParams['status'];
+
 			$fields = $importParams['fields'];
 
 			$c = 0;
@@ -1308,7 +1314,7 @@
 					if ( $c === 1 && $skipFirst ) {
 						continue;
 					}						
-					if ( $this->importSubscriber($list, $fields, $data) !== false ) {
+					if ( $this->importSubscriber($list, $fields, $st, $data) !== false ) {
 						$imported += 1;
 					}
 				}
@@ -1395,7 +1401,7 @@
 			} else {
 				$fields = $form->getFields();
 
-				$fields['ip'] = 'IP Address';
+				$fields['ip'] = __('IP Address', NEWSMAN);
 				
 				$this->respond(true, __('success', NEWSMAN), array(
 					'fields' => $fields
@@ -1406,6 +1412,9 @@
 		public function ajInstallTemplates() {
 			$u = newsmanUtils::getInstance();
 			$installed = 0;
+
+			$url = 'http://blog.dev/wp-admin/admin.php?page=newsman-templates'; //temporary
+			$method = 'GET';
 
 			$files = $this->getUploadedFiles('template', true);
 			if ( $files ) {
@@ -1648,12 +1657,29 @@
 			$this->respond(true, __('Saved', NEWSMAN));
 		}		
 
+		public function ajSendResubscribeRequest() {
+			global $newsman_current_subscriber;
+			global $newsman_current_email;
+			global $newsman_current_list;
+
+			$u = newsmanUtils::getInstance();
+			$n = newsman::getInstance();
+
+			$listId = $this->param('listId', '1');
+
+			if ( $n->createReConfirmEmail($listId) ) {
+				$this->respond(true, __('Your email is successfully scheduled.', NEWSMAN), array(
+					'redirect' => get_bloginfo('wpurl').'/wp-admin/admin.php?page=newsman-mailbox'
+				));
+			} else {
+				$this->respond(false, __('ReConfirmation system email template is not found.', NEWSMAN));
+			}
+		}
+
 		public function ajResendConfirmation() {
 			global $newsman_current_subscriber;		
 			global $newsman_current_email;
 			global $newsman_current_list;
-
-			$all = ( $this->param('all', '0') === '1' );
 
 			$u = newsmanUtils::getInstance();
 
@@ -1669,22 +1695,16 @@
 
 			$newsman_current_list = $list;
 
-			if ( $all ) {
-				$subs = $list->findAllSubscribers();
-			} else {
-				$subs = $list->findAllSubscribers("id in ".$set);
-			}
+			$subs = $list->findAllSubscribers("id in ".$set, array());
 
 			foreach ($subs as $s) {
 				$newsman_current_subscriber = $s->toJSON();
-
 				$newsman = newsman::getInstance();
-
 				$newsman->sendEmail($list->id, NEWSMAN_ET_CONFIRMATION);
 			}
 
 			// ajax responce
-			$this->respond(true, __('success', NEWSMAN) );
+			$this->respond(true, __('success', NEWSMAN) );			
 		}
 
 		public function ajGetListSettings() {

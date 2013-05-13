@@ -65,6 +65,10 @@ class newsmanSub {
 		$this->rawRec['status'] = NEWSMAN_SS_CONFIRMED;
 	}
 
+	public function unconfirm() {
+		$this->rawRec['status'] = NEWSMAN_SS_UNCONFIRMED;
+	}
+
 	public function is_subscribed() {
 		return $this->rawRec['status'] == NEWSMAN_SS_CONFIRMED || $this->rawRec['status'] == NEWSMAN_SS_UNCONFIRMED;
 	}

@@ -1,6 +1,6 @@
 <div class="alert newsman-admin-notification">
-	<form class="newsman-ajax-from" action="ajSwitchLocale">
-		<button type="button" class="close" data-dismiss="alert">&times;</button>
+	<button type="button" class="close" data-dismiss="alert">&times;</button>
+	<form class="newsman-ajax-from" action="ajSwitchLocale">		
 		<h3><?php _e('Warning!', NEWSMAN); ?></h3>
 		<p><?php /* translators: Replace the name of the language with the one you are translating to */ echo sprintf(__('You switched your blog to a new locale %s. Would you also like to replace the action pages and system email templates with English default versions?', NEWSMAN), $this->wplang); ?></p>
 		<div class="notification-action-form">

@@ -290,10 +290,16 @@ class newsmanForm {
 	}
 
 	public function getFields() {
+		$u = newsmanUtils::getInstance();
 		$fields = array();
+
+		$u->log(print_r($this->decodedForm, true));
+
 		foreach ($this->decodedForm as $item) {
+
 			if ( isset($item['name']) && isset($item['type']) && $item['type'] !== 'html' ) {
-				$fields[$item['name']] = $item['label'];
+				$key = ( $item['type'] === 'email' ) ? 'email' : $item['name'];
+				$fields[$key] = $item['label'];
 			}			
 		}
 		return $fields;

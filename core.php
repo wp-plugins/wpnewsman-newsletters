@@ -30,7 +30,6 @@ function wpnewsmanFilterSchedules($schedules) {
 
 add_filter('cron_schedules', 'wpnewsmanFilterSchedules');
 
-
 function wpnewsman_loadstring() {
 	$domain = NEWSMAN;
 	// The "plugin_locale" filter is also used in load_plugin_textdomain()
@@ -85,7 +84,7 @@ class newsman {
 
 		add_action('newsman_admin_page_header', array($this, 'showAdminNotifications'));
 
-		//add_filter('cron_schedules', array($this, 'addRecurrences'));		
+		//add_filter('cron_schedules', array($this, 'addRecurrences'));
 
 		$this->options = newsmanOptions::getInstance();
 		$this->utils = newsmanUtils::getInstance();
@@ -300,7 +299,6 @@ class newsman {
     	return $out;
     	
     }
-
 
     public function newsmanShortCodeOnWeb($attr, $content = null) {
     	if ( defined('EMAIL_WEB_VIEW') ) {
@@ -791,7 +789,6 @@ class newsman {
 
 	public function getTemplate($listId, $tplType) {
 		$email = array();
-		$emlId = $this->options->get('emailTemplates.'.$name);
 
 		$tpl = newsmanEmailTemplate::findOne('`assigned_list` = %d AND `system_type` = %d', array($listId, $tplType));
 
@@ -816,6 +813,39 @@ class newsman {
 		));
 
 		return $eml;
+	}
+
+	public function createReConfirmEmail($listId) {
+
+		$list = newsmanList::findOne('id = %d', array($listId));
+
+		$tpl = newsmanEmailTemplate::findOne('`assigned_list` = %d AND `system_type` = %d', array($listId, NEWSMAN_ET_RECONFIRM));
+
+		if ( $tpl ) {
+			$email = new newsmanEmail();
+
+			$email->type = 'email';	
+
+			$email->to = array($list->name.'/UNCONFIRMED');
+
+			$email->subject = $tpl->subject;
+			$email->html = $tpl->html;
+			$email->plain = $tpl->plain;
+			$email->assetsURL = $tpl->assetsURL;
+			$email->assetsPath = $tpl->assetsPath;
+			$email->particles = $tpl->particles;
+
+			$email->status = 'pending'; // $eml->status = 'pending';
+			$email->created = date('Y-m-d');
+
+			$email->save();
+
+			// starting sender for pending emails
+			$this->mailman();
+
+			return $email;
+		}
+		return false;
 	}
 
 	public function notifyAdmin($listId, $tplType) {
@@ -847,8 +877,7 @@ class newsman {
 		wp_localize_script( 'newsmanform', 'newsmanformL10n', array(
 			'pleaseFillAllTheRequiredFields' => __('Please fill all the required fields.', NEWSMAN),
 			'pleaseCheckYourEmailAddress' => __('Please check your email address.', NEWSMAN)
-		) );		
-
+		) );
 
 		wp_enqueue_script('newsman-jquery-1.9.1-ie-fix', NEWSMAN_PLUGIN_URL.'/js/jquery-1.9.1.mod.js', array('jquery'), NEWSMAN_VERSION);
 
@@ -878,6 +907,7 @@ class newsman {
 				wp_register_script('bootstrapjs', NEWSMAN_PLUGIN_URL.'/js/bootstrap.min.js', array('jquery'));
 				
 				wp_register_script('director', NEWSMAN_PLUGIN_URL.'/js/director.js');
+				wp_register_script('hashroute', NEWSMAN_PLUGIN_URL.'/js/hashroute.js');
 
 				if ( $page == 'newsman-forms' ) {
 					wp_enqueue_style('fileuploader-css');
@@ -899,6 +929,7 @@ class newsman {
 					wp_enqueue_style('bootstrap');				
 					wp_enqueue_script('bootstrapjs');
 					wp_enqueue_script('director');		
+					wp_enqueue_script('hashroute');		
 					// ------ 
 
 					wp_register_style('jq-multiselect', NEWSMAN_PLUGIN_URL.'/js/css/jquery.multiselect.css', array(), NEWSMAN_VERSION);
@@ -912,7 +943,7 @@ class newsman {
 
 					wp_enqueue_script('neouploader-js', NEWSMAN_PLUGIN_URL.'/js/neoUploader.js', array('jquery', 'jquery-ui-widget') );
 
-					wp_enqueue_script('newsman-holder-js', NEWSMAN_PLUGIN_URL.'/js/holder.js');
+					//wp_enqueue_script('newsman-holder-js', NEWSMAN_PLUGIN_URL.'/js/holder.js');
 
 					wp_register_script('bootstrap-editable', NEWSMAN_PLUGIN_URL.'/js/bootstrap-editable.js', array('bootstrapjs'));
 					wp_register_style('bootstrap-editable-css', NEWSMAN_PLUGIN_URL.'/css/bootstrap-editable.css', array('bootstrap'));
@@ -1053,7 +1084,15 @@ class newsman {
 						'savedAt' => __('Saved at', NEWSMAN),
 
 						'pleaseFillAllTheRequiredFields' => __('Please fill all the required fields.', NEWSMAN),
-						'pleaseCheckYourEmailAddress' => __('Please check your email address.', NEWSMAN)
+						'pleaseCheckYourEmailAddress' => __('Please check your email address.', NEWSMAN),
+
+						'NEWSMAN_ET_ADMIN_SUB_NOTIFICATION' => __('Subscribe notification email sent to the administrator.', NEWSMAN),
+						'NEWSMAN_ET_ADMIN_UNSUB_NOTIFICATION' => __('Unsubscribe notification email sent to the administrator.', NEWSMAN),
+						'NEWSMAN_ET_CONFIRMATION' => __('Email with the confirmation link sent to the user upon subscription.', NEWSMAN),
+						'NEWSMAN_ET_UNSUBSCRIBE' => __('Email sent to the user that confirms that his email address was unsubscribed.', NEWSMAN),
+						'NEWSMAN_ET_WELCOME' => __('Welcome message sent after the subscriber confirms his subscription.', NEWSMAN),
+						'NEWSMAN_ET_UNSUBSCRIBE_CONFIRMATION' => __('Email with a link to confirm the subscriber’s decision to unsubscribe.', NEWSMAN),
+						'NEWSMAN_ET_RECONFIRM' => __('Email with a link to re-confirm the subscription that is sent to ALL "unconfirmed" subscribers on the list.', NEWSMAN)
 					) );
 				}
 
@@ -1156,7 +1195,6 @@ class newsman {
 					$this->redirect( $this->getLink('unsubscribeSucceed', array('u' => $_REQUEST['u']) ) );
 				}
 			}
-
 		}
 		
 		if ( isset($_POST['nwsmn-subscribe']) ) {
@@ -1510,6 +1548,7 @@ class newsman {
 	}
 
 	public function ensureUploadDir($subdir = false) {
+
 		$dirs = wp_upload_dir();
 		$ud = $dirs['basedir'].DIRECTORY_SEPARATOR.'wpnewsman';
 
@@ -2165,6 +2204,10 @@ class newsman {
 
 		if ( $hideForLang != $this->wplang ) {
 			$this->options->set('hideLangNotice', false);			
+		}
+
+		if ( defined('FS_METHOD') && ( FS_METHOD !== '' || FS_METHOD !== 'direct' ) ) {
+			include('views/_an_fs_method.php');
 		}
 	}
 

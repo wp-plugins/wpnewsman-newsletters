@@ -128,13 +128,16 @@ class newsmanSentlog {
 
 	public function getPendingFromList($emailId, $listName, $limit = 25) {
 
-		$list = newsmanList::findOne('name = %s', array($listName) );
+		$ln = $this->u->parseListName($listName);
+
+		$list = newsmanList::findOne('name = %s', array($ln->name) );
+		$list->selectionType = $ln->selectionType;
 
 		if ( !$list ) {
 			die("List with the name $listName is not found");
 		}
 
-		$subs = $list->getPendingBatch($emailId, $limit);	
+		$subs = $list->getPendingBatch($emailId, $limit, $selectionType);	
 
 		$result = array();
 
@@ -367,10 +370,16 @@ class newsmanTransmissionStreamer {
 	}
 
 	function getTotal() {
+		$u = newsmanUtils::getInstance();
+
 		$this->total = count($this->plainAddresses);
 
 		foreach ($this->to as $listName) {
-			$list = newsmanList::findOne('name = %s', array($listName) );
+
+			$ln = $u->parseListName($listName);
+
+			$list = newsmanList::findOne('name = %s', array($ln->name) );
+			$list->selectionType = $ln->selectionType;
 
 			if ( $list ) {
 				$this->total += $list->getTotal();

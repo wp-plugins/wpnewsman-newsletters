@@ -24,8 +24,12 @@ function newsman_do_migration() {
 		$completed = array();
 	}
 
+	$u->log('DOING MIGRATION');
+
 	foreach ($newsman_changes as $change) {
 		if ( $oldVersion < $change['introduced_in'] && ( !in_array($change['func'], $completed) || $change['repeat'] ) ) {
+
+			$u->log("CALLING CHANGE:\n".print_r($change, true));
 
 			call_user_func($change['func']);
 			$completed[] = $change['func'];
@@ -276,5 +280,70 @@ function newsman_migration_add_index_to_sentlog2() {
 	$sql = 'ALTER TABLE `'.$wpdb->prefix.'newsman_sentlog` ADD INDEX recipientIdIdx ( `recipientId`, `emailId`, `listId` )';
 	$wpdb->query($sql);
 }
+
+
+$newsman_changes[] = array(
+	'introduced_in' => $u->versionToNum('1.5.2'),
+	'func' => 'newsman_migration_add_re_confirm_email'
+);
+
+function newsman_migration_add_re_confirm_email() {
+	$o = newsmanOptions::getInstance();
+	$u = newsmanUtils::getInstance();
+
+	// -- email template
+
+	$tplDef = array(
+		'type' => NEWSMAN_ET_RECONFIRM,
+		'name' => __('Re-subscription confirmation', NEWSMAN),
+		'file' => 'reconfirm.txt'
+	);
+
+	$tplFileName = NEWSMAN_PLUGIN_PATH.DIRECTORY_SEPARATOR."email-templates".DIRECTORY_SEPARATOR."newsman-system".DIRECTORY_SEPARATOR."newsman-system.html";
+	$baseTpl = file_get_contents($tplFileName);
+
+	$eml = $u->emailFromFile($tplDef['file']);
+
+	$tpl = newsmanEmailTemplate::findOne('`system` = 1 AND `assigned_list` = %d AND `system_type` = %d', array(0, $tplDef['type']));
+
+	if ( !$tpl ) {
+		$tpl = new newsmanEmailTemplate();
+
+		$tpl->name = $tplDef['name'];
+		$tpl->subject = $eml['subject'];
+		$tpl->html = $u->replaceSectionContent($baseTpl, 'std_content', $eml['html']);
+		$tpl->plain = $eml['plain'];
+		$tpl->system = true;
+		$tpl->system_type = $tplDef['type'];
+
+		$tpl->save();			
+	}
+
+
+	$doneListIds = array();
+	$tpls = newsmanEmailTemplate::findOne('`system` = 1 AND `assigned_list` != 0 AND `system_type` = %d', array($tplDef['type']));
+
+	foreach ($tpls as $tpl) {
+		$doneListIds[] = $tpl->id;
+	}
+
+	foreach ($lists as $list) {
+		if ( !in_array($list->id, $doneListIds) ) {
+			$u->duplicateTemplate($tpl->id, false, $list->id);	
+		}		
+	}
+}
+
+$newsman_changes[] = array(
+	'introduced_in' => $u->versionToNum('1.5.2'),
+	'func' => 'newsman_migration_remove_address_changed_tpl'
+);
+
+function newsman_migration_remove_address_changed_tpl() {
+	newsmanEmailTemplate::removeAll('`system_type` = %d', array(NEWSMAN_ET_ADDRESS_CHANGED));
+}
+
+
+
 
 

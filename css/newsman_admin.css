@@ -2,6 +2,10 @@ input[type="text"], input[type="password"], input[type="number"], input[type="se
     -moz-box-sizing: content-box;
 }
 
+#wpcontent {
+	margin-right: 20px;
+}
+
 #datepicker {
 	width: 214px;
 	display: inline-block;
@@ -24,6 +28,18 @@ input[type="text"], input[type="password"], input[type="number"], input[type="se
 
 .email.editable.editable-click {
 	cursor: pointer;
+}
+
+.modal-footer label.checkbox {
+	line-height: 28px;
+	margin-bottom: 0;
+	padding-bottom: 0;
+}
+
+.button-row-divider {
+	padding: 0 10px;
+	 line-height: 28px;
+	 color: #DADADA;
 }
 
 .noselect {
@@ -142,8 +158,13 @@ tr:hover .newsman-inline-controls {
 
 .newsman-tbl-controls .btn-group {
 	display: inline-block;
-	vertical-align: middle;
+	vertical-align: top;
 }
+
+.newsman-tbl-controls .btn {
+	vertical-align: top;
+}
+
 
 .newsman-tbl-controls .pagination {
 	margin: 0;
@@ -154,7 +175,11 @@ tr:hover .newsman-inline-controls {
 .newsman-tbl-controls .action-group {
 	margin: 0 3px; 
 	display: inline-block; 
-	vertical-align: middle;
+	/*vertical-align: middle;*/
+}
+
+.newsman-btn-reconfirm-group {
+	display: inline-block;
 }
 
 /* form tweak */ 
@@ -1270,6 +1295,14 @@ input.newsman-field-options-radio-opt-input {
 
 .newsman-admin-notification p {
 	margin: 10px 0;
+}
+
+.newsman-admin-notification h3 {
+	margin-top: 0;
+}
+
+.newsman-admin-notification > button.close {
+	position: static !important;
 }
 
 .newsman-admin-notification
