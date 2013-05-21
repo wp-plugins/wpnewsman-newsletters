@@ -2209,7 +2209,7 @@ class newsman {
 			$this->options->set('hideLangNotice', false);			
 		}
 
-		if ( defined('FS_METHOD') && ( FS_METHOD !== '' || FS_METHOD !== 'direct' ) ) {
+		if ( defined('FS_METHOD') && FS_METHOD !== '' && FS_METHOD !== 'direct' ) {
 			include('views/_an_fs_method.php');
 		}
 	}
