@@ -685,6 +685,8 @@ jQuery(function($){
 			err = data.msg;			
 		} catch(e) {
 			err = 'Cannot parse server response.';
+			console.log(e+'');
+			console.log(t.responseText);			
 			showMessage(err, 'error', null, {
 				responseText: t.responseText,
 				query: this.data
@@ -2546,7 +2548,7 @@ jQuery(function($){
 			throw new Error('Actions map is not defined for entity type '+NEWSMAN_ENT_TYPE);
 		}
 
-		var editor = CKEDITOR.replace( 'content', {
+		NEWSMAN.editor = CKEDITOR.replace( 'content', {
 			width: 'auto',
 			height: 700,
 			customConfig: NEWSMAN_PLUGIN_URL+'/js/custom_config.js'
@@ -2562,9 +2564,9 @@ jQuery(function($){
 			});			
 		}
 
-		editor.on('newsmanSave.ckeditor', function(){
+		NEWSMAN.editor.on('newsmanSave.ckeditor', function(){
 			changed();
-			editor.fire('afterNewsmanSave.ckeditor');
+			NEWSMAN.editor.fire('afterNewsmanSave.ckeditor');
 		});
 
 		$('#newsman-email-subj, #newsman-template-name').change(function(){
@@ -2619,9 +2621,9 @@ jQuery(function($){
 				id: NEWSMAN_ENTITY_ID,
 				action: actions.actSave
 			},
-			edBody = editor.document ? editor.document.getBody().$ : false,
+			edBody = NEWSMAN.editor.document ? NEWSMAN.editor.document.getBody().$ : false,
 			plain = convertToPlainText(edBody),
-			html = editor.getData();
+			html = NEWSMAN.editor.getData();
 
 			if ( !plain || !html ) {
 				return;
@@ -2664,7 +2666,7 @@ jQuery(function($){
 		$('#newsman-send-datepicker').datetimepicker('setDate', startDate);		
 
 		$('#newsman-send').click(function(){
-			editor.setMode('wysiwyg');
+			NEWSMAN.editor.setMode('wysiwyg');
 			sendEmail();
 		});
 	});
@@ -4370,8 +4372,8 @@ jQuery(function($){
 	});	
 
 	$('#btn-send-test-email').click(function(){
-		if ( editor ) {
-			editor.setMode('wysiwyg');
+		if ( NEWSMAN.editor ) {
+			NEWSMAN.editor.setMode('wysiwyg');
 		}
 
 		for (var ins in CKEDITOR.instances) {

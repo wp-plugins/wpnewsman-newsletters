@@ -33,16 +33,20 @@ class newsmanMailMan {
 	// shoud be run	by WP every minute
 	// check if workers alive
 	public function pokeWorkers() {
-		$emails = newsmanEmail::findAll('status = "%s"', array('inprogress'));
+		$emails = newsmanEmail::findAll('status = %s', array('inprogress'));
 
 		foreach ($emails as $email) {
 
 			if ( !newsmanWorker::isProcessRunning( $email->workerPid ) && !newsmanWorker::isProcessStopped($email->workerPid) ) {
 
-				$email->status = 'pending';
-				$email->workerPid = 0;
+				// double checke the status here to solve possible race condition
 
-				$email->save();
+				if ( $this->getStatus() === 'inprogress' ) {
+					$email->status = 'pending';
+					$email->workerPid = 0;
+
+					$email->save();
+				}
 			}
 		}
 	}

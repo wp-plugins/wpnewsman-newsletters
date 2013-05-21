@@ -432,7 +432,7 @@ class newsmanUtils {
 	}
 
 	function cutScripts($src) {
-		return preg_replace('@<script>.*?</script>@i', '', $src);
+		return preg_replace('@<script[^>]*>[\s\S]*?</script>@i', '', $src);
 	}	
 
 	function str_insert($insertstring, $intostring, $offset) {
@@ -1593,5 +1593,30 @@ class newsmanUtils {
 		$content = file_get_contents($fn);
 		return mb_convert_encoding($content, 'UTF-8',
 			mb_detect_encoding($content, 'UTF-8, ISO-8859-1', true));
-	}	
+	}
+
+	/* --------------------------------------------------------------------------------------------------------- */
+	/* Locks */
+	/* --------------------------------------------------------------------------------------------------------- */
+
+	public function lock($name) {
+		global $wpdb;
+		$sql = $wpdb->prepare("SELECT GET_LOCK(%s, 10);", $name);
+		$r = $wpdb->get_var($sql);
+		return $r === '1';
+	}
+
+	public function isLocked($name) {
+		global $wpdb;
+		$sql = $wpdb->prepare("SELECT IS_FREE_LOCK(%s);", $name);
+		$r = $wpdb->get_var($sql);
+		return $r === '0';
+	}
+
+	public function releaseLock($name) {
+		global $wpdb;
+		$sql = $wpdb->prepare("SELECT RELEASE_LOCK(%s);", $name);
+		$r = $wpdb->get_var($sql);
+		return $r === '1';
+	}
 }

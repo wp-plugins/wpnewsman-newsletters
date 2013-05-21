@@ -103,13 +103,13 @@ class newsmanSub {
 
 	public function toJSON() {
 		$jo = array(
-			'id' => $this->rawRec['id'],
-			'ts' => $this->rawRec['ts'],
-			'ip' => $this->rawRec['ip'],
-			'email' => $this->rawRec['email'],
-			'status' => $this->rawRec['status'],
-			'bounceStatus' => $this->rawRec['bounceStatus'],
-			'ucode' => $this->rawRec['ucode']
+			'id' => isset($this->rawRec['id']) ? $this->rawRec['id'] : NULL,
+			'ts' => isset($this->rawRec['ts']) ? $this->rawRec['ts'] : NULL,
+			'ip' => isset($this->rawRec['ip']) ? $this->rawRec['ip'] : NULL,
+			'email' => isset($this->rawRec['email']) ? $this->rawRec['email'] : NULL,
+			'status' => isset($this->rawRec['status']) ? $this->rawRec['status'] : NULL,
+			'bounceStatus' => isset($this->rawRec['bounceStatus']) ? $this->rawRec['bounceStatus'] : NULL,
+			'ucode' => isset($this->rawRec['ucode']) ? $this->rawRec['ucode'] : NULL
 		);
 		if ( isset($this->rawRec['fields']) ) {
 			$jo = array_merge($jo, $this->rawRec['fields']);	

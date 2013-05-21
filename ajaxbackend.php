@@ -7,9 +7,9 @@
 	require_once(__DIR__.DIRECTORY_SEPARATOR.'class.emailtemplates.php');
 	require_once(__DIR__.DIRECTORY_SEPARATOR.'class.sentlog.php');
 
-	if ( !defined('NEWSMAN_SS_UNCONFIRMED') )  { define('NEWSMAN_SS_UNCONFIRMED',0);  }
-	if ( !defined('NEWSMAN_SS_CONFIRMED') )    { define('NEWSMAN_SS_CONFIRMED',1);    }
-	if ( !defined('NEWSMAN_SS_UNSUBSCRIBED') ) { define('NEWSMAN_SS_UNSUBSCRIBED',2); }
+	if ( !defined('NEWSMAN_SS_UNCONFIRMED') )  { define('NEWSMAN_SS_UNCONFIRMED', 0);  }
+	if ( !defined('NEWSMAN_SS_CONFIRMED') )    { define('NEWSMAN_SS_CONFIRMED', 1);    }
+	if ( !defined('NEWSMAN_SS_UNSUBSCRIBED') ) { define('NEWSMAN_SS_UNSUBSCRIBED', 2); }
 
 	class newsmanAJAX {
 
@@ -31,7 +31,7 @@
 			}
 		}
 
-		public function respond($state, $msg, $params = array()) {
+		public function respond($state, $msg, $params = array(), $stop = true) {
 			global $db;
 
 			$u = newsmanUtils::getInstance();
@@ -47,36 +47,28 @@
 				echo json_encode($msg);
 				return;
 			}			
-
-		    // if ( !ob_start("ob_gzhandler") ) { 
-		    //     ob_start(); 			
-		    // }
 			
 			if ( !$state ) {
 				header("HTTP/1.0 400 Bad Request");
 			}
 
+			$content = json_encode( $u->utf8_encode_all($msg) );
+
+			ob_end_clean();
+			header("Connection: close");
+			ignore_user_abort(); // optional
+			ob_start();
+			echo $content;
+			$size = ob_get_length();
 			header("Content-type: application/json");
+			header("Content-Length: $size");
+			ob_end_flush(); // Strange behaviour, will not work
+			flush();            // Unless both are called !
 
-
-			
-			echo json_encode( $u->utf8_encode_all($msg) );
-			//echo "<pre>";
-			//print_r(var_dump($msg),true);
-			//echo "</pre>";    
-
-		    //$size = ob_get_length();    
-		    // send headers to tell the browser to close the connection    
-    		//header("Content-Length: $size");
-			//header('Connection: close');    
-
-			// flush all output 
-			// ob_end_flush(); 
-			// ob_flush(); 
-			// flush();
-			   
-			if ($db) $db->close();  
-			exit();
+			if ( $stop ) {
+				if ($db) $db->close();  
+				exit();
+			}			   
 		}
 
 		public function param($param) {
@@ -245,10 +237,11 @@
 			
 			//----------------------------------------- 
 			
-			if ($res === true)
+			if ($res === true) {
 			    $this->respond(true, sprintf(__('Test email was sent to %s.', NEWSMAN), $email) );
-			else
-			    $this->respond(false, $res);		
+			} else {
+			    $this->respond(false, $res);
+			}
 		}
 
 		public function ajUnsubscribe() {
@@ -522,8 +515,6 @@
 				}
 			}
 
-
-
 			if ( !empty($cats) ) {
 				$args['category__in'] = $cats;
 			}
@@ -541,27 +532,25 @@
 				$query = new WP_Query('posts_per_page='.$ipp.'&paged='.$page.'&post_type=post&s='.$search.'&order=DESC&orderby=date');
 			} else {
 				$query = new WP_Query($args);
-			}			
-
-			// array( 'post_status' => array( 'publish', 'private' ), 'perm' => 'readable' ) 
+			}
 
 			while ( $query->have_posts() ) {
 				$query->the_post();
 				$pt = mysql2date('U', $post->post_date); 
 
-				$content = $u->fancyExcerpt($post->post_content, 25);
+				$content = $u->cutScripts($post->post_content);
 
-				//if ('publish' == $post->post_status) {
-					$posts[] =	array(
-						'id' => $post->ID,
-						'date' => date($df.' '.$tf, $pt),
-						'title' => $post->post_title,
-						'description' => $content,
-						'link' => get_permalink($post->ID),
-						'number' => $i
-					);
-					$i++;
-				//}
+				$content = $u->fancyExcerpt($content, 25);
+
+				$posts[] =	array(
+					'id' => $post->ID,
+					'date' => date($df.' '.$tf, $pt),
+					'title' => $post->post_title,
+					'description' => $content,
+					'link' => get_permalink($post->ID),
+					'number' => $i
+				);
+				$i++;
 			}
 
 			$this->respond(true, 'success', array(
@@ -1324,11 +1313,6 @@
 
 			unlink($filePath);
 
-			//if ( preg_match_all('/[a-z0-9!#$%&\'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&\'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/ig', $content, $matches) ) {
-			// if ( preg_match_all('/\b[a-z0-9]+(?:[-\._]?[a-z0-9]+)*@(?:[a-z0-9]+(?:-?[a-z0-9]+)*\.)+[a-z]+\b/i', $content, $matches) ) {
-
-			// }
-
 			return $imported;
 		}
 
@@ -1458,7 +1442,9 @@
 				$email->status = 'stopped';
 				$email->save();								
 			}
-			$this->respond(true, 'Success');
+			$this->respond(true, 'Success', array(), false);
+			sleep(10); // sleep for few seconds to keep mysql lock alive
+			exit();
 		}
 			
 		public function ajResumeSending() {
@@ -1816,7 +1802,7 @@
 			$r = $u->mail($msg, array( 'to' => $toEmail) );
 
 			if ( $r === true ) {
-				$this->respond(true, sprintf(__('Test email was sent to %s.', NEWSMAN), $toEmail) );
+				$this->respond(true, sprintf(__('Test email was sent to %s.', NEWSMAN), $toEmail));
 			} else {
 				$this->respond(false, $r);
 			}			

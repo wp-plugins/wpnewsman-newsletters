@@ -3,7 +3,7 @@
 Plugin Name: G-Lock WPNewsman Lite
 Plugin URI: http://wpnewsman.com
 Description: You get simple yet powerful newsletter solution for WordPress. Now you can easily add double optin subscription forms in widgets, articles and pages, import and manage your lists, create and send beautiful newsletters directly from your WordPress site. You get complete freedom and a lower cost compared to Email Service Providers. Free yourself from paying for expensive email campaigns. WPNewsman plugin updated regularly with new features.
-Version: 1.5.2
+Version: 1.5.3
 Author: Alex Ladyga - G-Lock Software
 Author URI: http://www.glocksoft.com
 */
@@ -31,7 +31,7 @@ function newsman_ensure_correct_path($path) {
 }
 
 define('NEWSMAN', 'wpnewsman');
-define('NEWSMAN_VERSION', '1.5.2');
+define('NEWSMAN_VERSION', '1.5.3');
 
 if ( preg_match('/.*?\.dev$/i', $_SERVER['HTTP_HOST']) ) {
 	define('NEWSMAN_DEV_HOST', true);
@@ -58,6 +58,10 @@ define('NEWSMAN_ET_RECONFIRM', 8);
 
 if ( strpos($_SERVER['REQUEST_URI'], 'frmGetPosts.php') !== false && !defined('INSERT_POSTS_FRAME') ) {
 	define('INSERT_POSTS_FRAME', true);
+}
+
+function newsmanIsOnWindows() {
+	return strtoupper(substr(PHP_OS, 0, 3)) === 'WIN';
 }
 
 function newsmanStopActivation() {
@@ -154,16 +158,6 @@ function newsmanCheckCompatibility() {
 		'name' => __('MBString extension', NEWSMAN),
 		'help' => __('MBString extension is required for correct processing of non unicode characters. Read <a href="http://www.php.net/manual/en/mbstring.installation.php">how to Install/Configure</a> or contact your hosting provider if you\'re on a shared hosting.', NEWSMAN)
 	);
-
-	if ( !stristr(PHP_OS, 'WIN') ) {
-		// 4. Posix kill
-		$newsman_checklist[] = array(
-			'passed' => function_exists('posix_kill'),
-			'name' => __('posix_kill function', NEWSMAN),
-			'help' => __('posix_kill() function is used by the plugin to manage the senders processes. Make sure it\'s not disabled in your php.ini file.', NEWSMAN)
-		);
-	}
-
 
 	/// ----
 

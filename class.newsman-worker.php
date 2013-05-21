@@ -3,7 +3,7 @@
 require_once(__DIR__.DIRECTORY_SEPARATOR."class.utils.php");
 require_once(__DIR__.DIRECTORY_SEPARATOR."class.options.php");
 
-//require_once(__DIR__.DIRECTORY_SEPARATOR."lib/php-growl/class.growl.php");
+// require_once(__DIR__.DIRECTORY_SEPARATOR."lib/php-growl/class.growl.php");
 
 // http://cubicspot.blogspot.com/2010/10/forget-flock-and-system-v-semaphores.html
 
@@ -57,17 +57,22 @@ class newsmanWorker {
 	}
 
 	public function run($worker_lock = null) {
+		$this->initProcess();
 
 		if ( $worker_lock === null ) {
 			$this->worker();
 			$this->clearStopFlag($this->pid);
 		} else {
-			if ( $this->lock($worker_lock) ) {
+			if ( $this->lock($worker_lock) ) { // returns true if lock was successfully enabled
 				$this->worker();
 				$this->unlock();
 				$this->clearStopFlag($this->pid);
-			}			
+			} else {
+				$this->growl('WORKER is already processing '.$worker_lock);
+			}
 		}
+
+		$this->endProcess();
 	}
 
 
@@ -95,56 +100,63 @@ class newsmanWorker {
 	}
 
 	static function getTmpDir() {
-		$u = newsmanUtils::getInstance();		
+		$u = newsmanUtils::getInstance();
 		return $u->addTrSlash(sys_get_temp_dir(), 'path');
 	}
 
 	static function stop($pid) {
-		file_put_contents(static::getTmpDir().'newsman-worker-stop-'.$pid, $pid);
+		$u = newsmanUtils::getInstance();
+		//$u->log('[stop] newsman-worker-stop-'.$pid);
+		return $u->lock('newsman-worker-stop-'.$pid);
+
 	}
 
 	static function clearStopFlag($pid) {
-		$fn = static::getTmpDir().'newsman-worker-stop-'.$pid;
-		if ( file_exists($fn) ) {
-			unlink($fn);
-		}
+		$u = newsmanUtils::getInstance();
+		return $u->releaseLock('newsman-worker-stop-'.$pid);
 	}
 
 	static function isProcessStopped($pid) {
-		$fn = static::getTmpDir().'newsman-worker-stop-'.$pid;
-
-		if ( file_exists($fn) ) {
-			return true;
-		}
-
-		return false;
+		$u = newsmanUtils::getInstance();
+		//$u->log('[isLocked] newsman-worker-stop-'.$pid);
+		return $u->isLocked('newsman-worker-stop-'.$pid);
 	}
 
 	static function cleanStaleFlagFiles() {
-		$u = newsmanUtils::getInstance();
 
-		$tmpdir = static::getTmpDir();		
-		if ( $handle = opendir( $tmpdir ) ) {
-			while (false !== ($entry = readdir($handle))) {
-				if ( preg_match('/^newsman-worker/i', $entry) ) {
-					$pid = file_get_contents($tmpdir.$entry);
-					if ( $pid && is_numeric($pid) && !static::isProcessRunning($pid) ) {
-						unlink($tmpdir.$entry);
-					}
-				}
-			}
-			closedir($handle);
-		}
+		// $u = newsmanUtils::getInstance();
+
+		// $tmpdir = static::getTmpDir();		
+		// if ( $handle = opendir( $tmpdir ) ) {
+		// 	while (false !== ($entry = readdir($handle))) {
+		// 		if ( preg_match('/^newsman-worker/i', $entry) ) {
+		// 			$pid = file_get_contents($tmpdir.$entry);
+		// 			if ( $pid && is_numeric($pid) && !static::isProcessRunning($pid) ) {
+		// 				unlink($tmpdir.$entry);
+		// 			}
+		// 		}
+		// 	}
+		// 	closedir($handle);
+		// }
 	}
 
-	static function isProcessRunning($pid) {
-		if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-			$wmi=new COM("winmgmts:{impersonationLevel=impersonate}!\\\\.\\root\\cimv2"); 
-			$procs=$wmi->ExecQuery("SELECT * FROM Win32_Process WHERE ProcessId='".$pid."'"); 
-			return count($procs) > 0;
-		} else {
-			return posix_kill($pid, 0);
-		}
+	static function isProcessRunning($pid) {		
+		$u = newsmanUtils::getInstance();
+		return $u->isLocked('newsman-worker-running-'.$pid);
+	}
+
+	public function initProcess() {
+		$u = newsmanUtils::getInstance();
+
+		$this->growl('[!!!] init process');
+		$u->lock('newsman-worker-running-'.$this->pid);
+	}
+
+	public function endProcess() {
+		$u = newsmanUtils::getInstance();
+
+		$this->growl('[!!!] end process');
+		$u->releaseLock('newsman-worker-running-'.$this->pid);
 	}
 
 	// ----------------------
@@ -154,17 +166,13 @@ class newsmanWorker {
 	 * workers will not be able to run without obtaining the lock
 	 */ 
 	public function lock($worker_lock) {
-		$this->lockfile = static::getTmpDir().'newsman-worker-'.$worker_lock.".lock";
-		$r = @fopen($this->lockfile, "xb");
-		if ( $r ) {
-			fwrite($r, $this->pid);
-		}
-		return $r;
+		$this->lockfile = 'newsman-worker-'.$worker_lock;
+		return $this->u->lock($this->lockfile);
 	}
 
 	public function unlock() {
 		if ( $this->lockfile ) {
-			unlink($this->lockfile);
+			return $this->u->lock($this->lockfile);
 		}
 	}
 

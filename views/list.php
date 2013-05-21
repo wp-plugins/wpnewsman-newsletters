@@ -288,11 +288,11 @@
 				<input type="hidden" id="newsman_form_json" name="newsman-form-json" value="" />					
 			</div>
 			<div class="span4 ext-form-block">				
-				<h3><?php _e('This form on external sites? Sure!', NEWSMANP); ?></h3>
-				<p><?php _e('Copy the code below and paste it into any other site that you have.', NEWSMANP); ?></p>
+				<h3><?php _e('This form on external sites? Sure!', NEWSMAN); ?></h3>
+				<p><?php _e('Copy the code below and paste it into any other site that you have.', NEWSMAN); ?></p>
 				<pre><code>&lt;iframe src="<?php echo NEWSMAN_PLUGIN_URL; ?>/form.php?uid=<?php echo $list->uid; ?>" style="border: none; min-height: 400px;"&gt;&lt;/iframe&gt;</code></pre>
-				<h4><?php _e('Custom CSS for external form.', NEWSMANP); ?></h4>
-				<p><?php _e('This CSS will only affect the external form', NEWSMANP); ?></p>
+				<h4><?php _e('Custom CSS for external form.', NEWSMAN); ?></h4>
+				<p><?php _e('This CSS will only affect the external form', NEWSMAN); ?></p>
 				<textarea id="newsman_form_extcss" name="newsman-form-extcss"></textarea>
 				
 				

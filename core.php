@@ -371,7 +371,8 @@ class newsman {
 				if ( !isset($words) ) {
 					$words = 350;
 				}
-				return $this->utils->fancyExcerpt($newsman_loop_post->post_content, $words);
+				$c = $this->utils->cutScripts($newsman_loop_post->post_content);
+				return $this->utils->fancyExcerpt($c, $words);
 			} else if ( $post == 'thumbnail' ) {
 				$url = $this->utils->getPostThumbnail($newsman_loop_post);
 
@@ -383,6 +384,8 @@ class newsman {
 			} else if ( $post == 'firstimage' ) {
 				$url = $this->utils->getFirstImage($newsman_loop_post);
 				return $url ? $url : '';
+			} else if ( $post == 'post_content' ) {
+				return $this->utils->cutScripts($newsman_loop_post->post_content);
 			} else if ( property_exists($newsman_loop_post, $post) ) {
 				return $newsman_loop_post->$post;
 			}

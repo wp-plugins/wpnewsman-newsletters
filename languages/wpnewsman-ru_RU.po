@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: G-Lock WPNewsman Plugin for WordPress\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/wpnewsman\n"
-"POT-Creation-Date: 2013-05-13 08:01:35+00:00\n"
-"PO-Revision-Date: 2013-05-13 12:41+0000\n"
+"POT-Creation-Date: 2013-05-18 10:14:39+00:00\n"
+"PO-Revision-Date: 2013-05-20 09:33+0000\n"
 "Last-Translator: amura <seosirena@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -25,21 +25,21 @@ msgstr "обязательный параметр \"%s\"отсутствует �
 
 #. translators: subscriber type
 #. translators: lists and forms table header
-#: ajaxbackend.php:106 core.php:995 views/forms.php:24
+#: ajaxbackend.php:106 core.php:998 views/forms.php:24
 #: views/subscribers.php:31
 msgid "Confirmed"
 msgstr "Подтвержденные"
 
 #. translators: subscriber type
 #. translators: lists and forms table header
-#: ajaxbackend.php:107 core.php:993 views/forms.php:25
+#: ajaxbackend.php:107 core.php:996 views/forms.php:25
 #: views/subscribers.php:32
 msgid "Unconfirmed"
 msgstr "Неподтвержденные"
 
 #. translators: subscriber type
 #. translators: lists and forms table header
-#: ajaxbackend.php:108 core.php:997 views/forms.php:26
+#: ajaxbackend.php:108 core.php:1000 views/forms.php:26
 #: views/subscribers.php:33
 msgid "Unsubscribed"
 msgstr "Отписанные"
@@ -213,7 +213,7 @@ msgid "Subscribe"
 msgstr "Подписаться"
 
 #: class.form.php:92 class.form.php:112 class.form.php:129 class.form.php:162
-#: class.form.php:190 core.php:1018 views/list.php:69 views/list.php:86
+#: class.form.php:190 core.php:1021 views/list.php:69 views/list.php:86
 #: views/list.php:172 views/list.php:206
 msgid "Required"
 msgstr "Обязательное"
@@ -230,11 +230,11 @@ msgstr "Поле \"имя\" не может быть пустым."
 msgid "Add new..."
 msgstr "Добавить новый ..."
 
-#: class.utils.php:912 class.utils.php:963 core.php:1411 core.php:1424
+#: class.utils.php:912 class.utils.php:963 core.php:1414 core.php:1427
 msgid "Enter Subject Here"
 msgstr "Введите тему письма"
 
-#: class.utils.php:1083 core.php:1071
+#: class.utils.php:1083 core.php:1074
 msgid "Copy"
 msgstr "Копировать"
 
@@ -262,7 +262,7 @@ msgstr "Подписка еще не подтверждена"
 msgid "Successfully unsubscribed"
 msgstr "Вы успешно отписаны от рассылки"
 
-#: class.utils.php:1354 migration.php:179
+#: class.utils.php:1354 migration.php:183
 msgid "Please confirm your unsubscribe decision"
 msgstr "Пожалуйста, подтвердите ваш запрос на удаление вашего электронного адреса из нашей базы данных."
 
@@ -286,15 +286,15 @@ msgstr "Уведомление об отписке"
 msgid "Welcome letter, thanks for subscribing"
 msgstr "Приветственное письмо(\"спасибо за подписку\")"
 
-#: class.utils.php:1420 migration.php:211
+#: class.utils.php:1420 migration.php:215
 msgid "Unsubscribe confirmation"
 msgstr "Подтверждение отписки"
 
-#: class.utils.php:1425 migration.php:294
+#: class.utils.php:1425 migration.php:298
 msgid "Re-subscription confirmation"
 msgstr "Подтверждение повторной подписки"
 
-#: core.php:26 core.php:1766
+#: core.php:26 core.php:1769
 msgid "Every minute"
 msgstr "Каждую минуту"
 
@@ -335,7 +335,7 @@ msgid ""
 "each message."
 msgstr "Вы можете отписаться в любое время. Инструкции по отписке включены в каждое сообщение."
 
-#: core.php:241 core.php:1511
+#: core.php:241 core.php:1514
 msgid "Upgrade to Pro"
 msgstr "Обновиться до Pro"
 
@@ -354,262 +354,262 @@ msgid ""
 "option\""
 msgstr "\"Пост не имеет выдержки. Напишите что-то самостоятельно или используйте опцию fancy_excerpt\""
 
-#: core.php:545
+#: core.php:548
 msgid "Wrong \"code\" parameter format"
 msgstr "Неправильный формат параметра \"code\""
 
-#: core.php:551
+#: core.php:554
 msgid "Your link seems to be broken."
 msgstr "Кажется ваша ссылка сломана."
 
-#: core.php:557
+#: core.php:560
 msgid "List with the unique code \"%s\" is not found"
 msgstr "Список подписчиков с уникальным кодом \"%s\" не найден."
 
-#: core.php:563
+#: core.php:566
 msgid "Subscriber with the unique code \"%s\" is not found"
 msgstr "Подписчик с уникальным кодом \"%s\" не найден."
 
-#: core.php:631
+#: core.php:634
 msgid "Unique email id is missing in request."
 msgstr "Уникальный идентификатор email адреса отсутствует в запросе."
 
-#: core.php:636
+#: core.php:639
 msgid "Email with unique code %s is not found."
 msgstr "Электронный адрес с уникальным кодом \"%s\" не найден."
 
-#: core.php:878 core.php:1086
+#: core.php:881 core.php:1089
 msgid "Please fill all the required fields."
 msgstr "Пожалуйста, заполните все обязательные для заполнения поля."
 
-#: core.php:879 core.php:1087
+#: core.php:882 core.php:1090
 msgid "Please check your email address."
 msgstr "Пожалуйста, проверьте ваш адрес электронной почты."
 
-#: core.php:998
+#: core.php:1001
 msgid "Error: "
 msgstr "Ошибка: "
 
-#: core.php:999 core.php:1027
+#: core.php:1002 core.php:1030
 msgid "Error"
 msgstr "Ошибка"
 
-#: core.php:1000
+#: core.php:1003
 msgid "Done"
 msgstr "Завершено"
 
-#: core.php:1001
+#: core.php:1004
 msgid "Please select emails which you want to stop sending of."
 msgstr "Пожалуйста, выберите письма, отправку которых вы хотите остановить."
 
-#: core.php:1002
+#: core.php:1005
 msgid "You have successfully stopped sending of selected emails."
 msgstr "Вы успешно прекратили отправку выбранных писем."
 
-#: core.php:1003
+#: core.php:1006
 msgid "Please mark subscribers which you want to unsubscribe."
 msgstr "Пожалуйста, выберите подписчиков, которых вы хотите отписать."
 
-#: core.php:1004
+#: core.php:1007
 msgid "You have successfully unsubscribed selected subscribers."
 msgstr "Вы успешно отписали выбранных подписчиков."
 
-#: core.php:1005
+#: core.php:1008
 msgid "Please mark subscribers which you want to delete."
 msgstr "Пожалуйста, отметьте подписчиков, которых вы хотите удалить."
 
-#: core.php:1006
+#: core.php:1009
 msgid "You have successfully deleted selected subscribers."
 msgstr "Вы успешно удалили выбранных подписчиков."
 
-#: core.php:1007
+#: core.php:1010
 msgid "Please mark subscribers to change."
 msgstr "Пожалуйста, отметьте подписчиков статус которых вы хотите изменить."
 
-#: core.php:1008
+#: core.php:1011
 msgid "You have successfully changed status of selected subscribers."
 msgstr "Вы успешно изменили статус выбранных подписчиков."
 
-#: core.php:1009
+#: core.php:1012
 msgid "Please mark subscribers which you want to send confirmation to."
 msgstr "Пожалуйста, отметьте подписчиков, которым вы хотите отправить подтверждение."
 
-#: core.php:1010
+#: core.php:1013
 msgid "You have successfully send confirmation emails."
 msgstr "Письма подтверждения успешно отосланы."
 
-#: core.php:1011
+#: core.php:1014
 msgid "All subscribers (#)"
 msgstr "Все подписчики (#)"
 
-#: core.php:1012
+#: core.php:1015
 msgid "Confirmed (#)"
 msgstr "Подтвержденные"
 
-#: core.php:1013
+#: core.php:1016
 msgid "Unconfirmed (#)"
 msgstr "Неподтвержденные (#)"
 
-#: core.php:1014
+#: core.php:1017
 msgid "Unsubscribed (#)"
 msgstr "Отписанные (#)"
 
-#: core.php:1015
+#: core.php:1018
 msgid "You have no subscribers yet."
 msgstr "У вас еще нет подписчиков."
 
-#: core.php:1016 views/mailbox-email.php:107 views/newsman-html-editor.php:106
+#: core.php:1019 views/mailbox-email.php:107 views/newsman-html-editor.php:106
 msgid "Sending"
 msgstr "Отправка"
 
-#: core.php:1017
+#: core.php:1020
 msgid "Check me"
 msgstr "Отметь меня"
 
-#: core.php:1019
+#: core.php:1022
 msgid "Choose an option"
 msgstr "Выберите опцию"
 
-#: core.php:1020
+#: core.php:1023
 msgid "new option 1"
 msgstr "новая опция 1"
 
-#: core.php:1021
+#: core.php:1024
 msgid "Untitled"
 msgstr "Без названия"
 
-#: core.php:1022 views/addedit_email.php:71
+#: core.php:1025 views/addedit_email.php:71
 msgid "You have no emails yet."
 msgstr "У Вас еще нет писем."
 
-#: core.php:1023
+#: core.php:1026
 msgid "You have no forms, yet"
 msgstr "Вы не создали форм подписки еще"
 
 #. translators: mailbox view link
-#: core.php:1024 core.php:1055 views/addedit_email.php:17 views/mailbox.php:26
+#: core.php:1027 core.php:1058 views/addedit_email.php:17 views/mailbox.php:26
 msgid "Sent"
 msgstr "Отправлено"
 
 #. translators: mailbox view link
-#: core.php:1025 core.php:1053 views/addedit_email.php:16 views/mailbox.php:25
+#: core.php:1028 core.php:1056 views/addedit_email.php:16 views/mailbox.php:25
 msgid "Pending"
 msgstr "В ожидании"
 
-#: core.php:1026
+#: core.php:1029
 msgid "Draft"
 msgstr "Черновик"
 
-#: core.php:1028
+#: core.php:1031
 msgid "Sending..."
 msgstr "Посылка..."
 
-#: core.php:1029
+#: core.php:1032
 msgid "Stopped"
 msgstr "Остановлена"
 
-#: core.php:1030
+#: core.php:1033
 msgid "Scheduled on"
 msgstr "Запланированно на"
 
-#: core.php:1031
+#: core.php:1034
 msgid "You don't have any templates yet."
 msgstr "У вас пока нет шаблонов."
 
-#: core.php:1032
+#: core.php:1035
 msgid "Create one?"
 msgstr "Хотите создать?"
 
-#: core.php:1033
+#: core.php:1036
 msgid "Please mark the emails which you want to delete."
 msgstr "Пожалуйста, отметьте письма, которые вы хотите удалить."
 
-#: core.php:1034
+#: core.php:1037
 msgid "You have successfully deleted selected emails."
 msgstr "Вы успешно удалили выбранные письма."
 
-#: core.php:1035
+#: core.php:1038
 msgid "Please mark the templates which you want to delete."
 msgstr "Пожалуйста, отметьте шаблоны, которые вы хотите удалить."
 
-#: core.php:1036
+#: core.php:1039
 msgid "Please mark the forms which you want to delete."
 msgstr "Пожалуйста, отметьте форму, которую Вы хотите удалить"
 
-#: core.php:1037
+#: core.php:1040
 msgid "You have no templates yet."
 msgstr "У вас пока нет шаблонов."
 
-#: core.php:1038
+#: core.php:1041
 msgid "All emails (#)"
 msgstr "Все письма (#)"
 
-#: core.php:1039
+#: core.php:1042
 msgid "In progress (#)"
 msgstr "В процессе (#)"
 
-#: core.php:1040
+#: core.php:1043
 msgid "Pending (#)"
 msgstr "В ожидании (#)"
 
-#: core.php:1041
+#: core.php:1044
 msgid "Sent (#)"
 msgstr "Отправленные (#):"
 
-#: core.php:1042 views/mailbox-email.php:108 views/mailbox-email.php:113
+#: core.php:1045 views/mailbox-email.php:108 views/mailbox-email.php:113
 #: views/mailbox.php:52 views/newsman-html-editor.php:110
 #: views/newsman-html-editor.php:116
 msgid "Resume"
 msgstr "Продолжить"
 
-#: core.php:1043
+#: core.php:1046
 msgid "Please fill the \"To:\" field."
 msgstr "Пожалуйста, заполните поле \"Кому: \"."
 
-#: core.php:1044
+#: core.php:1047
 msgid "Please select emails first."
 msgstr "Пожалуйста, в первую очередь выберите письма."
 
-#: core.php:1045
+#: core.php:1048
 msgid "Please select"
 msgstr "Выберите"
 
 #. translators: mailbox view link
-#: core.php:1047 views/addedit_email.php:14 views/mailbox.php:22
+#: core.php:1050 views/addedit_email.php:14 views/mailbox.php:22
 msgid "All emails"
 msgstr "Все письма"
 
 #. translators: mailbox view link
-#: core.php:1049 views/addedit_email.php:15 views/mailbox.php:24
+#: core.php:1052 views/addedit_email.php:15 views/mailbox.php:24
 msgid "In progress"
 msgstr "В процессе"
 
 #. translators: mailbox view link
-#: core.php:1051 views/mailbox.php:23
+#: core.php:1054 views/mailbox.php:23
 msgid "Drafts"
 msgstr "Черновики"
 
-#: core.php:1056
+#: core.php:1059
 msgid "Sent %d of %d emails"
 msgstr "Отправлено %d из %d писем"
 
-#: core.php:1057
+#: core.php:1060
 msgid "Status: "
 msgstr "Статус:"
 
-#: core.php:1058
+#: core.php:1061
 msgid "Email Errors"
 msgstr "Ошибки"
 
-#: core.php:1059
+#: core.php:1062
 msgid "Email Address"
 msgstr "Электронный адрес"
 
-#: core.php:1060
+#: core.php:1063
 msgid "Error Message"
 msgstr "Ошибка"
 
-#: core.php:1061 views/forms.php:31 views/mailbox-email.php:155
+#: core.php:1064 views/forms.php:31 views/mailbox-email.php:155
 #: views/mailbox.php:78 views/newsman-html-editor.php:68
 #: views/newsman-html-editor.php:238 views/subscribers.php:81
 #: views/templates.php:63 views/templates.php:79 views/templates.php:95
@@ -617,30 +617,30 @@ msgstr "Ошибка"
 msgid "Loading..."
 msgstr "Загрузка..."
 
-#: core.php:1062 widget.php:51
+#: core.php:1065 widget.php:51
 msgid "List:"
 msgstr "Список:"
 
-#: core.php:1063
+#: core.php:1066
 msgid "Bug report"
 msgstr "Сообщение об ошибке"
 
-#: core.php:1064
+#: core.php:1067
 msgid "Load more..."
 msgstr "Загрузить больше..."
 
-#: core.php:1065
+#: core.php:1068
 msgid "Sorry, no posts matched your criteria."
 msgstr "Ни одна статья не соответствует выбранному критерию."
 
-#: core.php:1066
+#: core.php:1069
 msgid ""
 "Warning! You are close to the limit of %d subscribers you can send emails to"
 " in the Lite version of the plugin. Please, <a href=\"%s\">upgrade to the "
 "Pro version</a> to send emails without limitations."
 msgstr "Внимание! Вы почти достигли лимита в %d подписчиков, которым вы можете посылать письма, используя Lite версию плагина. Пожалуйста, <a href=\"%s\">обновите плагин до Pro версии</a>, чтобы иметь возможность посылать письма без ограничений."
 
-#: core.php:1067
+#: core.php:1070
 msgid ""
 "Warning! You exceeded the limit of %d subscribers you can send emails to in "
 "the Lite version of the plugin. Please, <a href=\"%s\">upgrade to the Pro "
@@ -648,268 +648,268 @@ msgid ""
 msgstr "Внимание! Вы превысили лимит в %d подписчиков, которым вы можете посылать письма, используя Lite версию плагина. Пожалуйста, <a href=\"%s\">обновите плагин до Pro версии</a>, чтобы иметь возможность посылать письма без ограничений."
 
 #. translators: lists and forms table header
-#: core.php:1068 views/forms.php:23 views/list.php:67 views/list.php:84
+#: core.php:1071 views/forms.php:23 views/list.php:67 views/list.php:84
 #: views/list.php:119 views/list.php:170 views/list.php:204
 #: views/templates.php:58 views/templates.php:74 views/templates.php:90
 msgid "Name"
 msgstr "Название"
 
-#: core.php:1069
+#: core.php:1072
 msgid "Edit Form"
 msgstr "Редактировать форму"
 
-#: core.php:1070
+#: core.php:1073
 msgid "View Subscribers"
 msgstr "Просмотреть подписчиков"
 
-#: core.php:1072
+#: core.php:1075
 msgid "Edit"
 msgstr "Редактировать"
 
-#: core.php:1073 views/addedit_email.php:39 views/addedit_email.php:102
+#: core.php:1076 views/addedit_email.php:39 views/addedit_email.php:102
 #: views/forms.php:15 views/forms.php:70 views/mailbox.php:53
 #: views/mailbox.php:109 views/subscribers.php:57 views/subscribers.php:115
 #: views/templates.php:28 views/templates.php:134 views/templates.php:149
 msgid "Delete"
 msgstr "Удалить"
 
-#: core.php:1074
+#: core.php:1077
 msgid "Export"
 msgstr "Экспортировать"
 
-#: core.php:1075
+#: core.php:1078
 msgid "Default System Templates"
 msgstr "Системные шаблоны по умолчанию"
 
-#: core.php:1076
+#: core.php:1079
 msgid "System Template. Cannot be deleted."
 msgstr "Системный шаблон. Удаление невозможно."
 
-#: core.php:1077
+#: core.php:1080
 msgid "Insert Posts"
 msgstr "Вставить посты"
 
-#: core.php:1078
+#: core.php:1081
 msgid "Post(s) selected: %d"
 msgstr "Выбранные посты: %d"
 
-#: core.php:1079
+#: core.php:1082
 msgid "Select categories"
 msgstr "Выбрать категории"
 
-#: core.php:1080
+#: core.php:1083
 msgid "# of # categories selected"
 msgstr "# из # категорий выбрано"
 
-#: core.php:1081
+#: core.php:1084
 msgid "Select author(s)"
 msgstr "Выбрать авторов"
 
-#: core.php:1082
+#: core.php:1085
 msgid "# of # authors selected"
 msgstr "# из # авторов выбрано"
 
-#: core.php:1083 views/list.php:315 views/newsman-html-editor.php:140
+#: core.php:1086 views/list.php:315 views/newsman-html-editor.php:140
 msgid "Save"
 msgstr "Сохранить"
 
-#: core.php:1084
+#: core.php:1087
 msgid "Saved at"
 msgstr "Сохранено в"
 
-#: core.php:1089
+#: core.php:1092
 msgid "Subscribe notification email sent to the administrator."
 msgstr "Письмо, уведомляющее администратора о подписке."
 
-#: core.php:1090
+#: core.php:1093
 msgid "Unsubscribe notification email sent to the administrator."
 msgstr "Письмо, уведомляющее администратора об отписке."
 
-#: core.php:1091
+#: core.php:1094
 msgid "Email with the confirmation link sent to the user upon subscription."
 msgstr "Письмо со ссылкой для подтверждения подписки, отправляемое подписчику."
 
-#: core.php:1092
+#: core.php:1095
 msgid ""
 "Email sent to the user that confirms that his email address was "
 "unsubscribed."
 msgstr "Письмо, уведомляющее пользователя о том, что его электронный адрес отписан."
 
-#: core.php:1093
+#: core.php:1096
 msgid "Welcome message sent after the subscriber confirms his subscription."
 msgstr "Письмо-приветствие, отправляемое подписчику после подтверждения подписки."
 
-#: core.php:1094
+#: core.php:1097
 msgid "Email with a link to confirm the subscriber’s decision to unsubscribe."
 msgstr "Письмо со ссылкой для подтверждения отписки, отправляемое подписчику."
 
-#: core.php:1095
+#: core.php:1098
 msgid ""
 "Email with a link to re-confirm the subscription that is sent to ALL "
 "\"unconfirmed\" subscribers on the list."
 msgstr "Письмо со ссылкой для подтверждения подписки, отправляемое ВСЕМ подписчикам со статусом \"Неподтвержденные\"."
 
-#: core.php:1178
+#: core.php:1181
 msgid "Cannot unsubscribe email. Subscriber with unique code %s is not found."
 msgstr "Невозможно отписать электронный адрес. Абонент с уникальным кодом %s не найден."
 
-#: core.php:1423
+#: core.php:1426
 msgid "Untitled templates"
 msgstr "Шаблоны без названия"
 
-#: core.php:1441
+#: core.php:1444
 msgid "Alternative Plain Text Body"
 msgstr "Альтернативный основной текст (обычный)"
 
-#: core.php:1455
+#: core.php:1458
 msgid "WPNewsman Lite"
 msgstr "WPNewsman Lite"
 
-#: core.php:1468 core.php:1469 views/addedit_email.php:5 views/mailbox.php:10
+#: core.php:1471 core.php:1472 views/addedit_email.php:5 views/mailbox.php:10
 msgid "Mailbox"
 msgstr "Почтовый ящик"
 
-#: core.php:1486 core.php:1487 views/forms.php:5
+#: core.php:1489 core.php:1490 views/forms.php:5
 msgid "Lists and Forms"
 msgstr "Рассылки и Формы"
 
-#: core.php:1495 core.php:1496 views/templates.php:5
+#: core.php:1498 core.php:1499 views/templates.php:5
 msgid "Email Templates"
 msgstr "Email-шаблоны"
 
-#: core.php:1504 core.php:1505 views/options.php:6
+#: core.php:1507 core.php:1508 views/options.php:6
 msgid "Settings"
 msgstr "Настройки"
 
-#: core.php:1538
+#: core.php:1541
 msgid "Excerpt for external forms"
 msgstr "Выдержки для внешних формах"
 
-#: core.php:1706
+#: core.php:1709
 msgctxt "Action Page"
 msgid "Action Pages"
 msgstr "Страницы действий"
 
-#: core.php:1707
+#: core.php:1710
 msgctxt "Action Page"
 msgid "Action Page"
 msgstr "Страница действий"
 
-#: core.php:1708
+#: core.php:1711
 msgctxt "Action Page"
 msgid "Add New"
 msgstr "Добавить"
 
-#: core.php:1709
+#: core.php:1712
 msgctxt "Action Page"
 msgid "Add New Action Page"
 msgstr "Добавить Новую Страницу Действий"
 
-#: core.php:1710
+#: core.php:1713
 msgctxt "Action Page"
 msgid "Edit Action Page"
 msgstr "Изменить Страницу Действий"
 
-#: core.php:1711
+#: core.php:1714
 msgctxt "Action Page"
 msgid "New Action Page"
 msgstr "Новая Страница Действий"
 
-#: core.php:1712
+#: core.php:1715
 msgctxt "Action Page"
 msgid "View Action Page"
 msgstr "Просмотр страницы действий"
 
-#: core.php:1713
+#: core.php:1716
 msgctxt "Action Page"
 msgid "Search Action Pages"
 msgstr "Поиск Страниц действий"
 
-#: core.php:1714
+#: core.php:1717
 msgid "Nothing found"
 msgstr "Ничего не найдено"
 
-#: core.php:1715
+#: core.php:1718
 msgid "Nothing found in the Trash"
 msgstr "В Корзине ничего не найдено "
 
-#: core.php:1907 core.php:1965
+#: core.php:1910 core.php:1968
 msgid "Error: Email template not found"
 msgstr "Ошибка: Email шаблон не найден"
 
-#: core.php:1924
+#: core.php:1927
 msgid "Error: Email not found"
 msgstr "Ошибка: письмо не найдено"
 
-#: core.php:2018
+#: core.php:2021
 msgid "G-Lock WPNewsman"
 msgstr "G-Lock WPNewsman"
 
-#: core.php:2056
+#: core.php:2059
 msgid "G-Lock WPNewsman subscription summary"
 msgstr "Сводка подписок из G-Lock WPNewsman"
 
-#: core.php:2057
+#: core.php:2060
 msgid "Manage Forms and Lists"
 msgstr "Управление списками и формами"
 
-#: core.php:2074 views/list.php:241
+#: core.php:2077 views/list.php:241
 msgid "List name"
 msgstr "Название списка подписчиков"
 
-#: core.php:2075
+#: core.php:2078
 msgid "Today confirmed"
 msgstr "Подтверждено сегодня"
 
-#: core.php:2076
+#: core.php:2079
 msgid "Yesterday confirmed"
 msgstr "Подтверждено вчера"
 
-#: core.php:2077
+#: core.php:2080
 msgid "Total confirmed"
 msgstr "Подтверждено всего"
 
-#: core.php:2078
+#: core.php:2081
 msgid "Total unconfirmed"
 msgstr "Не подтвержено всего"
 
-#: core.php:2079
+#: core.php:2082
 msgid "Total unsubscribed"
 msgstr "Отписано всего"
 
-#: core.php:2128
+#: core.php:2131
 msgid "Post Template"
 msgstr "Шаблон поста"
 
-#: core.php:2134
+#: core.php:2137
 msgid "Click here"
 msgstr "Нажмите сюда"
 
-#: core.php:2137
+#: core.php:2140
 msgid ""
 "You can use this shortcode macro to add the unsubscribe link to your "
 "message:"
 msgstr "Вы можете использовать этот код для добавления ссылки на отписку в письмо:"
 
-#: core.php:2141
+#: core.php:2144
 msgid ""
 "and these shortcode macros to add links to your social profiles (enter the "
 "URLs of your social profiles in the plugin Settings):"
 msgstr "и эти макросы, чтобы добавить ссылки на свои профили в социальных сетях (введите URL-адреса ваших социальных профилей в настройках плагина):"
 
-#: core.php:2149
+#: core.php:2152
 msgid "%s for more shortcode macros supported by WPNewsman."
 msgstr "%s для просмотра всех макросов, поддерживаемых WPNewsman."
 
-#: core.php:2244
+#: core.php:2247
 msgid "List: "
 msgstr "Рассылка:"
 
-#: core.php:2256
+#: core.php:2259
 msgid "Page Template"
 msgstr "Шаблон страницы"
 
-#: core.php:2258
+#: core.php:2261
 msgid "Default Template"
 msgstr "Темплата по умолчанию"
 
@@ -2103,27 +2103,27 @@ msgstr "Слишком много последовательных ошибок.
 msgid "No \"confirmed\" subscribers found in the selected list(s)."
 msgstr "В выбранных списках нет подтвержденных подписчиков."
 
-#: wpnewsman.php:129
+#: wpnewsman.php:133
 msgid "PHP version >= 5.3"
 msgstr "PHP версии >= 5.3"
 
-#: wpnewsman.php:130
+#: wpnewsman.php:134
 msgid "You have PHP %s installed."
 msgstr "У вас установлен PHP %s."
 
-#: wpnewsman.php:138
+#: wpnewsman.php:142
 msgid "Single-site mode"
 msgstr "режим одного сайта"
 
-#: wpnewsman.php:139
+#: wpnewsman.php:143
 msgid "Doesn't work in MultiSite setup."
 msgstr "Не работает в режиме нескольких сайтов."
 
-#: wpnewsman.php:146
+#: wpnewsman.php:150
 msgid "MCrypt library"
 msgstr "Библиотека MCrypt"
 
-#: wpnewsman.php:147
+#: wpnewsman.php:151
 msgid ""
 "MCrypt library is required to securely store your passwords in the database."
 " Read <a href=\"http://php.net/manual/en/mcrypt.setup.php\">how to "
@@ -2131,11 +2131,11 @@ msgid ""
 " hosting."
 msgstr "Библиотека MCrypt необходима для безопасного хранения ваших паролей в базе данных. Читайте здесь, <a href=\"http://php.net/manual/en/mcrypt.setup.php\">как ее поставить/сконфигурировать</a> или контактируйте вашего хостинг провайдера, если вы используете разделенный хостинг."
 
-#: wpnewsman.php:154
+#: wpnewsman.php:158
 msgid "MBString extension"
 msgstr "Расширение MBString"
 
-#: wpnewsman.php:155
+#: wpnewsman.php:159
 msgid ""
 "MBString extension is required for correct processing of non unicode "
 "characters. Read <a "
@@ -2144,11 +2144,22 @@ msgid ""
 " hosting."
 msgstr "Дополнение MBString необходимо для правильной обработки символов формата не Unicode. Читайте здесь, <a href=\"http://www.php.net/manual/en/mbstring.installation.php\">как его поставить/сконфигурировать</a> или контактируйте вашего хостинг провайдера, если вы используете разделенный хостинг."
 
-#: wpnewsman.php:162
+#: wpnewsman.php:166
+msgid "COM class"
+msgstr "Класс COM"
+
+#: wpnewsman.php:167
+msgid ""
+"COM class is used by the plugin to manage the senders processes. Make sure "
+"php_com_dotnet.dll extension is enabled in your php.ini file. <a "
+"href=\"http://www.php.net/manual/en/com.installation.php\">More info</a>"
+msgstr "Класс COM используется плагином для управления процессом посылки писем. Убедитесь, что расширение php_com_dotnet.dll включено в вашем файле php.ini. <a href=\"http://www.php.net/manual/en/com.installation.php\">Больше информации</a>"
+
+#: wpnewsman.php:173
 msgid "posix_kill function"
 msgstr "функция posix_kill"
 
-#: wpnewsman.php:163
+#: wpnewsman.php:174
 msgid ""
 "posix_kill() function is used by the plugin to manage the senders processes."
 " Make sure it's not disabled in your php.ini file."

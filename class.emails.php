@@ -58,6 +58,15 @@ class newsmanEmail extends newsmanStorable {
 		return parent::save();
 	}
 
+	public function getStatus() {
+		global $wpdb;
+		if ( isset($this->id) ) {
+			$tbl = $this->getTableName();
+			return $wpdb->get_var($wpdb->prepare("SELECT status FROM $tbl WHERE id = %d", $this->id));
+		}
+		return null;
+	}
+
 	public function incSent($n = 1) {
 		global $wpdb;
 		$tbl = $this->getTableName();
@@ -99,7 +108,7 @@ class newsmanEmail extends newsmanStorable {
 
 	public function addAnalytics() {
 
-		if ( $this->analytics ) {			
+		if ( isset($this->analytics) && $this->analytics ) {			
 			$this->p_html = preg_replace_callback('/(<\w+[^>]+href=(\\\'|"))(\w+\:[^>]*?)(\2[^>]*>)/i', array($this, 'addTracking'), $this->p_html);
 		}
 

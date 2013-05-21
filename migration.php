@@ -24,12 +24,8 @@ function newsman_do_migration() {
 		$completed = array();
 	}
 
-	$u->log('DOING MIGRATION');
-
 	foreach ($newsman_changes as $change) {
 		if ( $oldVersion < $change['introduced_in'] && ( !in_array($change['func'], $completed) || $change['repeat'] ) ) {
-
-			$u->log("CALLING CHANGE:\n".print_r($change, true));
 
 			call_user_func($change['func']);
 			$completed[] = $change['func'];
@@ -323,9 +319,13 @@ function newsman_migration_add_re_confirm_email() {
 	$doneListIds = array();
 	$tpls = newsmanEmailTemplate::findOne('`system` = 1 AND `assigned_list` != 0 AND `system_type` = %d', array($tplDef['type']));
 
-	foreach ($tpls as $tpl) {
-		$doneListIds[] = $tpl->id;
+	if ( is_array($tpls) ) {
+		foreach ($tpls as $tpl) {
+			$doneListIds[] = $tpl->id;
+		}		
 	}
+
+	$lists = newsmanList::findAll();
 
 	foreach ($lists as $list) {
 		if ( !in_array($list->id, $doneListIds) ) {

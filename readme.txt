@@ -4,7 +4,7 @@ Donate Link: http://wpnewsman.com/premium-newsletter-plugin-wordpress/
 Tags: wpnewsman, newsletter, newsletters, newsletter signup, newsletter widget, subscribers, post notification, email subscription, email marketing, email, emailing, subscription
 Requires at least: 3.5
 Tested up to: 3.6
-Stable tag: 1.5.2
+Stable tag: 1.5.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -120,6 +120,12 @@ We got a User Feedback page where you can [add or vote for new features](http://
 3. Subscriber management.
 
 == Changelog ==
+
+= 1.5.3 =
+* Added: javascript tags filtering during posts/pages insertion into the message.
+* Fixed: "Send test email" option.
+* Fixed: migrate.php warnings.
+* Removed: posix_kill function dependency.
 
 = 1.5.2 =
 * Added: new system email template "Re-subscription confirmation" that is sent to ALL subscribers with the "unconfirmed" status on the list when you re-send them the confirmation message. If you transferred your subscribers from another email marketing service to WPNewsman or you simply have an old email list and want to clear it from inactive subscribers, it's a good idea to ask your subscribers to re-confirm their subscription.
