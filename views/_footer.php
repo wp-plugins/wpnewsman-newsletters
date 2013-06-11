@@ -37,7 +37,7 @@
 		?>
 		<div class="buttons">
 			<div>
-				<div class="fb-like" data-href="http://wpnewsman.com/" data-send="false" data-layout="button_count" data-width="80" data-show-faces="true"></div>			
+				<div class="fb-like" data-href="https://www.facebook.com/WPNewsman" data-send="false" data-layout="button_count" data-width="80" data-show-faces="true"></div>			
 			</div>
 			<div>
 				<div class="g-plusone" data-size="medium" data-width="300" data-href="http://wpnewsman.com"></div>
