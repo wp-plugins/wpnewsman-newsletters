@@ -123,7 +123,7 @@ We got a User Feedback page where you can [add or vote for new features](http://
 
 = 1.5.4 =
 * Fixed: incompatibilities with some plugins during posts insertion
-* Fixed: expansion of domain relative urls ( like <img src="/images/logo.jpg"> ) in templates.
+* Fixed: expansion of domain relative urls ( like img src="/images/logo.jpg" ) in templates.
 * Fixed: bug that caused post template to be saved into post divider template.
 * Fixed: CKEditor doesn't insert &nbsp; into empty blocks anymore
 
