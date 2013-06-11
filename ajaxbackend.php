@@ -1628,7 +1628,7 @@
 
 		public function ajSetEntityParticle() {
 			$u = newsmanUtils::getInstance();
-			
+
 			$entityId = $this->param('entity');
 			$entType = $this->param('entType');
 			$name = $this->param('name');

@@ -4,7 +4,7 @@ Donate Link: http://wpnewsman.com/premium-newsletter-plugin-wordpress/
 Tags: wpnewsman, newsletter, newsletters, newsletter signup, newsletter widget, subscribers, post notification, email subscription, email marketing, email, emailing, subscription
 Requires at least: 3.5
 Tested up to: 3.6
-Stable tag: 1.5.3
+Stable tag: 1.5.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -57,8 +57,8 @@ Compatible with G-Lock EasyMail 6 [The Best Newsletter Software](http://directem
 Translations are included in the plugin: 
 
 * French (completed)
-* German (70%)
-* Italian (70%)
+* German (completed)
+* Italian (55%)
 * Russian (completed)
 
 * Your language: [get a Pro license in exchange for your translation](http://support.glocksoft.net/kb/articles/68-translation-of-wpnewsman-in-your-language). Join the translation teams on [our Transifex page](https://www.transifex.com/projects/p/g-lock-wpnewsman/).
@@ -120,6 +120,12 @@ We got a User Feedback page where you can [add or vote for new features](http://
 3. Subscriber management.
 
 == Changelog ==
+
+= 1.5.4 =
+* Fixed: incompatibilities with some plugins during posts insertion
+* Fixed: expansion of domain relative urls ( like <img src="/images/logo.jpg"> ) in templates.
+* Fixed: bug that caused post template to be saved into post divider template.
+* Fixed: CKEditor doesn't insert &nbsp; into empty blocks anymore
 
 = 1.5.3 =
 * Added: javascript tags filtering during posts/pages insertion into the message.

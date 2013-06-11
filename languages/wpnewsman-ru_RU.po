@@ -9,147 +9,145 @@ msgid ""
 msgstr ""
 "Project-Id-Version: G-Lock WPNewsman Plugin for WordPress\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/wpnewsman\n"
-"POT-Creation-Date: 2013-05-18 10:14:39+00:00\n"
-"PO-Revision-Date: 2013-05-20 09:33+0000\n"
+"POT-Creation-Date: 2013-06-10 09:00:22+00:00\n"
+"PO-Revision-Date: 2013-06-10 09:50+0000\n"
 "Last-Translator: amura <seosirena@gmail.com>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language-Team: Russian (Russia) (http://www.transifex.com/projects/p/g-lock-wpnewsman/language/ru_RU/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: ru_RU\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: ajaxbackend.php:96 api.php:83
+#: ajaxbackend.php:88 api.php:83
 msgid "required parameter \"%s\" is missing in the request"
 msgstr "обязательный параметр \"%s\"отсутствует в запросе"
 
 #. translators: subscriber type
 #. translators: lists and forms table header
-#: ajaxbackend.php:106 core.php:998 views/forms.php:24
-#: views/subscribers.php:31
+#: ajaxbackend.php:98 core.php:998 views/forms.php:24 views/subscribers.php:31
 msgid "Confirmed"
 msgstr "Подтвержденные"
 
 #. translators: subscriber type
 #. translators: lists and forms table header
-#: ajaxbackend.php:107 core.php:996 views/forms.php:25
-#: views/subscribers.php:32
+#: ajaxbackend.php:99 core.php:996 views/forms.php:25 views/subscribers.php:32
 msgid "Unconfirmed"
 msgstr "Неподтвержденные"
 
 #. translators: subscriber type
 #. translators: lists and forms table header
-#: ajaxbackend.php:108 core.php:1000 views/forms.php:26
+#: ajaxbackend.php:100 core.php:1000 views/forms.php:26
 #: views/subscribers.php:33
 msgid "Unsubscribed"
 msgstr "Отписанные"
 
-#: ajaxbackend.php:115
+#: ajaxbackend.php:107
 msgid "Cannot edit email. Email with id \"%s\" is not found."
 msgstr "Не удается отредактировать письмо. Письмо с ID \"%s\"не найдено."
 
-#: ajaxbackend.php:119
+#: ajaxbackend.php:111
 msgid "Cannot edit email. Email with id \"%s\" cannot be written."
 msgstr "Не удается отредактировать письмо. Письмо с ID \"%s\" не может быть записано."
 
-#: ajaxbackend.php:123
+#: ajaxbackend.php:115
 msgid "Email does not have a \"%s\" property."
 msgstr "У письма отсутствует свойство \"%s\"."
 
-#: ajaxbackend.php:128
+#: ajaxbackend.php:120
 msgid "Cannot edit template. Template with id \"%s\" is not found."
 msgstr "Не удается изменить шаблон. Шаблон с идентификатором \"%s\"не найден."
 
-#: ajaxbackend.php:133
+#: ajaxbackend.php:125
 msgid "Cannot edit template. Template with id \"%s\" cannot be written."
 msgstr "Не удается изменить шаблон. Шаблон с идентификатором \"%s\"не может быть записан."
 
-#: ajaxbackend.php:137 ajaxbackend.php:1293 api.php:107 api.php:156
+#: ajaxbackend.php:129 ajaxbackend.php:1282 api.php:107 api.php:156
 #: export_list.php:33
 msgid "List with id \"%s\" is not found."
 msgstr "Список подписчиков с идентификатором \"%s\" не найден."
 
-#: ajaxbackend.php:194
+#: ajaxbackend.php:186
 msgid "WPNEWSMAN Bug Report from %s"
 msgstr "Отчет WPNEWSMAN об ошибках от %s"
 
-#: ajaxbackend.php:205
+#: ajaxbackend.php:197
 msgid "Bug report was sent to %s."
 msgstr "Отчет об ошибке был отправлен на %s."
 
-#: ajaxbackend.php:240
+#: ajaxbackend.php:232
 msgid "Your SMTP settings are correct"
 msgstr "Ваши настройки SMTP верны."
 
-#: ajaxbackend.php:241
+#: ajaxbackend.php:233
 msgid ""
 " If you read this message, your SMTP settings in the G-Lock WPNewsman plugin"
 " are correct"
 msgstr " Если вы читаете это сообщение, то Ваши настройки SMTP в плагине G-Lock WPNewsman верны."
 
-#: ajaxbackend.php:249 ajaxbackend.php:1819
+#: ajaxbackend.php:241 ajaxbackend.php:1809
 msgid "Test email was sent to %s."
 msgstr "Тестовое письмо было отправлено на %s."
 
-#: ajaxbackend.php:274 ajaxbackend.php:304 ajaxbackend.php:432
-#: ajaxbackend.php:777 ajaxbackend.php:821 ajaxbackend.php:1060
-#: ajaxbackend.php:1337 ajaxbackend.php:1387 ajaxbackend.php:1406
-#: ajaxbackend.php:1640 ajaxbackend.php:1707 ajaxbackend.php:1717
-#: ajaxbackend.php:1857 ajaxbackend.php:1993
+#: ajaxbackend.php:267 ajaxbackend.php:297 ajaxbackend.php:425
+#: ajaxbackend.php:766 ajaxbackend.php:810 ajaxbackend.php:1049
+#: ajaxbackend.php:1321 ajaxbackend.php:1371 ajaxbackend.php:1390
+#: ajaxbackend.php:1626 ajaxbackend.php:1697 ajaxbackend.php:1707
+#: ajaxbackend.php:1847 ajaxbackend.php:1983
 msgid "success"
 msgstr "Готово"
 
-#: ajaxbackend.php:332
+#: ajaxbackend.php:325
 msgid "Successfully deleted selected subscribers."
 msgstr "Выбранные подписчики были успешно удалены."
 
-#: ajaxbackend.php:353
+#: ajaxbackend.php:346
 msgid "Error: \"options\" request parameter was empty or not defined."
 msgstr "Ошибка: параметр \"options\" в запросе пуст или не определен."
 
-#: ajaxbackend.php:358
+#: ajaxbackend.php:351
 msgid "Options were successfully saved."
 msgstr "Параметры были успешно сохранены."
 
-#: ajaxbackend.php:625 ajaxbackend.php:876 ajaxbackend.php:903
-#: ajaxbackend.php:931 ajaxbackend.php:963 ajaxbackend.php:993
-#: ajaxbackend.php:1089 ajaxbackend.php:1119 ajaxbackend.php:1657
-#: ajaxbackend.php:1750
+#: ajaxbackend.php:614 ajaxbackend.php:865 ajaxbackend.php:892
+#: ajaxbackend.php:920 ajaxbackend.php:952 ajaxbackend.php:982
+#: ajaxbackend.php:1078 ajaxbackend.php:1108 ajaxbackend.php:1647
+#: ajaxbackend.php:1740
 msgid "Saved"
 msgstr "Сохранено"
 
-#: ajaxbackend.php:661
+#: ajaxbackend.php:650
 msgid "Your email was successfully queued for sending."
 msgstr "Ваше письмо поставлено в очередь на отправку."
 
-#: ajaxbackend.php:816 ajaxbackend.php:839
+#: ajaxbackend.php:805 ajaxbackend.php:828
 msgid "Template does not have a \"%s\" property."
 msgstr "У шаблона отсутствует свойство \"%s\"."
 
-#: ajaxbackend.php:1032
+#: ajaxbackend.php:1021
 msgid "You have successfully deleted %d template."
 msgid_plural "You have successfully deleted %d templates."
 msgstr[0] "Вы успешно удалили %d шаблон."
 msgstr[1] "Вы успешно удалили %d шаблона."
 msgstr[2] "Вы успешно удалили %d шаблонов."
 
-#: ajaxbackend.php:1148 ajaxbackend.php:1671
+#: ajaxbackend.php:1137 ajaxbackend.php:1661
 msgid "Your email is successfully scheduled."
 msgstr "Ваше письмо поставлено в очередь на отправку."
 
-#: ajaxbackend.php:1155
+#: ajaxbackend.php:1144
 msgid "Unrecognized \"send\" parameter - %s"
 msgstr "Неизвестный параметр \"отправить\" - %s"
 
-#: ajaxbackend.php:1207
+#: ajaxbackend.php:1196
 msgid "Emails were successfully unsubscribed."
 msgstr "Email адреса были успешно отписаны."
 
-#: ajaxbackend.php:1352
+#: ajaxbackend.php:1336
 msgid "Please select a file to import"
 msgstr "Пожалуйста, выберите файл для импорта"
 
-#: ajaxbackend.php:1357
+#: ajaxbackend.php:1341
 msgid "Imported %d subscriber. Make sure you send him confirmation email."
 msgid_plural ""
 "Imported %d subscribers. Make sure you send them confirmation email."
@@ -157,53 +155,53 @@ msgstr[0] "Импортирован %d подписчик. Рекомендуе�
 msgstr[1] "Импортировано %d подписчика. Рекомендуем послать им письмо-подтверждение."
 msgstr[2] "Импортировано %d подписчиков. Рекомендуем послать им письмо-подтверждение."
 
-#: ajaxbackend.php:1404 views/subscribers.php:74
+#: ajaxbackend.php:1388 views/subscribers.php:74
 msgid "IP Address"
 msgstr "IP-адрес"
 
-#: ajaxbackend.php:1427
+#: ajaxbackend.php:1411
 msgid "Imported %d template."
 msgid_plural "Imported %d templates."
 msgstr[0] "Импортирован %d шаблон."
 msgstr[1] "Импортировано %d шаблона."
 msgstr[2] "Импортировано %d шаблонов."
 
-#: ajaxbackend.php:1480
+#: ajaxbackend.php:1466
 msgid "Selected emails were successfully resumed"
 msgstr "Посылка выбранных писем успешно возобновлена."
 
-#: ajaxbackend.php:1533 ajaxbackend.php:1615
+#: ajaxbackend.php:1519 ajaxbackend.php:1601
 msgid "\"entType\" parameter value \"%s\" should be \"email\" or \"template\"."
 msgstr "Значение параметра \"EntType\" - \"%s\". Должно быть \"email\" или \"template\"."
 
-#: ajaxbackend.php:1599
+#: ajaxbackend.php:1585
 msgid "Posts block successfully compiled"
 msgstr "Блок постов успешно собран."
 
-#: ajaxbackend.php:1611
+#: ajaxbackend.php:1597
 msgid ""
 "\"postTemplateType\" parameter value \"%s\" should be \"post_content\", "
 "\"post_excerpt\" or \"fancy_excerpt\"."
 msgstr "Значение параметра \"PostTemplateType\" - \"%s\". Должно быть \"post_content\", \"post_excerpt\" либо \"fancy_excerpt\"."
 
-#: ajaxbackend.php:1626
+#: ajaxbackend.php:1612
 msgid "Posts block successfully updated"
 msgstr "Блок постов успешно обновлен."
 
-#: ajaxbackend.php:1675
+#: ajaxbackend.php:1665
 msgid "ReConfirmation system email template is not found."
 msgstr "Системный шаблон повторного подтверждения подписки не найден."
 
-#: ajaxbackend.php:1763
+#: ajaxbackend.php:1753
 msgid "List with the name \"%s\" already exists."
 msgstr "Список подписчиков с именем \"%s\" уже существует."
 
 #. translators: email property
-#: ajaxbackend.php:1770 views/addedit_email.php:65 views/mailbox.php:71
+#: ajaxbackend.php:1760 views/addedit_email.php:65 views/mailbox.php:71
 msgid "Created"
 msgstr "Создано"
 
-#: ajaxbackend.php:1895
+#: ajaxbackend.php:1885
 msgid "Wrong \"type\" parameter. Must be \"csv\" or \"template\""
 msgstr "Неверный параметр \"type\".  Должен быть \"csv\" или \"template\""
 
@@ -226,71 +224,71 @@ msgstr "Не могу найти свободный уникальный иде�
 msgid "\"name\" field could not be empty."
 msgstr "Поле \"имя\" не может быть пустым."
 
-#: class.utils.php:733
+#: class.utils.php:738
 msgid "Add new..."
 msgstr "Добавить новый ..."
 
-#: class.utils.php:912 class.utils.php:963 core.php:1414 core.php:1427
+#: class.utils.php:917 class.utils.php:968 core.php:1414 core.php:1427
 msgid "Enter Subject Here"
 msgstr "Введите тему письма"
 
-#: class.utils.php:1083 core.php:1074
+#: class.utils.php:1088 core.php:1074
 msgid "Copy"
 msgstr "Копировать"
 
-#: class.utils.php:1318
+#: class.utils.php:1323
 msgid "Already Subscribed and Verified"
 msgstr "Адрес уже подписан и подтвержден."
 
-#: class.utils.php:1324
+#: class.utils.php:1329
 msgid "Bad email address format"
 msgstr "Неверный формат адреса электронной почты"
 
-#: class.utils.php:1330
+#: class.utils.php:1335
 msgid "Confirmation Required"
 msgstr "Требуется подтверждение"
 
-#: class.utils.php:1336
+#: class.utils.php:1341
 msgid "Confirmation Successful"
 msgstr "Успешно подтвержено"
 
-#: class.utils.php:1342
+#: class.utils.php:1347
 msgid "Subscription not yet confirmed"
 msgstr "Подписка еще не подтверждена"
 
-#: class.utils.php:1348
+#: class.utils.php:1353
 msgid "Successfully unsubscribed"
 msgstr "Вы успешно отписаны от рассылки"
 
-#: class.utils.php:1354 migration.php:183
+#: class.utils.php:1359 migration.php:179
 msgid "Please confirm your unsubscribe decision"
 msgstr "Пожалуйста, подтвердите ваш запрос на удаление вашего электронного адреса из нашей базы данных."
 
-#: class.utils.php:1395
+#: class.utils.php:1400
 msgid "Administrator notification - new subscriber"
 msgstr "Уведомление администратора - новый подписчик"
 
-#: class.utils.php:1400
+#: class.utils.php:1405
 msgid "Administrator notification - user unsubscribed"
 msgstr "Уведомление администратора - пользователь отписался"
 
-#: class.utils.php:1405
+#: class.utils.php:1410
 msgid "Subscription confirmation"
 msgstr "Подтверждение подписки"
 
-#: class.utils.php:1410
+#: class.utils.php:1415
 msgid "Unsubscribe notification"
 msgstr "Уведомление об отписке"
 
-#: class.utils.php:1415
+#: class.utils.php:1420
 msgid "Welcome letter, thanks for subscribing"
 msgstr "Приветственное письмо(\"спасибо за подписку\")"
 
-#: class.utils.php:1420 migration.php:215
+#: class.utils.php:1425 migration.php:211
 msgid "Unsubscribe confirmation"
 msgstr "Подтверждение отписки"
 
-#: class.utils.php:1425 migration.php:298
+#: class.utils.php:1430 migration.php:294
 msgid "Re-subscription confirmation"
 msgstr "Подтверждение повторной подписки"
 
@@ -2036,16 +2034,16 @@ msgid "New Template"
 msgstr "Новый шаблон"
 
 #: views/templates.php:19
-msgid "Get More"
-msgstr "Получить больше"
+msgid "Install New Templates"
+msgstr "Поставить новые шаблоны писем"
 
 #: views/templates.php:23
-msgid "Browse for templates..."
-msgstr "Просмотреть шаблоны"
+msgid "From Templates Store..."
+msgstr "Из хранилища шаблонов..."
 
 #: views/templates.php:24
-msgid "Import from file"
-msgstr "Импортировать из файла"
+msgid "From File..."
+msgstr "Из файла..."
 
 #: views/templates.php:42
 msgid "My Templates"
@@ -2093,13 +2091,13 @@ msgstr "форма подписки WPNewsman для ваших рассылок
 msgid "WPNewsman Subscription Form"
 msgstr "Форма подписки WPNewsman"
 
-#: workers/class.mailer.php:182
+#: workers/class.mailer.php:205
 msgid ""
 "Too many consecutive errors. Please check your mail delivery settings and "
 "make sure you can send a test email. Last SMTP error: "
 msgstr "Слишком много последовательных ошибок. Пожалуйста, проверьте настройки доставки почты и убедитесь, что вы можете отправить тестовое письмо. Последняя ошибка SMTP: "
 
-#: workers/class.mailer.php:211
+#: workers/class.mailer.php:237
 msgid "No \"confirmed\" subscribers found in the selected list(s)."
 msgstr "В выбранных списках нет подтвержденных подписчиков."
 
@@ -2143,27 +2141,6 @@ msgid ""
 "Install/Configure</a> or contact your hosting provider if you're on a shared"
 " hosting."
 msgstr "Дополнение MBString необходимо для правильной обработки символов формата не Unicode. Читайте здесь, <a href=\"http://www.php.net/manual/en/mbstring.installation.php\">как его поставить/сконфигурировать</a> или контактируйте вашего хостинг провайдера, если вы используете разделенный хостинг."
-
-#: wpnewsman.php:166
-msgid "COM class"
-msgstr "Класс COM"
-
-#: wpnewsman.php:167
-msgid ""
-"COM class is used by the plugin to manage the senders processes. Make sure "
-"php_com_dotnet.dll extension is enabled in your php.ini file. <a "
-"href=\"http://www.php.net/manual/en/com.installation.php\">More info</a>"
-msgstr "Класс COM используется плагином для управления процессом посылки писем. Убедитесь, что расширение php_com_dotnet.dll включено в вашем файле php.ini. <a href=\"http://www.php.net/manual/en/com.installation.php\">Больше информации</a>"
-
-#: wpnewsman.php:173
-msgid "posix_kill function"
-msgstr "функция posix_kill"
-
-#: wpnewsman.php:174
-msgid ""
-"posix_kill() function is used by the plugin to manage the senders processes."
-" Make sure it's not disabled in your php.ini file."
-msgstr "Функция posix_kill() используется плагином для управления процессами посылки писем. Убедитесь, что эта функция не отключена в вашем файле php.ini."
 
 #. Plugin Name of the plugin/theme
 msgid "G-Lock WPNewsman Lite"

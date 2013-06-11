@@ -34,13 +34,13 @@ CKEDITOR.editorConfig = function( config ) {
 	config.basicEntities = true;
 	//config.entities_latin = false;
 
-
 	config.resize_enabled = true;
 
 	config.extraPlugins = 'ui_newsman_label,newsman_autosave,iframedialog,newsman_insert_posts,newsman_add_wp_media,newsman_save,newsmanshortcodes';
 
 	config.enterMode = CKEDITOR.ENTER_BR;
 	config.shiftEnterMode = CKEDITOR.ENTER_P;	
+	config.fillEmptyBlocks = false;
 
 	// The toolbar groups arrangement, optimized for two toolbar rows.
 	config.toolbarGroups = [

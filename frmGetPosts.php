@@ -27,7 +27,7 @@
 <html>
 <head>
 	<title></title>
-	<?php wp_head(); ?>
+	<?php do_action('admin_enqueue_scripts'); ?>
 	<script type="text/javascript">
 		window.ajaxurl = "<?php echo admin_url( 'admin-ajax.php', 'relative' ); ?>";
 	</script>

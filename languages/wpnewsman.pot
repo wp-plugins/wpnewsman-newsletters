@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the G-Lock WPNewsman Lite package.
 msgid ""
 msgstr ""
-"Project-Id-Version: G-Lock WPNewsman Lite 1.5.3-beta-2\n"
+"Project-Id-Version: G-Lock WPNewsman Lite 1.5.4-beta-1\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/wpnewsman\n"
-"POT-Creation-Date: 2013-05-20 14:50:18+00:00\n"
+"POT-Creation-Date: 2013-06-10 09:00:22+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -55,7 +55,7 @@ msgstr ""
 msgid "Cannot edit template. Template with id \"%s\" cannot be written."
 msgstr ""
 
-#: ajaxbackend.php:129 ajaxbackend.php:1286 api.php:107 api.php:156
+#: ajaxbackend.php:129 ajaxbackend.php:1282 api.php:107 api.php:156
 #: export_list.php:33
 msgid "List with id \"%s\" is not found."
 msgstr ""
@@ -78,15 +78,15 @@ msgid ""
 "are correct"
 msgstr ""
 
-#: ajaxbackend.php:241 ajaxbackend.php:1814
+#: ajaxbackend.php:241 ajaxbackend.php:1809
 msgid "Test email was sent to %s."
 msgstr ""
 
 #: ajaxbackend.php:267 ajaxbackend.php:297 ajaxbackend.php:425
-#: ajaxbackend.php:770 ajaxbackend.php:814 ajaxbackend.php:1053
-#: ajaxbackend.php:1330 ajaxbackend.php:1380 ajaxbackend.php:1399
-#: ajaxbackend.php:1635 ajaxbackend.php:1702 ajaxbackend.php:1712
-#: ajaxbackend.php:1852 ajaxbackend.php:1988
+#: ajaxbackend.php:766 ajaxbackend.php:810 ajaxbackend.php:1049
+#: ajaxbackend.php:1321 ajaxbackend.php:1371 ajaxbackend.php:1390
+#: ajaxbackend.php:1626 ajaxbackend.php:1697 ajaxbackend.php:1707
+#: ajaxbackend.php:1847 ajaxbackend.php:1983
 msgid "success"
 msgstr ""
 
@@ -102,96 +102,96 @@ msgstr ""
 msgid "Options were successfully saved."
 msgstr ""
 
-#: ajaxbackend.php:618 ajaxbackend.php:869 ajaxbackend.php:896
-#: ajaxbackend.php:924 ajaxbackend.php:956 ajaxbackend.php:986
-#: ajaxbackend.php:1082 ajaxbackend.php:1112 ajaxbackend.php:1652
-#: ajaxbackend.php:1745
+#: ajaxbackend.php:614 ajaxbackend.php:865 ajaxbackend.php:892
+#: ajaxbackend.php:920 ajaxbackend.php:952 ajaxbackend.php:982
+#: ajaxbackend.php:1078 ajaxbackend.php:1108 ajaxbackend.php:1647
+#: ajaxbackend.php:1740
 msgid "Saved"
 msgstr ""
 
-#: ajaxbackend.php:654
+#: ajaxbackend.php:650
 msgid "Your email was successfully queued for sending."
 msgstr ""
 
-#: ajaxbackend.php:809 ajaxbackend.php:832
+#: ajaxbackend.php:805 ajaxbackend.php:828
 msgid "Template does not have a \"%s\" property."
 msgstr ""
 
-#: ajaxbackend.php:1025
+#: ajaxbackend.php:1021
 msgid "You have successfully deleted %d template."
 msgid_plural "You have successfully deleted %d templates."
 msgstr[0] ""
 msgstr[1] ""
 
-#: ajaxbackend.php:1141 ajaxbackend.php:1666
+#: ajaxbackend.php:1137 ajaxbackend.php:1661
 msgid "Your email is successfully scheduled."
 msgstr ""
 
-#: ajaxbackend.php:1148
+#: ajaxbackend.php:1144
 msgid "Unrecognized \"send\" parameter - %s"
 msgstr ""
 
-#: ajaxbackend.php:1200
+#: ajaxbackend.php:1196
 msgid "Emails were successfully unsubscribed."
 msgstr ""
 
-#: ajaxbackend.php:1345
+#: ajaxbackend.php:1336
 msgid "Please select a file to import"
 msgstr ""
 
-#: ajaxbackend.php:1350
+#: ajaxbackend.php:1341
 msgid "Imported %d subscriber. Make sure you send him confirmation email."
 msgid_plural ""
 "Imported %d subscribers. Make sure you send them confirmation email."
 msgstr[0] ""
 msgstr[1] ""
 
-#: ajaxbackend.php:1397 views/subscribers.php:74
+#: ajaxbackend.php:1388 views/subscribers.php:74
 msgid "IP Address"
 msgstr ""
 
-#: ajaxbackend.php:1420
+#: ajaxbackend.php:1411
 msgid "Imported %d template."
 msgid_plural "Imported %d templates."
 msgstr[0] ""
 msgstr[1] ""
 
-#: ajaxbackend.php:1475
+#: ajaxbackend.php:1466
 msgid "Selected emails were successfully resumed"
 msgstr ""
 
-#: ajaxbackend.php:1528 ajaxbackend.php:1610
+#: ajaxbackend.php:1519 ajaxbackend.php:1601
 msgid "\"entType\" parameter value \"%s\" should be \"email\" or \"template\"."
 msgstr ""
 
-#: ajaxbackend.php:1594
+#: ajaxbackend.php:1585
 msgid "Posts block successfully compiled"
 msgstr ""
 
-#: ajaxbackend.php:1606
+#: ajaxbackend.php:1597
 msgid ""
 "\"postTemplateType\" parameter value \"%s\" should be \"post_content\", "
 "\"post_excerpt\" or \"fancy_excerpt\"."
 msgstr ""
 
-#: ajaxbackend.php:1621
+#: ajaxbackend.php:1612
 msgid "Posts block successfully updated"
 msgstr ""
 
-#: ajaxbackend.php:1670
+#: ajaxbackend.php:1665
 msgid "ReConfirmation system email template is not found."
 msgstr ""
 
-#: ajaxbackend.php:1758
+#: ajaxbackend.php:1753
 msgid "List with the name \"%s\" already exists."
 msgstr ""
 
 #. translators: email property
-#: ajaxbackend.php:1765 views/addedit_email.php:65 views/mailbox.php:71
+#: ajaxbackend.php:1760 views/addedit_email.php:65 views/mailbox.php:71
 msgid "Created"
 msgstr ""
 
-#: ajaxbackend.php:1890
+#: ajaxbackend.php:1885
 msgid "Wrong \"type\" parameter. Must be \"csv\" or \"template\""
 msgstr ""
 
@@ -214,71 +214,71 @@ msgstr ""
 msgid "\"name\" field could not be empty."
 msgstr ""
 
-#: class.utils.php:733
+#: class.utils.php:738
 msgid "Add new..."
 msgstr ""
 
-#: class.utils.php:912 class.utils.php:963 core.php:1414 core.php:1427
+#: class.utils.php:917 class.utils.php:968 core.php:1414 core.php:1427
 msgid "Enter Subject Here"
 msgstr ""
 
-#: class.utils.php:1083 core.php:1074
+#: class.utils.php:1088 core.php:1074
 msgid "Copy"
 msgstr ""
 
-#: class.utils.php:1318
+#: class.utils.php:1323
 msgid "Already Subscribed and Verified"
 msgstr ""
 
-#: class.utils.php:1324
+#: class.utils.php:1329
 msgid "Bad email address format"
 msgstr ""
 
-#: class.utils.php:1330
+#: class.utils.php:1335
 msgid "Confirmation Required"
 msgstr ""
 
-#: class.utils.php:1336
+#: class.utils.php:1341
 msgid "Confirmation Successful"
 msgstr ""
 
-#: class.utils.php:1342
+#: class.utils.php:1347
 msgid "Subscription not yet confirmed"
 msgstr ""
 
-#: class.utils.php:1348
+#: class.utils.php:1353
 msgid "Successfully unsubscribed"
 msgstr ""
 
-#: class.utils.php:1354 migration.php:179
+#: class.utils.php:1359 migration.php:179
 msgid "Please confirm your unsubscribe decision"
 msgstr ""
 
-#: class.utils.php:1395
+#: class.utils.php:1400
 msgid "Administrator notification - new subscriber"
 msgstr ""
 
-#: class.utils.php:1400
+#: class.utils.php:1405
 msgid "Administrator notification - user unsubscribed"
 msgstr ""
 
-#: class.utils.php:1405
+#: class.utils.php:1410
 msgid "Subscription confirmation"
 msgstr ""
 
-#: class.utils.php:1410
+#: class.utils.php:1415
 msgid "Unsubscribe notification"
 msgstr ""
 
-#: class.utils.php:1415
+#: class.utils.php:1420
 msgid "Welcome letter, thanks for subscribing"
 msgstr ""
 
-#: class.utils.php:1420 migration.php:211
+#: class.utils.php:1425 migration.php:211
 msgid "Unsubscribe confirmation"
 msgstr ""
 
-#: class.utils.php:1425 migration.php:294
+#: class.utils.php:1430 migration.php:294
 msgid "Re-subscription confirmation"
 msgstr ""
 
@@ -2018,15 +2018,15 @@ msgid "New Template"
 msgstr ""
 
 #: views/templates.php:19
-msgid "Get More"
+msgid "Install New Templates"
 msgstr ""
 
 #: views/templates.php:23
-msgid "Browse for templates..."
+msgid "From Templates Store..."
 msgstr ""
 
 #: views/templates.php:24
-msgid "Import from file"
+msgid "From File..."
 msgstr ""
 
 #: views/templates.php:42
@@ -2075,13 +2075,13 @@ msgstr ""
 msgid "WPNewsman Subscription Form"
 msgstr ""
 
-#: workers/class.mailer.php:182
+#: workers/class.mailer.php:205
 msgid ""
 "Too many consecutive errors. Please check your mail delivery settings and "
 "make sure you can send a test email. Last SMTP error: "
 msgstr ""
 
-#: workers/class.mailer.php:211
+#: workers/class.mailer.php:237
 msgid "No \"confirmed\" subscribers found in the selected list(s)."
 msgstr ""
 

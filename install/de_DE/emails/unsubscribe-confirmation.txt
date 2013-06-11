@@ -1,27 +1,29 @@
-Unsubscribe Confirmation
+Abmelden Bestätigung
 --- plain ---
-Hi,
+Hallo,
 
-We just received a request to remove you from our mailing list. To make sure you are the owner of the email address we sent you this letter. 
+wir haben gerade eine Anfrage erhalten, Sie aus unserer Mailingliste zu entfernen. Um sicherzustellen, dass
+Sie der Besitzer des Email Adresse sind, haben wir Ihnen diesen Brief gesendet.
 
-To confirm you unsubscribe decision please go to the link bellow
+Um Ihre Entscheidung zur Abbestellung zu bestätigen, gehen Sie bitte auf den Link unten
 
 [newsman link="confirm-unsubscribe"]
 
-If you don't want to unsubscribe just ignore or delete this message.
+<p>Wenn Sie sich nicht abmelden wollen, ignorieren Sie diese Meldung einfach oder löschen Sie sie.</p>
 
-Sincerely,
+Hochachtungsvoll,
 [newsman me="name"]
 [newsman me="email"]
 [newsman wp="url"]
 --- html ---
-<p>Hi,</p>
-<p>We just received a request to remove you from our mailing list. To make sure you are the owner of the email address we sent you this letter.</p>
-<p>To confirm you unsubscribe decision please go to the link bellow</p>
-<p><a href="[newsman link='unsubscribe-confirmation']">Please unsubscribe me</a></p>
-<p>If you don't want to unsubscribe just ignore or delete this message.</p>
+<p>Hallo,</p>
+<p>wir haben gerade eine Anfrage erhalten, Sie aus unserer Mailingliste zu entfernen. Um sicherzustellen, dass
+Sie der Besitzer des Email Adresse sind, haben wir Ihnen diesen Brief gesendet.</p>
+<p>Um Ihre Entscheidung zur Abbestellung zu bestätigen, gehen Sie bitte auf den Link unten</p>
+<p><a href="[newsman link='unsubscribe-confirmation']">Bitte melden Sie mich ab</a></p>
+<p>Wenn Sie sich nicht abmelden wollen, ignorieren Sie diese Meldung einfach oder löschen Sie sie.</p>
 <p>&nbsp;</p>
-<p>Sincerely,<br>
+<p>Hochachtungsvoll,<br>
 [newsman me="name"]<br>
 [newsman me="email"]<br>
 <a href="[newsman wp='url']">[newsman wp="url"]</a></p>

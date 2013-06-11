@@ -222,7 +222,7 @@ jQuery(function($){
 				entities: false,
 				entities_latin: false
 			},function(){
-				//that.edReady();
+				// that.edReady();
 			});
 
 			var ed = this.ed = $(this.options.edSelector).ckeditorGet();

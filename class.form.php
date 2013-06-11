@@ -293,8 +293,6 @@ class newsmanForm {
 		$u = newsmanUtils::getInstance();
 		$fields = array();
 
-		$u->log(print_r($this->decodedForm, true));
-
 		foreach ($this->decodedForm as $item) {
 
 			if ( isset($item['name']) && isset($item['type']) && $item['type'] !== 'html' ) {

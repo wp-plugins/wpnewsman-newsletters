@@ -16,12 +16,12 @@
 			
 			<div class="btn-group">
 				<button class="btn dropdown-toggle" data-toggle="dropdown">
-					<?php _e('Get More', NEWSMAN); ?>
+					<?php _e('Install New Templates', NEWSMAN); ?>
 					<span class="caret"></span>
 				</button>
 				<ul class="dropdown-menu">
-					<li><a id="btn-open-store" href="#"><?php _e('Browse for templates...', NEWSMAN); ?></a></li>
-					<li><a id="btn-import-from-file" href="#"><?php _e('Import from file', NEWSMAN); ?></a></li>
+					<li><a id="btn-open-store" href="#"><?php _e('From Templates Store...', NEWSMAN); ?></a></li>
+					<li><a id="btn-import-from-file" href="#"><?php _e('From File...', NEWSMAN); ?></a></li>
 				</ul>
 			</div>
 			

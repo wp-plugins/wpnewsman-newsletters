@@ -639,7 +639,12 @@ class newsmanUtils {
 		global $NEWSMAN_CURRENT_ASSETS_URL;
 		$url = $matches[3];
 
-		if ( !(strpos($url, '[') === 0) && !( strpos($url, 'http') === 0 ) ) {
+		if ( strpos($url, '/') === 0 ) {
+			$url = get_bloginfo('wpurl').$url;
+		} else if (
+			strpos($url, '[') !== 0 &&
+			strpos($url, 'http') !== 0
+		) {
 			$url = $NEWSMAN_CURRENT_ASSETS_URL.$url;
 		}
 

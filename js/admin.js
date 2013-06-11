@@ -669,9 +669,9 @@ jQuery(function($){
 		if ( t.readyState < 3 ) {
 			// if we didn't establish the connection to the server
 			err = 'Cannot connect to the server. Data: '+this.data;
-			showMessage(err, 'error', null, {
-				responseText: t.responseText
-			});
+			// showMessage(err, 'error', null, {
+			// 	responseText: t.responseText
+			// });
 			if ( typeof console !== 'undefined' ) {
 				console.error(err);	
 			}			
@@ -4265,12 +4265,12 @@ jQuery(function($){
 
 	var currentParticleName;
 
-	function saveParticle(content) {
+	function saveParticle(content, particleName) {
 		$.ajax({
 			type: 'POST',
 			url: ajaxurl,
 			data: {
-				name: currentParticleName,
+				name: particleName,
 				entType: NEWSMAN_ENT_TYPE,
 				entity: NEWSMAN_ENTITY_ID,
 				content: content,
@@ -4301,8 +4301,9 @@ jQuery(function($){
 
 			$('#dialog').editorDialog({
 				edSelector: 'editor1',
+				particleName: currentParticleName,
 				save: function(ev, data) {
-					saveParticle(data.html);
+					saveParticle(data.html, data.particleName);
 				}
 			}).editorDialog('setData', html).editorDialog('open');
 

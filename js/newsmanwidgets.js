@@ -1,8 +1,9 @@
 jQuery(function($){
 
 	$.widget('glock.editorDialog', {
-		options: {
-			edSelector: null // editor selector
+		options: {			
+			edSelector: null, // editor selector
+			particleName: ''
 		},
 		_create: function() {
 			var that = this;
@@ -39,8 +40,10 @@ jQuery(function($){
 				customConfig: NEWSMAN_PLUGIN_URL+'/js/custom_config.js'
 			});			
 
+			window.ed = editor;
+
 			editor.on('newsmanSave.ckeditor', function(){
-				that._trigger('save', 0, { html: editor.getData() } );
+				that._trigger('save', 0, { html: editor.getData(), particleName: that.options.particleName } );	
 				editor.fire('afterNewsmanSave.ckeditor');
 			});		
 
