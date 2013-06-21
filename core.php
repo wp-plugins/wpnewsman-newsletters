@@ -409,6 +409,9 @@ class newsman {
 			} else {
 				if ( isset($newsman_current_subscriber[$sub]) ) {
 					return $newsman_current_subscriber[$sub];
+				} else if ( $sub == 'subscribed' ) {
+					$subscr_time = strtotime($newsman_current_subscriber['ts']);				
+					return isset($format) ? date($format, $subscr_time) : date('D, d M Y H:i:s', $subscr_time);
 				} else {
 					return '';
 				}

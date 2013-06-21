@@ -124,6 +124,7 @@ We got a User Feedback page where you can [add or vote for new features](http://
 = 1.5.5 =
 * Added: ability to add a textarea element to the form.
 * Added: "Current Date" option to shortcode dropdown menu.
+* Added: "Subscribed" option to newsman shortcodes and template editor dropdown menu
 * Fixed: get_current_screen() error.
 * Fixed: problem with the plugin activation on some sites.
 * Fixed: menu in the template store.

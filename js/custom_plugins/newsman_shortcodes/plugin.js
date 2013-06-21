@@ -58,7 +58,13 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 		  		code: '<span>[newsman date="F j, Y"]</span>',
 		  		codeBefore: '',
 		  		codeAfter: ''
-		  	}
+		  	},
+		  	'subscribed-date': {
+		  		title: 'Subscription Date',
+		  		code: '<span>[newsman sub=\'subscribed\' format=\'F j, Y\']</span>',
+		  		codeBefore: '',
+		  		codeAfter: ''
+		  	}		  	
 		  };  
 
 			function htmlEntities(str) {
