@@ -63,6 +63,14 @@ class newsmanForm {
 		$this->adminMode = $admin;
 	}
 
+	private function ent($str) {
+		return htmlentities($str, ENT_COMPAT | ENT_HTML5, 'UTF-8');
+	}
+
+	private function specChr($str) {
+		return htmlspecialchars($str, ENT_COMPAT | ENT_HTML5, 'UTF-8');
+	}
+
 	private function getElId() {
 		$this->elId += 1;
 
@@ -81,14 +89,36 @@ class newsmanForm {
 
 		$lblSt = $this->useInlineLabels ? 'style="display: none;"' : '';
 
-		$lbl = '<label class="newsman-form-item-label" '.$lblSt.' >'.htmlentities($item['label']).'</label>';
-		$ph = $this->useInlineLabels ? 'placeholder="'.htmlspecialchars($item['label']).'"' : '';
+		$lbl = '<label class="newsman-form-item-label" '.$lblSt.' >'.$this->ent($item['label']).'</label>';
+		$ph = $this->useInlineLabels ? 'placeholder="'.$this->specChr($item['label']).'"' : '';
 
 		$elId = $this->getElId();
 
 		return	"<div $type class=\"newsman-form-item $req $it $elId\">".
 					$lbl.
-					'<input type="text" name="'.htmlspecialchars($item['name']).'" value="'.htmlspecialchars($item['value']).'" '.$ph.'>'.
+					'<input type="text" name="'.$this->specChr($item['name']).'" value="'.$this->specChr($item['value']).'" '.$ph.'>'.
+					'<span class="newsman-required-msg" style="display:none;">'.__('Required', NEWSMAN).'</span>'.
+					$this->getCloseButton().
+				'</div>';
+	}
+
+
+	private function getTextarea($item) {
+
+		$req = isset($item['required']) && $item['required'] ? 'newsman-required' : '';
+		$type = $this->adminMode ? 'gstype="textarea"' : '';
+		$it = 'newsman-form-item-'.$item['type'];
+
+		$lblSt = $this->useInlineLabels ? 'style="display: none;"' : '';
+
+		$lbl = '<label class="newsman-form-item-label" '.$lblSt.' >'.$this->ent($item['label']).'</label>';
+		$ph = $this->useInlineLabels ? 'placeholder="'.$this->specChr($item['label']).'"' : '';
+
+		$elId = $this->getElId();
+
+		return	"<div $type class=\"newsman-form-item $req $it $elId\">".
+					$lbl.
+					'<textarea name="'.$this->specChr($item['name']).'" '.$ph.'>'.$this->specChr($item['value']).'</textarea>'.
 					'<span class="newsman-required-msg" style="display:none;">'.__('Required', NEWSMAN).'</span>'.
 					$this->getCloseButton().
 				'</div>';
@@ -101,14 +131,14 @@ class newsmanForm {
 
 		$lblSt = $this->useInlineLabels ? 'style="display: none;"' : '';
 
-		$lbl = '<label class="newsman-form-item-label" '.$lblSt.'>'.htmlentities($item['label']).'</label>';
-		$ph = $this->useInlineLabels ? 'placeholder="'.htmlspecialchars($item['label']).'"' : '';
+		$lbl = '<label class="newsman-form-item-label" '.$lblSt.'>'.$this->ent($item['label']).'</label>';
+		$ph = $this->useInlineLabels ? 'placeholder="'.$this->specChr($item['label']).'"' : '';
 
 		$elId = $this->getElId();
 
 		return 	"<div $type class=\"newsman-form-item $req $it $elId\">".
 					$lbl.
-					'<input type="text" name="newsman-email" '.$ph.' value="'.htmlspecialchars($item['value']).'">'.
+					'<input type="text" name="newsman-email" '.$ph.' value="'.$this->specChr($item['value']).'">'.
 					'<span class="newsman-required-msg" style="display:none;">'.__('Required', NEWSMAN).'</span>'.
 				'</div>';
 	}	
@@ -123,8 +153,8 @@ class newsmanForm {
 
 		return "<div $type class=\"newsman-form-item $req $it $elId\">".
 					'<label class="checkbox newsman-form-item-label">'.
-						'<input type="checkbox" '.$chkd.' name="'.htmlspecialchars($item['name']).'" value="'.htmlspecialchars($item['value']).'"> '.
-						htmlentities($item['label']).
+						'<input type="checkbox" '.$chkd.' name="'.$this->specChr($item['name']).'" value="'.$this->specChr($item['value']).'"> '.
+						$this->ent($item['label']).
 					'</label>'.
 					'<span style="display:none" class="newsman-required-msg cbox">'.__('Required', NEWSMAN).'</span>'.
 					$this->getCloseButton().
@@ -149,9 +179,9 @@ class newsmanForm {
 
 			$val = isset($radio['value']) ? $radio['value'] : $this->valueFromLabel($radio['label']);
 			$chkd = $radio['checked'] ? 'checked="checked"' : '';
-			$radios .= 	'<label id="'.htmlspecialchars($id).'" class="radio">'.
-							'<input type="radio" name="'.htmlspecialchars($item['name']).'" '.$chkd.' value="'.htmlspecialchars($val).'">'.
-							'<span>'.htmlentities($radio['label']).'</span>'.
+			$radios .= 	'<label id="'.$this->specChr($id).'" class="radio">'.
+							'<input type="radio" name="'.$this->specChr($item['name']).'" '.$chkd.' value="'.$this->specChr($val).'">'.
+							'<span>'.$this->ent($radio['label']).'</span>'.
 						'</label>';
 		}
 
@@ -178,7 +208,7 @@ class newsmanForm {
 
 			$val = isset($opt['value']) ? $opt['value'] : $this->valueFromLabel($opt['label']);
 			$chkd = (isset($opt['checked']) && $opt['checked']) ? 'checked="checked"' : '';
-			$options .= '<option value="'.htmlspecialchars($opt['value']).'">'.$opt['label'].'</option>';
+			$options .= '<option value="'.$this->specChr($opt['value']).'">'.$opt['label'].'</option>';
 		}
 
 		$lblSt = $this->useInlineLabels ? 'style="display: none;"' : '';
@@ -188,7 +218,7 @@ class newsmanForm {
 		return "<div $type class=\"newsman-form-item $req $it $elId\">".
 					'<label '.$lblSt.'>'.$item['label'].'</label>'.
 					'<span style="display:none;" class="newsman-required-msg radio">'.__('Required', NEWSMAN).'</span>'.
-					'<select name="'.htmlspecialchars($item['name']).'">'.
+					'<select name="'.$this->specChr($item['name']).'">'.
 					$options.
 					'</select>'.
 					$this->getCloseButton().
@@ -221,10 +251,10 @@ class newsmanForm {
 			$btnClasses .= ' newsman-button-'.$style;
 			$btnClasses .= ' newsman-button-'.$color;	
 
-			$btn = '<button type="submit" class="'.$btnClasses.'" name="nwsmn-subscribe" value="1">'.htmlentities($item['value']).'</button>';
+			$btn = '<button type="submit" class="'.$btnClasses.'" name="nwsmn-subscribe" value="1">'.$this->ent($item['value']).'</button>';
 
 		} else {
-			$btn = '<input type="submit" class="newsman-button-default button btn" name="nwsmn-subscribe" value="'.htmlspecialchars($item['value']).'">';
+			$btn = '<input type="submit" class="newsman-button-default button btn" name="nwsmn-subscribe" value="'.$this->specChr($item['value']).'">';
 		}
 
 		$elId = $this->getElId();
@@ -279,7 +309,7 @@ class newsmanForm {
 			));
 		}
 
-		$formHtml .= '<input type="hidden" name="uid" value="'.htmlspecialchars($this->uid).'">';
+		$formHtml .= '<input type="hidden" name="uid" value="'.$this->specChr($this->uid).'">';
 		$formHtml .= '<input class="newsman-form-url" type="hidden" name="newsman-form-url" value="'.$_SERVER['REQUEST_URI'].'">';
 
 		if ( $use_excerpts ) {

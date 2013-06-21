@@ -175,8 +175,6 @@ jQuery(function($){
 			el.ph = ko.computed(function(){
 				return viewModel.useInlineLabels() ? (this.label && this.label()) || this.name() : '';
 			}, el);
-
-
 		}
 
 		function normalizeDefinition(el) {
@@ -206,6 +204,7 @@ jQuery(function($){
 			var map = {
 				'checkbox': 'tpl-newsman-form-el-checkbox',
 				'text': 	'tpl-newsman-form-el-text',
+				'textarea': 'tpl-newsman-form-el-textarea',
 				'email': 	'tpl-newsman-form-el-email',
 				'submit': 	'tpl-newsman-form-el-submit',
 				'radio': 	'tpl-newsman-form-el-radio',
@@ -220,6 +219,7 @@ jQuery(function($){
 			var map = {
 				'checkbox': 'tpl-newsman-options-checkbox',
 				'text': 	'tpl-newsman-options-text',
+				'textarea': 'tpl-newsman-options-textarea',
 				'email': 	'tpl-newsman-options-text',
 				'submit': 	'tpl-newsman-options-submit',
 				'radio': 	'tpl-newsman-options-radio',
@@ -247,6 +247,9 @@ jQuery(function($){
 				'text': {
 					type: "text",  label: "Untitled", name: "untitled", value: ""
 				},
+				'textarea': {
+					type: "textarea",  label: "Untitled", name: "untitled", value: ""
+				},				
 				'checkbox': {
 					type: "checkbox", label: "Untitled checkbox", name:"untitled-checkbox", checked: false, value: "1"
 				},

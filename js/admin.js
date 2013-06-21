@@ -4012,6 +4012,7 @@ jQuery(function($){
 						stores = data.stores;
 
 						var tbody = $('#templates-previews tbody').empty(),
+							storeSelectBox = $('#store-selector').empty(),
 							html = [],
 							r = 0,
 							p = 1;
@@ -4031,7 +4032,7 @@ jQuery(function($){
 								'</tr>'
 							].join(''));
 
-							$('<option value="'+name+'">'+store.title+'</option>').appendTo($('#store-selector'));
+							$('<option value="'+name+'">'+store.title+'</option>').appendTo(storeSelectBox);
 
 							var lastTplIdx = store.templates.length-1;
 
@@ -4421,12 +4422,12 @@ jQuery(function($){
 		$(form).submit(function(e){
 			e.preventDefault();
 			var action = 
-				$(this).attr('action').replace(/\b[a-z]/g, function(c) {
-					return c.toUpperCase();
-				});
+				$(this).attr('action');
 
 			var dataObj = {
-				action: 'newsman'+action
+				action: 'newsman'+action.replace(/^[a-z]/g, function(c) {
+					return c.toUpperCase();
+				})
 			};
 
 			$($(this).serializeArray()).each(function(i, el){
@@ -4438,6 +4439,7 @@ jQuery(function($){
 				url: ajaxurl,
 				data: dataObj
 			}).done(function(data){
+
 				if ( data.msg && data.msg !== 'success' ) {
 					showMessage(data.msg, 'success');	
 				}

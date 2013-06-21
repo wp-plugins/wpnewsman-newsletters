@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: G-Lock WPNewsman Plugin for WordPress\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/wpnewsman\n"
-"POT-Creation-Date: 2013-06-10 09:00:22+00:00\n"
-"PO-Revision-Date: 2013-06-10 09:50+0000\n"
+"POT-Creation-Date: 2013-06-20 21:16:34+00:00\n"
+"PO-Revision-Date: 2013-06-21 09:29+0000\n"
 "Last-Translator: amura <seosirena@gmail.com>\n"
 "Language-Team: Russian (Russia) (http://www.transifex.com/projects/p/g-lock-wpnewsman/language/ru_RU/)\n"
 "MIME-Version: 1.0\n"
@@ -85,15 +85,15 @@ msgid ""
 " are correct"
 msgstr " Если вы читаете это сообщение, то Ваши настройки SMTP в плагине G-Lock WPNewsman верны."
 
-#: ajaxbackend.php:241 ajaxbackend.php:1809
+#: ajaxbackend.php:241 ajaxbackend.php:1805
 msgid "Test email was sent to %s."
 msgstr "Тестовое письмо было отправлено на %s."
 
 #: ajaxbackend.php:267 ajaxbackend.php:297 ajaxbackend.php:425
 #: ajaxbackend.php:766 ajaxbackend.php:810 ajaxbackend.php:1049
 #: ajaxbackend.php:1321 ajaxbackend.php:1371 ajaxbackend.php:1390
-#: ajaxbackend.php:1626 ajaxbackend.php:1697 ajaxbackend.php:1707
-#: ajaxbackend.php:1847 ajaxbackend.php:1983
+#: ajaxbackend.php:1626 ajaxbackend.php:1693 ajaxbackend.php:1703
+#: ajaxbackend.php:1843 ajaxbackend.php:1979
 msgid "success"
 msgstr "Готово"
 
@@ -111,8 +111,8 @@ msgstr "Параметры были успешно сохранены."
 
 #: ajaxbackend.php:614 ajaxbackend.php:865 ajaxbackend.php:892
 #: ajaxbackend.php:920 ajaxbackend.php:952 ajaxbackend.php:982
-#: ajaxbackend.php:1078 ajaxbackend.php:1108 ajaxbackend.php:1647
-#: ajaxbackend.php:1740
+#: ajaxbackend.php:1078 ajaxbackend.php:1108 ajaxbackend.php:1643
+#: ajaxbackend.php:1736
 msgid "Saved"
 msgstr "Сохранено"
 
@@ -131,7 +131,7 @@ msgstr[0] "Вы успешно удалили %d шаблон."
 msgstr[1] "Вы успешно удалили %d шаблона."
 msgstr[2] "Вы успешно удалили %d шаблонов."
 
-#: ajaxbackend.php:1137 ajaxbackend.php:1661
+#: ajaxbackend.php:1137 ajaxbackend.php:1657
 msgid "Your email is successfully scheduled."
 msgstr "Ваше письмо поставлено в очередь на отправку."
 
@@ -188,20 +188,20 @@ msgstr "Значение параметра \"PostTemplateType\" - \"%s\". До�
 msgid "Posts block successfully updated"
 msgstr "Блок постов успешно обновлен."
 
-#: ajaxbackend.php:1665
+#: ajaxbackend.php:1661
 msgid "ReConfirmation system email template is not found."
 msgstr "Системный шаблон повторного подтверждения подписки не найден."
 
-#: ajaxbackend.php:1753
+#: ajaxbackend.php:1749
 msgid "List with the name \"%s\" already exists."
 msgstr "Список подписчиков с именем \"%s\" уже существует."
 
 #. translators: email property
-#: ajaxbackend.php:1760 views/addedit_email.php:65 views/mailbox.php:71
+#: ajaxbackend.php:1756 views/addedit_email.php:65 views/mailbox.php:71
 msgid "Created"
 msgstr "Создано"
 
-#: ajaxbackend.php:1885
+#: ajaxbackend.php:1881
 msgid "Wrong \"type\" parameter. Must be \"csv\" or \"template\""
 msgstr "Неверный параметр \"type\".  Должен быть \"csv\" или \"template\""
 
@@ -210,9 +210,9 @@ msgstr "Неверный параметр \"type\".  Должен быть \"csv
 msgid "Subscribe"
 msgstr "Подписаться"
 
-#: class.form.php:92 class.form.php:112 class.form.php:129 class.form.php:162
-#: class.form.php:190 core.php:1021 views/list.php:69 views/list.php:86
-#: views/list.php:172 views/list.php:206
+#: class.form.php:92 class.form.php:114 class.form.php:134 class.form.php:151
+#: class.form.php:184 class.form.php:212 core.php:1021 views/list.php:69
+#: views/list.php:91 views/list.php:108 views/list.php:194 views/list.php:228
 msgid "Required"
 msgstr "Обязательное"
 
@@ -228,7 +228,7 @@ msgstr "Поле \"имя\" не может быть пустым."
 msgid "Add new..."
 msgstr "Добавить новый ..."
 
-#: class.utils.php:917 class.utils.php:968 core.php:1414 core.php:1427
+#: class.utils.php:917 class.utils.php:968 core.php:1419 core.php:1432
 msgid "Enter Subject Here"
 msgstr "Введите тему письма"
 
@@ -292,7 +292,7 @@ msgstr "Подтверждение отписки"
 msgid "Re-subscription confirmation"
 msgstr "Подтверждение повторной подписки"
 
-#: core.php:26 core.php:1769
+#: core.php:26 core.php:1774
 msgid "Every minute"
 msgstr "Каждую минуту"
 
@@ -321,8 +321,7 @@ msgid "Last Name"
 msgstr "Фамилия"
 
 #. translators: Default subscription form
-#: core.php:218 views/list.php:254 views/newsman-html-editor.php:19
-#: views/subscribers.php:72
+#: core.php:218 views/list.php:277 views/subscribers.php:72
 msgid "Email"
 msgstr "E-mail"
 
@@ -333,7 +332,7 @@ msgid ""
 "each message."
 msgstr "Вы можете отписаться в любое время. Инструкции по отписке включены в каждое сообщение."
 
-#: core.php:241 core.php:1514
+#: core.php:241 core.php:1519
 msgid "Upgrade to Pro"
 msgstr "Обновиться до Pro"
 
@@ -456,7 +455,7 @@ msgstr "Отписанные (#)"
 msgid "You have no subscribers yet."
 msgstr "У вас еще нет подписчиков."
 
-#: core.php:1019 views/mailbox-email.php:107 views/newsman-html-editor.php:106
+#: core.php:1019 views/mailbox-email.php:107
 msgid "Sending"
 msgstr "Отправка"
 
@@ -555,8 +554,7 @@ msgid "Sent (#)"
 msgstr "Отправленные (#):"
 
 #: core.php:1045 views/mailbox-email.php:108 views/mailbox-email.php:113
-#: views/mailbox.php:52 views/newsman-html-editor.php:110
-#: views/newsman-html-editor.php:116
+#: views/mailbox.php:52
 msgid "Resume"
 msgstr "Продолжить"
 
@@ -608,10 +606,8 @@ msgid "Error Message"
 msgstr "Ошибка"
 
 #: core.php:1064 views/forms.php:31 views/mailbox-email.php:155
-#: views/mailbox.php:78 views/newsman-html-editor.php:68
-#: views/newsman-html-editor.php:238 views/subscribers.php:81
-#: views/templates.php:63 views/templates.php:79 views/templates.php:95
-#: views/templates.php:183
+#: views/mailbox.php:78 views/subscribers.php:81 views/templates.php:63
+#: views/templates.php:79 views/templates.php:95 views/templates.php:183
 msgid "Loading..."
 msgstr "Загрузка..."
 
@@ -646,8 +642,8 @@ msgid ""
 msgstr "Внимание! Вы превысили лимит в %d подписчиков, которым вы можете посылать письма, используя Lite версию плагина. Пожалуйста, <a href=\"%s\">обновите плагин до Pro версии</a>, чтобы иметь возможность посылать письма без ограничений."
 
 #. translators: lists and forms table header
-#: core.php:1071 views/forms.php:23 views/list.php:67 views/list.php:84
-#: views/list.php:119 views/list.php:170 views/list.php:204
+#: core.php:1071 views/forms.php:23 views/list.php:67 views/list.php:86
+#: views/list.php:106 views/list.php:141 views/list.php:192 views/list.php:226
 #: views/templates.php:58 views/templates.php:74 views/templates.php:90
 msgid "Name"
 msgstr "Название"
@@ -707,7 +703,7 @@ msgstr "Выбрать авторов"
 msgid "# of # authors selected"
 msgstr "# из # авторов выбрано"
 
-#: core.php:1086 views/list.php:315 views/newsman-html-editor.php:140
+#: core.php:1086 views/list.php:338
 msgid "Save"
 msgstr "Сохранить"
 
@@ -751,163 +747,163 @@ msgstr "Письмо со ссылкой для подтверждения по�
 msgid "Cannot unsubscribe email. Subscriber with unique code %s is not found."
 msgstr "Невозможно отписать электронный адрес. Абонент с уникальным кодом %s не найден."
 
-#: core.php:1426
+#: core.php:1431
 msgid "Untitled templates"
 msgstr "Шаблоны без названия"
 
-#: core.php:1444
+#: core.php:1449
 msgid "Alternative Plain Text Body"
 msgstr "Альтернативный основной текст (обычный)"
 
-#: core.php:1458
+#: core.php:1463
 msgid "WPNewsman Lite"
 msgstr "WPNewsman Lite"
 
-#: core.php:1471 core.php:1472 views/addedit_email.php:5 views/mailbox.php:10
+#: core.php:1476 core.php:1477 views/addedit_email.php:5 views/mailbox.php:10
 msgid "Mailbox"
 msgstr "Почтовый ящик"
 
-#: core.php:1489 core.php:1490 views/forms.php:5
+#: core.php:1494 core.php:1495 views/forms.php:5
 msgid "Lists and Forms"
 msgstr "Рассылки и Формы"
 
-#: core.php:1498 core.php:1499 views/templates.php:5
+#: core.php:1503 core.php:1504 views/templates.php:5
 msgid "Email Templates"
 msgstr "Email-шаблоны"
 
-#: core.php:1507 core.php:1508 views/options.php:6
+#: core.php:1512 core.php:1513 views/options.php:6
 msgid "Settings"
 msgstr "Настройки"
 
-#: core.php:1541
+#: core.php:1546
 msgid "Excerpt for external forms"
 msgstr "Выдержки для внешних формах"
 
-#: core.php:1709
+#: core.php:1714
 msgctxt "Action Page"
 msgid "Action Pages"
 msgstr "Страницы действий"
 
-#: core.php:1710
+#: core.php:1715
 msgctxt "Action Page"
 msgid "Action Page"
 msgstr "Страница действий"
 
-#: core.php:1711
+#: core.php:1716
 msgctxt "Action Page"
 msgid "Add New"
 msgstr "Добавить"
 
-#: core.php:1712
+#: core.php:1717
 msgctxt "Action Page"
 msgid "Add New Action Page"
 msgstr "Добавить Новую Страницу Действий"
 
-#: core.php:1713
+#: core.php:1718
 msgctxt "Action Page"
 msgid "Edit Action Page"
 msgstr "Изменить Страницу Действий"
 
-#: core.php:1714
+#: core.php:1719
 msgctxt "Action Page"
 msgid "New Action Page"
 msgstr "Новая Страница Действий"
 
-#: core.php:1715
+#: core.php:1720
 msgctxt "Action Page"
 msgid "View Action Page"
 msgstr "Просмотр страницы действий"
 
-#: core.php:1716
+#: core.php:1721
 msgctxt "Action Page"
 msgid "Search Action Pages"
 msgstr "Поиск Страниц действий"
 
-#: core.php:1717
+#: core.php:1722
 msgid "Nothing found"
 msgstr "Ничего не найдено"
 
-#: core.php:1718
+#: core.php:1723
 msgid "Nothing found in the Trash"
 msgstr "В Корзине ничего не найдено "
 
-#: core.php:1910 core.php:1968
+#: core.php:1915 core.php:1973
 msgid "Error: Email template not found"
 msgstr "Ошибка: Email шаблон не найден"
 
-#: core.php:1927
+#: core.php:1932
 msgid "Error: Email not found"
 msgstr "Ошибка: письмо не найдено"
 
-#: core.php:2021
+#: core.php:2026
 msgid "G-Lock WPNewsman"
 msgstr "G-Lock WPNewsman"
 
-#: core.php:2059
+#: core.php:2064
 msgid "G-Lock WPNewsman subscription summary"
 msgstr "Сводка подписок из G-Lock WPNewsman"
 
-#: core.php:2060
+#: core.php:2065
 msgid "Manage Forms and Lists"
 msgstr "Управление списками и формами"
 
-#: core.php:2077 views/list.php:241
+#: core.php:2082 views/list.php:263
 msgid "List name"
 msgstr "Название списка подписчиков"
 
-#: core.php:2078
+#: core.php:2083
 msgid "Today confirmed"
 msgstr "Подтверждено сегодня"
 
-#: core.php:2079
+#: core.php:2084
 msgid "Yesterday confirmed"
 msgstr "Подтверждено вчера"
 
-#: core.php:2080
+#: core.php:2085
 msgid "Total confirmed"
 msgstr "Подтверждено всего"
 
-#: core.php:2081
+#: core.php:2086
 msgid "Total unconfirmed"
 msgstr "Не подтвержено всего"
 
-#: core.php:2082
+#: core.php:2087
 msgid "Total unsubscribed"
 msgstr "Отписано всего"
 
-#: core.php:2131
+#: core.php:2136
 msgid "Post Template"
 msgstr "Шаблон поста"
 
-#: core.php:2137
+#: core.php:2142
 msgid "Click here"
 msgstr "Нажмите сюда"
 
-#: core.php:2140
+#: core.php:2145
 msgid ""
 "You can use this shortcode macro to add the unsubscribe link to your "
 "message:"
 msgstr "Вы можете использовать этот код для добавления ссылки на отписку в письмо:"
 
-#: core.php:2144
+#: core.php:2149
 msgid ""
 "and these shortcode macros to add links to your social profiles (enter the "
 "URLs of your social profiles in the plugin Settings):"
 msgstr "и эти макросы, чтобы добавить ссылки на свои профили в социальных сетях (введите URL-адреса ваших социальных профилей в настройках плагина):"
 
-#: core.php:2152
+#: core.php:2157
 msgid "%s for more shortcode macros supported by WPNewsman."
 msgstr "%s для просмотра всех макросов, поддерживаемых WPNewsman."
 
-#: core.php:2247
+#: core.php:2252
 msgid "List: "
 msgstr "Рассылка:"
 
-#: core.php:2259
+#: core.php:2264
 msgid "Page Template"
 msgstr "Шаблон страницы"
 
-#: core.php:2261
+#: core.php:2266
 msgid "Default Template"
 msgstr "Темплата по умолчанию"
 
@@ -919,79 +915,79 @@ msgstr "Вы не авторизованы для доступа к этому �
 msgid "Please, provide correct \"listId\" parameter."
 msgstr "Пожалуйста, предоставьте правильный параметр \"ListId\"."
 
-#: frmGetPosts.php:15
+#: frmGetPosts.php:16
 msgid "Post"
 msgstr "Пост"
 
-#: frmGetPosts.php:16 views/newsman-html-editor.php:59
+#: frmGetPosts.php:17
 msgid "Page"
 msgstr "Страница"
 
-#: frmGetPosts.php:17
+#: frmGetPosts.php:18
 msgid "Attachment"
 msgstr "Пристегнутый файл"
 
-#: frmGetPosts.php:18
+#: frmGetPosts.php:19
 msgid "Action Page"
 msgstr "Страница действий"
 
-#: frmGetPosts.php:109 views/newsman-html-editor.php:162
+#: frmGetPosts.php:110
 msgid "Search..."
 msgstr "Поиск"
 
-#: frmGetPosts.php:115 frmGetPosts.php:200 views/newsman-html-editor.php:164
+#: frmGetPosts.php:116 frmGetPosts.php:201
 msgid "Post type:"
 msgstr "Тип записи"
 
-#: frmGetPosts.php:129 frmGetPosts.php:212
+#: frmGetPosts.php:130 frmGetPosts.php:213
 msgid "Show private posts"
 msgstr "Показать приватные посты"
 
-#: frmGetPosts.php:133 frmGetPosts.php:214 views/newsman-html-editor.php:177
+#: frmGetPosts.php:134 frmGetPosts.php:215
 msgid "Categories:"
 msgstr "Категории:"
 
-#: frmGetPosts.php:149 frmGetPosts.php:226
+#: frmGetPosts.php:150 frmGetPosts.php:227
 msgid "Show thumbnails placeholders"
 msgstr "Показывать места расположения пиктограмм"
 
-#: frmGetPosts.php:154 frmGetPosts.php:228 views/newsman-html-editor.php:190
+#: frmGetPosts.php:155 frmGetPosts.php:229
 msgid "Authors:"
 msgstr "Авторы"
 
-#: frmGetPosts.php:173 frmGetPosts.php:239 views/newsman-html-editor.php:201
+#: frmGetPosts.php:174 frmGetPosts.php:240
 msgid "Use content:"
 msgstr "Используйте содержания:"
 
-#: frmGetPosts.php:177 frmGetPosts.php:241 views/newsman-html-editor.php:203
+#: frmGetPosts.php:178 frmGetPosts.php:242
 msgid "Full post"
 msgstr "Пост полностью"
 
-#: frmGetPosts.php:178 frmGetPosts.php:242 views/newsman-html-editor.php:204
+#: frmGetPosts.php:179 frmGetPosts.php:243
 msgid "Excerpt"
 msgstr "Отрывок"
 
-#: frmGetPosts.php:179 frmGetPosts.php:243 views/newsman-html-editor.php:205
+#: frmGetPosts.php:180 frmGetPosts.php:244
 msgid "Fancy excerpt"
 msgstr "Авто-отрывок "
 
-#: frmGetPosts.php:187 frmGetPosts.php:247
+#: frmGetPosts.php:188 frmGetPosts.php:248
 msgid "Select post(s) for last:"
 msgstr "Выбрать посты за последний:"
 
-#: frmGetPosts.php:189 frmGetPosts.php:249 views/options.php:98
+#: frmGetPosts.php:190 frmGetPosts.php:250 views/options.php:98
 msgid "Day"
 msgstr "день"
 
-#: frmGetPosts.php:190 frmGetPosts.php:250
+#: frmGetPosts.php:191 frmGetPosts.php:251
 msgid "Week"
 msgstr "неделю"
 
-#: frmGetPosts.php:191 frmGetPosts.php:251
+#: frmGetPosts.php:192 frmGetPosts.php:252
 msgid "Month"
 msgstr "месяц"
 
-#: frmGetPosts.php:193 frmGetPosts.php:253
+#: frmGetPosts.php:194 frmGetPosts.php:254
 msgid "Clear Selection"
 msgstr "Отменить выборку"
 
@@ -1073,8 +1069,7 @@ msgstr "Отправить сообщение об ошибке."
 #: views/addedit_email.php:115 views/forms.php:55 views/forms.php:69
 #: views/mailbox-email.php:119 views/mailbox.php:94 views/mailbox.php:108
 #: views/mailbox.php:122 views/mailbox.php:137 views/mailbox.php:150
-#: views/newsman-html-editor.php:117 views/options.php:216
-#: views/subscribers.php:98 views/subscribers.php:114
+#: views/options.php:216 views/subscribers.php:98 views/subscribers.php:114
 #: views/subscribers.php:130 views/subscribers.php:158
 #: views/subscribers.php:280 views/subscribers.php:300
 #: views/subscribers.php:315 views/templates.php:118 views/templates.php:133
@@ -1186,16 +1181,17 @@ msgid ""
 "operation cannot be undone!"
 msgstr "Вы уверены, что хотите удалить выбранные формы и списки подписчиков? Операция удаления не может быть отменена!"
 
-#: views/list.php:9 views/list.php:278
+#: views/list.php:9 views/list.php:301
 msgid "Form options"
 msgstr "Параметры формы"
 
-#: views/list.php:10 views/list.php:279
+#: views/list.php:10 views/list.php:302
 msgid "Use inline labels"
 msgstr "Использовать встроенные названия полей"
 
-#: views/list.php:24 views/list.php:42 views/list.php:66 views/list.php:83
-#: views/list.php:101 views/list.php:118 views/list.php:169 views/list.php:203
+#: views/list.php:24 views/list.php:42 views/list.php:66 views/list.php:84
+#: views/list.php:105 views/list.php:123 views/list.php:140 views/list.php:191
+#: views/list.php:225
 msgid "Field options"
 msgstr "Опции поля"
 
@@ -1207,209 +1203,217 @@ msgstr "Название"
 msgid "HTML content"
 msgstr "содержание в формате HTML"
 
-#: views/list.php:122
+#: views/list.php:88
+msgid "Content"
+msgstr "Содержание"
+
+#: views/list.php:144
 msgid "Size"
 msgstr "Размер"
 
-#: views/list.php:124
+#: views/list.php:146
 msgid "Mini"
 msgstr "Минимальный"
 
-#: views/list.php:125
+#: views/list.php:147
 msgid "Small"
 msgstr "Маленький"
 
-#: views/list.php:126
+#: views/list.php:148
 msgid "Medium"
 msgstr "Средний"
 
-#: views/list.php:127
+#: views/list.php:149
 msgid "Large"
 msgstr "Большой"
 
-#: views/list.php:130
+#: views/list.php:152
 msgid "Color"
 msgstr "Цвет"
 
-#: views/list.php:132
+#: views/list.php:154
 msgid "Gray"
 msgstr "Серый"
 
-#: views/list.php:133
+#: views/list.php:155
 msgid "Pink"
 msgstr "Розовый"
 
-#: views/list.php:134
+#: views/list.php:156
 msgid "Blue"
 msgstr "Голубой"
 
-#: views/list.php:135
+#: views/list.php:157
 msgid "Green"
 msgstr "Зеленый"
 
-#: views/list.php:136
+#: views/list.php:158
 msgid "Turquoise"
 msgstr "Бирюзовый"
 
-#: views/list.php:137
+#: views/list.php:159
 msgid "Black"
 msgstr "Черный"
 
-#: views/list.php:138
+#: views/list.php:160
 msgid "Dark Gray"
 msgstr "Темно-серый"
 
-#: views/list.php:139
+#: views/list.php:161
 msgid "Yellow"
 msgstr "Желтый"
 
-#: views/list.php:140
+#: views/list.php:162
 msgid "Purple"
 msgstr "Фиолетовый"
 
-#: views/list.php:141
+#: views/list.php:163
 msgid "Dark blue"
 msgstr "Синий"
 
-#: views/list.php:144
+#: views/list.php:166
 msgid "Style"
 msgstr "Стиль"
 
-#: views/list.php:146
+#: views/list.php:168
 msgid "None ( Theme native )"
 msgstr "Никакая (родная тема)"
 
-#: views/list.php:147
+#: views/list.php:169
 msgid "Brick"
 msgstr "Прямоугольный"
 
-#: views/list.php:148
+#: views/list.php:170
 msgid "Rounded"
 msgstr "Закругленный"
 
-#: views/list.php:149
+#: views/list.php:171
 msgid "Pill"
 msgstr "Круглый"
 
-#: views/list.php:174
+#: views/list.php:196
 msgid "Radio options"
 msgstr "Радио опции"
 
-#: views/list.php:176 views/list.php:210
+#: views/list.php:198 views/list.php:232
 msgid "Add"
 msgstr "Добавить"
 
-#: views/list.php:178 views/list.php:212
+#: views/list.php:200 views/list.php:234
 msgid "New option"
 msgstr "Новая опция"
 
-#: views/list.php:180
+#: views/list.php:202
 msgid "Genders"
 msgstr "Пол"
 
-#: views/list.php:185 views/list.php:220
+#: views/list.php:207 views/list.php:242
 msgid "Double click to edit"
 msgstr "Нажмите два раза для редактирования"
 
-#: views/list.php:208
+#: views/list.php:230
 msgid "Select options"
 msgstr "Выберите опции"
 
-#: views/list.php:214
+#: views/list.php:236
 msgid "Countries"
 msgstr "Страны"
 
-#: views/list.php:215
+#: views/list.php:237
 msgid "States"
 msgstr "Штаты"
 
-#: views/list.php:233
+#: views/list.php:255
 msgid "Edit subscribers list"
 msgstr "Редактировать список подписчиков"
 
-#: views/list.php:242
+#: views/list.php:264
 msgid "List Name"
 msgstr "Название списка"
 
-#: views/list.php:249
+#: views/list.php:271
 msgid "Form Builder"
 msgstr "Конструктор форм"
 
-#: views/list.php:251
+#: views/list.php:273
 msgid "Add Field"
 msgstr "Добавить поле"
 
-#: views/list.php:253
+#: views/list.php:275
 msgid "Text"
 msgstr "Текст"
 
-#: views/list.php:255
+#: views/list.php:276
+msgid "Textarea"
+msgstr "Текстовое поле"
+
+#: views/list.php:278
 msgid "Checkbox"
 msgstr "Чекбокс"
 
-#: views/list.php:256
+#: views/list.php:279
 msgid "Radio buttons"
 msgstr "Радио-кнопки"
 
-#: views/list.php:257
+#: views/list.php:280
 msgid "Dropdown menu"
 msgstr "Выпадающее меню"
 
-#: views/list.php:258
+#: views/list.php:281
 msgid "Form title"
 msgstr "Заголовок формы"
 
-#: views/list.php:259
+#: views/list.php:282
 msgid "HTML"
 msgstr "HTML"
 
-#: views/list.php:262
+#: views/list.php:285
 msgid "Load Default Form"
 msgstr "Загрузить стандартную форму"
 
-#: views/list.php:291
+#: views/list.php:314
 msgid "This form on external sites? Sure!"
 msgstr "Хотите использовать эту форму на внешних сайтах? Пожалуйста!"
 
-#: views/list.php:292
+#: views/list.php:315
 msgid "Copy the code below and paste it into any other site that you have."
 msgstr "Скопируйте код, приведенный ниже, и используйте его на любом другом сайте."
 
-#: views/list.php:294
+#: views/list.php:317
 msgid "Custom CSS for external form."
 msgstr "Персональный CSS код для внешней формы"
 
-#: views/list.php:295
+#: views/list.php:318
 msgid "This CSS will only affect the external form"
 msgstr "Этот CSS код применим только для внешней формы"
 
-#: views/list.php:299
+#: views/list.php:322
 msgid "Here are the unsubscribe links"
 msgstr "Ссылки на отписку"
 
-#: views/list.php:300
+#: views/list.php:323
 msgid "if your are using 3rd party software to send emails:"
 msgstr "Если вы используете стороннюю программу для посылки электронных писем:"
 
-#: views/list.php:301
+#: views/list.php:324
 msgid "Link to instant unsubscribe:"
 msgstr "Ссылка на мгновенную отписку:"
 
-#: views/list.php:304
+#: views/list.php:327
 msgid ""
 "You must replace the %s with the value of the ucode field of the exported "
 "subscribers list."
 msgstr "Вы должны заменить %s на значение поля ucode экспортированного списка подписчиков."
 
-#: views/list.php:306
+#: views/list.php:329
 msgid "One more thing,"
 msgstr "Еще кое-что,"
 
-#: views/list.php:307
+#: views/list.php:330
 msgid "you can put this form inside any post content with this short-code:"
 msgstr "Вы можете поместить эту форму в любом посте при помощи этого макроса:"
 
-#: views/list.php:309
+#: views/list.php:332
 msgid "and you can make it horizontal with this shortcode"
 msgstr "и можете расположить ее горизонтально при помощи этого макроса:"
 
@@ -1421,15 +1425,15 @@ msgstr "Редактировать письмо"
 msgid "Edit template"
 msgstr "Редактировать шаблон"
 
-#: views/mailbox-email.php:66 views/newsman-html-editor.php:35
+#: views/mailbox-email.php:66
 msgid "To:"
 msgstr "Кому:"
 
-#: views/mailbox-email.php:91 views/newsman-html-editor.php:48
+#: views/mailbox-email.php:91
 msgid "Subject:"
 msgstr "Тема:"
 
-#: views/mailbox-email.php:108 views/newsman-html-editor.php:110
+#: views/mailbox-email.php:108
 msgid "Send immediately"
 msgstr "Отправить немедленно"
 
@@ -1438,13 +1442,11 @@ msgid "Schedule sending on"
 msgstr "Запланировать посылку на"
 
 #: views/mailbox-email.php:113 views/mailbox-email.php:158
-#: views/newsman-html-editor.php:116 views/newsman-html-editor.php:241
 #: views/subscribers.php:159
 msgid "Send"
 msgstr "Отправить"
 
 #: views/mailbox-email.php:116 views/mailbox-email.php:144
-#: views/newsman-html-editor.php:124 views/newsman-html-editor.php:227
 msgid "Send test email"
 msgstr "Отправить тестовое письмо"
 
@@ -1464,16 +1466,15 @@ msgstr "Редактировать шаблон поста"
 msgid "Edit Post Divider Template"
 msgstr "Редактировать разделитель постов"
 
-#: views/mailbox-email.php:149 views/newsman-html-editor.php:232
+#: views/mailbox-email.php:149
 msgid "Email address:"
 msgstr "Адрес электронной почты"
 
-#: views/mailbox-email.php:155 views/newsman-html-editor.php:238
+#: views/mailbox-email.php:155
 msgid "Sending email..."
 msgstr "Отправка электронной почты ..."
 
-#: views/mailbox-email.php:157 views/newsman-html-editor.php:219
-#: views/newsman-html-editor.php:240 views/subscribers.php:144
+#: views/mailbox-email.php:157 views/subscribers.php:144
 msgid "Cancel"
 msgstr "Отменить"
 
@@ -1512,78 +1513,6 @@ msgstr "Выберите шаблон"
 #: views/mailbox.php:144
 msgid "Sending log"
 msgstr "Журнал отправки"
-
-#: views/newsman-html-editor.php:19
-msgid "Template"
-msgstr "Шаблоны"
-
-#: views/newsman-html-editor.php:21
-msgid "Edit %s"
-msgstr "Редактировать %s"
-
-#: views/newsman-html-editor.php:22
-msgid "New %s"
-msgstr "Новое %s"
-
-#: views/newsman-html-editor.php:60 views/newsman-html-editor.php:72
-msgid "Header"
-msgstr "Шапка"
-
-#: views/newsman-html-editor.php:61 views/newsman-html-editor.php:73
-msgid "Body"
-msgstr "Содержание"
-
-#: views/newsman-html-editor.php:62 views/newsman-html-editor.php:74
-msgid "Footer"
-msgstr " Нижний колонтитул"
-
-#: views/newsman-html-editor.php:71
-msgid "background color"
-msgstr "цвет фона"
-
-#: views/newsman-html-editor.php:120
-msgid "Close editor"
-msgstr "Закрыть редактор"
-
-#: views/newsman-html-editor.php:121
-msgid "Export template"
-msgstr "Экспортировать шаблон"
-
-#: views/newsman-html-editor.php:126
-msgid "Digest controls"
-msgstr "Управление дайджестом"
-
-#: views/newsman-html-editor.php:127
-msgid " Add posts"
-msgstr " Добавить посты"
-
-#: views/newsman-html-editor.php:128
-msgid " Edit post template"
-msgstr " Изменить шаблон поста"
-
-#: views/newsman-html-editor.php:129
-msgid " Edit post divider"
-msgstr " Редактировать разделитель постов"
-
-#: views/newsman-html-editor.php:142 views/newsman-html-editor.php:148
-msgid "hello"
-msgstr "привет"
-
-#: views/newsman-html-editor.php:155
-msgid "Choose posts to include into digest"
-msgstr "Выберите посты для включения в дайджест"
-
-#: views/newsman-html-editor.php:208
-msgid " Show private posts"
-msgstr " Показать приватные посты"
-
-#: views/newsman-html-editor.php:209
-msgid "No posts selected"
-msgstr "Ни один пост не выбран"
-
-#: views/newsman-html-editor.php:220
-msgid "Insert"
-msgstr "Вставить"
 
 #. translators: Options page tab title
 #: views/options.php:17

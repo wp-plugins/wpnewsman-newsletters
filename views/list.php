@@ -71,6 +71,28 @@
 </script>
 <!-- /Text element templates -->
 
+<!-- Textarea element templates -->
+<script type="text/html" id="tpl-newsman-form-el-textarea">
+	<li gstype="textarea" class="newsman-form-item textarea" data-bind="css: { selected: active, 'newsman-required': required }, click: $parent.elClick">
+		<label class="newsman-form-item-label" style="display: none;" data-bind="text: label, visible: !$parent.useInlineLabels()"></label>
+		<textarea data-bind="value: value, valueUpdate:'afterkeydown', attr: { name: name(), placeholder: ph() } "></textarea>
+		<button class="close" data-bind="click: removeFormItem">×</button>
+	</li>
+</script>
+<script type="text/html" id="tpl-newsman-options-textarea">
+	<div class="newsman-field-options newsman-field-options-textarea" data-bind="visible: active()">
+		<strong><?php _e('Field options', NEWSMAN); ?></strong><br>
+
+		<label for="newsman_fb_field_name"><?php _e('Name', NEWSMAN); ?></label>
+		<input class="newsman_fb_field_name input-large" type="text" data-bind="value:label">
+		<label><?php _e('Content', NEWSMAN); ?></label>
+		<textarea data-bind="value: value, valueUpdate:'afterkeydown'"></textarea>
+
+		<label class="checkbox"><input type="checkbox" data-bind="checked: required"> <?php _e('Required', NEWSMAN); ?></label>
+	</div>
+</script>
+<!-- /Textarea element templates -->
+
 <!-- Checkbox element templates -->
 <script type="text/html" id="tpl-newsman-form-el-checkbox">
 	<li gstype="checkbox" class="newsman-form-item" style="position: relative;" data-bind="css: { selected: active, 'newsman-required': required }, click: $parent.elClick">
@@ -251,6 +273,7 @@
 						<a class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><i class="icon-plus-sign icon-white"></i> <?php _e('Add Field', NEWSMAN); ?> <span class="caret"></span></a>
 						<ul class="dropdown-menu">
 							<li><a type="text"><?php _e('Text', NEWSMAN); ?></a></li>
+							<li><a type="textarea"><?php _e('Textarea', NEWSMAN); ?></a></li>
 							<!-- <li><a type="email"><?php _e('Email', NEWSMAN); ?></a></li> -->
 							<li><a type="checkbox"><?php _e('Checkbox', NEWSMAN); ?></a></li>
 							<li><a type="radio"><?php _e('Radio buttons', NEWSMAN); ?></a></li>

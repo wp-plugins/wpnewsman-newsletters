@@ -22,8 +22,12 @@ input[type="text"], input[type="password"], input[type="number"], input[type="se
 	display: none;
 }
 
+#adminmenu .wp-has-current-submenu.opensub .wp-submenu {
+	z-index: 5 !important;
+}
+
 .newsman-shortcode-menu {
-	height: 190px !important;
+	height: 240px !important;
 }
 
 .email.editable.editable-click {
@@ -438,10 +442,6 @@ tr:hover .newsman-inline-controls {
 
 #newsman-modal-add-posts {
 	max-height: 600px;
-}
-
-#newsman-search {
-	width: 520px;
 }
 
 #newsman-post-type,

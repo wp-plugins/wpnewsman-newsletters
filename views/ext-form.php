@@ -9,6 +9,7 @@
 	<!--[if gte IE 9]>
 	<link rel='stylesheet' id='newsman-ie9-css'  href='http://blog.dev/wp-content/plugins/wpnewsman/css/newsman-ie9.css?ver=1.3.1' type='text/css' media='all' />
 	<![endif]-->
+	<?php wp_print_scripts(); ?>
   </head>
   <body class="wp_bootstrap">
 	<div class="form-container">

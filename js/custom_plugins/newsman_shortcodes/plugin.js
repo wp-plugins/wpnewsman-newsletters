@@ -51,6 +51,13 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 		  		code: "<a href=\"[newsman profileurl='googleplus']\">Add on Google+</a>",
 		  		codeBefore: "<a href=\"[newsman profileurl='googleplus']\">",
 		  		codeAfter: "</a>"
+		  	},
+		  	'hr2': true,
+		  	'current-date': {
+		  		title: 'Current Date',
+		  		code: '<span>[newsman date="F j, Y"]</span>',
+		  		codeBefore: '',
+		  		codeAfter: ''
 		  	}
 		  };  
 

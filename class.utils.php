@@ -1362,6 +1362,12 @@ class newsmanUtils {
 			)
 		);
 
+		$langExists = $this->installLangExists($lang);
+
+		if ( !$langExists )  {
+			$lang = 'en_US';
+		}
+
 		foreach ($pagesData as $pageKey => $data) {
 			$pageId = $options->get('activePages.'.$pageKey);
 
@@ -1378,7 +1384,7 @@ class newsmanUtils {
 				$pageId = wp_insert_post($new_page);
 
 				$options->set('activePages.'.$pageKey, $pageId);
-			} else if ( $replace && $this->installLangExists($lang) ) {
+			} else if ( $replace ) {
 				// replacing the action page
 				$ap = get_post($pageId);
 				$ap->post_title = $data['title'];
@@ -1393,6 +1399,10 @@ class newsmanUtils {
 	public function installSystemEmailTemplates($lang = 'en_US', $replace = false) {
 		$options = newsmanOptions::getInstance();
 		// loading email templates
+
+		if ( !$this->installLangExists($lang) ) {
+			$lang = 'en_US';
+		}
 
 		$emailTemplates = array(
 			array(
@@ -1446,7 +1456,7 @@ class newsmanUtils {
 
 			if ( !$tpl ) {
 				$tpl = new newsmanEmailTemplate();
-			} else if ( !$replace || !$this->installLangExists($lang) ) {
+			} else if ( !$replace ) {
 				continue;
 			}
 

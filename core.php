@@ -352,7 +352,7 @@ class newsman {
 			return '<img src="'.NEWSMAN_PLUGIN_URL.'/img/newsman-badge.png" />';
 		}
 
-		if ( isset($subject) || in_array('subject', $attr) ) {
+		if ( isset($newsman_current_email) && ( isset($subject) || in_array('subject', $attr) ) ) {
 			return $newsman_current_email->subject;
 		}
 
@@ -1407,6 +1407,11 @@ class newsman {
 		$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 		$type = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
 
+		if ( $page === 'newsman-settings' && $action === 'newsman-frame-get-posts' ) {
+			include(__DIR__.DIRECTORY_SEPARATOR.'frmGetPosts.php');
+			exit();
+		}
+
 		if ( $page === 'newsman-mailbox' && $action === 'compose' && $type === 'wp' ) {
 			$ent = new newsmanEmail();
 			$ent->editor = 'wp';
@@ -2219,7 +2224,7 @@ class newsman {
 
 		$ignoreStem = $wpdb->prefix.'newsman_';
 
-		if ( defined('W3TC_DIR') ) {
+		if ( defined('W3TC_DIR') && is_plugin_active('w3-total-cache/w3-total-cache.php') ) {
 			require_once W3TC_DIR . '/inc/define.php';
 
 			$config = w3_instance('W3_Config');

@@ -1,7 +1,8 @@
 <?php
-	define('WP_ADMIN', true);
+
 	define('IFRAME_REQUEST', true);
-	require_once("../../../wp-load.php");
+
+	//require_once("../../../wp-admin/admin.php");
 	require_once(__DIR__.DIRECTORY_SEPARATOR."class.utils.php");
 	require_once(__DIR__.DIRECTORY_SEPARATOR."class.options.php");
 
@@ -27,7 +28,7 @@
 <html>
 <head>
 	<title></title>
-	<?php do_action('admin_enqueue_scripts'); ?>
+
 	<script type="text/javascript">
 		window.ajaxurl = "<?php echo admin_url( 'admin-ajax.php', 'relative' ); ?>";
 	</script>
@@ -267,7 +268,16 @@
 	 * generally use this hook to reference JavaScript files.
 	 */
 
-	wp_footer();
+	//wp_footer();
+
+	global $hook_suffix;
+	$hook_suffix = '/wp-admin/?page=wpnewsman-settings';
+
+	//require_once(ABSPATH . 'wp-admin/admin-footer.php');
+	do_action('admin_footer', '');
+	do_action('admin_print_footer_scripts');
+	do_action("admin_footer-" . $GLOBALS['hook_suffix']);
+	
 ?>	
 </body>
 </html>

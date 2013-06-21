@@ -109,10 +109,6 @@
 					this.blocktypes = gsblock ? gsblock.split(',') : [];
 
 				this._getButtons();
-
-				//this._bindMoves();
-
-				//this._bindShiftHander();
 			},
 
 			_bind: function() {
@@ -178,7 +174,7 @@
 
 				this._moveHandler = function(e) {
 					var parentOffset = that.element.offset();
-					//or $(this).offset(); if you really just want the current element's offset
+
 					var relX = e.pageX - parentOffset.left,
 						relY = e.pageY - parentOffset.top;
 
@@ -238,11 +234,9 @@
 					}					
 				};
 
-				//globalKeyHandler.on(this._shiftHandler);
 			},
 			_unbindShiftHander: function() {
 				if ( this._shiftHandler ) {
-					//globalKeyHandler.off(this._shiftHandler);
 					this._shiftHandler = null;
 				}
 			},
@@ -551,7 +545,8 @@
 			var dialog = CKEDITOR.dialog.addIframe(
 				'newsmanInsertPostsDlg',
 				newsmanL10n.insertPosts,
-				NEWSMAN_PLUGIN_URL+'/frmGetPosts.php', width, height,
+				NEWSMAN_BLOG_ADMIN_URL+'admin.php?page=newsman-settings&action=newsman-frame-get-posts',
+				width, height,
 				function(){
 					// Iframe loaded callback.	
 				},
@@ -611,10 +606,6 @@
 
 				}
 			);
-
-			// dialog.on('ok', function(){
-
-			// });
 
 			editor.addCommand( 'newsmanOpenInsertPostDlg', new CKEDITOR.dialogCommand( 'newsmanInsertPostsDlg' ) );
 

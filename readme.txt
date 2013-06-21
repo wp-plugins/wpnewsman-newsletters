@@ -4,7 +4,7 @@ Donate Link: http://wpnewsman.com/premium-newsletter-plugin-wordpress/
 Tags: wpnewsman, newsletter, newsletters, newsletter signup, newsletter widget, subscribers, post notification, email subscription, email marketing, email, emailing, subscription
 Requires at least: 3.5
 Tested up to: 3.6
-Stable tag: 1.5.4
+Stable tag: 1.5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -120,6 +120,15 @@ We got a User Feedback page where you can [add or vote for new features](http://
 3. Subscriber management.
 
 == Changelog ==
+
+= 1.5.5 =
+* Added: ability to add a textarea element to the form.
+* Added: "Current Date" option to shortcode dropdown menu.
+* Fixed: get_current_screen() error.
+* Fixed: problem with the plugin activation on some sites.
+* Fixed: menu in the template store.
+* Fixed: ckeditor source mode and active menu overlapping.
+* Fix: language fallback for missing language pack.
 
 = 1.5.4 =
 * Fixed: incompatibilities with some plugins during posts insertion
@@ -269,6 +278,9 @@ We got a User Feedback page where you can [add or vote for new features](http://
 * First public release. Hello World! 
 
 == Upgrade Notice ==
+
+= 1.5.5 = 
+Recomended upgrade. Improved compatibility with 3rd party plugins.
 
 = 1.5.2 = 
 Highly recomended upgrade. Lots of stability and speed improvements. Added new system email template "Re-subscription confirmation"

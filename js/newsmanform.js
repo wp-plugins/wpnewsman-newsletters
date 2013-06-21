@@ -41,6 +41,15 @@ jQuery(function($){
 			} 			
 		});
 
+		// textarea validation
+		$('.newsman-form-item.newsman-form-item-textarea.newsman-required', form).each(function(i, block){
+ 			el = $('textarea', block);
+			v = el.val();	
+			if ( !v ) {
+				err(newsmanformL10n.pleaseFillAllTheRequiredFields, el);
+			} 			
+		});
+
 
 		// checkbox validation
 		$('.newsman-form-item.newsman-form-item-checkbox.newsman-required', form).each(function(i, block){
