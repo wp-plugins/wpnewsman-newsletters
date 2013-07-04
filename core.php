@@ -1159,7 +1159,7 @@ class newsman {
 
 		$use_excerpts = isset($_REQUEST['newsman_use_excerpts']);
 
-		if ( isset($_REQUEST['u']) && !empty($_REQUEST['u']) ) {
+		if ( strpos($_SERVER['REQUEST_URI'], 'press-this.php') === false && isset($_REQUEST['u']) && !empty($_REQUEST['u']) ) {
 			if ( strpos($_REQUEST['u'], ':') === false ) {
 				wp_die('Wrong "u" parameter format');
 			}
@@ -1168,15 +1168,16 @@ class newsman {
 
 			$uArr = explode(':', $_REQUEST['u']);
 			$list = newsmanList::findOne('uid = %s', array($uArr[0]));
-			$newsman_current_list = $list;
 
-			$s = $list->findSubscriber("ucode = %s", $uArr[1]);
+			if ( $list ) {
+				$newsman_current_list = $list;
 
-			if ( !$s ) {
-				wp_die('Please, check your link. It seems to be broken.');
+				$s = $list->findSubscriber("ucode = %s", $uArr[1]);
+				if ( !$s ) {
+					wp_die('Please, check your link. It seems to be broken.');
+				}
+				$newsman_current_subscriber = $s->toJSON();
 			}
-
-			$newsman_current_subscriber = $s->toJSON();
 		}
 				
 		if ( isset($_REQUEST['nwsmn-unsubscribe']) ) {

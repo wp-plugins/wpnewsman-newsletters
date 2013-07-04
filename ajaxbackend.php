@@ -54,7 +54,8 @@
 
 			$content = json_encode( $u->utf8_encode_all($msg) );
 
-			ob_end_clean();
+			while(@ob_end_clean());
+			
 			header("Connection: close");
 			ignore_user_abort(); // optional
 			ob_start();
