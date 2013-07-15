@@ -2265,8 +2265,7 @@ class newsman {
 
 		$result = wp_remote_post( $cron_url, array(
 			'timeout'   => 3,
-			'blocking'  => true,
-			'sslverify' => apply_filters( 'https_local_ssl_verify', true )
+			'blocking'  => true
 		) );
 
 		return is_wp_error($result) ? $result : 'normal';
