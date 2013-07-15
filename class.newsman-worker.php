@@ -2,6 +2,7 @@
 
 require_once(__DIR__.DIRECTORY_SEPARATOR."class.utils.php");
 require_once(__DIR__.DIRECTORY_SEPARATOR."class.options.php");
+require_once(__DIR__.DIRECTORY_SEPARATOR."class.ajax-fork.php");
 
 // require_once(__DIR__.DIRECTORY_SEPARATOR."lib/php-growl/class.growl.php");
 
@@ -14,35 +15,48 @@ class newsmanWorker {
 	var $stopped = false;
 	var $pid = null;
 	var $lockfile = null;
+	var $ts = null;
 
 	public function __construct() {
 
-		// TODO: remove in production
-		// $this->growl_connection = array('address' => '127.0.0.1', 'password' => 'neuroshok');
-		// $this->oGrowl = new Growl();
+		if ( class_exists('Growl') ) {
+			$this->growl_connection = array('address' => '127.0.0.1', 'password' => 'glocksoft');
+			$this->oGrowl = new Growl();			
+		}
+
+		$newsmanAdmin = function_exists('current_user_can') && current_user_can( 'newsman_wpNewsman' );
 
 		$o = newsmanOptions::getInstance();
 		$this->secret = $o->get('secret');
 
 		if ( defined('NEWSMAN_WORKER') && ( !defined('NEWSMAN_DEBUG') || NEWSMAN_DEBUG === false ) ) {
-			if ( $_REQUEST['secret'] !== $this->secret ) {
+			if ( !$newsmanAdmin && $_REQUEST['secret'] !== $this->secret ) {
 				die('0');
-			}				
-		}
+			}
+		}	
+
+		$this->tryRemoveAjaxFork();	
 
 		$this->pid = getmypid();
 		$this->u = newsmanUtils::getInstance();
-
-		static::cleanStaleFlagFiles();
 	}
 
-	// TODO: remove in production
+	private function tryRemoveAjaxFork() {
+		if ( defined('NEWSMAN_WORKER') && isset($_REQUEST['ts']) ) {
+			$fork = newsmanAjaxFork::findOne('ts = %s', array($_REQUEST['ts']));
+			if ( $fork ) {
+				$fork->remove();
+			}
+		}
+	}
+
 	public function growl($str) {
+		if ( isset($this->oGrowl) && $this->oGrowl ) {
+			$this->oGrowl->addNotification('newsman_worker');
+			$this->oGrowl->register($this->growl_connection);
 
-		// $this->oGrowl->addNotification('newsman_worker');
-		// $this->oGrowl->register($this->growl_connection);
-
-		// $this->oGrowl->notify($this->growl_connection, 'newsman_worker', get_called_class(), $str);
+			$this->oGrowl->notify($this->growl_connection, 'newsman_worker', get_called_class(), $str);			
+		}
 	}	
 
 	/**
@@ -57,13 +71,28 @@ class newsmanWorker {
 	}
 
 	public function run($worker_lock = null) {
-		$this->initProcess();
+
+		if ( !$this->initProcess() ) {
+			return; // the lock is already obtained
+		}
+
+		// for debug
+		if ( defined('NEWSMAN_WORKER') ) {
+			$this->isProcessRunning($this->pid);
+		}
+		// ---
+
 
 		if ( $worker_lock === null ) {
 			$this->worker();
 			$this->clearStopFlag($this->pid);
 		} else {
+			$this->isProcessRunning($this->pid);
+
 			if ( $this->lock($worker_lock) ) { // returns true if lock was successfully enabled
+
+				$this->isProcessRunning($this->pid);
+
 				$this->worker();
 				$this->unlock();
 				$this->clearStopFlag($this->pid);
@@ -85,18 +114,32 @@ class newsmanWorker {
 		$secret = $o->get('secret');
 
 		$workerURL = NEWSMAN_PLUGIN_URL.'/worker.php';
-
-		$params['secret'] = $secret;
+		
 		$params['newsman_worker_fork'] = get_called_class();
+		$params['ts'] = sprintf( '%.22F', microtime( true ) );
 
-		wp_remote_post(
-			$workerURL,
-			array(
-				'timeout' => 0.01,
-				'blocking' => false,
-				'body' => $params
-			)
-		);
+		if ( defined('ALTERNATE_WP_CRON') && ALTERNATE_WP_CRON ) {
+			// passing url to the ajax forker
+			$fork = new newsmanAjaxFork();
+			$fork->ts = $params['ts'];
+			$fork->method = 'post';
+			$fork->url = $workerURL;
+			$fork->body = http_build_query($params);
+			$fork->save();
+			
+		} else {
+			// exposing secret only in loopback requests
+			$params['secret'] = $secret;
+			wp_remote_post(
+				$workerURL,
+				array(
+					//'timeout' => 0.01,
+					'blocking' => false,
+					'body' => $params
+				)
+			);			
+		}
+
 	}
 
 	static function getTmpDir() {
@@ -106,38 +149,20 @@ class newsmanWorker {
 
 	static function stop($pid) {
 		$u = newsmanUtils::getInstance();
-		//$u->log('[stop] newsman-worker-stop-'.$pid);
 		return $u->lock('newsman-worker-stop-'.$pid);
 
 	}
 
-	static function clearStopFlag($pid) {
+	static function clearStopFlag($pid) {		
 		$u = newsmanUtils::getInstance();
 		return $u->releaseLock('newsman-worker-stop-'.$pid);
 	}
 
 	static function isProcessStopped($pid) {
 		$u = newsmanUtils::getInstance();
-		//$u->log('[isLocked] newsman-worker-stop-'.$pid);
-		return $u->isLocked('newsman-worker-stop-'.$pid);
-	}
-
-	static function cleanStaleFlagFiles() {
-
-		// $u = newsmanUtils::getInstance();
-
-		// $tmpdir = static::getTmpDir();		
-		// if ( $handle = opendir( $tmpdir ) ) {
-		// 	while (false !== ($entry = readdir($handle))) {
-		// 		if ( preg_match('/^newsman-worker/i', $entry) ) {
-		// 			$pid = file_get_contents($tmpdir.$entry);
-		// 			if ( $pid && is_numeric($pid) && !static::isProcessRunning($pid) ) {
-		// 				unlink($tmpdir.$entry);
-		// 			}
-		// 		}
-		// 	}
-		// 	closedir($handle);
-		// }
+		
+		$r = $u->isLocked('newsman-worker-stop-'.$pid);
+		return $r;
 	}
 
 	static function isProcessRunning($pid) {		
@@ -149,7 +174,7 @@ class newsmanWorker {
 		$u = newsmanUtils::getInstance();
 
 		$this->growl('[!!!] init process');
-		$u->lock('newsman-worker-running-'.$this->pid);
+		return $u->lock('newsman-worker-running-'.$this->pid);
 	}
 
 	public function endProcess() {
@@ -172,9 +197,20 @@ class newsmanWorker {
 
 	public function unlock() {
 		if ( $this->lockfile ) {
-			return $this->u->lock($this->lockfile);
+			return $this->u->releaseLock($this->lockfile);
 		}
 	}
 
+	/**
+	 * Write timestamp to the lock file each 10 seconds
+	 */
+	public function writeTS() {		
+		$ts = gettimeofday(true);
+		$timeout = 10;
+		if ( $this->lockfile && ($this->ts === null || $ts > $this->ts+$timeout )) {
+			file_put_contents($this->u->getLockFilePath($this->lockfile), $ts);
+			$this->ts = $ts;
+		}
+	}
 
 }

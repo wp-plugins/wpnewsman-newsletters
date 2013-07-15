@@ -6,16 +6,12 @@ define('NEWSMAN_WORKER_WAIT_STOPPED', 2);
 class newsmanMailer extends newsmanWorker {
 
 	var $ts = null;
-
-	// function checkpoint($msg) {
-	// 	return;
-	// 	$u = newsmanUtils::getInstance();
-	// 	$elapsed = $this->ts !== null ? microtime(true) - $this->ts : 0;
-	// 	$u->log(sprintf($msg, $elapsed));
-	// 	$this->ts = microtime(true);
-	// }
 	
 	function worker() {
+
+		$u = newsmanUtils::getInstance();
+
+		$this->isProcessRunning($this->pid);		
 
 		$this->growl('Worker started.');
 
@@ -44,16 +40,12 @@ class newsmanMailer extends newsmanWorker {
 	private function waitOrStop($ms) {
 		$start = round(microtime(true)*1000);
 
-		// $this->u->log('wait for: '.$ms.'ms');
-		// $this->u->log('start: '.$start);
-
 		for ( ;; ) {
 			$d = round(microtime(true)*1000) - $start;
-			//$this->u->log('delta: '.$d.'ms');
 			if ( $d > $ms ) {
 				return NEWSMAN_WORKER_WAIT_TIMEOUT;
 			} else {
-				usleep(100000); // 200 ms
+				usleep(100000); // 100 ms
 				if ( $this->isStopped() ) {
 					return NEWSMAN_WORKER_WAIT_STOPPED;	
 				}				
@@ -72,9 +64,13 @@ class newsmanMailer extends newsmanWorker {
 
 		$sl = newsmanSentlog::getInstance();
 
-//		$checkpoint = time();
+		$this->isProcessRunning($this->pid);
+
 
 		$tStreamer = new newsmanTransmissionStreamer($email);
+
+		$this->isProcessRunning($this->pid);
+
 
 		$email->recipients = $tStreamer->getTotal();
 		$email->msg = '';
@@ -118,12 +114,9 @@ class newsmanMailer extends newsmanWorker {
 		$email->p_html = $u->processAssetsURLs($email->p_html, $email->assets);
 		$email->p_html = $u->compileThumbnails($email->p_html);	
 
-//		$this->checkpoint('Assets URLs processed in %.4fus');
-
-		//foreach ($transmissions as $t) {
 		while ( $t = $tStreamer->getTransmission() ) {
 
-//			$this->checkpoint('Transmission received in %.4fus');
+			$this->isProcessRunning($this->pid);
 
 			$this->growl('Got transmission object...');
 
@@ -132,7 +125,6 @@ class newsmanMailer extends newsmanWorker {
 				$this->growl('Worker stopped.');
 				break;
 			}
-//			$this->checkpoint('Stopflag checked in %.4fus');
 
 			$newsman_current_list = $t->list;
 
@@ -140,15 +132,7 @@ class newsmanMailer extends newsmanWorker {
 
 			$data = $t->getSubscriberData();
 
-//			$this->checkpoint('Subscribers data taken in %.4fus');
-
 			$msg = $email->renderMessage($data, false);
-
-//			$this->checkpoint('Message rendered in %.4fus');
-
-			// $msg['html'] = $u->processAssetsURLs($msg['html'], $email->assets);
-
-			// $this->checkpoint('Assets URLs processed in %.4fus');
 
 			$mail_opts = array(
 				 'to' => $t->email,
@@ -158,24 +142,16 @@ class newsmanMailer extends newsmanWorker {
 				 'uns_code' => $nmn->getActionLink('unsubscribe', 'code_only'),
 			);
 
-//			$this->checkpoint('Mail opts prepared in %.4fus');
-
 			$this->growl('sending email...');
 
 			$r = $u->mail($msg, $mail_opts );
-
-//			$this->checkpoint('Mail sent in %.4fus');
 
 			if ( $r === true ) {
 				$this->growl('Email sent. Setting transmission to "done"');
 				$errorsCount = 0;
 				$email->incSent();
 
-//				$this->checkpoint('Email counter incremented in %.4fus');
-
 				$t->done($email->id);
-
-//				$this->checkpoint('Transmission finished in %.4fus');
 			} else {
 
 				$this->growl('Sending failed: '.$r);
@@ -211,7 +187,6 @@ class newsmanMailer extends newsmanWorker {
 			$elapsed = (time() - $start)* 1000; // time that sending email took in ms
 
 			if ( $throttlingTimeout > 0 ) {
-//				$this->checkpoint('Throttling timeout engaged in %.4fus');
 				$t = $throttlingTimeout - $elapsed; // how much time we've left to wait				
 				if ( $t > 0 ) {
 					$this->growl('Falling asleep for '.($throttlingTimeout/1000).' seconds at '.date('H:i:s'));
@@ -223,6 +198,7 @@ class newsmanMailer extends newsmanWorker {
 					$this->growl('No time for sleep :) Preparing next email...');
 				}
 			}
+			$this->writeTS();
 			$ts = microtime(true);
 		}
 

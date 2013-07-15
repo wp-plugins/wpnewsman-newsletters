@@ -165,4 +165,16 @@ class newsmanEmail extends newsmanStorable {
 
 		return $rendered;
 	}	
+
+	public function isWorkerAlive() {
+		$u = newsmanUtils::getInstance();
+		return !$u->isLockStale('newsman-worker-'.$this->id);
+	}
+
+	public function releaseLocks() {
+		$u = newsmanUtils::getInstance();
+		$u->releaseLock('newsman-worker-'.$this->id);
+		$u->releaseLock('newsman-worker-running-'.$this->workerPid);
+	}
+
 }

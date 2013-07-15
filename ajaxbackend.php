@@ -52,6 +52,15 @@
 				header("HTTP/1.0 400 Bad Request");
 			}
 
+			// getting ajax forks
+			if ( defined('ALTERNATE_WP_CRON') && ALTERNATE_WP_CRON ) {
+				$forks = newsmanAjaxFork::findAll();
+				if ( is_array($forks) ) {
+					$msg['newsman_ajax_fork'] = $forks;
+				}
+			}
+			//
+
 			$content = json_encode( $u->utf8_encode_all($msg) );
 
 			while(@ob_end_clean());
@@ -1150,7 +1159,7 @@
 			global $wpdb;			
 			$c = 0;
 
-			if ( preg_match_all('/\b[a-z0-9]+(?:[-\._]?[a-z0-9]+)*@(?:[a-z0-9]+(?:-?[a-z0-9]+)*\.)+[a-z]+\b/i', $emailsList, $matches) ) {
+			if ( preg_match_all('/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b/i', $emailsList, $matches) ) {
 
 				$set = '(';
 				$del = '';
@@ -1444,7 +1453,7 @@
 				$email->save();								
 			}
 			$this->respond(true, 'Success', array(), false);
-			sleep(10); // sleep for few seconds to keep mysql lock alive
+			sleep(5); // sleep for few seconds to keep mysql lock alive
 			exit();
 		}
 			
@@ -2057,6 +2066,9 @@
 			$this->respond(true, 'Success', array( 'installed' => $templates ));
 		}
 
+		public function ajHideCronAlternativeModeMessage() {
+			$o = newsmanOptions::getInstance();
+			$o->set('hideAlternateCronWarning', true);
+			$this->respond(true, 'Success');
+		}
 	}
-	
-?>

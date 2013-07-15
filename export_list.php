@@ -1,12 +1,25 @@
 <?php
 
-//ignore_user_abort(true);
+define('NEWSMAN_WORKER', 1);
+
+if ( ! defined('WP_ADMIN') )
+	define('WP_ADMIN', true);
+
+if ( ! defined('WP_NETWORK_ADMIN') )
+	define('WP_NETWORK_ADMIN', false);
+
+if ( ! defined('WP_USER_ADMIN') )
+	define('WP_USER_ADMIN', false);
+
+if ( ! WP_NETWORK_ADMIN && ! WP_USER_ADMIN ) {
+	define('WP_BLOG_ADMIN', true);
+}
 
 require_once('../../../wp-load.php');
+
 require_once(__DIR__.DIRECTORY_SEPARATOR."class.utils.php");
 require_once(__DIR__.DIRECTORY_SEPARATOR."class.list.php");
 
-define('NEWSMAN_WORKER', 1);
 
 function export_newsman_list() {
 	if ( !current_user_can('newsman_wpNewsman') ) {

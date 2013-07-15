@@ -1291,17 +1291,19 @@ class newsmanUtils {
 		return null;
 	}
 
-	public function getPostFeaturedImageThumbnail($post) {
+	public function getPostFeaturedImageThumbnail($post, $size) {
+		$size = ( $size === null ) ? 'thumbnail' : $size;
+
 		$post_thumbnail_id = get_post_thumbnail_id( $post->ID );
-		$attrs = wp_get_attachment_image_src( $post_thumbnail_id, 'thumbnail', false );
+		$attrs = wp_get_attachment_image_src( $post_thumbnail_id, $size, false );
 		return $attrs[0];
 	}
 
 	/**
 	 * Gets posts featured image on any first image it can find in the post
 	 */
-	public function getPostThumbnail($post) {
-		$url = $this->getPostFeaturedImageThumbnail($post);
+	public function getPostThumbnail($post, $size = null) {
+		$url = $this->getPostFeaturedImageThumbnail($post, $size);
 
 		if ( !$url ) {
 			$url = $this->getFirstImage($post);	
@@ -1614,24 +1616,29 @@ class newsmanUtils {
 	/* Locks */
 	/* --------------------------------------------------------------------------------------------------------- */
 
+	public function getLockFilePath($name) {
+		$n = newsman::getInstance();
+		$locksDir = $n->ensureUploadDir('locks');
+		return $locksDir.DIRECTORY_SEPARATOR.$name.".lock";
+	}
+
 	public function lock($name) {
-		global $wpdb;
-		$sql = $wpdb->prepare("SELECT GET_LOCK(%s, 10);", $name);
-		$r = $wpdb->get_var($sql);
-		return $r === '1';
+		return @fopen($this->getLockFilePath($name), "xb") !== false;
 	}
 
 	public function isLocked($name) {
-		global $wpdb;
-		$sql = $wpdb->prepare("SELECT IS_FREE_LOCK(%s);", $name);
-		$r = $wpdb->get_var($sql);
-		return $r === '0';
+		return @file_exists($this->getLockFilePath($name));
 	}
 
 	public function releaseLock($name) {
-		global $wpdb;
-		$sql = $wpdb->prepare("SELECT RELEASE_LOCK(%s);", $name);
-		$r = $wpdb->get_var($sql);
-		return $r === '1';
+		return @unlink($this->getLockFilePath($name));
+	}	
+
+	public function isLockStale($name, $timeout = 60) {
+		$ts = gettimeofday(true);
+		$lock_ts = floatval(file_get_contents($this->getLockFilePath($name)));
+
+		return $ts - $lock_ts > $timeout;		
 	}
+		
 }

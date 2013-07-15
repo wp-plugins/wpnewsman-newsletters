@@ -253,6 +253,10 @@ var NEWSMAN_HTML_TO_TEXT = (function(){
 
 jQuery(function($){
 
+	$(document).on('click', '[data-dismiss="newsman-admin-notification"]', function(e){
+		$(this).closest('.newsman-admin-notification').animate({ height: 'toggle', opacity: 'toggle' }, 'slow');
+	});
+
 	/******* Pagination widget ********/
 
 	$.widget('newsman.newsmanPagination', {
@@ -685,8 +689,6 @@ jQuery(function($){
 			err = data.msg;			
 		} catch(e) {
 			err = 'Cannot parse server response.';
-			console.log(e+'');
-			console.log(t.responseText);			
 			showMessage(err, 'error', null, {
 				responseText: t.responseText,
 				query: this.data
@@ -698,6 +700,24 @@ jQuery(function($){
 			showMessage(err, 'error', null);
 		}
 	};
+
+	// ------------------- ajax-fork
+	function forkWorkers(forks) {
+		if ( $.isArray(forks) ) {
+			$(forks).each(function(i, fork){
+				$.ajax({
+					type: fork.method,
+					url: fork.url,
+					data: fork.body,
+					timeout: 100
+				});
+			});
+		}
+	}
+
+	if ( typeof newsman_ajax_fork !== 'undefined' ) {
+		forkWorkers(newsman_ajax_fork);
+	}
 
 	// global ajax senders
 
@@ -741,6 +761,17 @@ jQuery(function($){
 			if ( NEWSMAN.ajaxCnt <= 0 ) {
 				requestsDone();
 			}			
+		}
+
+		if ( aj.responseText ) {
+			var data, forks = [];
+			try {
+				data = JSON.parse(aj.responseText);				
+			} catch(e) {				
+			}
+			if ( data && data.newsman_ajax_fork ) {
+				forkWorkers(data.newsman_ajax_fork);
+			}
 		}
 	});
 

@@ -8,6 +8,7 @@ require_once(__DIR__.DIRECTORY_SEPARATOR.'class.options.php');
 require_once(__DIR__.DIRECTORY_SEPARATOR.'class.utils.php');
 require_once(__DIR__.DIRECTORY_SEPARATOR.'class.emails.php');
 require_once(__DIR__.DIRECTORY_SEPARATOR.'class.emailtemplates.php');
+require_once(__DIR__.DIRECTORY_SEPARATOR.'class.ajax-fork.php');
 require_once(__DIR__.DIRECTORY_SEPARATOR.'class.mailman.php');
 require_once(__DIR__.DIRECTORY_SEPARATOR.'class.sentlog.php');
 require_once(__DIR__.DIRECTORY_SEPARATOR.'ajaxbackend.php');
@@ -157,7 +158,7 @@ class newsman {
 
 	public function onTemplateRedirect() {
 		global $post;
-		if( $post->post_type == 'newsman_ap' ){
+		if ( isset($post) && $post->post_type == 'newsman_ap' ){
 			$categories = get_the_category();
 			if ( count($categories) == 0 ) {
 				//assign a category
@@ -374,7 +375,8 @@ class newsman {
 				$c = $this->utils->cutScripts($newsman_loop_post->post_content);
 				return $this->utils->fancyExcerpt($c, $words);
 			} else if ( $post == 'thumbnail' ) {
-				$url = $this->utils->getPostThumbnail($newsman_loop_post);
+				$s = isset($size) ? $size : null;
+				$url = $this->utils->getPostThumbnail($newsman_loop_post, $s);
 
 				if ( !$url && isset($placeholder) ) {
 					$url = $placeholder;
@@ -1559,7 +1561,7 @@ class newsman {
 		}
 	}
 
-	public function ensureUploadDir($subdir = false) {
+	static function ensureUploadDir($subdir = false) {
 
 		$dirs = wp_upload_dir();
 		$ud = $dirs['basedir'].DIRECTORY_SEPARATOR.'wpnewsman';
@@ -2218,6 +2220,15 @@ class newsman {
 			$this->options->set('hideLangNotice', false);			
 		}
 
+		$this->showWPCronStatus();
+
+		$forks = newsmanAjaxFork::findAll();
+		if ( is_array($forks) ) {
+			echo '<script>';
+			echo "var newsman_ajax_fork = ".json_encode($forks).";";
+			echo '</script>';
+		}
+
 		if ( defined('FS_METHOD') && FS_METHOD !== '' && FS_METHOD !== 'direct' ) {
 			include('views/_an_fs_method.php');
 		}
@@ -2241,6 +2252,45 @@ class newsman {
 				$this->options->set('showW3TCConfigNotice', true);
 			}		
 		}
+	}
+
+	private function getWPCronStatus() {
+
+		if ( defined('ALTERNATE_WP_CRON') && ALTERNATE_WP_CRON ) {
+			return 'alternative';
+		}
+
+		$doing_wp_cron = sprintf( '%.22F', microtime( true ) );
+		$cron_url = site_url( 'wp-cron.php?doing_wp_cron=' . $doing_wp_cron );
+
+		$result = wp_remote_post( $cron_url, array(
+			'timeout'   => 3,
+			'blocking'  => true,
+			'sslverify' => apply_filters( 'https_local_ssl_verify', true )
+		) );
+
+		return is_wp_error($result) ? $result : 'normal';
+	} 
+
+	public function showWPCronStatus() {
+		global $wpdb;
+
+		$st = $this->getWPCronStatus();
+
+		if ( $st === 'alternative' ) {
+			if ( !$this->options->get('hideAlternateCronWarning') ) {
+				include('views/_an_wpcron_alternative_mode.php');
+			}			
+		} else if ( is_wp_error($st) ) {
+			$error = esc_html($st->get_error_message());
+			$code = 
+			'<pre><code>'.
+			'define("ALTERNATE_WP_CRON", true);'.
+			'</code></pre>';			
+			include('views/_an_wp_cron_error.php');
+			// show error message
+		}
+
 	}
 
 	public function putListSelect($showAddNew = false) {

@@ -1305,6 +1305,27 @@ input.newsman-field-options-radio-opt-input {
 	position: static !important;
 }
 
+.newsman-admin-notification .button-group  {
+	margin: 1em 0;
+}
+
+.newsman-admin-notification .button-group > * {
+	display: inline-block;
+}
+
+.newsman-admin-notification .button-group .checkbox {
+	margin-left: 1em;
+	margin-bottom: 0;
+}
+
+.newsman-admin-notification .button-group input[type="checkbox"] {
+	margin-right: 0.3em !important;
+}
+
+.newsman-admin-notification .newsman-ajax-from {
+	margin-bottom: 0;
+}
+
 .newsman-admin-notification
 .notification-action-form {
 	margin-bottom: 20px;

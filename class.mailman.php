@@ -37,16 +37,13 @@ class newsmanMailMan {
 
 		foreach ($emails as $email) {
 
-			if ( !newsmanWorker::isProcessRunning( $email->workerPid ) && !newsmanWorker::isProcessStopped($email->workerPid) ) {
+			// double checke the status here to solve possible race condition
+			if ( !$email->isWorkerAlive() && $email->getStatus() === 'inprogress' ) {
+				$email->releaseLocks();
+				$email->status = 'pending';
+				$email->workerPid = 0;
 
-				// double checke the status here to solve possible race condition
-
-				if ( $this->getStatus() === 'inprogress' ) {
-					$email->status = 'pending';
-					$email->workerPid = 0;
-
-					$email->save();
-				}
+				$email->save();
 			}
 		}
 	}

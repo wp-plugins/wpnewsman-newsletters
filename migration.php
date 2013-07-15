@@ -5,6 +5,7 @@ require_once(__DIR__.DIRECTORY_SEPARATOR.'class.emailtemplates.php');
 require_once(__DIR__.DIRECTORY_SEPARATOR.'class.utils.php');
 require_once(__DIR__.DIRECTORY_SEPARATOR.'class.options.php');
 require_once(__DIR__.DIRECTORY_SEPARATOR.'class.list.php');
+require_once(__DIR__.DIRECTORY_SEPARATOR.'class.ajax-fork.php');
 
 /*******************************/
 /*      Registration code      */
@@ -341,6 +342,18 @@ $newsman_changes[] = array(
 
 function newsman_migration_remove_address_changed_tpl() {
 	newsmanEmailTemplate::removeAll('`system_type` = %d', array(NEWSMAN_ET_ADDRESS_CHANGED));
+}
+
+
+$newsman_changes[] = array(
+	'introduced_in' => $u->versionToNum('1.5.7-alpha-1'),
+	'func' => 'newsman_migration_init_ajax_fork_table',
+	'repeat' => true
+);
+
+function newsman_migration_init_ajax_fork_table() {
+	newsmanAjaxFork::ensureTable();	
+	newsmanAjaxFork::ensureDefinition();
 }
 
 

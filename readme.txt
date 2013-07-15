@@ -121,6 +121,13 @@ We got a User Feedback page where you can [add or vote for new features](http://
 
 == Changelog ==
 
+= 1.5.7 =
+* Added: wp-cron testing code
+* Added: the ajax-fork mechanism to spawn workers in environments with alternate_wp_cron enabled
+* Added: correct initialization of wp admin environment in external scripts
+* Fixed: plugin urls contain propper protocol ( http/https )
+* Fixed: bulk unsubscribe correctly skips broken email addresses
+
 = 1.5.6 =
 * Updated German translation
 * Fixed: conflict with "Press this" bookmarklet
@@ -283,6 +290,9 @@ We got a User Feedback page where you can [add or vote for new features](http://
 * First public release. Hello World! 
 
 == Upgrade Notice ==
+
+= 1.5.7 = 
+Added an option to work in environments with disabled loopback requests. Due to stability issues we switched worker management to use lock files thus the pluging now REQUIRES direct filesystem access. Make sure your wordpress can write to the uploads directory.
 
 = 1.5.6 = 
 Recomended upgrade. Improved compatibility with 3rd party plugins and updated german translation.
