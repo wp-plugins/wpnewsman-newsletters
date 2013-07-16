@@ -774,7 +774,8 @@ class newsman {
 		}
 
 		$wpdb->query("DROP TABLE IF EXISTS ".$wpdb->prefix.newsmanEmail::$table);
-		$wpdb->query("DROP TABLE IF EXISTS ".$wpdb->prefix.newsmanEmailTemplate::$table);		
+		$wpdb->query("DROP TABLE IF EXISTS ".$wpdb->prefix.newsmanEmailTemplate::$table);
+		$wpdb->query("DROP TABLE IF EXISTS ".$wpdb->prefix.newsmanAjaxFork::$table);
 		$sl = newsmanSentlog::getInstance();
 		$wpdb->query("DROP TABLE IF EXISTS ".$sl->tableName);
 
@@ -792,6 +793,7 @@ class newsman {
 		delete_option('newsman_bh_pid');
 		delete_option('newsman_bh_pid');
 		delete_option('newsman_bh_last_stats');
+		delete_option('NEWSMAN_DOING_UPDATE');
 	}
 
 

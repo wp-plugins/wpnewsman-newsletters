@@ -72,7 +72,12 @@ class newsmanList extends newsmanStorable {
 
 		// $this->assignTable();
 
-		return parent::save();
+		$r = parent::save();
+
+		$u = newsmanUtils::getInstance();
+		$u->copySystemTemplatesForList($this->id);
+
+		return $r;
 	}
 
 	public function newSub() {

@@ -26,7 +26,7 @@ function newsman_do_migration() {
 	}
 
 	foreach ($newsman_changes as $change) {
-		if ( $oldVersion < $change['introduced_in'] && ( !in_array($change['func'], $completed) || $change['repeat'] ) ) {
+		if ( $oldVersion <= $change['introduced_in'] && ( !in_array($change['func'], $completed) || $change['repeat'] ) ) {
 
 			call_user_func($change['func']);
 			$completed[] = $change['func'];
@@ -347,13 +347,36 @@ function newsman_migration_remove_address_changed_tpl() {
 
 $newsman_changes[] = array(
 	'introduced_in' => $u->versionToNum('1.5.7-alpha-1'),
-	'func' => 'newsman_migration_init_ajax_fork_table',
-	'repeat' => true
+	'func' => 'newsman_migration_init_ajax_fork_table'
 );
 
 function newsman_migration_init_ajax_fork_table() {
 	newsmanAjaxFork::ensureTable();	
 	newsmanAjaxFork::ensureDefinition();
+}
+
+$newsman_changes[] = array(
+	'introduced_in' => $u->versionToNum('1.5.8'),
+	'func' => 'newsman_migration_ensure_system_templates'
+);
+
+function newsman_migration_ensure_system_templates() {
+	$u = newsmanUtils::getInstance();
+	$lists = newsmanList::findAll();
+	foreach ($lists as $list) {
+		$tpls = newsmanEmailTemplate::findAll('`system` = 1 AND `assigned_list` = %d', array($list->id));
+		if ( !$tpls || count($tpls) === 0 ) {
+			$u->copySystemTemplatesForList($list->id);
+		}
+	}
+	// stoping emails
+	$emails = newsmanEmail::findAll('status = "pending"');
+
+	foreach ($emails as $email) {
+		newsmanWorker::stop($email->workerPid);
+		$email->status = 'stopped';
+		$email->save();								
+	}	
 }
 
 

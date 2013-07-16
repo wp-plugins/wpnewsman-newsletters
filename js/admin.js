@@ -723,7 +723,13 @@ jQuery(function($){
 
 	$(document).on('click','a', function(e){
 		var href = $(this).prop('href') || '';
-		if ( !href.match(/^http/) ) {
+
+		if ( href.indexOf('#') > -1 ) {
+			e.preventDefault();
+			return;
+		}
+
+		if ( !href.match(/^http/)) {
 			return;
 		}
 
@@ -3675,8 +3681,17 @@ jQuery(function($){
 
 			// SYSTEM TEMPLATES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+			var gotSystemEmailTemplates = false;
+
 			function getSystemTemplates(callback) {
 				callback = callback || function(){};
+
+				if ( gotSystemEmailTemplates ) {
+					callback();
+					return;
+				}
+
+				gotSystemEmailTemplates = true;
 
 				var data = {
 					action: 'newsmanAjGetSystemTemplates'
@@ -3687,7 +3702,6 @@ jQuery(function($){
 					url: ajaxurl,
 					data: data
 				}).done(function(data){
-
 					$('#tabs-header .dropdown-menu').empty();
 
 					if ( data.lists && data.lists.length ) {
@@ -3695,8 +3709,8 @@ jQuery(function($){
 							addSysemTemplatesTab(list);
 						});
 					}
-						
 				}).fail(NEWSMAN.ajaxFailHandler).always(callback);
+
 			}
 
 			function makeTabId(listName) {

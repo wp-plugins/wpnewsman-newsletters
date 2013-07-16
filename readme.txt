@@ -4,7 +4,7 @@ Donate Link: http://wpnewsman.com/premium-newsletter-plugin-wordpress/
 Tags: wpnewsman, newsletter, newsletters, newsletter signup, newsletter widget, subscribers, post notification, email subscription, email marketing, email, emailing, subscription
 Requires at least: 3.5
 Tested up to: 3.6
-Stable tag: 1.5.6
+Stable tag: 1.5.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -120,6 +120,9 @@ We got a User Feedback page where you can [add or vote for new features](http://
 3. Subscriber management.
 
 == Changelog ==
+
+= 1.5.8 =
+* Fixed: system email templates were not copied for default and wp-users lists during installation
 
 = 1.5.7 =
 * Added: wp-cron testing code
@@ -291,20 +294,23 @@ We got a User Feedback page where you can [add or vote for new features](http://
 
 == Upgrade Notice ==
 
+= 1.5.8 =
+Recommended upgrade.
+
 = 1.5.7 = 
 Added an option to work in environments with disabled loopback requests. Due to stability issues we switched worker management to use lock files thus the pluging now REQUIRES direct filesystem access. Make sure your wordpress can write to the uploads directory.
 
 = 1.5.6 = 
-Recomended upgrade. Improved compatibility with 3rd party plugins and updated german translation.
+Recommended upgrade. Improved compatibility with 3rd party plugins and updated German translation.
 
 = 1.5.5 = 
-Recomended upgrade. Improved compatibility with 3rd party plugins.
+Recommended upgrade. Improved compatibility with 3rd party plugins.
 
 = 1.5.2 = 
-Highly recomended upgrade. Lots of stability and speed improvements. Added new system email template "Re-subscription confirmation"
+Highly recommended upgrade. Lots of stability and speed improvements. Added new system email template "Re-subscription confirmation"
 
 = 1.5.1 = 
-* Highly recomended upgrade. Lots of stability and speed improvements. Better support of IE and new double opt-out procedure, fixed sticky posts bug
+* Highly recommended upgrade. Lots of stability and speed improvements. Better support of IE and new double opt-out procedure, fixed sticky posts bug
 
 = 1.4.4 =
 * Highly recommended upgrade. Fixed sending performance degradation on large lists.

@@ -1452,9 +1452,7 @@
 				$email->status = 'stopped';
 				$email->save();								
 			}
-			$this->respond(true, 'Success', array(), false);
-			sleep(5); // sleep for few seconds to keep mysql lock alive
-			exit();
+			$this->respond(true, 'Success', array());
 		}
 			
 		public function ajResumeSending() {
@@ -1760,8 +1758,6 @@
 			} else {
 				$list = new newsmanList($name);
 				$list->save();
-
-				$u->copySystemTemplatesForList($list->id);
 
 				$this->respond(true, __('Created', NEWSMAN), array(
 					'name' => $list->name,
