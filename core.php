@@ -2266,7 +2266,7 @@ class newsman {
 		$cron_url = site_url( 'wp-cron.php?doing_wp_cron=' . $doing_wp_cron );
 
 		$result = wp_remote_post( $cron_url, array(
-			'timeout'   => 3,
+			'timeout'   => 5,
 			'blocking'  => true
 		) );
 

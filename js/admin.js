@@ -724,7 +724,7 @@ jQuery(function($){
 	$(document).on('click','a', function(e){
 		var href = $(this).prop('href') || '';
 
-		if ( href.indexOf('#') > -1 ) {
+		if ( href.indexOf('#') == 0 ) {
 			e.preventDefault();
 			return;
 		}
@@ -2066,6 +2066,40 @@ jQuery(function($){
 				}
 				return true;
 			});
+		});
+
+		$('#newsman-btn-validate').click(function(){
+			showLoading();
+			$.ajax({
+				type: 'POST',
+				url: ajaxurl,
+				data: {
+					action: 'newsmanAjCheckEmailAddresses',
+					listId: $('#newsman-lists').val() || '1'
+				}
+			}).done(function(data){
+
+				showMessage(data.msg, 'success');
+				getSubscribers();
+
+			}).fail(NEWSMAN.ajaxFailHandler).always(function(){
+				hideLoading();
+			});
+		});
+
+		var validaBtnShown = false;
+		$(document).on('keydown', function(e){
+			if ( e.altKey ) {
+				$('#newsman-btn-validate').show();
+				validaBtnShown = true;
+			}
+		});
+
+		$(document).on('keyup', function(e){
+			if ( validaBtnShown ) {
+				validaBtnShown = false;
+				$('#newsman-btn-validate').hide();
+			}
 		});
 
 		$('#newsman-btn-bulk-unsubscribe').click(function(){

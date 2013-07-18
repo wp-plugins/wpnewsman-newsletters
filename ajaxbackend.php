@@ -1249,19 +1249,31 @@
 		private function importSubscriber($list, $fields, $status, $row) {
 			$form = array();
 
+			$u = newsmanUtils::getInstance();
+
 			$s = $list->newSub();
 
+			$badEmail = false;
+
 			foreach ($fields as $col => $name) {
-				$form[$name] = $row[ intval($col) ];	
+				$value = $row[ intval($col) ];
+
+				if ( $name === 'email' && !$u->emailValid($value) ) {
+					$badEmail = true;
+				}
+
+				$form[$name] = $value;
 			}
 
 			$s->fill($form);
-			if ( $status === 'unconfirmed' ) {
+
+			if ( $badEmail ) {
+				$s->unsubscribe(__('Bad email address', NEWSMAN));
+			} else if ( $status === 'unconfirmed' ) {
 				$s->unconfirm();	
 			} else {
 				$s->confirm();
-			}
-			
+			}				
 			
 			return $s->save();
 		}
@@ -2065,6 +2077,36 @@
 		public function ajHideCronAlternativeModeMessage() {
 			$o = newsmanOptions::getInstance();
 			$o->set('hideAlternateCronWarning', true);
+			$this->respond(true, 'Success');
+		}
+
+		public function ajCheckEmailAddresses() {
+			$listId = $this->param('listId');
+
+			$u = newsmanUtils::getInstance();
+
+			$list = newsmanList::findOne('id = %d', array($listId));
+			if ( !$list ) {
+				$this->errListNotFound($listId);
+			}
+
+			$p = 1;
+			$done = false;
+			do {
+				$res = $list->getPage($p, 1000);
+				if ( is_array($res) && !empty($res)  ) {
+					foreach ($res as $sub) {
+						if ( !$u->emailValid($sub->email) ) {
+							$sub->unsubscribe(__('Bad email address', NEWSMAN));
+							$sub->save();
+						}
+					}
+					$p += 1;
+				} else {
+					$done = true;
+				}
+			} while ( !$done );
+
 			$this->respond(true, 'Success');
 		}
 	}

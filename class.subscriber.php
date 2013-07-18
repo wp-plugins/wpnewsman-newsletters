@@ -57,8 +57,11 @@ class newsmanSub {
 		$this->rawRec['status'] = NEWSMAN_SS_UNCONFIRMED;
 	}
 
-	public function unsubscribe() {
+	public function unsubscribe($bounceStatus = '') {		
 		$this->rawRec['status'] = NEWSMAN_SS_UNSUBSCRIBED;
+		if ( $bounceStatus ) {
+			$this->rawRec['bounceStatus'] = $bounceStatus;
+		}
 	}
 
 	public function confirm() {
@@ -153,12 +156,13 @@ class newsmanSub {
 						email='%s',
 						status='%s',
 						ucode='%s',
-						fields='%s'
+						fields='%s',
+						bounceStatus='%s'
 					WHERE id=%d";
 		} else {
 			$sql = "INSERT HIGH_PRIORITY IGNORE into 
-					$this->tableName (ts, ip, email, status, ucode, fields)
-					VALUES('%s','%s','%s','%s','%s','%s');"; //" ON DUPLICATE KEY UPDATE `status`=`status`;";
+					$this->tableName (ts, ip, email, status, ucode, fields, bounceStatus)
+					VALUES('%s','%s','%s','%s','%s','%s','%s');"; //" ON DUPLICATE KEY UPDATE `status`=`status`;";
 		}
 
 		$sql = $wpdb->prepare(
@@ -169,6 +173,7 @@ class newsmanSub {
 					isset($r['status']) ? $r['status'] : null,
 					isset($r['ucode'])	? $r['ucode'] : null,
 					isset($r['fields']) ? $r['fields'] : null,
+					isset($r['bounceStatus']) ? $r['bounceStatus'] : null,
 					isset($r['id'])		? $r['id'] : null
 				);
 

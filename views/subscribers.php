@@ -58,6 +58,7 @@
 	
 		<button id="newsman-btn-export" type="button" class="btn pull-right"><i class="icon-download"></i> <?php _e('Export to CSV', NEWSMAN); ?></button>
 		<button id="newsman-btn-import" style="margin-right: 5px;" type="button" class="btn pull-right"><i class="icon-upload"></i> <?php _e('Import from CSV', NEWSMAN); ?></button>
+		<button id="newsman-btn-validate" style="display:none; margin-right: 5px;" type="button" class="btn pull-right"><i class="icon-ok-circle"></i> <?php _e('Validate email addresses', NEWSMAN); ?></button>
 		
 		<div class="newsman-btn-reconfirm-group pull-right">
 			<span class="pull-right button-row-divider">|</span>
