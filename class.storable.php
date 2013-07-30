@@ -168,7 +168,7 @@ class newsmanStorable {
 		return $vals;
 	}
 
-	function getTableName() {
+	static function getTableName() {
 		global $wpdb;
 		return $wpdb->prefix.static::$table;
 	}

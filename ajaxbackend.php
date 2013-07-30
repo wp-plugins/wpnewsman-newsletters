@@ -2080,6 +2080,12 @@
 			$this->respond(true, 'Success');
 		}
 
+		public function ajHideCronFilaWarning() {
+			$o = newsmanOptions::getInstance();
+			$o->set('hideCronFailWarning', true);
+			$this->respond(true, 'Success');
+		}
+
 		public function ajCheckEmailAddresses() {
 			$listId = $this->param('listId');
 

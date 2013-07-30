@@ -64,11 +64,11 @@ class newsmanForm {
 	}
 
 	private function ent($str) {
-		return htmlentities($str, ENT_COMPAT | ENT_HTML5, 'UTF-8');
+		return htmlentities($str, ENT_COMPAT, 'UTF-8');
 	}
 
 	private function specChr($str) {
-		return htmlspecialchars($str, ENT_COMPAT | ENT_HTML5, 'UTF-8');
+		return htmlspecialchars($str, ENT_COMPAT, 'UTF-8');
 	}
 
 	private function getElId() {

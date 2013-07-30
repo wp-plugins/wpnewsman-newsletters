@@ -70,12 +70,12 @@ class newsmanList extends newsmanStorable {
 			throw new newsmanListException( __( '"name" field could not be empty.', NEWSMAN ) );
 		}
 
-		// $this->assignTable();
-
 		$r = parent::save();
 
 		$u = newsmanUtils::getInstance();
-		$u->copySystemTemplatesForList($this->id);
+		if ( !$u->listHasSystemTemplates($this->id) ) {
+			$u->copySystemTemplatesForList($this->id);	
+		}		
 
 		return $r;
 	}
@@ -651,26 +651,9 @@ class newsmanList extends newsmanStorable {
 		}		
 	}
 
-
-	// UNF
 	public function unsubscribe($email, $statusStr) {
 		global $wpdb;
 		$c = 0;
-
-		if ( preg_match_all('/\b[a-z0-9]+(?:[-\._]?[a-z0-9]+)*@(?:[a-z0-9]+(?:-?[a-z0-9]+)*\.)+[a-z]+\b/i', $emailsList, $matches) ) {
-
-			$set = '(';
-			$del = '';
-
-			foreach ($matches[0] as $email) {
-				$email = strtolower($email);
-				$set .= $del.'"'.mysql_real_escape_string($email).'"';
-				$del = ', ';
-				$c += 1;
-			}		
-
-			$set .= ')';
-		}
 
 		$sql = "UPDATE $this->tblSubscribers SET status = %d, bounceStatus = %s where email = %s";
 		$sql = $wpdb->prepare($sql, NEWSMAN_SS_UNSUBSCRIBED, $statusStr, $email);

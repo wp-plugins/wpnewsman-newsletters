@@ -76,13 +76,6 @@ class newsmanWorker {
 			return; // the lock is already obtained
 		}
 
-		// for debug
-		if ( defined('NEWSMAN_WORKER') ) {
-			$this->isProcessRunning($this->pid);
-		}
-		// ---
-
-
 		if ( $worker_lock === null ) {
 			$this->worker();
 			$this->clearStopFlag($this->pid);
@@ -174,7 +167,7 @@ class newsmanWorker {
 		$u = newsmanUtils::getInstance();
 
 		$this->growl('[!!!] init process');
-		return $u->lock('newsman-worker-running-'.$this->pid);
+		return $u->lock('newsman-worker-running-'.$this->pid, true);
 	}
 
 	public function endProcess() {

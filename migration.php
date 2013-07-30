@@ -375,10 +375,30 @@ function newsman_migration_ensure_system_templates() {
 	foreach ($emails as $email) {
 		newsmanWorker::stop($email->workerPid);
 		$email->status = 'stopped';
-		$email->save();								
-	}	
+		$email->save();
+	}
 }
 
+$newsman_changes[] = array(
+	'introduced_in' => $u->versionToNum('1.5.10'),
+	'func' => 'newsman_migration_cleanup_system_eml_template_dups'
+);
+
+function newsman_migration_cleanup_system_eml_template_dups() {
+	global $wpdb;
+	$tbl = newsmanEmailTemplate::getTableName();
+	$sql1 = "
+		CREATE TEMPORARY TABLE newsman_tmp_tbl SELECT id
+		  FROM `$tbl` WHERE assigned_list > 0
+		  GROUP BY assigned_list, system_type;";
+
+	$sql2 = "DELETE FROM `$tbl` WHERE id NOT IN (
+		select id from newsman_tmp_tbl
+		) and `assigned_list` > 0";	
+
+	$wpdb->query($sql1);
+	$wpdb->query($sql2);
+}
 
 
 

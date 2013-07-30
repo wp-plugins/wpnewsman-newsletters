@@ -14,9 +14,7 @@ require_once(__DIR__.DIRECTORY_SEPARATOR.'class.sentlog.php');
 require_once(__DIR__.DIRECTORY_SEPARATOR.'ajaxbackend.php');
 
 require_once(__DIR__.DIRECTORY_SEPARATOR.'workers/class.mailer.php');
-
 require_once(__DIR__.DIRECTORY_SEPARATOR.'class.zip.php');
-
 require_once(__DIR__.DIRECTORY_SEPARATOR.'lib/emogrifier.php');
 
 global $newsman_checklist;
@@ -358,6 +356,9 @@ class newsman {
 		}
 
 		if ( !empty($post) ) {
+			if ( !is_object($newsman_loop_post) ) {
+				return '';
+			}
 			if ( $post === 'post_excerpt' ) {
 				if ( trim($newsman_loop_post->post_excerpt) === '' ) {
 					return __('"Post has no excerpt. Write something yourself or use fancy_excerpt option"', NEWSMAN);
@@ -659,9 +660,7 @@ class newsman {
 
 	// -----
 
-	public function install() {		
-
-		error_reporting(0);
+	public function install() {
 
 		wpnewsman_loadstring();
 
@@ -804,8 +803,8 @@ class newsman {
 
 		if ( $tpl ) {
 			$email['subject'] = do_shortcode( $tpl->subject );
-			$email['html'] = do_shortcode( $tpl->p_html );
-			$email['plain'] = do_shortcode( $tpl->plain );
+			$email['html']    = do_shortcode( $tpl->p_html );
+			$email['plain']   = do_shortcode( $tpl->plain );
 
 			return $email;
 		}
@@ -1316,6 +1315,10 @@ class newsman {
 
 		$frm->horizontal = $horizontal;
 
+		if ( !wp_script_is('newsmanform') ) {
+			wp_register_script('newsmanform', NEWSMAN_PLUGIN_URL.'/js/newsmanform.js', array('jquery'), NEWSMAN_VERSION);
+		}
+
 		$data = '';
 																	   
 		if ( !$print ) {
@@ -1325,8 +1328,6 @@ class newsman {
 			$clsa_form = '';
 			$clsa_placehldr = '';
 		}
-
-		//$data .= $list->header;
 		
 		wp_enqueue_script('newsmanform');
 		if ( !get_option('newsman_code') ) {
@@ -1340,8 +1341,6 @@ class newsman {
 		$data.= $frm->getForm();
 
 		$data .= '</form>';
-		
-		//$data .= $list->footer;
 		
 		/*
 		* G-Lock WPNewsman has required a great deal of time and effort to develop.
@@ -1405,7 +1404,7 @@ class newsman {
 	}
 
 	public function onAdminInit() {
-		
+
 		$this->tryUpdate();
 
 		$this->configureW3TC();
@@ -2282,7 +2281,7 @@ class newsman {
 			if ( !$this->options->get('hideAlternateCronWarning') ) {
 				include('views/_an_wpcron_alternative_mode.php');
 			}			
-		} else if ( is_wp_error($st) ) {
+		} else if ( is_wp_error($st) && !$this->options->get('hideCronFailWarning') ) {
 			$error = esc_html($st->get_error_message());
 			$code = 
 			'<pre><code>'.
@@ -2375,7 +2374,6 @@ class newsman {
 			while ( $users = $wpdb->get_results( $wpdb->prepare($sql, $offset, $limit) ) ) {
 
 				foreach ($users as $user) {
-
 					$s = $list->newSub();
 					$s->fill(array(
 						'email' 		=> $user->email,
@@ -2410,7 +2408,7 @@ if ( !function_exists('nwsmn_get_prop') ) {
 
 function newsmanCheckedValue($htmlVal, $checked, $applyFalsy = false) {
 	if ( !$checked && $applyFalsy ) {		
-		echo 'checked="Fchecked"';
+		echo 'checked="checked"';
 	} else {
 		echo ( $checked === $htmlVal ) ? 'checked="checked"' : '';	
 	}	

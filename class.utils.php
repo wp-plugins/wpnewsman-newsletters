@@ -1484,6 +1484,11 @@ class newsmanUtils {
 		}
 	}
 
+	public function listHasSystemTemplates($listId) {
+		$tpls = newsmanEmailTemplate::findAll('`system` = 1 AND `assigned_list` = %d', array($listId));
+		return is_array($tpls) && count($tpls) > 0;
+	}	
+
 	public function getPostTypes() {
 		$res = array();
 
@@ -1622,8 +1627,12 @@ class newsmanUtils {
 		return $locksDir.DIRECTORY_SEPARATOR.$name.".lock";
 	}
 
-	public function lock($name) {
-		return @fopen($this->getLockFilePath($name), "xb") !== false;
+	public function lock($name, $removeIfStale = false) {
+		$file = $this->getLockFilePath($name);
+		if ( $removeIfStale && $this->isLockStale($file) ) {
+			@unlink($file);
+		}
+		return @fopen($file, "xb") !== false;
 	}
 
 	public function isLocked($name) {

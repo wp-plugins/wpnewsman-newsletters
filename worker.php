@@ -15,6 +15,8 @@ if ( ! WP_NETWORK_ADMIN && ! WP_USER_ADMIN ) {
 	define('WP_BLOG_ADMIN', true);
 }
 
+$_SERVER['PHP_SELF'] = '/wp-admin/wpnewsman-worker.php';
+
 require_once('../../../wp-load.php');
 
 ignore_user_abort(true);

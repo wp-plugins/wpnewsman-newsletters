@@ -137,7 +137,7 @@ class newsmanSentlog {
 			die("List with the name $listName is not found");
 		}
 
-		$subs = $list->getPendingBatch($emailId, $limit, $selectionType);	
+		$subs = $list->getPendingBatch($emailId, $limit, $ln->selectionType);	
 
 		$result = array();
 
@@ -161,7 +161,7 @@ class newsmanSentlog {
 			$listIdsClause = ' = '.$listId;
 		} else if ( is_array($listId) ) {
 			foreach ($listId as $id) {
-				$listIdsClause = ( !$listIdsClause ) ? 'in (' : ',';
+				$listIdsClause .= ( !$listIdsClause ) ? 'in (' : ',';
 				$listIdsClause .= $id;
 			}
 			$listIdsClause .= ')';

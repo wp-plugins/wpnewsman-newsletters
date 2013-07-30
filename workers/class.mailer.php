@@ -111,7 +111,7 @@ class newsmanMailer extends newsmanWorker {
 		$errorsCount = 0;
 		$errorStop = false;
 
-		$email->p_html = $u->processAssetsURLs($email->p_html, $email->assets);
+		$email->p_html = $u->processAssetsURLs($email->p_html, $email->assetsURL);
 		$email->p_html = $u->compileThumbnails($email->p_html);	
 
 		while ( $t = $tStreamer->getTransmission() ) {
