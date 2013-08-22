@@ -369,14 +369,6 @@ function newsman_migration_ensure_system_templates() {
 			$u->copySystemTemplatesForList($list->id);
 		}
 	}
-	// stoping emails
-	$emails = newsmanEmail::findAll('status = "pending"');
-
-	foreach ($emails as $email) {
-		newsmanWorker::stop($email->workerPid);
-		$email->status = 'stopped';
-		$email->save();
-	}
 }
 
 $newsman_changes[] = array(
@@ -399,6 +391,19 @@ function newsman_migration_cleanup_system_eml_template_dups() {
 	$wpdb->query($sql1);
 	$wpdb->query($sql2);
 }
+
+$newsman_changes[] = array(
+	'introduced_in' => $u->versionToNum('1.6.0'),
+	'func' => 'newsman_migration_alter_emails_table'
+);
+
+function newsman_migration_alter_emails_table() {
+	global $wpdb;
+	$tbl = newsmanEmail::getTableName();	
+	$sql = "ALTER TABLE $tbl MODIFY COLUMN workerPid varchar(255) NOT NULL DEFAULT ''";
+	$wpdb->query($sql);
+}
+
 
 
 

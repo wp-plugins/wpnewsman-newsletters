@@ -4,7 +4,7 @@ Donate Link: http://wpnewsman.com/premium-newsletter-plugin-wordpress/
 Tags: wpnewsman, newsletter, newsletters, newsletter signup, newsletter widget, subscribers, post notification, email subscription, email marketing, email, emailing, subscription
 Requires at least: 3.5
 Tested up to: 3.6
-Stable tag: 1.5.10
+Stable tag: 1.6.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -120,6 +120,13 @@ We got a User Feedback page where you can [add or vote for new features](http://
 3. Subscriber management.
 
 == Changelog ==
+
+= 1.6.0 =
+* Added: WPML plugin integration.
+* Added: honeypot and timestamp fields to prevent spambots from subscribing to your lists.
+* Added: translation to the Polish language.
+* Fixed: compatibility issues with ClassiPress 3.1.9 theme.
+* Fixed: compatibility issues with "twitch.tv embeded" plugin
 
 = 1.5.10 =
 * Fixed: system email templates duplicates
@@ -303,6 +310,9 @@ We got a User Feedback page where you can [add or vote for new features](http://
 * First public release. Hello World! 
 
 == Upgrade Notice ==
+
+= 1.6.0 =
+Recommended upgrade. This release brings integration with the WordPress Multilingual Plugin http://wpml.org/ and improves overal stability of the plugin.
 
 = 1.5.10 =
 Recommended upgrade. Sender stability improved.

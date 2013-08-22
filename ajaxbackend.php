@@ -11,6 +11,9 @@
 	if ( !defined('NEWSMAN_SS_CONFIRMED') )    { define('NEWSMAN_SS_CONFIRMED', 1);    }
 	if ( !defined('NEWSMAN_SS_UNSUBSCRIBED') ) { define('NEWSMAN_SS_UNSUBSCRIBED', 2); }
 
+	ignore_user_abort(true);
+	set_time_limit(0);
+
 	class newsmanAJAX {
 
 		public function __construct() {
@@ -18,7 +21,7 @@
 			mb_internal_encoding("UTF-8");
 			$loc = "UTF-8";
 			putenv("LANG=$loc");
-			$loc = setlocale(LC_ALL, $loc);			
+			$loc = setlocale(LC_ALL, $loc);
 
 			if ( current_user_can( 'newsman_wpNewsman' ) ) {
 				$methods = get_class_methods(__CLASS__);
@@ -29,12 +32,14 @@
 					}
 				}
 			}
+
+			$this->u = newsmanUtils::getInstance();
 		}
 
 		public function respond($state, $msg, $params = array(), $stop = true) {
 			global $db;
 
-			$u = newsmanUtils::getInstance();
+			
 
 			$msg = array(
 				'state' => $state,
@@ -61,7 +66,7 @@
 			}
 			//
 
-			$content = json_encode( $u->utf8_encode_all($msg) );
+			$content = json_encode( $this->u->utf8_encode_all($msg) );
 
 			while(@ob_end_clean());
 			
@@ -81,8 +86,7 @@
 			}			   
 		}
 
-		public function param($param) {
-			$u = newsmanUtils::getInstance();
+		public function param($param) {			
 
 			if ( defined('NEWSMAN_TESTS') ) {
 				global $AJ_PARAMS;
@@ -99,7 +103,7 @@
 				}
 
 			} else {				
-				return is_string( $_REQUEST[$param] ) ? $u->remslashes( $_REQUEST[$param] ) : $_REQUEST[$param];
+				return is_string( $_REQUEST[$param] ) ? $this->u->remslashes( $_REQUEST[$param] ) : $_REQUEST[$param];
 			}
 		}
 
@@ -348,7 +352,7 @@
 
 		public function ajSetOptions() {
 			$o = newsmanOptions::getInstance();
-			$u = newsmanUtils::getInstance();
+			
 
 			$opts = $this->param('options', false);
 
@@ -492,7 +496,7 @@
 
 			//$newsman_ajresponse['limit'] = $limit;
 
-			$u = newsmanUtils::getInstance();
+			
 
 			$args = array(		
 				'post_type' => $postType,
@@ -548,9 +552,9 @@
 				$query->the_post();
 				$pt = mysql2date('U', $post->post_date); 
 
-				$content = $u->cutScripts($post->post_content);
+				$content = $this->u->cutScripts($post->post_content);
 
-				$content = $u->fancyExcerpt($content, 25);
+				$content = $this->u->fancyExcerpt($content, 25);
 
 				$posts[] =	array(
 					'id' => $post->ID,
@@ -850,7 +854,7 @@
 		 */
 		public function ajChangeTemplateSection() {
 			
-			$u = newsmanUtils::getInstance();
+			
 
 			$tplId = $this->param('id');
 			$section = $this->param('section');
@@ -863,7 +867,7 @@
 				return;
 			}
 
-			$tpl->html = $u->changeSectionType($tpl->html, $section, $newType);
+			$tpl->html = $this->u->changeSectionType($tpl->html, $section, $newType);
 
 			$res = $tpl->save();
 
@@ -876,7 +880,7 @@
 		}
 
 		public function ajChangeEmailSection() {
-			$u = newsmanUtils::getInstance();
+			
 
 			$id = $this->param('id');
 			$section = $this->param('section');
@@ -890,7 +894,7 @@
 				return;
 			}
 
-			$eml->html = $u->changeSectionType($eml->html, $section, $newType);
+			$eml->html = $this->u->changeSectionType($eml->html, $section, $newType);
 
 			$res = $eml->save();
 
@@ -905,7 +909,7 @@
 
 		public function ajEditTemplate() {
 
-			$u = newsmanUtils::getInstance();
+			
 
 			$tplId = $this->param('id');
 			$section = $this->param('section');
@@ -918,7 +922,7 @@
 				return;
 			}
 
-			$tpl->html = $u->replaceSectionContent($tpl->html, $section, $newContent);
+			$tpl->html = $this->u->replaceSectionContent($tpl->html, $section, $newContent);
 
 			$res = $tpl->save();
 
@@ -932,7 +936,7 @@
 
 		public function ajSetTemplate() {
 
-			$u = newsmanUtils::getInstance();
+			
 
 			$tplId = $this->param('id');
 			$html = $this->param('html');
@@ -964,7 +968,7 @@
 
 
 		public function ajSetEmail() {
-			$u = newsmanUtils::getInstance();
+			
 
 			$id = $this->param('id');
 			$html = $this->param('html');
@@ -993,17 +997,17 @@
 		}
 
 		public function ajHasSharedAssets() {
-			$u = newsmanUtils::getInstance();
+			
 
 			$ids = $this->param('ids');
-			$set = $u->jsArrToMySQLSet($ids);
+			$set = $this->u->jsArrToMySQLSet($ids);
 
 			$s = 0;
 
 			$tpls = newsmanEmailTemplate::findAll('`id` in '.$set.' and `system` = 0');
 
 			foreach ($tpls as $tpl) {
-				if ( $u->hasSharedAssets($tpl->assetsPath) ) {
+				if ( $this->u->hasSharedAssets($tpl->assetsPath) ) {
 					$s += 1;	
 				}				
 			}
@@ -1012,18 +1016,18 @@
 		}
 
 		public function ajDeleteEmailTemplates() {
-			$u = newsmanUtils::getInstance();
+			
 
 			$ids = $this->param('ids');
 			$deleteSharedAssets = $this->param('delSharedAssets', '0') === '1';
-			$set = $u->jsArrToMySQLSet($ids);
+			$set = $this->u->jsArrToMySQLSet($ids);
 
 			$r = 0;
 
 			$tpls = newsmanEmailTemplate::findAll('`id` in '.$set.' and ( `system` = 0 OR `assigned_list` = 0 )');
 
 			foreach ($tpls as $tpl) {
-				$u->tryRemoveTemplateAssets($tpl->assetsPath, $deleteSharedAssets);
+				$this->u->tryRemoveTemplateAssets($tpl->assetsPath, $deleteSharedAssets);
 				$tpl->remove();
 				$r += 1;
 			}
@@ -1033,11 +1037,11 @@
 
 		public function ajDeleteEmails() {
 
-			$u = newsmanUtils::getInstance();
+			
 
 			$ids = $this->param('ids');
 			$all = ( $this->param('all', '0') === '1' );
-			$set = $u->jsArrToMySQLSet($ids);
+			$set = $this->u->jsArrToMySQLSet($ids);
 
 			$r = 0;
 
@@ -1048,7 +1052,7 @@
 			}
 
 			foreach ($tpls as $tpl) {
-				$u->tryRemoveTemplateAssets($tpl->assetsPath);
+				$this->u->tryRemoveTemplateAssets($tpl->assetsPath);
 				$tpl->remove();
 				$r += 1;
 			}
@@ -1104,7 +1108,7 @@
 
 			$rx = '/('.preg_quote($selector).'\s*\{[\s\S]*?\/\*\@editable\*\/'.preg_quote($name).':)([^;]*)(;[\s\S]*?\})/i';
 
-			$u = newsmanUtils::getInstance();
+			
 
 			$eml->html = preg_replace($rx, '${1}'.$value.'${3}', $eml->html);
 
@@ -1130,7 +1134,7 @@
 
 				if ( $eml ) {
 
-					$u = newsmanUtils::getInstance();
+					
 
 					if ( $send == 'schedule' ) {
 						$eml->schedule = intval($ts);
@@ -1249,7 +1253,7 @@
 		private function importSubscriber($list, $fields, $status, $row) {
 			$form = array();
 
-			$u = newsmanUtils::getInstance();
+			
 
 			$s = $list->newSub();
 
@@ -1258,7 +1262,7 @@
 			foreach ($fields as $col => $name) {
 				$value = $row[ intval($col) ];
 
-				if ( $name === 'email' && !$u->emailValid($value) ) {
+				if ( $name === 'email' && !$this->u->emailValid($value) ) {
 					$badEmail = true;
 				}
 
@@ -1416,7 +1420,7 @@
 		}
 
 		public function ajInstallTemplates() {
-			$u = newsmanUtils::getInstance();
+			
 			$installed = 0;
 
 			$url = 'http://blog.dev/wp-admin/admin.php?page=newsman-templates'; //temporary
@@ -1425,7 +1429,7 @@
 			$files = $this->getUploadedFiles('template', true);
 			if ( $files ) {
 				foreach ($files as $file) {
-					if ( $u->installTemplate($file) ) {
+					if ( $this->u->installTemplate($file) ) {
 						$installed += 1;
 					}
 				}
@@ -1434,10 +1438,10 @@
 		}
 
 		public function ajDuplicateTemplate() {
-			$u = newsmanUtils::getInstance();			
+						
 			$id = $this->param('id');
 
-			$tpl = $u->duplicateTemplate($id);
+			$tpl = $this->u->duplicateTemplate($id);
 
 			if ( $tpl ) {
 				$this->respond(true, 'Success', array(
@@ -1452,15 +1456,16 @@
 		//private function 
 
 		public function ajStopSending() {
-			$u = newsmanUtils::getInstance();
+			
 
 			$ids = $this->param('ids');
-			$set = $u->jsArrToMySQLSet($ids);	
+			$set = $this->u->jsArrToMySQLSet($ids);	
 			
 			$emails = newsmanEmail::findAll('id in '.$set);
 
 			foreach ($emails as $email) {
-				newsmanWorker::stop($email->workerPid);
+				$w = new newsmanWorkerAvatar($email->workerPid);
+				$w->stop();
 				$email->status = 'stopped';
 				$email->save();								
 			}
@@ -1468,10 +1473,10 @@
 		}
 			
 		public function ajResumeSending() {
-			$u = newsmanUtils::getInstance();
+			
 
 			$ids = $this->param('ids');
-			$set = $u->jsArrToMySQLSet($ids);	
+			$set = $this->u->jsArrToMySQLSet($ids);	
 			
 			$emails = newsmanEmail::findAll('(status = "stopped" OR status = "error") AND id in '.$set);
 
@@ -1491,10 +1496,10 @@
 		 * entity ( email or template )
 		 */
 		// private function getEntityParticle($entityId, $entType, $particleName) {
-		// 	$u = newsmanUtils::getInstance();
+		// 	
 		// 	$ent = $this->getEntityById($entityId, $entType);
 		// 	$particles = $ent->particles;
-		// 	$content = $u->getSectionContent($particles, 'gsedit', $particleName);
+		// 	$content = $this->u->getSectionContent($particles, 'gsedit', $particleName);
 		// 	return $content;
 		// }
 
@@ -1525,7 +1530,7 @@
 			global $newsman_loop_post_nr;
 			global $newsman_show_thumbnail_placeholders;
 
-			$u = newsmanUtils::getInstance();
+			
 
 			$pids = $this->param('pids');
 			$pids = preg_split('/[\s*,]+/', $pids);
@@ -1541,10 +1546,10 @@
 
 			$ent = $this->getEntityById($entityId, $entType);
 
-			$postBlockTpl = $u->getSectionContent($ent->particles, 'gsedit', 'post_block');
-			$postDividerTpl = $u->getSectionContent($ent->particles, 'gsedit', 'post_divider');
+			$postBlockTpl = $this->u->getSectionContent($ent->particles, 'gsedit', 'post_block');
+			$postDividerTpl = $this->u->getSectionContent($ent->particles, 'gsedit', 'post_divider');
 
-			$sc = $u->findShortCode($postBlockTpl, 'newsman', array( 'post' => array('fancy_excerpt', 'post_excerpt', 'post_content') ));
+			$sc = $this->u->findShortCode($postBlockTpl, 'newsman', array( 'post' => array('fancy_excerpt', 'post_excerpt', 'post_content') ));
 
 			$postType = 'post';
 
@@ -1600,13 +1605,13 @@
 				$output .= do_shortcode(preg_replace('/(gsedit=")([^"]+)(")/i', '$1$2_'.$post->ID.'$3', $postBlockTpl));
 			}
 
-			$output = $u->processAssetsURLs($output, $ent->assetsURL);
+			$output = $this->u->processAssetsURLs($output, $ent->assetsURL);
 
 			$this->respond(true, __('Posts block successfully compiled', NEWSMAN), array('content' => $output ));
 		}
 
 		public function ajSetPostTemplateType() {
-			$u = newsmanUtils::getInstance();
+			
 			
 			$entityId = $this->param('entity');
 			$entType = $this->param('entType');
@@ -1622,18 +1627,18 @@
 			}
 
 			$ent = $this->getEntityById($entityId, $entType);
-			$postBlockTpl = $u->getSectionContent($ent->particles, 'gsedit', 'post_block');
+			$postBlockTpl = $this->u->getSectionContent($ent->particles, 'gsedit', 'post_block');
 
 			//$postBlockTpl = preg_replace('/(\[newsman[^\[\]]+post=(?:\'|"))(fancy_excerpt|post_excerpt|post_content)((?:\'|")[^\[\]]+\])/', '$1'.$newTplType.'$3', $postBlockTpl);
-			$postBlockTpl = $u->modifyShortCode($postBlockTpl, 'newsman', array( 'post' => array('fancy_excerpt', 'post_excerpt', 'post_content') ), array( 'post'=> $newTplType, 'type'=>$postType ));	
+			$postBlockTpl = $this->u->modifyShortCode($postBlockTpl, 'newsman', array( 'post' => array('fancy_excerpt', 'post_excerpt', 'post_content') ), array( 'post'=> $newTplType, 'type'=>$postType ));	
 
-			$ent->particles = $u->replaceSectionContent($ent->particles, 'post_block', $postBlockTpl);
+			$ent->particles = $this->u->replaceSectionContent($ent->particles, 'post_block', $postBlockTpl);
 			$ent->save();
 			$this->respond(true, __('Posts block successfully updated', NEWSMAN));
 		}
 
 		public function ajGetEntityParticle() {
-			$u = newsmanUtils::getInstance();
+			
 
 			$entityId = $this->param('entity');
 			$entType = $this->param('entType');
@@ -1641,13 +1646,13 @@
 
 			$ent = $this->getEntityById($entityId, $entType);
 
-			$tpl = $u->getSectionContent($ent->particles, 'gsedit', $name);
+			$tpl = $this->u->getSectionContent($ent->particles, 'gsedit', $name);
 
 			$this->respond(true, __('success', NEWSMAN), array( 'particle' => $tpl ));
 		}
 
 		public function ajSetEntityParticle() {
-			$u = newsmanUtils::getInstance();
+			
 
 			$entityId = $this->param('entity');
 			$entType = $this->param('entType');
@@ -1656,7 +1661,7 @@
 
 			$ent = $this->getEntityById($entityId, $entType);
 
-			$ent->particles = $u->replaceSectionContent($ent->particles, $name, $content);
+			$ent->particles = $this->u->replaceSectionContent($ent->particles, $name, $content);
 
 			$ent->save();
 
@@ -1668,7 +1673,7 @@
 			global $newsman_current_email;
 			global $newsman_current_list;
 
-			$u = newsmanUtils::getInstance();
+			
 			$n = newsman::getInstance();
 
 			$listId = $this->param('listId', '1');
@@ -1687,11 +1692,11 @@
 			global $newsman_current_email;
 			global $newsman_current_list;
 
-			$u = newsmanUtils::getInstance();
+			
 
 			$ids = $this->param('ids'); // js array or comma sep. enumeration
 			
-			$set = $u->jsArrToMySQLSet($ids);
+			$set = $this->u->jsArrToMySQLSet($ids);
 
 			$listId = $this->param('listId', '1');
 			$list = newsmanList::findOne('id = %d', array($listId));
@@ -1758,7 +1763,7 @@
 		}
 
 		public function ajCreateList() {
-			$u = newsmanUtils::getInstance();
+			
 
 			$name = $this->param('name');
 			$name = trim($name);
@@ -1783,7 +1788,7 @@
 			global $newsman_current_list;
 			global $newsman_current_subscriber;
 
-			$u = newsmanUtils::getInstance();
+			
 
 			$toEmail = $this->param('toEmail');
 			$entityId = $this->param('entity');
@@ -1815,9 +1820,9 @@
 
 
 			$msg = $email->renderMessage($data);
-			$msg['html'] = $u->processAssetsURLs($msg['html'], $ent->assetsURL);
+			$msg['html'] = $this->u->processAssetsURLs($msg['html'], $ent->assetsURL);
 
-			$r = $u->mail($msg, array( 'to' => $toEmail) );
+			$r = $this->u->mail($msg, array( 'to' => $toEmail) );
 
 			if ( $r === true ) {
 				$this->respond(true, sprintf(__('Test email was sent to %s.', NEWSMAN), $toEmail));
@@ -1934,12 +1939,12 @@
 		}
 
 		public function ajGetSystemInfo() {
-			$u = newsmanUtils::getInstance();
-			$this->respond(true, $u->getSystemInfo());
+			
+			$this->respond(true, $this->u->getSystemInfo());
 		}
 
 		public function ajSwitchLocale() {
-			$u = newsmanUtils::getInstance();
+			
 			$n = newsman::getInstance();
 
 			$switchLocale = $this->param('switch-locale', false);
@@ -1948,8 +1953,8 @@
 
 			switch ( $switchLocale ) {
 				case 'replace-all':
-					$u->installActionPages($n->wplang, 'REPLACE');
-					$u->installSystemEmailTemplates($n->wplang, 'REPLACE');
+					$this->u->installActionPages($n->wplang, 'REPLACE');
+					$this->u->installSystemEmailTemplates($n->wplang, 'REPLACE');
 
 					$n->options->set('lang', $n->wplang);
 					$n->lang = $n->wplang;
@@ -1963,11 +1968,11 @@
 				case 'custom':
 
 					if ( $swtichLocalePages ) {
-						$u->installActionPages($n->wplang, 'REPLACE');
+						$this->u->installActionPages($n->wplang, 'REPLACE');
 					}
 
 					if ( $swtichLocaleTemplates ) {
-						$u->installSystemEmailTemplates($n->wplang, 'REPLACE');
+						$this->u->installSystemEmailTemplates($n->wplang, 'REPLACE');
 					}
 
 					$n->options->set('lang', $n->wplang);
@@ -1983,10 +1988,10 @@
 		}
 
 		public function ajRemoveLists() {
-			$u = newsmanUtils::getInstance();
+			
 
 			$ids = $this->param('ids');
-			$set = $u->jsArrToMySQLSet($ids);
+			$set = $this->u->jsArrToMySQLSet($ids);
 
 			$r = newsmanList::findAll('`id` in '.$set);
 
@@ -2019,7 +2024,7 @@
 
 		public function ajDownloadTemplate() {
 			$n = newsman::getInstance();
-			$u = newsmanUtils::getInstance();
+			
 
 			$json = $this->param('json');
 
@@ -2042,7 +2047,7 @@
 				if ( $res['body'] ) {
 					$length = file_put_contents($filePath, $res['body']);
 
-					$u->installTemplate($filePath, $tpl);
+					$this->u->installTemplate($filePath, $tpl);
 					$this->respond(true, $filePath);					
 				} else {
 					$this->respond(false, 'Some error occured. Downloaded file size is 0.');
@@ -2089,7 +2094,7 @@
 		public function ajCheckEmailAddresses() {
 			$listId = $this->param('listId');
 
-			$u = newsmanUtils::getInstance();
+			
 
 			$list = newsmanList::findOne('id = %d', array($listId));
 			if ( !$list ) {
@@ -2102,7 +2107,7 @@
 				$res = $list->getPage($p, 1000);
 				if ( is_array($res) && !empty($res)  ) {
 					foreach ($res as $sub) {
-						if ( !$u->emailValid($sub->email) ) {
+						if ( !$this->u->emailValid($sub->email) ) {
 							$sub->unsubscribe(__('Bad email address', NEWSMAN));
 							$sub->save();
 						}
@@ -2115,4 +2120,37 @@
 
 			$this->respond(true, 'Success');
 		}
+
+		public function ajGetActivePageTranslation() {
+
+			$pageId = $this->param('pageId');
+			$loc = $this->param('loc');
+
+			
+			
+			$translation = $this->u->getPageTranslation($loc, $pageId);
+
+			if ( $translation ) {
+				$this->respond(true, __('Success', NEWSMAN), $translation);
+			} else {
+				$this->respond(false, __('Translation not found', NEWSMAN));
+			}
+		}
+
+		public function ajGetAvailableLanuages() {
+			
+			$langs = $this->u->getAvailableTranslationLocales();
+
+			$this->respond(true, 'Success', array( 'languages' => $langs ));
+		}
+
+		public function ajInstallSystemEmailTemplatesForList() {
+			$listId = $this->param('listId');
+			$loc = $this->param('loc');
+
+			$this->u->installSystemEmailTemplates($loc, true, $listId);
+			$this->respond(true, __('Success', NEWSMAN));
+		}
+
+
 	}

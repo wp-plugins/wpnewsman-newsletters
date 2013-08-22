@@ -1,0 +1,27 @@
+﻿Potwierdzenie rezygnacji 
+--- plain ---
+Witaj,
+
+Właśnie otrzymaliśmy wniosek, aby usunąć się z listy mailingowej. Piszemy, aby upewnić się, że jesteś właścicielem adresu tego e-mail.
+
+Aby potwierdzić swoją decyzję rezygnacji z subskrypcji należy przejść do linku poniżej
+
+[newsman link="confirm-unsubscribe"]
+
+Jeśli nie chcesz się wypisać, możesz po prostu zignorować lub usunąć tę wiadomość.
+
+Z poważaniem,
+[newsman me="name"]
+[newsman me="email"]
+[newsman wp="url"]
+--- html ---
+<p>Witaj,</p>
+<p>Właśnie otrzymaliśmy wniosek, aby usunąć się z listy mailingowej. Piszemy, aby upewnić się, że jesteś właścicielem adresu tego e-mail.</p>
+<p>Aby potwierdzić swoją decyzję rezygnacji z subskrypcji należy przejść do linku poniżej</p>
+<p><a href="[newsman link='unsubscribe-confirmation']">Wypisz mnie</a></p>
+<p>Jeśli nie chcesz się wypisać, możesz po prostu zignorować lub usunąć tę wiadomość.</p>
+<p>&nbsp;</p>
+<p>Z poważaniem,<br>
+[newsman me="name"]<br>
+[newsman me="email"]<br>
+<a href="[newsman wp='url']">[newsman wp="url"]</a></p>

@@ -22,6 +22,7 @@ require_once('../../../wp-load.php');
 ignore_user_abort(true);
 set_time_limit(0);
 
+
 if ( isset( $_REQUEST['newsman_worker_fork'] ) && !empty($_REQUEST['newsman_worker_fork']) ) {
 	$workerClass = $_REQUEST['newsman_worker_fork'];
 
@@ -29,7 +30,11 @@ if ( isset( $_REQUEST['newsman_worker_fork'] ) && !empty($_REQUEST['newsman_work
 		die("requested worker class ".htmlentities($workerClass)." does not exist");
 	}
 
-	$worker = new $workerClass();
+	if ( !isset($_REQUEST['workerId']) ) {
+		die('workerId parameter is not defiend in the query');
+	}
+
+	$worker = new $workerClass($_REQUEST['workerId']);
 	$worker_lock = isset($_REQUEST['worker_lock']) ? $_REQUEST['worker_lock'] : null;
 	$worker->run($worker_lock);
 }

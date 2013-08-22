@@ -10,6 +10,8 @@ class newsmanForm {
 	var $useInlineLabels;
 	var $horizontal;
 
+	var $hpCSSClassName;
+
 	var $elId;
 
 	public function __construct($id, $admin = false) {
@@ -61,6 +63,24 @@ class newsmanForm {
 		}
 
 		$this->adminMode = $admin;
+
+		$this->hpCSSClassName = $this->randStr(15);
+	}
+
+	private function randStr($len = 8) {
+		return substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, $len);
+	}
+
+	private function getHPCSS() {
+		return '
+			<style>
+				.'.$this->hpCSSClassName.' {
+					position: absolute;
+					left: -9999px;
+					top: -9999px;
+				}
+			</style>
+		';
 	}
 
 	private function ent($str) {
@@ -79,6 +99,95 @@ class newsmanForm {
 
 	private function getCloseButton() {		
 		return $this->adminMode ? '<button class="close">&times;</button>' : '';
+	}
+
+	private function getCypherField() {
+		$u = newsmanUtils::getInstance();
+
+		$lblSt = $this->useInlineLabels ? 'style="display: none;"' : '';
+
+		$peer_ip = $u->peerip();
+		$ts = time();
+		$value = $u->encrypt_pwd($peer_ip.'-'.$ts);
+
+		$label = $this->randStr();
+
+		$lbl = '<label class="newsman-form-item-label" '.$lblSt.' >'.$this->ent($label).'</label>';
+		$ph = $this->useInlineLabels ? 'placeholder="'.$this->specChr($label).'"' : '';
+
+		$elId = $this->getElId();
+
+		return	"<div class=\"newsman-form-item ".$this->hpCSSClassName." newsman-form-item-text $elId\">".
+					$lbl.
+					'<input type="text" name="newsman-special-c" value="'.$this->specChr($value).'" '.$ph.'>'.
+					'<span class="newsman-required-msg" style="display:none;">'.__('Required', NEWSMAN).'</span>'.
+				'</div>';	
+	}
+
+	private function getHPField() {
+		$lblSt = $this->useInlineLabels ? 'style="display: none;"' : '';
+
+		$formFiledNames = array();
+		foreach ($this->decodedForm as $item) {
+			$formFiledNames[] = $item['name'];
+		}		
+
+		$fieldNames = array('url', 'title', 'description', 'country');
+		$fn = $this->randStr();
+
+		foreach ($fieldNames as $fieldName) {
+			if ( !in_array($fieldName, $formFiledNames) ) {
+				$fn = $fieldName;
+				break;
+			}
+		}
+
+		$label = ucfirst($fn);
+
+		$lbl = '<label class="newsman-form-item-label" '.$lblSt.' >'.$this->ent($label).'</label>';
+		$ph = $this->useInlineLabels ? 'placeholder="'.$this->specChr($label).'"' : '';
+
+		$elId = $this->getElId();
+
+		return	"<div class=\"newsman-form-item ".$this->hpCSSClassName." newsman-form-item-text $elId\">".
+					$lbl.
+					'<input type="text" name="'.$this->specChr($fn).'" value="" '.$ph.'>'.
+					'<input type="hidden" name="newsman-special-h" value="'.$this->specChr($fn).'">'.
+					'<span class="newsman-required-msg" style="display:none;">'.__('Required', NEWSMAN).'</span>'.
+				'</div>';		
+	}
+
+	private function validateHPFields() {
+		$u = newsmanUtils::getInstance();
+
+		$hpFieldName = $_REQUEST['newsman-special-h'];
+		if ( !$hpFieldName ) { return false; }
+
+		$hpFieldValue = $_REQUEST[$hpFieldName];
+		if ( $hpFieldValue !== '' ) { return false; }
+
+		if ( !isset($_REQUEST['newsman-special-c']) ) { return false; }
+
+		$cfFieldValueEnc = $_REQUEST['newsman-special-c'];
+		$cfFieldValueDec = $u->decrypt_pwd($cfFieldValueEnc);
+
+		if ( !$cfFieldValueDec ) { return false; }
+
+		$cfFieldValueDecArr = explode('-', $cfFieldValueDec);
+
+		$ip = $cfFieldValueDecArr[0];
+		$ts = $cfFieldValueDecArr[1];
+
+		$validInterval = $ts + ( 5*60*60 ); // ts + 5 hours
+
+		if ( $ip !== $u->peerip() ) { return false; }
+
+		$now = time();
+
+		// if post "from future" or form data older than 5 hours
+		if ( $ts > $now || $validInterval < $now ) { return false; }
+
+		return true;
 	}
 
 	private function getText($item) {
@@ -263,6 +372,9 @@ class newsmanForm {
 	}
 
 	public function parse() {
+		if ( !$this->validateHPFields() ) {
+			wp_die( __('Something went wrong. Please contact the site administrator and describe the problem.', NEWSMAN), __('Error', NEWSMAN) );
+		}
 		$parsed = array();
 		foreach ($this->decodedForm as $item) {
 			if ( isset($item['name']) ) {
@@ -277,14 +389,15 @@ class newsmanForm {
 	}
 
 	public function getForm($use_excerpts = false) {
-		global $post;
+		global $post;		
+
 		if ( !is_array($this->decodedForm) ) {
 			echo '<p class="error">The form settings are corrupted.</p>';
 			return;
 		}
 		$il = $this->useInlineLabels ? ' inline-labels' : '';
 		$hor = $this->horizontal ? ' newsman-form-horizontal' : '';
-		$formHtml = '<div class="newsman-form'.$il.$hor.'">';
+		$formHtml = $this->getHPCSS().'<div class="newsman-form'.$il.$hor.'">';
 		$hasEmailField = false;
 
 		foreach ($this->decodedForm as $item) {
@@ -299,8 +412,10 @@ class newsmanForm {
 			if ( method_exists($this, $method) ) {
 				$renderedItem = call_user_func( array($this, $method), $item);
 			}
-			$formHtml .= $renderedItem;
+			$formHtml .= $renderedItem;			
 		}
+
+		$formHtml .= $this->getCypherField().$this->getHPField();
 
 		if ( !$hasEmailField ) {
 			$formHtml .= $this->getEmail(array(
@@ -311,6 +426,10 @@ class newsmanForm {
 
 		$formHtml .= '<input type="hidden" name="uid" value="'.$this->specChr($this->uid).'">';
 		$formHtml .= '<input class="newsman-form-url" type="hidden" name="newsman-form-url" value="'.$_SERVER['REQUEST_URI'].'">';
+
+		if ( isset($_GET['lang']) ) {
+			$formHtml .= '<input type="hidden" name="_form_lang" value="'.$_GET['lang'].'">';
+		}
 
 		if ( $use_excerpts ) {
 			$formHtml .= '<input type="hidden" name="newsman_use_excerpts" value="1">';

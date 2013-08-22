@@ -1,0 +1,12 @@
+﻿Kontakt dołączył do Twojej listy mailingowej w [newsman wp="blogname"]
+--- plain ---
+Kontakt dołączył do Twojej listy mailingowej. Szczegóły kontaktu są wymienione poniżej:
+
+[newsman sub="*"]
+--
+[newsman wp="url"]/wp-admin/ -> WPNewsman -> Ustawienia
+--- html ---
+<p>Kontakt dołączył do Twojej listy mailingowej. Szczegóły kontaktu są wymienione poniżej:</p>
+<ul>[newsman sub="*" tag="li"]</ul>
+<p>--</p>
+<p><a href="[newsman wp='url']/wp-admin/">[newsman wp="url"]/wp-admin/</a> -> WPNewsman -> Ustawienia </p>

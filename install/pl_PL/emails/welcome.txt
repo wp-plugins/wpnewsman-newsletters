@@ -1,0 +1,57 @@
+﻿Witamy z [newsman me="name"]
+--- plain ---
+Witam,
+
+Dziękuję za dołączenie do mojej listy subskrybentów. Teraz, gdy już tu jesteś, będziesz otrzymywał kilka razy w miesiącu, rewelacyjne porady, wskazówki i strategie. Mam nadzieję, że odniesiesz z tego wymierną korzyść! Tu właśnie trafia wszystko to co najlepsze z moich postów!
+
+Nie udostępniam adresów e-mail osobom trzecim oraz będę chronić dane osobowe prywatne.
+
+Aby zapewnić sobie w przyszłości otrzymywanie specjalnie przygotowanych ciekawych porad, wskazówek i ofert dodaj adres [newsman me="email"] do swojej książki adresowej lub listy bezpiecznych nadawców.
+
+Z poważaniem,
+[newsman me="name"]
+[newsman me="email"]
+[newsman wp="url"]
+
+--
+Otrzymujesz tę wiadomość, ponieważ na [newsman sub="ts"] na [newsman wp="url"] zapisałeś się, żeby otrzymywać moje wiadomości e-biuletyny.
+
+Możesz wypisać się przez ten link:
+[newsman link="unsubscribe"]
+--- html ---
+<p>Witam,</p>
+<p>Dziękuję za dołączenie do mojej listy subskrybentów. Teraz, gdy już tu jesteś, będziesz otrzymywał kilka razy w miesiącu, rewelacyjne porady, wskazówki i strategie. Mam nadzieję, że odniesiesz z tego wymierną korzyść! Tu właśnie trafia wszystko to co najlepsze z moich postów!</p>
+<p>Nie udostępniam adresów e-mail osobom trzecim oraz będę chronić dane osobowe prywatne.</p>
+<p>Aby zapewnić sobie w przyszłości otrzymywanie specjalnie przygotowanych ciekawych porad, wskazówek i ofert dodaj adres [newsman me="email"] do swojej książki adresowej lub listy bezpiecznych nadawców.</p>
+<p>&nbsp;</p>
+
+<p>Z poważaniem,<br>
+[newsman me="name"]<br>
+[newsman me="email"]<br>
+<a href="[newsman wp='url']">[newsman wp="url"]</a></p>
+<p>&nbsp;<p>
+<table bgcolor="#eeeeee" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #eeeeee; background-position: top; background-repeat: repeat-x; border-top-color: #dddddd; border-top-style: solid; border-top-width: 2px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px;"> 
+ <tbody> 
+        <tr> 
+         <td colspan="4" style="height: 28px; white-space : nowrap;">&nbsp;</td> 
+        </tr> 
+        <tr> 
+         <td style="width: 25px;"></td> 
+         <td width="10"></td> 
+         <td style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 11px; line-height: 17px; color: #777; text-shadow: 0 1px 0 #ffffff;"> 
+                <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 11px; line-height: 17px; color: #666; text-shadow: 0 1px 0 #ffffff;">
+Zapisałeś się na[newsman sub="ts"] na <a href="[newsman wp='url']" style="border: none; color: #0084b4; text-decoration: none;">[newsman wp="blogname"]</a> from IP: [newsman sub="ip"]
+                </div> 
+                <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 11px; line-height: 17px; color: #666; text-shadow: 0 1px 0 #ffffff;">
+        Możesz też:
+                 <a href="[newsman link='unsubscribe']" style="border: none; color: #0084b4; text-decoration: none;">wypisać się przez ten link</a>.</div> 
+                <div>
+                 <a href="#" style="border: none; color: #0084b4; text-decoration: none; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; text-decoration: none; font-size: 11px; line-height: 17px; color: #999999; text-shadow: 0 1px 0 #ffffff;">Copyright (C) [newsman wp="blogname"]. <span style="white-space: nowrap;">All rights reserved.</span></a>
+                </div> </td> 
+         <td style="width: 75px;"></td> 
+        </tr> 
+        <tr> 
+         <td colspan="3" height="25"></td> 
+        </tr> 
+ </tbody> 
+</table>

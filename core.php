@@ -29,12 +29,25 @@ function wpnewsmanFilterSchedules($schedules) {
 
 add_filter('cron_schedules', 'wpnewsmanFilterSchedules');
 
-function wpnewsman_loadstring() {
-	$domain = NEWSMAN;
-	// The "plugin_locale" filter is also used in load_plugin_textdomain()
-	$locale = apply_filters('plugin_locale', get_locale(), $domain);
+function wpnewsman_redefine_locale($locale) {
+	$localeSwitchingMethods = array( 'newsmanAjGetActivePageTranslation', 'newsmanAjInstallSystemEmailTemplatesForList' );
+	if (
+		isset($_REQUEST['action'])
+		&& in_array($_REQUEST['action'], $localeSwitchingMethods)
+		&& isset($_REQUEST['loc'])
+		) {
+		$locale = $_REQUEST['loc'];
+	}	
+    return $locale;
+}
+add_filter('plugin_locale','wpnewsman_redefine_locale',10);  
 
-	load_textdomain($domain, WP_LANG_DIR.'/wpnewsman/'.$domain.'-'.$locale.'.mo');
+function wpnewsman_loadstring() {
+	// The "plugin_locale" filter is also used in load_plugin_textdomain()
+	$domain = NEWSMAN;
+	$loc = apply_filters('plugin_locale', get_locale(), $domain);
+
+	load_textdomain($domain, WP_LANG_DIR.'/wpnewsman/'.$domain.'-'.$loc.'.mo');
 	load_plugin_textdomain($domain, FALSE, dirname(plugin_basename(NEWSMAN_PLUGIN_MAINFILE)).'/languages/');	
 }
 add_action('plugins_loaded', 'wpnewsman_loadstring');
@@ -43,9 +56,9 @@ if ( function_exists('mb_internal_encoding') ) {
 	mb_internal_encoding("UTF-8");
 }
 
-$loc = "UTF-8";
-putenv("LANG=$loc");
-$loc = setlocale(LC_ALL, $loc);
+// $loc = get_locale()."UTF-8";
+// putenv("LANG=$loc");
+// $loc = setlocale(LC_ALL, $loc);
 
 class newsman {
 
@@ -80,6 +93,8 @@ class newsman {
 		$newsman_success_message = '';
 
 		add_action('init', array($this, 'onInit'));
+
+		add_action('admin_enqueue_scripts', array($this, 'onAdminEnqueueScripts'), 99);
 
 		add_action('newsman_admin_page_header', array($this, 'showAdminNotifications'));
 
@@ -880,6 +895,7 @@ class newsman {
 		
 		$NEWSMAN_PAGE = strpos($page, 'newsman') !== false;
 
+		// this scripts should be loaded on all pages.
 		wp_register_script('newsmanform', NEWSMAN_PLUGIN_URL.'/js/newsmanform.js', array('jquery'), NEWSMAN_VERSION);
 		wp_enqueue_script('newsman-jquery-placeholder', NEWSMAN_PLUGIN_URL.'/js/jquery.placeholder.js', array('jquery'), NEWSMAN_VERSION);		
 
@@ -896,27 +912,26 @@ class newsman {
 		
 				global $wp_scripts;
 
-				do_action('newsman_get_ext_script');
+				if ( $NEWSMAN_PAGE ) {
+					do_action('newsman_get_ext_script');
 
-				wp_enqueue_script('jquery-ui-core ');
+					wp_enqueue_script('jquery-ui-core ');
+					wp_enqueue_script('jquery-ui-datepicker');
 
-				wp_enqueue_script('jquery-ui-datepicker');
+					wp_enqueue_style('jquery-tipsy-css', NEWSMAN_PLUGIN_URL.'/css/tipsy.css');
+					wp_enqueue_script('jquery-tipsy', NEWSMAN_PLUGIN_URL.'/js/jquery.tipsy.js', array('jquery'));
 
-				wp_enqueue_style('jquery-tipsy-css', NEWSMAN_PLUGIN_URL.'/css/tipsy.css');
-				wp_enqueue_script('jquery-tipsy', NEWSMAN_PLUGIN_URL.'/js/jquery.tipsy.js', array('jquery'));
+					wp_register_style('fileuploader-css', NEWSMAN_PLUGIN_URL.'/css/fileuploader.css', array(), NEWSMAN_VERSION);
+					wp_register_script('fileuploader-iframe-transport-js', NEWSMAN_PLUGIN_URL.'/js/uploader/jquery.iframe-transport.js', array('jquery'), NEWSMAN_VERSION);	
+					wp_register_script('fileuploader-js', NEWSMAN_PLUGIN_URL.'/js/uploader/jquery.fileupload.js', array('jquery', 'jquery-ui-widget', 'fileuploader-iframe-transport-js'), NEWSMAN_VERSION);
 
-				wp_register_style('fileuploader-css', NEWSMAN_PLUGIN_URL.'/css/fileuploader.css', array(), NEWSMAN_VERSION);
-				wp_register_script('fileuploader-iframe-transport-js', NEWSMAN_PLUGIN_URL.'/js/uploader/jquery.iframe-transport.js', array('jquery'), NEWSMAN_VERSION);	
-				wp_register_script('fileuploader-js', NEWSMAN_PLUGIN_URL.'/js/uploader/jquery.fileupload.js', array('jquery', 'jquery-ui-widget', 'fileuploader-iframe-transport-js'), NEWSMAN_VERSION);
+					wp_register_style('bootstrap', NEWSMAN_PLUGIN_URL.'/css/bootstrap.css', array(), NEWSMAN_VERSION);
 
-
-
-				wp_register_style('bootstrap', NEWSMAN_PLUGIN_URL.'/css/bootstrap.css', array(), NEWSMAN_VERSION);
-
-				wp_register_script('bootstrapjs', NEWSMAN_PLUGIN_URL.'/js/bootstrap.min.js', array('jquery'));
-				
-				wp_register_script('director', NEWSMAN_PLUGIN_URL.'/js/director.js');
-				wp_register_script('hashroute', NEWSMAN_PLUGIN_URL.'/js/hashroute.js');
+					wp_register_script('bootstrapjs', NEWSMAN_PLUGIN_URL.'/js/bootstrap.min.js', array('jquery'));
+					
+					wp_register_script('director', NEWSMAN_PLUGIN_URL.'/js/director.js');
+					wp_register_script('hashroute', NEWSMAN_PLUGIN_URL.'/js/hashroute.js');
+				}
 
 				if ( $page == 'newsman-forms' ) {
 					wp_enqueue_style('fileuploader-css');
@@ -934,6 +949,10 @@ class newsman {
 				}
 
 				if ( $NEWSMAN_PAGE || defined('INSERT_POSTS_FRAME') ) {
+
+
+					//wp_dequeue_script
+
 					// bootstrap
 					wp_enqueue_style('bootstrap');				
 					wp_enqueue_script('bootstrapjs');
@@ -1139,6 +1158,32 @@ class newsman {
 		$GLOBALS['wp_styles']->add_data( 'newsman-ie9', 'conditional', 'gte IE 9' );
 		wp_enqueue_style('newsman-ie9');
 
+	}
+
+	public function onAdminEnqueueScripts() {
+		// This is a hack for a Classipress 3.1.9 
+		// which loads it's dependent sctips on all admin pages
+
+		$NEWSMAN_PAGE = false;
+		if ( isset( $_REQUEST['page'] ) ) {
+			$NEWSMAN_PAGE = strpos($_REQUEST['page'], 'newsman') !== false;	
+		}
+		
+		if ( $NEWSMAN_PAGE && function_exists( 'scb_init' ) ) {
+			if ( wp_script_is('datepicker') )   { 
+				wp_dequeue_script('datepicker'); 
+			}
+			if ( wp_script_is('jqueryslider') ) { 
+				wp_dequeue_script('jqueryslider'); 
+			}
+			if ( wp_script_is('timepicker') )   { 
+				wp_dequeue_script('timepicker'); 
+			}
+
+			if ( wp_style_is('admin-style') ) {
+				wp_dequeue_style('admin-style');
+			}
+		}
 	}
 
 	public function cleanOldUnconfirmed() {
@@ -1369,7 +1414,8 @@ class newsman {
 		//wp_tiny_mce( false ); // true gives you a stripped down version of the editor
 		echo '<script>
 			NEWSMAN_PLUGIN_URL = "'.NEWSMAN_PLUGIN_URL.'";
-			NEWSMAN_BLOG_ADMIN_URL = "'.NEWSMAN_BLOG_ADMIN_URL.'";			
+			NEWSMAN_BLOG_ADMIN_URL = "'.NEWSMAN_BLOG_ADMIN_URL.'";
+			NEWSMAN_WPML_MODE = '.( (defined('NEWSMAN_WPML_MODE') && NEWSMAN_WPML_MODE) ? 'true' : 'false' ).';
 			</script>';
 
 		$mode = '<script>NEWSMAN_LITE_MODE = true;</script>';
@@ -1444,20 +1490,17 @@ class newsman {
 			$tpl->save();
 
 			wp_redirect(NEWSMAN_BLOG_ADMIN_URL.'admin.php?page=newsman-templates&action=edit&id='.$tpl->id);
-
-			// Duplicating basic template
-			// $basicTplId = $this->options->get('basicTemplate');
-			// if ( $basicTplId ) {
-			// 	$tpl = $this->utils->duplicateTemplate($basicTplId, __('Untitled Template', NEWSMAN));
-			// 	wp_redirect(NEWSMAN_BLOG_ADMIN_URL.'admin.php?page=newsman-templates&action=edit&id='.$tpl->id);
-			// }
 		}
 
 		add_meta_box("newsman-et-meta", __('Alternative Plain Text Body', NEWSMAN), array($this, "metaPlainBody"), "newsman_et", "normal", "default");
 	}
 
 	public function onWidgetsInit() {
-		require_once(NEWSMAN_PLUGIN_PATH.'/widget.php');
+		require_once(NEWSMAN_PLUGIN_PATH.'/newsman-widget.php');
+
+		if ( defined('NEWSMAN_WPML_MODE') && NEWSMAN_WPML_MODE ) {
+			require_once(NEWSMAN_PLUGIN_PATH.'/widget-wpml.php');
+		}
 	}
 
 	public function onAdminMenu() {
@@ -1651,15 +1694,25 @@ class newsman {
 
 		$link = get_permalink( $this->options->get('activePages.'.$pageName) );
 
-		if ( count($params) ) {
-			$link = $this->utils->addTrSlash($link);
+		$del = ( strpos($link, '?') === false ) ? '?' : '&';
 
-			$del = ( strpos($link, '?') === false ) ? '?' : '&';		
+		if ( count($params) ) {
 			foreach ( $params as $key => $value ) {
 				$link .= $del.$key.'='.$value;
 				$del = '&';
 			}			
 		}
+
+		$lang = 'en';
+
+		if ( isset($_REQUEST['_form_lang']) ) {
+			$lang = $_REQUEST['_form_lang'];
+		}
+
+		if ( $lang ) { 
+			$link .= $del.'lang='.$lang;
+		}
+
 		return $link;
 	}
 
@@ -2139,6 +2192,11 @@ class newsman {
 		$title = 'WPNewsman <a style="font-size: inherit;" href="http://codex.wordpress.org/Shortcode_API">shortcodes</a>';
 		add_meta_box('newsman_ap_shortcodes', $title, array($this, 'putApShortcodesMetabox'), 'newsman_ap', 'side', 'default');
 
+		if ( defined('NEWSMAN_WPML_MODE') && NEWSMAN_WPML_MODE ) {
+			$title = 'WPNewsman Translations';
+			add_meta_box('newsman_mb_translations', $title, array($this, 'putApTranslationsMetabox'), 'newsman_ap', 'side', 'high');
+		}
+
 		// page_attributes_meta_box
 	    add_meta_box('newsman_ap_template', __('Post Template'), array($this, 'post_template_meta_box'), 'newsman_ap', 'side', 'core');
 	    //add_meta_box('newsman_ap_template', __('Post Template'), 'page_attributes_meta_box', 'newsman_ap', 'side', 'core');
@@ -2162,6 +2220,49 @@ class newsman {
 		</ul>
 		
 		<p><?php echo sprintf( __('%s for more shortcode macros supported by WPNewsman.', NEWSMAN), $link ); ?></p>
+		<?php
+	}
+
+	public function putApTranslationsMetabox() {
+		$translations = $this->utils->getAvailableTranslationLocales();
+		?>
+		<p><label for="wp-load-lang">Load default translation of this page:</label></p>
+		<select name="wp-load-lang" id="wp-load-lang">
+			<?php
+			foreach ($translations as $t) {
+				echo '<option value="'.$t['locale'].'">'.$t['native'].'</option>';
+			}
+			?>
+		</select>
+		<button type="button" id="btn-load-translation" class="button">Load</button>
+		<script>
+			jQuery(function($){
+				$('#btn-load-translation').click(function(){
+					var btn = $(this);
+					btn.prop('disabled', true).text('Loadin...');
+					$.ajax(ajaxurl, {
+						type: 'post',
+						data: {
+							action: 'newsmanAjGetActivePageTranslation',
+							pageId: $('#icl_translation_of').val(),
+							loc: $('#wp-load-lang').val()
+						}
+					}).done(function(data){
+						if ( data.state ) {
+							$('#title').val( data.title );
+							var e = tinyMCE.editors[0];
+							if ( e ) {
+								setTimeout(function() {
+									e.setContent(data.content);	
+								}, 10);								
+							}
+						}
+					}).always(function(){
+						btn.prop('disabled', false).text('Load');
+					});
+				});
+			});
+		</script>
 		<?php
 	}
 

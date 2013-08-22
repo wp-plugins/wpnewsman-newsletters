@@ -3127,6 +3127,7 @@ jQuery(function($){
 			// --- ui elements
 
 			$('#newsman-btn-stop').click(function(e){
+				showLoading('Stopping...');
 				var ids = [];
 				$('#newsman-mailbox tbody input:checked').each(function(i, el){
 					ids.push( parseInt($(el).val(), 10) );
@@ -3144,10 +3145,13 @@ jQuery(function($){
 				}).done(function(data){
 					showMessage(newsmanL10n.youHaveSuccessfullyStoppedSending, 'success');
 					getEmails();
-				}).fail(NEWSMAN.ajaxFailHandler);
+				}).fail(NEWSMAN.ajaxFailHandler).always(function(){
+					hideLoading();
+				});
 			});
 
 			$('#newsman-btn-resume').click(function(e){
+				showLoading('Resuming...');
 				var ids = [];
 				$('#newsman-mailbox tbody input:checked').each(function(i, el){
 					ids.push( parseInt($(el).val(), 10) );
@@ -3165,7 +3169,9 @@ jQuery(function($){
 				}).done(function(data){
 					showMessage(data.msg, 'success');
 					getEmails();
-				}).fail(NEWSMAN.ajaxFailHandler);
+				}).fail(NEWSMAN.ajaxFailHandler).always(function(){
+					hideLoading();
+				});
 			});
 
 			$('#btn-compose').click(function(e){
@@ -3725,8 +3731,6 @@ jQuery(function($){
 					return;
 				}
 
-				gotSystemEmailTemplates = true;
-
 				var data = {
 					action: 'newsmanAjGetSystemTemplates'
 				};
@@ -3736,15 +3740,22 @@ jQuery(function($){
 					url: ajaxurl,
 					data: data
 				}).done(function(data){
+					gotSystemEmailTemplates = true;
 					$('#tabs-header .dropdown-menu').empty();
 
-					if ( data.lists && data.lists.length ) {
-						$(data.lists).each(function(i, list){
-							addSysemTemplatesTab(list);
-						});
-					}
-				}).fail(NEWSMAN.ajaxFailHandler).always(callback);
+					getLanuages(function(err, langs){
+						if ( data.lists && data.lists.length ) {
+							$(data.lists).each(function(i, list){
+								addSystemTemplatesTab(list, langs);
+							});
+						}
+						callback();
+					});
 
+				}).fail(function(){
+					NEWSMAN.ajaxFailHandler.apply(this, arguments);
+					callback();
+				});
 			}
 
 			function makeTabId(listName) {
@@ -3759,7 +3770,7 @@ jQuery(function($){
 				return str[0].toUpperCase()+str.substr(1);
 			}
 
-			function addSysemTemplatesTab(list) {
+			function addSystemTemplatesTab(list, langs) {
 				var menuUl = $('#tabs-header .dropdown-menu'),
 					tc = $('#tabs-container');
 
@@ -3779,10 +3790,33 @@ jQuery(function($){
 					return out.join('');
 				}
 
+				function getLangSwitchButton() {
+					if ( !NEWSMAN_WPML_MODE ) { return ''; }
+					var langList = '';
+					$(langs).each(function(i, l){
+						langList += '<li><a locale="'+l.locale+'">'+l.native+'</a></li>';
+					});
+
+					return [
+						'<div class="btn-group" style="margin-left: 15px;">',
+						  '<a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#">',
+						    'Load default templates ',
+						    '<span class="caret"></span>',
+						  '</a>',
+						  '<ul class="dropdown-menu">',
+						  	langList,
+						  '</ul>',
+						'</div>'					
+					].join('');
+				}
+
+
 				$('<li><a href="#'+id+'" data-toggle="tab">'+listName+'</a></li>').appendTo(menuUl);
 
-				$(['<div class="tab-pane fade" id="'+id+'">',
-					'<h4>'+listName+'</h4>',
+				var panel = $(['<div class="tab-pane fade list-pane" id="'+id+'" listid="'+list.listId+'">',
+					'<h4>'+listName,
+						getLangSwitchButton(),
+					'</h4>',
 					'<table class="table table-striped table-bordered">',
 						'<thead>',
 							'<tr>',
@@ -3794,6 +3828,55 @@ jQuery(function($){
 						'</tbody>',
 					'</table>',
 				'</div>'].join('')).appendTo(tc);
+
+				$('a[locale]', panel).click(function(e){
+					e.preventDefault();
+
+					var listId = $(this).closest('.list-pane').attr('listid'),
+						locale = $(this).attr('locale');
+
+					loadTranslatedSystemEmailTemplates(listId, locale);
+				});
+
+			}
+
+			function loadTranslatedSystemEmailTemplates(listId, locale) {
+
+				showLoading();
+				
+				$.ajax(ajaxurl, {
+					type: 'post',
+					data: {
+						listId: listId,
+						loc: locale,
+						action: 'newsmanAjInstallSystemEmailTemplatesForList'
+					}
+				}).done(function(data){
+
+					gotSystemEmailTemplates = false;
+
+					getSystemTemplates(function(){
+						$('#tabs-header a[href="#system-'+listId+'"]').tab('show');
+						hideLoading();
+					});
+
+				}).fail(function(){
+					hideLoading();
+					NEWSMAN.ajaxFailHandler.apply(this, arguments);
+				})
+			}
+
+			function getLanuages(cb) {
+				$.ajax(ajaxurl, {
+					type: 'post',
+					data: {
+						action: 'newsmanAjGetAvailableLanuages'
+					}
+				}).done(function(data){
+					cb(null, data.languages)
+				}).fail(function(xhr){
+					cb(new Error('Some error occured. Response: '+xhr.responseText));
+				});
 			}
 
 			// /SYSTEM TEMPLATES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -3814,7 +3897,6 @@ jQuery(function($){
 
 				pageState.pg = parseInt(p, 10);		
 				getTemplates();
-				getSystemTemplates();
 				$('.subsubsub a.current').removeClass('current');
 			}
 
@@ -3826,12 +3908,14 @@ jQuery(function($){
 				'system-default': function() {
 					$('.newsman-tbl-controls .pagination').hide();
 					getSystemTemplates(function(){
+						//debugger;
 						$('#tabs-header a[href="#system-default"]').tab('show');	
 					});
 				},
 				'system-:id': function(id) {
 					$('.newsman-tbl-controls .pagination').hide();
 					getSystemTemplates(function(){
+						///debugger;
 						$('#tabs-header a[href="#system-'+id+'"]').tab('show');
 					});
 				},
@@ -3839,6 +3923,7 @@ jQuery(function($){
 					this.redirect('my-templates/1');
 				},
 				'my-templates/:p': function(p) {
+					getSystemTemplates();
 					$('.newsman-tbl-controls .pagination').show();
 					r(p);
 				}

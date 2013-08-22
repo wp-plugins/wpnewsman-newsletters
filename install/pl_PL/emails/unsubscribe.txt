@@ -1,0 +1,27 @@
+﻿Removal Request Confirmation
+--- plain ---
+Witaj,
+
+Ten e-mail został wysyłany, żeby powiadomić Cię o otrzymaniu żądania usunięcia następującego adresu z naszej listy mailingowej:
+
+Email: [newsman sub="email"]
+
+Ten zapis został usunięty z naszej bazy danych online, a niebawem zostanie również usunięty z wszelkich plików kopii zapasowych.
+
+Jeśli otrzymasz jednak niechciane e-maile z naszego systemu, proszę o kontakt za pomocą poniższych informacji kontaktowych. Z chęcią rozwiążę ten problem natychmiast.
+
+Z poważaniem,
+[newsman me="name"]
+[newsman me="email"]
+[newsman wp="url"]
+--- html ---
+<p>Witaj,</p>
+<p>Ten e-mail został wysyłany, żeby powiadomić Cię o otrzymaniu żądania usunięcia następującego adresu z naszej listy mailingowej:</p>
+<p>Email: [newsman sub="email"]</p>
+<p>Ten zapis został usunięty z naszej bazy danych online, a niebawem zostanie również usunięty z wszelkich plików kopii zapasowych.</p>
+<p>Jeśli otrzymasz jednak niechciane e-maile z naszego systemu, proszę o kontakt za pomocą poniższych informacji kontaktowych. Z chęcią rozwiążę ten problem natychmiast.</p>
+<p>&nbsp;</p>
+<p>Z poważaniem,<br>
+[newsman me="name"]<br>
+[newsman me="email"]<br>
+<a href="[newsman wp='url']">[newsman wp="url"]</a></p>

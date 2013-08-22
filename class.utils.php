@@ -3,6 +3,7 @@
 require_once(__DIR__.DIRECTORY_SEPARATOR."class.options.php");
 require_once(__DIR__.DIRECTORY_SEPARATOR."class.list.php");
 require_once(__DIR__.DIRECTORY_SEPARATOR."class.shortcode.php");
+require_once(__DIR__.DIRECTORY_SEPARATOR.'class.locks.php');
 
 require_once(ABSPATH.DIRECTORY_SEPARATOR.'wp-includes'.DIRECTORY_SEPARATOR.'class-phpmailer.php');
 
@@ -11,6 +12,58 @@ define('KEY', "\xa3\xb4\xef\xda\x24\xd5\xcc\x3b");
 class newsmanUtils {
 
 	var $base64Map = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+	var $l;
+
+	function __construct() {
+		$this->l = newsmanLocks::getInstance();
+	}
+
+	function getPagesData() {
+		return array(
+			'alreadySubscribedAndVerified' => array(
+				'slug' => 'already-subscribed-and-verified',
+				'title' => __('Already Subscribed and Verified', NEWSMAN),
+				'template' => 'already-subscribed-and-verified.html',
+				'excerpt' => 'already-subscribed-and-verified-ex.html',
+			),
+			'badEmail' => array(
+				'slug' => 'bad-email-format',
+				'title' => __('Bad email address format', NEWSMAN),
+				'template' => 'bad-email.html',
+				'excerpt' => 'bad-email-ex.html'
+			),
+			'confirmationRequired' => array(
+				'slug' => 'confirmation-required',
+				'title' => __('Confirmation Required', NEWSMAN),
+				'template' => 'confirmation-required.html',
+				'excerpt' => 'confirmation-required-ex.html'
+			),
+			'confirmationSucceed' => array(
+				'slug' => 'confirmation-successful',
+				'title' => __('Confirmation Successful', NEWSMAN),
+				'template' => 'confirmation-successful.html',
+				'excerpt' => 'confirmation-successful-ex.html'
+			),
+			'emailSubscribedNotConfirmed' => array(
+				'slug' => 'email-subscribed-not-confirmed',
+				'title' => __('Subscription not yet confirmed', NEWSMAN),
+				'template' => 'email-subscribed-not-confirmed.html',
+				'excerpt' => 'email-subscribed-not-confirmed-ex.html'
+			),
+			'unsubscribeSucceed' => array(
+				'slug' => 'unsubscribe-succeed',
+				'title' => __('Successfully unsubscribed', NEWSMAN),
+				'template' => 'unsubscribe-succeed.html',
+				'excerpt' => 'unsubscribe-succeed-ex.html'
+			),
+			'unsubscribeConfirmation' => array(
+				'slug' => 'unsubscribe-confirmation-required',
+				'title' => __('Please confirm your unsubscribe decision', NEWSMAN),
+				'template' => 'unsubscribe-confirmation-required.html',
+				'excerpt' => 'unsubscribe-confirmation-required-ex.html'
+			)
+		);
+	}
 
 	// singleton instance 
 	private static $instance; 
@@ -1315,54 +1368,35 @@ class newsmanUtils {
 	/* L10n functions */	
 	/* --------------------------------------------------------------------------------------------------------- */
 
+	public function getActionPageNameById($pageId) {
+		$options = newsmanOptions::getInstance();
+		$pages = $options->get('activePages');
+		foreach ($pages as $name => $id) {	
+			if ( $id == $pageId ) {
+				return $name;
+			}
+		}
+	}
+
+	public function getPageTranslation($lang = 'en_US', $pageId) {
+		$name = $this->getActionPageNameById($pageId);
+		if ( $name ) {
+			$pd = $this->getPagesData();
+			$data = $pd[$name];
+			$translation = array();
+			$translation['title'] = $data['title'];
+			$translation['content'] = $this->loadTpl($data['template'], $lang);
+			$translation['excerpt'] = $this->loadTpl($data['excerpt'],  $lang);
+
+			return $translation;
+		}
+	}
+
+
 	public function installActionPages($lang = 'en_US', $replace = false) {
 		// loading pages & email templates
 		$options = newsmanOptions::getInstance();
 
-		$pagesData = array(
-			'alreadySubscribedAndVerified' => array(
-				'slug' => 'already-subscribed-and-verified',
-				'title' => __('Already Subscribed and Verified', NEWSMAN),
-				'template' => 'already-subscribed-and-verified.html',
-				'excerpt' => 'already-subscribed-and-verified-ex.html',
-			),
-			'badEmail' => array(
-				'slug' => 'bad-email-format',
-				'title' => __('Bad email address format', NEWSMAN),
-				'template' => 'bad-email.html',
-				'excerpt' => 'bad-email-ex.html'
-			),
-			'confirmationRequired' => array(
-				'slug' => 'confirmation-required',
-				'title' => __('Confirmation Required', NEWSMAN),
-				'template' => 'confirmation-required.html',
-				'excerpt' => 'confirmation-required-ex.html'
-			),
-			'confirmationSucceed' => array(
-				'slug' => 'confirmation-successful',
-				'title' => __('Confirmation Successful', NEWSMAN),
-				'template' => 'confirmation-successful.html',
-				'excerpt' => 'confirmation-successful-ex.html'
-			),
-			'emailSubscribedNotConfirmed' => array(
-				'slug' => 'email-subscribed-not-confirmed',
-				'title' => __('Subscription not yet confirmed', NEWSMAN),
-				'template' => 'email-subscribed-not-confirmed.html',
-				'excerpt' => 'email-subscribed-not-confirmed-ex.html'
-			),
-			'unsubscribeSucceed' => array(
-				'slug' => 'unsubscribe-succeed',
-				'title' => __('Successfully unsubscribed', NEWSMAN),
-				'template' => 'unsubscribe-succeed.html',
-				'excerpt' => 'unsubscribe-succeed-ex.html'
-			),
-			'unsubscribeConfirmation' => array(
-				'slug' => 'unsubscribe-confirmation-required',
-				'title' => __('Please confirm your unsubscribe decision', NEWSMAN),
-				'template' => 'unsubscribe-confirmation-required.html',
-				'excerpt' => 'unsubscribe-confirmation-required-ex.html'
-			)
-		);
 
 		$langExists = $this->installLangExists($lang);
 
@@ -1370,7 +1404,9 @@ class newsmanUtils {
 			$lang = 'en_US';
 		}
 
-		foreach ($pagesData as $pageKey => $data) {
+		$pd = $this->getPagesData();
+
+		foreach ($pd as $pageKey => $data) {
 			$pageId = $options->get('activePages.'.$pageKey);
 
 			if ( !$pageId ) {
@@ -1398,7 +1434,7 @@ class newsmanUtils {
 		}		
 	}
 
-	public function installSystemEmailTemplates($lang = 'en_US', $replace = false) {
+	public function installSystemEmailTemplates($lang = 'en_US', $replace = false, $listId = 0) {
 		$options = newsmanOptions::getInstance();
 		// loading email templates
 
@@ -1454,20 +1490,25 @@ class newsmanUtils {
 
 			$eml = $this->emailFromFile($fileName, $lang);
 
-			$tpl = newsmanEmailTemplate::findOne('`system` = 1 AND `assigned_list` = %d AND `system_type` = %d', array(0, $tplDef['type']));
+			$tpl = newsmanEmailTemplate::findOne('`system` = 1 AND `assigned_list` = %d AND `system_type` = %d', array($listId, $tplDef['type']));
 
 			if ( !$tpl ) {
 				$tpl = new newsmanEmailTemplate();
 			} else if ( !$replace ) {
 				continue;
 			}
-
+			
 			$tmp_base = $baseTpl;
 
 			$tpl->name = $name;
 			$tpl->subject = $eml['subject'];
 			$tpl->html = $this->replaceSectionContent($tmp_base, 'std_content', $eml['html']);
 			$tpl->plain = $eml['plain'];
+
+			if ( !isset($tpl->assigned_list) ) {
+				$tpl->assigned_list = $listId;	
+			}
+
 			$tpl->system = true;
 			$tpl->system_type = $tplDef['type'];
 
@@ -1617,37 +1658,44 @@ class newsmanUtils {
 			mb_detect_encoding($content, 'UTF-8, ISO-8859-1', true));
 	}
 
+	public function getInstalledLanguageData($locale) {
+		$dir = __DIR__.DIRECTORY_SEPARATOR.'install'.DIRECTORY_SEPARATOR.$locale.DIRECTORY_SEPARATOR.'lang.txt';
+		$data = explode('|', @file_get_contents($dir));		
+
+		return array(
+			'locale' => $locale,
+			'name' => $data[0],
+			'native' => $data[1]
+		);
+	}
+
+	public function getAvailableTranslationLocales() {
+		$list = array();
+		$dir = __DIR__.DIRECTORY_SEPARATOR.'install';
+		if ( $handle = opendir($dir) ) {
+			while (false !== ($entry = readdir($handle))) {
+				$epath = $dir.DIRECTORY_SEPARATOR.$entry;
+				if ( $entry[0] !== '.' && is_dir($epath) ) {
+					$list[] = $this->getInstalledLanguageData($entry);
+				}				
+			}
+		}
+		return $list;
+	}
+
 	/* --------------------------------------------------------------------------------------------------------- */
 	/* Locks */
 	/* --------------------------------------------------------------------------------------------------------- */
 
-	public function getLockFilePath($name) {
-		$n = newsman::getInstance();
-		$locksDir = $n->ensureUploadDir('locks');
-		return $locksDir.DIRECTORY_SEPARATOR.$name.".lock";
-	}
-
-	public function lock($name, $removeIfStale = false) {
-		$file = $this->getLockFilePath($name);
-		if ( $removeIfStale && $this->isLockStale($file) ) {
-			@unlink($file);
-		}
-		return @fopen($file, "xb") !== false;
+	public function lock($name) {
+		return $this->l->lock($name);
 	}
 
 	public function isLocked($name) {
-		return @file_exists($this->getLockFilePath($name));
+		return $this->l->isLocked($name);
 	}
 
 	public function releaseLock($name) {
-		return @unlink($this->getLockFilePath($name));
-	}	
-
-	public function isLockStale($name, $timeout = 60) {
-		$ts = gettimeofday(true);
-		$lock_ts = floatval(file_get_contents($this->getLockFilePath($name)));
-
-		return $ts - $lock_ts > $timeout;		
-	}
-		
+		return $this->l->releaseLock($name);
+	}		
 }

@@ -41,7 +41,7 @@ class newsmanMailMan {
 			if ( !$email->isWorkerAlive() && $email->getStatus() === 'inprogress' ) {
 				$email->releaseLocks();
 				$email->status = 'pending';
-				$email->workerPid = 0;
+				$email->workerPid = '';
 
 				$email->save();
 			}
@@ -56,6 +56,7 @@ class newsmanMailMan {
 		$emails = newsmanEmail::findAll('status = "pending"');
 
 		foreach ($emails as $email) {
+
 			newsmanMailer::fork(array(
 				'worker_lock' => $email->id,
 				'email_id' => $email->id

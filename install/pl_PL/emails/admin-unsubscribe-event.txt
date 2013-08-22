@@ -1,0 +1,17 @@
+﻿Kontakt został wypisany z listy [newsman wp="url"]
+--- plain ---
+Kontakt został wypisany z listy mailingowej. Szczegóły kontaktu są wymienione poniżej:
+
+[newsman sub="*"]
+
+Powód: 
+$u_reason
+
+--
+[newsman wp="url"]/wp-admin/ -> WPNewsman -> Ustawienia
+--- html ---
+<p>Kontakt został wypisany z listy mailingowej. Szczegóły kontaktu są wymienione poniżej:</p>
+<ul>[newsman sub="*" tag="li"]</ul>
+&nbsp;
+<p>--</p>
+<p><a href="[newsman wp='url']/wp-admin/">[newsman wp="url"]/wp-admin/</a> -> WPNewsman -> Ustawienia</p>

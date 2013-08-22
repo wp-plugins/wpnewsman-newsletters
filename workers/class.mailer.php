@@ -11,24 +11,16 @@ class newsmanMailer extends newsmanWorker {
 
 		$u = newsmanUtils::getInstance();
 
-		$this->isProcessRunning($this->pid);		
-
-		$this->growl('Worker started.');
-
 		if ( isset($_REQUEST['email_id']) ) {
 			$eml = newsmanEmail::findOne('id = %d', array( $_REQUEST['email_id'] ));
-
-			$this->growl('Email found');
 
 			if ( $eml ) {
 
 				if ( $eml->status == 'inprogress' && ( !isset($_REQUEST['force']) || $_REQUEST['force'] !== '1' ) ) {
 					die('Email is already processed by other worker. Use "force=1" in the query to run another worker anyway.');
 				} else if ( $eml->status != 'stopped' ) {
-					$this->growl('Setting email status to "inprogress"');
-
 					$eml->status = 'inprogress';
-					$eml->workerPid = getmypid();
+					$eml->workerPid = $this->workerId;
 					$eml->save();
 
 					$this->launchSender($eml);
@@ -37,7 +29,7 @@ class newsmanMailer extends newsmanWorker {
 		}
 	}
 
-	private function waitOrStop($ms) {
+	private function wait($ms) {
 		$start = round(microtime(true)*1000);
 
 		for ( ;; ) {
@@ -46,7 +38,7 @@ class newsmanMailer extends newsmanWorker {
 				return NEWSMAN_WORKER_WAIT_TIMEOUT;
 			} else {
 				usleep(100000); // 100 ms
-				if ( $this->isStopped() ) {
+				if ( $this->stopped ) {
 					return NEWSMAN_WORKER_WAIT_STOPPED;	
 				}				
 			}			
@@ -56,21 +48,13 @@ class newsmanMailer extends newsmanWorker {
 	private function launchSender($email) {
 		global $newsman_current_list;
 
-		$this->growl('launching sendner');
-
-		$stopped = false;
+		$this->processMessages();
 
 		$u = newsmanUtils::getInstance();
 
 		$sl = newsmanSentlog::getInstance();
 
-		$this->isProcessRunning($this->pid);
-
-
 		$tStreamer = new newsmanTransmissionStreamer($email);
-
-		$this->isProcessRunning($this->pid);
-
 
 		$email->recipients = $tStreamer->getTotal();
 		$email->msg = '';
@@ -98,7 +82,6 @@ class newsmanMailer extends newsmanWorker {
 			}
 			if ( $limit !== 0 ) {
 				$throttlingTimeout = ($div / $limit) * 1000; // in ms
-				$this->growl('Throttling timeout: '.$throttlingTimeout.' ms');
 				/* 
 					actually it's not a timeout but a minimum time between send operations.
 				*/
@@ -114,15 +97,13 @@ class newsmanMailer extends newsmanWorker {
 		$email->p_html = $u->processAssetsURLs($email->p_html, $email->assetsURL);
 		$email->p_html = $u->compileThumbnails($email->p_html);	
 
+		$this->processMessages();
+
 		while ( $t = $tStreamer->getTransmission() ) {
 
-			$this->isProcessRunning($this->pid);
+			$this->processMessages();
 
-			$this->growl('Got transmission object...');
-
-			if ( $this->isStopped() ) { // checks with file_exists(), IO operation
-				$stopped = true;
-				$this->growl('Worker stopped.');
+			if ( $this->stopped ) { // checks with file_exists(), IO operation
 				break;
 			}
 
@@ -142,19 +123,14 @@ class newsmanMailer extends newsmanWorker {
 				 'uns_code' => $nmn->getActionLink('unsubscribe', 'code_only'),
 			);
 
-			$this->growl('sending email...');
-
 			$r = $u->mail($msg, $mail_opts );
 
 			if ( $r === true ) {
-				$this->growl('Email sent. Setting transmission to "done"');
 				$errorsCount = 0;
 				$email->incSent();
 
 				$t->done($email->id);
 			} else {
-
-				$this->growl('Sending failed: '.$r);
 
 				if ( strpos($r, 'SMTP Error: Could not connect to SMTP host') !== false ) {
 					$lastError = $r;
@@ -180,7 +156,6 @@ class newsmanMailer extends newsmanWorker {
 			if ( $errorsCount >= 5 ) {
 				$lastError = __('Too many consecutive errors. Please check your mail delivery settings and make sure you can send a test email. Last SMTP error: ', NEWSMAN).$lastError;
 				$errorStop = true;
-				$this->growl($lastError);
 				break;
 			}
 
@@ -189,20 +164,13 @@ class newsmanMailer extends newsmanWorker {
 			if ( $throttlingTimeout > 0 ) {
 				$t = $throttlingTimeout - $elapsed; // how much time we've left to wait				
 				if ( $t > 0 ) {
-					$this->growl('Falling asleep for '.($throttlingTimeout/1000).' seconds at '.date('H:i:s'));
-					if ( $this->waitOrStop($t) === NEWSMAN_WORKER_WAIT_STOPPED ) {
-						$stopped = true;
-					}
-					$this->growl('waking up');
-				} else {
-					$this->growl('No time for sleep :) Preparing next email...');
+					$this->wait($t);
 				}
 			}
-			$this->writeTS();
 			$ts = microtime(true);
 		}
 
-		if ( $stopped ) {
+		if ( $this->stopped ) {
 			$email->status = 'stopped';
 		} else {
 			if ( $email->status !== 'stopped' ) {
@@ -218,7 +186,7 @@ class newsmanMailer extends newsmanWorker {
 			}
 		}
 
-		$email->workerPid = 0;
+		$email->workerPid = '';
 		$email->save();
 	}	
 

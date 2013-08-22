@@ -275,6 +275,7 @@
 
 	//require_once(ABSPATH . 'wp-admin/admin-footer.php');
 	do_action('admin_footer', '');
+	do_action('admin_print_scripts');
 	do_action('admin_print_footer_scripts');
 	do_action("admin_footer-" . $GLOBALS['hook_suffix']);
 	

@@ -4,11 +4,47 @@ require_once(__DIR__.DIRECTORY_SEPARATOR."class.utils.php");
 require_once(__DIR__.DIRECTORY_SEPARATOR."class.options.php");
 require_once(__DIR__.DIRECTORY_SEPARATOR."class.ajax-fork.php");
 
-// require_once(__DIR__.DIRECTORY_SEPARATOR."lib/php-growl/class.growl.php");
+//require_once(__DIR__.DIRECTORY_SEPARATOR."lib/php-growl/class.growl.php");
 
 // http://cubicspot.blogspot.com/2010/10/forget-flock-and-system-v-semaphores.html
 
-class newsmanWorker {
+class newsmanWorkerBase {
+
+	var $_db;
+	var $_table;
+
+	function __construct() {
+		global $wpdb;
+		$this->_db = $wpdb;
+		$this->_table = $wpdb->prefix.'newsman_mqueue';
+
+		$this->createTable();		
+	}
+
+	private function createTable() {
+		if ( !$this->tableExists() ) {
+			$sql = "CREATE TABLE $this->_table (
+					`id` int(10) unsigned NOT NULL auto_increment,
+					`processed` tinyint(1) unsigned NOT NULL DEFAULT 0,
+					`workerId` varchar(255) NOT NULL DEFAULT '',
+					`method` varchar(255) NOT NULL DEFAULT '',
+					`arguments` varchar(255) NOT NULL DEFAULT '',
+					`result` text NOT NULL DEFAULT '',
+					PRIMARY KEY (`id`),
+							KEY (`workerId`)
+					) CHARSET=utf8";
+
+			$result = $this->_db->query($sql);			
+		}
+	}
+
+	private function tableExists() {
+		$sql = $this->_db->prepare("show tables like '%s';", $this->_table);
+		return $this->_db->get_var($sql) == $this->_table;
+	}	
+}
+
+class newsmanWorker extends newsmanWorkerBase {
 
 	var $secret = '';
 	var $u = null;
@@ -17,7 +53,17 @@ class newsmanWorker {
 	var $lockfile = null;
 	var $ts = null;
 
-	public function __construct() {
+	var $pm_iv = null;
+
+	var $workerId;
+
+	var $db;
+	var $mtable;
+
+	public function __construct($workerId) {
+		parent::__construct();
+
+		$this->workerId = $workerId;
 
 		if ( class_exists('Growl') ) {
 			$this->growl_connection = array('address' => '127.0.0.1', 'password' => 'glocksoft');
@@ -37,8 +83,16 @@ class newsmanWorker {
 
 		$this->tryRemoveAjaxFork();	
 
-		$this->pid = getmypid();
 		$this->u = newsmanUtils::getInstance();
+	}
+
+	public function stop() {
+		$this->stopped = true;
+		return true;
+	}
+
+	public function isRunning() {
+		return !$this->stopped;
 	}
 
 	private function tryRemoveAjaxFork() {
@@ -66,37 +120,59 @@ class newsmanWorker {
 
 	}
 
-	public function isStopped() {
-		return $this->isProcessStopped($this->pid);
-	}
-
 	public function run($worker_lock = null) {
 
-		if ( !$this->initProcess() ) {
-			return; // the lock is already obtained
-		}
+		$this->processMessages();
 
 		if ( $worker_lock === null ) {
 			$this->worker();
-			$this->clearStopFlag($this->pid);
 		} else {
-			$this->isProcessRunning($this->pid);
-
 			if ( $this->lock($worker_lock) ) { // returns true if lock was successfully enabled
-
-				$this->isProcessRunning($this->pid);
-
 				$this->worker();
 				$this->unlock();
-				$this->clearStopFlag($this->pid);
-			} else {
-				$this->growl('WORKER is already processing '.$worker_lock);
 			}
 		}
 
-		$this->endProcess();
+		$this->processMessages();
 	}
 
+	/*******************************************************
+	 * Message Loop Functions	 
+	 *******************************************************/
+
+
+	public function processMessages() {
+
+		if ( $this->pm_iv !== null ) {
+			$now = microtime(true);	
+
+			if ( $now - $this->pm_iv < 0.2 ) { // return if < then 200 ms elased since last call
+				return;
+			}
+		}
+
+		$sql = "SELECT * FROM $this->_table WHERE `workerId` = %s AND `processed` = 0";
+		$sql = $this->_db->prepare($sql, $this->workerId);
+		$res = $this->_db->get_results($sql);
+		if ( is_array($res) ) {
+			foreach ($res as $c) {
+				if ( method_exists($this, $c->method) ) {
+					$args = @unserialize($c->arguments);
+					$args = is_array($args) ? $args : array();
+
+					$res = call_user_func_array(array($this, $c->method), $args);
+					$res = serialize($res);
+
+					$sql = "UPDATE $this->_table SET `processed` = 1, `result` = %s WHERE `id` = %d";
+					$sql = $this->_db->prepare($sql, $res, $c->id);
+
+					$this->_db->query($sql);
+				}
+			}
+		}
+
+		$this->pm_iv = microtime(true);
+	}
 
 	/*******************************************************
 	 * STATIC functions
@@ -110,6 +186,7 @@ class newsmanWorker {
 		
 		$params['newsman_worker_fork'] = get_called_class();
 		$params['ts'] = sprintf( '%.22F', microtime( true ) );
+		$params['workerId'] = microtime();
 
 		if ( defined('ALTERNATE_WP_CRON') && ALTERNATE_WP_CRON ) {
 			// passing url to the ajax forker
@@ -126,55 +203,18 @@ class newsmanWorker {
 			wp_remote_post(
 				$workerURL,
 				array(
-					//'timeout' => 0.01,
+					'timeout' => 0.01,
 					'blocking' => false,
 					'body' => $params
 				)
-			);			
+			);
 		}
-
+		return $params['workerId'];
 	}
 
 	static function getTmpDir() {
 		$u = newsmanUtils::getInstance();
 		return $u->addTrSlash(sys_get_temp_dir(), 'path');
-	}
-
-	static function stop($pid) {
-		$u = newsmanUtils::getInstance();
-		return $u->lock('newsman-worker-stop-'.$pid);
-
-	}
-
-	static function clearStopFlag($pid) {		
-		$u = newsmanUtils::getInstance();
-		return $u->releaseLock('newsman-worker-stop-'.$pid);
-	}
-
-	static function isProcessStopped($pid) {
-		$u = newsmanUtils::getInstance();
-		
-		$r = $u->isLocked('newsman-worker-stop-'.$pid);
-		return $r;
-	}
-
-	static function isProcessRunning($pid) {		
-		$u = newsmanUtils::getInstance();
-		return $u->isLocked('newsman-worker-running-'.$pid);
-	}
-
-	public function initProcess() {
-		$u = newsmanUtils::getInstance();
-
-		$this->growl('[!!!] init process');
-		return $u->lock('newsman-worker-running-'.$this->pid, true);
-	}
-
-	public function endProcess() {
-		$u = newsmanUtils::getInstance();
-
-		$this->growl('[!!!] end process');
-		$u->releaseLock('newsman-worker-running-'.$this->pid);
 	}
 
 	// ----------------------
@@ -193,17 +233,68 @@ class newsmanWorker {
 			return $this->u->releaseLock($this->lockfile);
 		}
 	}
+}
 
-	/**
-	 * Write timestamp to the lock file each 10 seconds
-	 */
-	public function writeTS() {		
-		$ts = gettimeofday(true);
-		$timeout = 10;
-		if ( $this->lockfile && ($this->ts === null || $ts > $this->ts+$timeout )) {
-			file_put_contents($this->u->getLockFilePath($this->lockfile), $ts);
-			$this->ts = $ts;
+class newsmanWorkerAvatar extends newsmanWorkerBase {
+
+	var $workerId;
+
+	function __construct($workerId) {
+		parent::__construct();
+
+		$this->workerId = $workerId;		
+	}
+
+	function __call($name, $arguments) {
+		$opId = $this->_writeCall($name, $arguments);
+		$res = $this->_waitForResult($opId);
+		return $res;
+	}
+
+	function _writeCall($method, $arguments){
+		$sql = "INSERT INTO $this->_table (`workerId`,`method`,`arguments`) VALUES(%s, %s, %s);";
+		$sql = $this->_db->prepare($sql, $this->workerId, $method, serialize($arguments));
+		$res = $this->_db->query($sql);
+		if ( $res === 1 ) {
+			return $this->_db->insert_id;
+		} else {
+			return NULL;
 		}
 	}
 
+	function _waitForResult($opId) {
+		$count = 50;
+		$res = NULL;
+		while ( $res === NULL ) {
+			$res = $this->_getOpResult($opId);
+			usleep(100000);
+			$count -= 1;
+			if ( $count === 0 ) { break; }
+		}
+		if ( $res !== NULL ) {
+			$this->_clearOpResult($opId);
+		}
+		return $res;
+	}
+
+	function _getOpResult($opId) {
+		$sql = "SELECT `result` from $this->_table WHERE `id` = %d AND `processed` = 1";
+		$sql = $this->_db->prepare($sql, $opId);
+
+		$v = $this->_db->get_var($sql);
+		if ( $v === NULL ) { return NULL; }
+
+		$data = @unserialize($v);
+		if ($v === 'b:0;' || $data !== false) {
+			return $data;
+		} else {
+			return NULL;
+		}
+	}
+
+	function _clearOpResult($opId) {
+		$sql = "DELETE FROM $this->_table WHERE id = %s";
+		$sql = $this->_db->prepare($sql, $opId);
+		$this->_db->query($sql);
+	}
 }

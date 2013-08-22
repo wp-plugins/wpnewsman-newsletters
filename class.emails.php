@@ -30,7 +30,7 @@ class newsmanEmail extends newsmanStorable {
 		'sentTo' => 'int', // Current number of recipient the email is sent to
 		'sent' => 'int', // total number of emails emails
 		'recipients' => 'int', // Number of recipients which are eligible to receive this email. Sets at the beginig of sending
-		'workerPid' => 'int',
+		'workerPid' => 'string',
 		'analytics' => 'string', // analytics type  '', or ga or piwik
 		'campName' => 'string' // analytics  campaign name
 	);
@@ -167,14 +167,13 @@ class newsmanEmail extends newsmanStorable {
 	}	
 
 	public function isWorkerAlive() {
-		$u = newsmanUtils::getInstance();
-		return !$u->isLockStale('newsman-worker-'.$this->id);
+		$w = new newsmanWorkerAvatar($this->workerPid);
+		return $w->isRunning();
 	}
 
 	public function releaseLocks() {
 		$u = newsmanUtils::getInstance();
 		$u->releaseLock('newsman-worker-'.$this->id);
-		$u->releaseLock('newsman-worker-running-'.$this->workerPid);
 	}
 
 }
