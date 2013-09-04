@@ -19,13 +19,12 @@ jQuery(function($){
 
 	ko.bindingHandlers.placeholder = {
 	    init: function(element, valueAccessor, allBindingsAccessor, viewModel) {
-	      //init logic
+			// init logic
 	      	$(element).placeholder();
         	var underlyingObservable = valueAccessor();
-        	//ko.applyBindingsToNode(element, { attr: { placeholder: underlyingObservable } } );
 	    },
 	    update: function(element, valueAccessor, allBindingsAccessor, viewModel) {
-	       //update logic
+	       // update logic
 	       var val = ko.utils.unwrapObservable(valueAccessor());	       
 	       $(element).attr('placeholder', val);
 	       $(element).val('');
@@ -60,6 +59,12 @@ jQuery(function($){
 
 			var elType = el.type();
 
+			el.shortcodeAvailable = ko.computed(function(){
+				var disabledTypes = ['submit', 'html', 'title'];
+
+				return this.active() && ( disabledTypes.indexOf(el.type()) === -1 );
+			}, el);
+
 			el.removeFormItem = function(formEl) {
 				var idx = viewModel.elements.indexOf(formEl);
 				if ( idx > -1 ) {
@@ -69,11 +74,14 @@ jQuery(function($){
 
 			if ( elType === 'radio' || elType === 'select' ) {
 
-				$(el.children()).each(function(i){
+				$(el.children()).each(function(i){					
 					var c = el.children()[i];
+
+					if ( !c.label ) { c.label = ko.observable(''); }
+
 					c.edit = ko.observable(false);
 					c.value = ko.computed(function(){
-						return fieldName(this.label());
+						return this.label();
 					}, c);
 				});
 
@@ -91,7 +99,6 @@ jQuery(function($){
 							var list = defaultOptionsLists[listName];
 							for ( var value in list ) {
 								that._addOption(convEl.html(list[value]).text(), value);
-								//that._addOption(list[value], value);
 							}
 						}						
 					}, 10);
@@ -111,12 +118,13 @@ jQuery(function($){
 					};
 
 					value = ko.observable(value) || ko.computed(function(){
-						return fieldName(this.label());
+						return this.label();
 					}, c);
 
 					c.value = value;
 
 					el.children.push(c);
+					return c;
 				};
 
 				el.removeOption = function(child) {

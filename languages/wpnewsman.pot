@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the G-Lock WPNewsman Lite package.
 msgid ""
 msgstr ""
-"Project-Id-Version: G-Lock WPNewsman Lite 1.6.0-beta-7\n"
+"Project-Id-Version: G-Lock WPNewsman Lite 1.6.1-alpha-3\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/wpnewsman\n"
-"POT-Creation-Date: 2013-08-20 21:25:46+00:00\n"
+"POT-Creation-Date: 2013-08-30 21:25:10+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -215,19 +215,19 @@ msgid "Subscribe"
 msgstr ""
 
 #: class.form.php:123 class.form.php:156 class.form.php:209 class.form.php:231
-#: class.form.php:251 class.form.php:268 class.form.php:301 class.form.php:329
+#: class.form.php:251 class.form.php:268 class.form.php:301 class.form.php:332
 #: core.php:1046 views/list.php:69 views/list.php:91 views/list.php:108
-#: views/list.php:194 views/list.php:228
+#: views/list.php:194 views/list.php:231
 msgid "Required"
 msgstr ""
 
-#: class.form.php:376
+#: class.form.php:379
 msgid ""
 "Something went wrong. Please contact the site administrator and describe the "
 "problem."
 msgstr ""
 
-#: class.form.php:376 core.php:1027 core.php:1055
+#: class.form.php:379 core.php:1027 core.php:1055
 msgid "Error"
 msgstr ""
 
@@ -307,7 +307,7 @@ msgstr ""
 msgid "Re-subscription confirmation"
 msgstr ""
 
-#: core.php:25 core.php:1841
+#: core.php:25 core.php:1838
 msgid "Every minute"
 msgstr ""
 
@@ -336,7 +336,7 @@ msgid "Last Name"
 msgstr ""
 
 #. translators: Default subscription form
-#: core.php:232 views/list.php:277 views/subscribers.php:73
+#: core.php:232 views/list.php:279 views/subscribers.php:73
 msgid "Email"
 msgstr ""
 
@@ -347,7 +347,7 @@ msgid ""
 "each message."
 msgstr ""
 
-#: core.php:255 core.php:1576
+#: core.php:255 core.php:1569
 msgid "Upgrade to Pro"
 msgstr ""
 
@@ -621,7 +621,7 @@ msgstr ""
 msgid "Loading..."
 msgstr ""
 
-#: core.php:1090 widget.php:51
+#: core.php:1090 newsman-widget.php:51
 msgid "List:"
 msgstr ""
 
@@ -653,7 +653,7 @@ msgstr ""
 
 #. translators: lists and forms table header
 #: core.php:1096 views/forms.php:23 views/list.php:67 views/list.php:86
-#: views/list.php:106 views/list.php:141 views/list.php:192 views/list.php:226
+#: views/list.php:106 views/list.php:141 views/list.php:192 views/list.php:229
 #: views/templates.php:58 views/templates.php:74 views/templates.php:90
 msgid "Name"
 msgstr ""
@@ -713,7 +713,7 @@ msgstr ""
 msgid "# of # authors selected"
 msgstr ""
 
-#: core.php:1111 views/list.php:338
+#: core.php:1111 views/list.php:346
 msgid "Save"
 msgstr ""
 
@@ -760,158 +760,158 @@ msgstr ""
 msgid "Untitled templates"
 msgstr ""
 
-#: core.php:1502
+#: core.php:1495
 msgid "Alternative Plain Text Body"
 msgstr ""
 
-#: core.php:1520
+#: core.php:1513
 msgid "WPNewsman Lite"
 msgstr ""
 
-#: core.php:1533 core.php:1534 views/addedit_email.php:5 views/mailbox.php:10
+#: core.php:1526 core.php:1527 views/addedit_email.php:5 views/mailbox.php:10
 msgid "Mailbox"
 msgstr ""
 
-#: core.php:1551 core.php:1552 views/forms.php:5
+#: core.php:1544 core.php:1545 views/forms.php:5
 msgid "Lists and Forms"
 msgstr ""
 
-#: core.php:1560 core.php:1561 views/templates.php:5
+#: core.php:1553 core.php:1554 views/templates.php:5
 msgid "Email Templates"
 msgstr ""
 
-#: core.php:1569 core.php:1570 views/options.php:6
+#: core.php:1562 core.php:1563 views/options.php:6
 msgid "Settings"
 msgstr ""
 
-#: core.php:1603
+#: core.php:1596
 msgid "Excerpt for external forms"
 msgstr ""
 
-#: core.php:1781
+#: core.php:1778
 msgctxt "Action Page"
 msgid "Action Pages"
 msgstr ""
 
-#: core.php:1782
+#: core.php:1779
 msgctxt "Action Page"
 msgid "Action Page"
 msgstr ""
 
-#: core.php:1783
+#: core.php:1780
 msgctxt "Action Page"
 msgid "Add New"
 msgstr ""
 
-#: core.php:1784
+#: core.php:1781
 msgctxt "Action Page"
 msgid "Add New Action Page"
 msgstr ""
 
-#: core.php:1785
+#: core.php:1782
 msgctxt "Action Page"
 msgid "Edit Action Page"
 msgstr ""
 
-#: core.php:1786
+#: core.php:1783
 msgctxt "Action Page"
 msgid "New Action Page"
 msgstr ""
 
-#: core.php:1787
+#: core.php:1784
 msgctxt "Action Page"
 msgid "View Action Page"
 msgstr ""
 
-#: core.php:1788
+#: core.php:1785
 msgctxt "Action Page"
 msgid "Search Action Pages"
 msgstr ""
 
-#: core.php:1789
+#: core.php:1786
 msgid "Nothing found"
 msgstr ""
 
-#: core.php:1790
+#: core.php:1787
 msgid "Nothing found in the Trash"
 msgstr ""
 
-#: core.php:1982 core.php:2040
+#: core.php:1979 core.php:2037
 msgid "Error: Email template not found"
 msgstr ""
 
-#: core.php:1999
+#: core.php:1996
 msgid "Error: Email not found"
 msgstr ""
 
-#: core.php:2093
+#: core.php:2090
 msgid "G-Lock WPNewsman"
 msgstr ""
 
-#: core.php:2131
+#: core.php:2128
 msgid "G-Lock WPNewsman subscription summary"
 msgstr ""
 
-#: core.php:2132
+#: core.php:2129
 msgid "Manage Forms and Lists"
 msgstr ""
 
-#: core.php:2149 views/list.php:263
+#: core.php:2146 views/list.php:265
 msgid "List name"
 msgstr ""
 
-#: core.php:2150
+#: core.php:2147
 msgid "Today confirmed"
 msgstr ""
 
-#: core.php:2151
+#: core.php:2148
 msgid "Yesterday confirmed"
 msgstr ""
 
-#: core.php:2152
+#: core.php:2149
 msgid "Total confirmed"
 msgstr ""
 
-#: core.php:2153
+#: core.php:2150
 msgid "Total unconfirmed"
 msgstr ""
 
-#: core.php:2154
+#: core.php:2151
 msgid "Total unsubscribed"
 msgstr ""
 
-#: core.php:2208
+#: core.php:2205
 msgid "Post Template"
 msgstr ""
 
-#: core.php:2214
+#: core.php:2211
 msgid "Click here"
 msgstr ""
 
-#: core.php:2217
+#: core.php:2214
 msgid ""
 "You can use this shortcode macro to add the unsubscribe link to your message:"
 msgstr ""
 
-#: core.php:2221
+#: core.php:2218
 msgid ""
 "and these shortcode macros to add links to your social profiles (enter the "
 "URLs of your social profiles in the plugin Settings):"
 msgstr ""
 
-#: core.php:2229
+#: core.php:2226
 msgid "%s for more shortcode macros supported by WPNewsman."
 msgstr ""
 
-#: core.php:2414
+#: core.php:2427
 msgid "List: "
 msgstr ""
 
-#: core.php:2426
+#: core.php:2439
 msgid "Page Template"
 msgstr ""
 
-#: core.php:2428
+#: core.php:2441
 msgid "Default Template"
 msgstr ""
 
@@ -997,6 +997,14 @@ msgstr ""
 
 #: frmGetPosts.php:194 frmGetPosts.php:254
 msgid "Clear Selection"
+msgstr ""
+
+#: newsman-widget.php:8
+msgid "WPNewsman Subscription form for your newsletters"
+msgstr ""
+
+#: newsman-widget.php:10
+msgid "WPNewsman Subscription Form"
 msgstr ""
 
 #: views/_an_fs_method.php:3 views/_an_locale_changed.php:4
@@ -1208,17 +1216,17 @@ msgid ""
 "operation cannot be undone!"
 msgstr ""
 
-#: views/list.php:9 views/list.php:301
+#: views/list.php:9 views/list.php:303
 msgid "Form options"
 msgstr ""
 
-#: views/list.php:10 views/list.php:302
+#: views/list.php:10 views/list.php:304
 msgid "Use inline labels"
 msgstr ""
 
 #: views/list.php:24 views/list.php:42 views/list.php:66 views/list.php:84
 #: views/list.php:105 views/list.php:123 views/list.php:140 views/list.php:191
-#: views/list.php:225
+#: views/list.php:228
 msgid "Field options"
 msgstr ""
 
@@ -1322,11 +1330,11 @@ msgstr ""
 msgid "Radio options"
 msgstr ""
 
-#: views/list.php:198 views/list.php:232
+#: views/list.php:198 views/list.php:235
 msgid "Add"
 msgstr ""
 
-#: views/list.php:200 views/list.php:234
+#: views/list.php:200 views/list.php:237
 msgid "New option"
 msgstr ""
 
@@ -1334,113 +1342,117 @@ msgstr ""
 msgid "Genders"
 msgstr ""
 
-#: views/list.php:207 views/list.php:242
+#: views/list.php:207 views/list.php:245
 msgid "Double click to edit"
 msgstr ""
 
-#: views/list.php:230
+#: views/list.php:233
 msgid "Select options"
 msgstr ""
 
-#: views/list.php:236
+#: views/list.php:239
 msgid "Countries"
 msgstr ""
 
-#: views/list.php:237
+#: views/list.php:240
 msgid "States"
 msgstr ""
 
-#: views/list.php:255
+#: views/list.php:257
 msgid "Edit subscribers list"
 msgstr ""
 
-#: views/list.php:264
+#: views/list.php:266
 msgid "List Name"
 msgstr ""
 
-#: views/list.php:271
+#: views/list.php:273
 msgid "Form Builder"
 msgstr ""
 
-#: views/list.php:273
+#: views/list.php:275
 msgid "Add Field"
 msgstr ""
 
-#: views/list.php:275
+#: views/list.php:277
 msgid "Text"
 msgstr ""
 
-#: views/list.php:276
+#: views/list.php:278
 msgid "Textarea"
 msgstr ""
 
-#: views/list.php:278
+#: views/list.php:280
 msgid "Checkbox"
 msgstr ""
 
-#: views/list.php:279
+#: views/list.php:281
 msgid "Radio buttons"
 msgstr ""
 
-#: views/list.php:280
+#: views/list.php:282
 msgid "Dropdown menu"
 msgstr ""
 
-#: views/list.php:281
+#: views/list.php:283
 msgid "Form title"
 msgstr ""
 
-#: views/list.php:282
+#: views/list.php:284
 msgid "HTML"
 msgstr ""
 
-#: views/list.php:285
+#: views/list.php:287
 msgid "Load Default Form"
 msgstr ""
 
-#: views/list.php:314
-msgid "This form on external sites? Sure!"
-msgstr ""
-
-#: views/list.php:315
-msgid "Copy the code below and paste it into any other site that you have."
-msgstr ""
-
-#: views/list.php:317
-msgid "Custom CSS for external form."
-msgstr ""
-
-#: views/list.php:318
-msgid "This CSS will only affect the external form"
+#: views/list.php:311
+msgid "Field shortcode"
 msgstr ""
 
 #: views/list.php:322
-msgid "Here are the unsubscribe links"
+msgid "This form on external sites? Sure!"
 msgstr ""
 
 #: views/list.php:323
+msgid "Copy the code below and paste it into any other site that you have."
+msgstr ""
+
+#: views/list.php:325
+msgid "Custom CSS for external form."
+msgstr ""
+
+#: views/list.php:326
+msgid "This CSS will only affect the external form"
+msgstr ""
+
+#: views/list.php:330
+msgid "Here are the unsubscribe links"
+msgstr ""
+
+#: views/list.php:331
 msgid "if your are using 3rd party software to send emails:"
 msgstr ""
 
-#: views/list.php:324
+#: views/list.php:332
 msgid "Link to instant unsubscribe:"
 msgstr ""
 
-#: views/list.php:327
+#: views/list.php:335
 msgid ""
 "You must replace the %s with the value of the ucode field of the exported "
 "subscribers list."
 msgstr ""
 
-#: views/list.php:329
+#: views/list.php:337
 msgid "One more thing,"
 msgstr ""
 
-#: views/list.php:330
+#: views/list.php:338
 msgid "you can put this form inside any post content with this short-code:"
 msgstr ""
 
-#: views/list.php:332
+#: views/list.php:340
 msgid "and you can make it horizontal with this shortcode"
 msgstr ""
 
@@ -1863,6 +1875,10 @@ msgstr ""
 msgid "Manage Subscribers"
 msgstr ""
 
+#: views/subscribers.php:20
+msgid "Form & List options"
+msgstr ""
+
 #: views/subscribers.php:30
 msgid "All Subscribers"
 msgstr ""
@@ -2048,14 +2064,6 @@ msgstr ""
 msgid "WPNewsman Subscription Multilanguage Form"
 msgstr ""
 
-#: widget.php:8
-msgid "WPNewsman Subscription form for your newsletters"
-msgstr ""
-
-#: widget.php:10
-msgid "WPNewsman Subscription Form"
-msgstr ""
-
 #: workers/class.mailer.php:157
 msgid ""
 "Too many consecutive errors. Please check your mail delivery settings and "
@@ -2120,7 +2128,10 @@ msgid "Safe mode is turned off"
 msgstr ""
 
 #: wpnewsman.php:182
-msgid "Safe mode is deprecated in PHP and not supported by the plugin"
+msgid ""
+"Safe mode is deprecated in PHP and not supported by the plugin.(Set "
+"safe_mode = Off in php.ini. See <a href=\"http://www.php.net/manual/en/"
+"features.safe-mode.php\">Safe Mode on php.net</a>)"
 msgstr ""
 
 #. Plugin Name of the plugin/theme

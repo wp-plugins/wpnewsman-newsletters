@@ -30,6 +30,7 @@
 	<title></title>
 
 	<script type="text/javascript">
+		addLoadEvent = function(func){if(typeof jQuery!="undefined")jQuery(document).ready(func);else if(typeof wpOnload!='function'){wpOnload=func;}else{var oldonload=wpOnload;wpOnload=function(){oldonload();func();}}};
 		window.ajaxurl = "<?php echo admin_url( 'admin-ajax.php', 'relative' ); ?>";
 	</script>
 	<style type="text/css">

@@ -117,7 +117,7 @@ class newsmanForm {
 
 		$elId = $this->getElId();
 
-		return	"<div class=\"newsman-form-item ".$this->hpCSSClassName." newsman-form-item-text $elId\">".
+		return	"<div style=\"display: none;\" class=\"newsman-form-item ".$this->hpCSSClassName." newsman-form-item-text $elId\">".
 					$lbl.
 					'<input type="text" name="newsman-special-c" value="'.$this->specChr($value).'" '.$ph.'>'.
 					'<span class="newsman-required-msg" style="display:none;">'.__('Required', NEWSMAN).'</span>'.
@@ -149,7 +149,7 @@ class newsmanForm {
 
 		$elId = $this->getElId();
 
-		return	"<div class=\"newsman-form-item ".$this->hpCSSClassName." newsman-form-item-text $elId\">".
+		return	"<div style=\"display: none;\" class=\"newsman-form-item ".$this->hpCSSClassName." newsman-form-item-text $elId\">".
 					$lbl.
 					'<input type="text" name="'.$this->specChr($fn).'" value="" '.$ph.'>'.
 					'<input type="hidden" name="newsman-special-h" value="'.$this->specChr($fn).'">'.
@@ -313,10 +313,13 @@ class newsmanForm {
 		$options = '';
 		$children = isset($item['value']) ? $item['value'] : $item['children'];
 
-		foreach ($children as $opt) {
+		if ( $this->useInlineLabels ) {
+			$options .= '<option value="">'.$item['label'].'</option>';
+		}
 
+		foreach ($children as $opt) {
 			$val = isset($opt['value']) ? $opt['value'] : $this->valueFromLabel($opt['label']);
-			$chkd = (isset($opt['checked']) && $opt['checked']) ? 'checked="checked"' : '';
+			//$chkd = (isset($opt['checked']) && $opt['checked']) ? 'checked="checked"' : '';
 			$options .= '<option value="'.$this->specChr($opt['value']).'">'.$opt['label'].'</option>';
 		}
 
@@ -427,8 +430,8 @@ class newsmanForm {
 		$formHtml .= '<input type="hidden" name="uid" value="'.$this->specChr($this->uid).'">';
 		$formHtml .= '<input class="newsman-form-url" type="hidden" name="newsman-form-url" value="'.$_SERVER['REQUEST_URI'].'">';
 
-		if ( isset($_GET['lang']) ) {
-			$formHtml .= '<input type="hidden" name="_form_lang" value="'.$_GET['lang'].'">';
+		if ( defined('ICL_LANGUAGE_CODE') ) {
+			$formHtml .= '<input type="hidden" name="_form_lang" value="'.ICL_LANGUAGE_CODE.'">';
 		}
 
 		if ( $use_excerpts ) {

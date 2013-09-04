@@ -17,7 +17,7 @@
 	<?php include("_header.php"); ?>
 	<div style="border-bottom: 1px solid #DADADA; overflow: hidden;">
 
-		<h2><?php _e('Manage Subscribers', NEWSMAN); ?><?php do_action('newsman_put_list_select', true); ?> <a href="<?php echo NEWSMAN_BLOG_ADMIN_URL; ?>admin.php?page=newsman-forms&amp;sub=subscribers&amp;action=editlist" id="btn-edit-form" class="btn">Form &amp; List options</a> <form id="subs-search-form" class="form-search" style="display: inline-block; float: right;">
+		<h2><?php _e('Manage Subscribers', NEWSMAN); ?><?php do_action('newsman_put_list_select', true); ?> <a href="<?php echo NEWSMAN_BLOG_ADMIN_URL; ?>admin.php?page=newsman-forms&amp;sub=subscribers&amp;action=editlist" id="btn-edit-form" class="btn"><?php echo htmlentities(__('Form & List options', NEWSMAN)); ?></a> <form id="subs-search-form" class="form-search" style="display: inline-block; float: right;">
 			<input  id="newsman-subs-search" type="text" class="input-medium search-query">
 			<button id="newsman-subs-search-clear" style="display:none;" class="btn"><?php _e('Clear', NEWSMAN); ?></button>
 			<button id="newsman-subs-search-btn" type="submit" class="btn"><?php _e('Search', NEWSMAN); ?></button>

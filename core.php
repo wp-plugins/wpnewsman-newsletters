@@ -915,8 +915,9 @@ class newsman {
 				if ( $NEWSMAN_PAGE ) {
 					do_action('newsman_get_ext_script');
 
-					wp_enqueue_script('jquery-ui-core ');
-					wp_enqueue_script('jquery-ui-datepicker');
+					wp_enqueue_script('jquery-ui-core', array('jquery'));
+					wp_enqueue_script('jquery-ui-datepicker', array('jquery'));					
+					//wp_enqueue_script('jquery-ui-draggable', array('jquery'));
 
 					wp_enqueue_style('jquery-tipsy-css', NEWSMAN_PLUGIN_URL.'/css/tipsy.css');
 					wp_enqueue_script('jquery-tipsy', NEWSMAN_PLUGIN_URL.'/js/jquery.tipsy.js', array('jquery'));
@@ -931,6 +932,10 @@ class newsman {
 					
 					wp_register_script('director', NEWSMAN_PLUGIN_URL.'/js/director.js');
 					wp_register_script('hashroute', NEWSMAN_PLUGIN_URL.'/js/hashroute.js');
+
+					if ( isset($_REQUEST['action']) && $_REQUEST['action'] === 'newsman-frame-get-posts' ) {
+						wp_enqueue_script('jquery-cookie', NEWSMAN_PLUGIN_URL.'/js/jquery.cookie.js', array('jquery'));
+					}
 				}
 
 				if ( $page == 'newsman-forms' ) {
@@ -1692,7 +1697,20 @@ class newsman {
 		
 		$params = ( func_num_args() == 2 ) ? func_get_arg(1) : array();
 
-		$link = get_permalink( $this->options->get('activePages.'.$pageName) );
+ 		$post_id = $this->options->get('activePages.'.$pageName);
+
+ 		if ( function_exists('icl_object_id') ) {
+
+ 			$lang = 'en';
+
+			if ( isset($_REQUEST['_form_lang']) ) {
+				$lang = $_REQUEST['_form_lang'];
+			}
+
+ 			$post_id = icl_object_id( $post_id , 'newsman_ap', true, $lang );
+ 		}    	
+
+		$link = get_permalink( $post_id );
 
 		$del = ( strpos($link, '?') === false ) ? '?' : '&';
 
@@ -1703,15 +1721,6 @@ class newsman {
 			}			
 		}
 
-		$lang = 'en';
-
-		if ( isset($_REQUEST['_form_lang']) ) {
-			$lang = $_REQUEST['_form_lang'];
-		}
-
-		if ( $lang ) { 
-			$link .= $del.'lang='.$lang;
-		}
 
 		return $link;
 	}
@@ -2240,22 +2249,38 @@ class newsman {
 				$('#btn-load-translation').click(function(){
 					var btn = $(this);
 					btn.prop('disabled', true).text('Loadin...');
+
+					var originalPageId;
+
+					var origPageSel = $('#icl_translation_of')[0];
+					if ( origPageSel ) {
+						originalPageId = $(origPageSel).val();
+					} else {
+						originalPageId = $('#post_ID').val();
+					}
+
 					$.ajax(ajaxurl, {
 						type: 'post',
 						data: {
 							action: 'newsmanAjGetActivePageTranslation',
-							pageId: $('#icl_translation_of').val(),
+							pageId: originalPageId,
 							loc: $('#wp-load-lang').val()
 						}
 					}).done(function(data){
 						if ( data.state ) {
 							$('#title').val( data.title );
-							var e = tinyMCE.editors[0];
-							if ( e ) {
-								setTimeout(function() {
-									e.setContent(data.content);	
-								}, 10);								
+
+							if ( tinyMCE && tinyMCE.editors && tinyMCE.editors[0] ) {
+								var e = tinyMCE.editors[0];
+								if ( e ) {
+									setTimeout(function() {
+										e.setContent(data.content);
+									}, 10);
+								}
+							} else if ( CKEDITOR && CKEDITOR.instances && CKEDITOR.instances.content ) {
+								CKEDITOR.instances.content.setData(data.content);
 							}
+
 						}
 					}).always(function(){
 						btn.prop('disabled', false).text('Load');

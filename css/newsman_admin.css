@@ -1220,15 +1220,19 @@ input.newsman-field-options-radio-opt-input {
 }
 
 .radio-option span {
-	display: inline;
+	display: block;
 }
 .radio-option .newsman-field-options-radio-opt-input {
 	display: none;
 }
 
-.radio-option.edit span {
-	display: none;
+.radio-option:hover {
+	cursor: ns-resize;
 }
+
+/*.radio-option.edit span {
+	display: none;
+}*/
 .radio-option.edit .newsman-field-options-radio-opt-input {
 	display: inline;
 }
@@ -1387,10 +1391,10 @@ input.newsman-field-options-radio-opt-input {
 	color: #C0423D !important;
 }
 
-.cke_dialog {
+/*.cke_dialog {
 	top: 32px !important;
 }
-
+*/
 .cke_dialog_page_contents {
 	height: 100% !important;
 }

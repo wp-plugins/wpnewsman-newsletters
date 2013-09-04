@@ -549,6 +549,12 @@
 				width, height,
 				function(){
 					// Iframe loaded callback.	
+
+					// console.log('iframe loaded');
+
+					// var dialog = this.getDialog();			
+					// dialog.parts.dialog.$.style.top = '32px';
+
 				},
 				{
 					onOk: function() {

@@ -215,6 +215,9 @@
 	<li gstype="radio" class="newsman-form-item" data-bind="css: { selected: active, 'newsman-required': required }, click: $parent.elClick">
 		<label class="newsman-form-item-label" data-bind="text: label, visible: !$parent.useInlineLabels()"></label>
 		<select data-bind="foreach: children">
+			<!-- ko if: $index() === 0 && $root.useInlineLabels() -->
+			<option value="" data-bind="text: $parent.label()" selected="selected"></option>
+			<!-- /ko -->
 			<option data-bind="html: label, value: value"></option>
 		</select>
 		<button class="close" data-bind="click: removeFormItem">×</button>
@@ -238,13 +241,12 @@
 				</ul>
 			</div>			
 		</div>
-		<ul class="options unstyled" data-bind="foreach: children">
+		<ul class="options unstyled" data-bind="sortable: children">
 			<li class="radio-option" title="<?php _e('Double click to edit', NEWSMAN); ?>" data-bind="css: { edit: edit }, event: { dblclick: $root.toggleEdit}"><span data-bind="html:label"></span><input type="text" data-bind="value: label, valueUpdate:'afterkeydown', event: { blur: $root.toggleEdit }" class="newsman-field-options-radio-opt-input"><i class="icon-trash newsman-remove-option" data-bind="click: $parent.removeOption"></i></li>
 		</ul>		
 	</div>
 </script>
 <!-- /Select element templates -->
-
 
 <!--  /form builder templates -->
 
@@ -303,7 +305,13 @@
 							</div>
 							<div id="newsman-formbuilder-options" data-bind="template: { name: optionsTpl, foreach: elements }">
 								
-							</div>							
+							</div>
+							<div data-bind="template: { foreach: elements }">
+								<div class="newsman-field-shortcode" data-bind="visible: shortcodeAvailable()">
+									<strong><?php _e('Field shortcode', NEWSMAN); ?></strong><br>
+									<p>[newsman sub=&apos;<span data-bind="text: name()"></span>&apos;]</p>
+								</div>								
+							</div>
 						</div>
 					</div>
 				</div>	

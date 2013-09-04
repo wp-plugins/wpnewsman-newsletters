@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: G-Lock WPNewsman Plugin for WordPress\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/wpnewsman\n"
-"POT-Creation-Date: 2013-08-19 10:52:06+00:00\n"
-"PO-Revision-Date: 2013-08-19 11:49+0000\n"
+"POT-Creation-Date: 2013-08-30 21:25:10+00:00\n"
+"PO-Revision-Date: 2013-09-02 13:12+0000\n"
 "Last-Translator: Averell <martin.pscheidl@avecon.at>\n"
 "Language-Team: German (Germany) (http://www.transifex.com/projects/p/g-lock-wpnewsman/language/de_DE/)\n"
 "MIME-Version: 1.0\n"
@@ -218,15 +218,26 @@ msgid "Translation not found"
 msgstr "Übersetzung nicht gefunden"
 
 #. translators: Default subscription form
-#: class.form.php:58 core.php:234
+#: class.form.php:60 core.php:234
 msgid "Subscribe"
 msgstr "Abbonieren"
 
-#: class.form.php:100 class.form.php:122 class.form.php:142 class.form.php:159
-#: class.form.php:192 class.form.php:220 core.php:1046 views/list.php:69
-#: views/list.php:91 views/list.php:108 views/list.php:194 views/list.php:228
+#: class.form.php:123 class.form.php:156 class.form.php:209 class.form.php:231
+#: class.form.php:251 class.form.php:268 class.form.php:301 class.form.php:332
+#: core.php:1046 views/list.php:69 views/list.php:91 views/list.php:108
+#: views/list.php:194 views/list.php:231
 msgid "Required"
 msgstr "Erforderlich"
+
+#: class.form.php:379
+msgid ""
+"Something went wrong. Please contact the site administrator and describe the"
+" problem."
+msgstr "Es ist etwas falsch gelaufen. Bitte benachrichtigen Sie den Site Administrator und beschreiben Sie ihm das Problem."
+
+#: class.form.php:379 core.php:1027 core.php:1055
+msgid "Error"
+msgstr "Fehler"
 
 #: class.list.php:56
 msgid "Cannot find free unique list ID. Recursive operations limit exceeded."
@@ -304,7 +315,7 @@ msgstr "Abmelde Bestätigung"
 msgid "Re-subscription confirmation"
 msgstr "Wieder-Abonnement Bestätigung"
 
-#: core.php:25 core.php:1841
+#: core.php:25 core.php:1838
 msgid "Every minute"
 msgstr "Jede Minute"
 
@@ -333,7 +344,7 @@ msgid "Last Name"
 msgstr "Nachname"
 
 #. translators: Default subscription form
-#: core.php:232 views/list.php:277 views/subscribers.php:73
+#: core.php:232 views/list.php:279 views/subscribers.php:73
 msgid "Email"
 msgstr "E-Mail"
 
@@ -344,7 +355,7 @@ msgid ""
 "each message."
 msgstr "Sie können unseren Newsletter jederzeit stornieren. Eine diesbezügliche Anleitung ist in jeder Nachricht enthalten."
 
-#: core.php:255 core.php:1576
+#: core.php:255 core.php:1569
 msgid "Upgrade to Pro"
 msgstr "Upgrade auf die Pro-Version"
 
@@ -398,10 +409,6 @@ msgstr "Bitte überprüfen Sie Ihre E-Mail Adresse"
 #: core.php:1026
 msgid "Error: "
 msgstr "Fehler:"
-
-#: core.php:1027 core.php:1055
-msgid "Error"
-msgstr "Fehler"
 
 #: core.php:1028
 msgid "Done"
@@ -623,7 +630,7 @@ msgstr "Fehlermeldung"
 msgid "Loading..."
 msgstr "Laden..."
 
-#: core.php:1090 widget.php:51
+#: core.php:1090 newsman-widget.php:51
 msgid "List:"
 msgstr "Liste:"
 
@@ -655,7 +662,7 @@ msgstr "Achtung! Sie haben die Grenze von %d Abonnenten denen Sie in der Lite-Ve
 
 #. translators: lists and forms table header
 #: core.php:1096 views/forms.php:23 views/list.php:67 views/list.php:86
-#: views/list.php:106 views/list.php:141 views/list.php:192 views/list.php:226
+#: views/list.php:106 views/list.php:141 views/list.php:192 views/list.php:229
 #: views/templates.php:58 views/templates.php:74 views/templates.php:90
 msgid "Name"
 msgstr "Name"
@@ -715,7 +722,7 @@ msgstr " Autor(en) auswählen"
 msgid "# of # authors selected"
 msgstr "# von #  Autoren ausgewählt"
 
-#: core.php:1111 views/list.php:338
+#: core.php:1111 views/list.php:346
 msgid "Save"
 msgstr "Sichern"
 
@@ -763,159 +770,159 @@ msgstr "Kann den Abonnenten nicht abmelden. Abonnent mit dem Code %s wurde nicht
 msgid "Untitled templates"
 msgstr "Unbenannte Vorlage"
 
-#: core.php:1502
+#: core.php:1495
 msgid "Alternative Plain Text Body"
 msgstr "Alternative Nur-Text Nachricht "
 
-#: core.php:1520
+#: core.php:1513
 msgid "WPNewsman Lite"
 msgstr "WPNewsman Lite"
 
-#: core.php:1533 core.php:1534 views/addedit_email.php:5 views/mailbox.php:10
+#: core.php:1526 core.php:1527 views/addedit_email.php:5 views/mailbox.php:10
 msgid "Mailbox"
 msgstr "Mailbox"
 
-#: core.php:1551 core.php:1552 views/forms.php:5
+#: core.php:1544 core.php:1545 views/forms.php:5
 msgid "Lists and Forms"
 msgstr "Listen und Formulare"
 
-#: core.php:1560 core.php:1561 views/templates.php:5
+#: core.php:1553 core.php:1554 views/templates.php:5
 msgid "Email Templates"
 msgstr "Email Vorlagen"
 
-#: core.php:1569 core.php:1570 views/options.php:6
+#: core.php:1562 core.php:1563 views/options.php:6
 msgid "Settings"
 msgstr "Einstellungen"
 
-#: core.php:1603
+#: core.php:1596
 msgid "Excerpt for external forms"
 msgstr "Auszug für externe Formulare"
 
-#: core.php:1781
+#: core.php:1778
 msgctxt "Action Page"
 msgid "Action Pages"
 msgstr "Interaktions Seiten"
 
-#: core.php:1782
+#: core.php:1779
 msgctxt "Action Page"
 msgid "Action Page"
 msgstr "Interaktions Seite"
 
-#: core.php:1783
+#: core.php:1780
 msgctxt "Action Page"
 msgid "Add New"
 msgstr "Neu hinzufügen"
 
-#: core.php:1784
+#: core.php:1781
 msgctxt "Action Page"
 msgid "Add New Action Page"
 msgstr "Neue Interaktions Seite hinzufügen"
 
-#: core.php:1785
+#: core.php:1782
 msgctxt "Action Page"
 msgid "Edit Action Page"
 msgstr "Interaktions Seite bearbeiten"
 
-#: core.php:1786
+#: core.php:1783
 msgctxt "Action Page"
 msgid "New Action Page"
 msgstr "Neue Interaktions Seite"
 
-#: core.php:1787
+#: core.php:1784
 msgctxt "Action Page"
 msgid "View Action Page"
 msgstr "Zeige Interaktions Seite"
 
-#: core.php:1788
+#: core.php:1785
 msgctxt "Action Page"
 msgid "Search Action Pages"
 msgstr " Interaktions Seiten Suche"
 
-#: core.php:1789
+#: core.php:1786
 msgid "Nothing found"
 msgstr "Nichts gefunden"
 
-#: core.php:1790
+#: core.php:1787
 msgid "Nothing found in the Trash"
 msgstr "Nichts im Papierkorb gefunden"
 
-#: core.php:1982 core.php:2040
+#: core.php:1979 core.php:2037
 msgid "Error: Email template not found"
 msgstr "Fehler: E-Mail Vorlage nicht gefunden"
 
-#: core.php:1999
+#: core.php:1996
 msgid "Error: Email not found"
 msgstr "Fehler: E-Mail nicht gefunden"
 
-#: core.php:2093
+#: core.php:2090
 msgid "G-Lock WPNewsman"
 msgstr "G-Lock WPNewsman"
 
-#: core.php:2131
+#: core.php:2128
 msgid "G-Lock WPNewsman subscription summary"
 msgstr "G-Lock WPNewsman Abonnement Zusammenfassung"
 
-#: core.php:2132
+#: core.php:2129
 msgid "Manage Forms and Lists"
 msgstr "Formulare und Listen verwalten "
 
-#: core.php:2149 views/list.php:263
+#: core.php:2146 views/list.php:265
 msgid "List name"
 msgstr "Listen Name"
 
-#: core.php:2150
+#: core.php:2147
 msgid "Today confirmed"
 msgstr "Heute bestätigt"
 
-#: core.php:2151
+#: core.php:2148
 msgid "Yesterday confirmed"
 msgstr "Gestern bestätigt"
 
-#: core.php:2152
+#: core.php:2149
 msgid "Total confirmed"
 msgstr "Im Ganzen bestätigt"
 
-#: core.php:2153
+#: core.php:2150
 msgid "Total unconfirmed"
 msgstr "Im Ganzen unbestätigt"
 
-#: core.php:2154
+#: core.php:2151
 msgid "Total unsubscribed"
 msgstr "Insgesamt abgemeldet"
 
-#: core.php:2208
+#: core.php:2205
 msgid "Post Template"
 msgstr "Beitrags Vorlage"
 
-#: core.php:2214
+#: core.php:2211
 msgid "Click here"
 msgstr "Hier klicken"
 
-#: core.php:2217
+#: core.php:2214
 msgid ""
 "You can use this shortcode macro to add the unsubscribe link to your "
 "message:"
 msgstr "Sie können dieses Kurzbeszeichnungs Makro benutzen, um den Abmelde Link in Ihrer Nachricht hinzu zu fügen:"
 
-#: core.php:2221
+#: core.php:2218
 msgid ""
 "and these shortcode macros to add links to your social profiles (enter the "
 "URLs of your social profiles in the plugin Settings):"
 msgstr "und diese Shortcode Macros, um Links zu Ihrem sozialen Profilen hinzuzufügen (tragen sie die URLs ihres sozialen Profile in den Plugin Einstellungen ein):"
 
-#: core.php:2229
+#: core.php:2226
 msgid "%s for more shortcode macros supported by WPNewsman."
 msgstr "% s für weitere Makros zu Kurzaufruf unterstützt bei WPNewsman."
 
-#: core.php:2414
+#: core.php:2427
 msgid "List: "
 msgstr "Liste:"
 
-#: core.php:2426
+#: core.php:2439
 msgid "Page Template"
 msgstr "Seiten Vorlage"
 
-#: core.php:2428
+#: core.php:2441
 msgid "Default Template"
 msgstr "Standard Vorlage"
 
@@ -1002,6 +1009,14 @@ msgstr "Monat"
 #: frmGetPosts.php:194 frmGetPosts.php:254
 msgid "Clear Selection"
 msgstr "Auswahl löschen"
+
+#: newsman-widget.php:8
+msgid "WPNewsman Subscription form for your newsletters"
+msgstr "WPNewsman Anmeldeformular für ihre Newsletter"
+
+#: newsman-widget.php:10
+msgid "WPNewsman Subscription Form"
+msgstr "WPNewsman Anmeldeformular"
 
 #: views/_an_fs_method.php:3 views/_an_locale_changed.php:4
 #: views/_an_w3tc_configured.php:3 views/_an_wp_cron_error.php:4
@@ -1212,17 +1227,17 @@ msgid ""
 "operation cannot be undone!"
 msgstr "Sind Sie sicher, dass Sie die ausgewählten Formulare und Abbonenten Listen löschen wollen? Dieser Schritt kann nicht rückgängig gemacht werden!"
 
-#: views/list.php:9 views/list.php:301
+#: views/list.php:9 views/list.php:303
 msgid "Form options"
 msgstr "Formular Optionen"
 
-#: views/list.php:10 views/list.php:302
+#: views/list.php:10 views/list.php:304
 msgid "Use inline labels"
 msgstr "Inline Feldbezeichnungen verwenden"
 
 #: views/list.php:24 views/list.php:42 views/list.php:66 views/list.php:84
 #: views/list.php:105 views/list.php:123 views/list.php:140 views/list.php:191
-#: views/list.php:225
+#: views/list.php:228
 msgid "Field options"
 msgstr "Feld Optionen"
 
@@ -1326,11 +1341,11 @@ msgstr "Pillenförmig"
 msgid "Radio options"
 msgstr "Mehrfachauswahl"
 
-#: views/list.php:198 views/list.php:232
+#: views/list.php:198 views/list.php:235
 msgid "Add"
 msgstr "Hinzufügen"
 
-#: views/list.php:200 views/list.php:234
+#: views/list.php:200 views/list.php:237
 msgid "New option"
 msgstr "Neue Option"
 
@@ -1338,113 +1353,117 @@ msgstr "Neue Option"
 msgid "Genders"
 msgstr "Geschlecht"
 
-#: views/list.php:207 views/list.php:242
+#: views/list.php:207 views/list.php:245
 msgid "Double click to edit"
 msgstr "Doppelklick zum Bearbeiten"
 
-#: views/list.php:230
+#: views/list.php:233
 msgid "Select options"
 msgstr "Optionen auswählen"
 
-#: views/list.php:236
+#: views/list.php:239
 msgid "Countries"
 msgstr "Länder"
 
-#: views/list.php:237
+#: views/list.php:240
 msgid "States"
 msgstr "Staaten"
 
-#: views/list.php:255
+#: views/list.php:257
 msgid "Edit subscribers list"
 msgstr "Abonnentenliste bearbeiten"
 
-#: views/list.php:264
+#: views/list.php:266
 msgid "List Name"
 msgstr "Listen Name"
 
-#: views/list.php:271
+#: views/list.php:273
 msgid "Form Builder"
 msgstr "Formulargenerator"
 
-#: views/list.php:273
+#: views/list.php:275
 msgid "Add Field"
 msgstr "Feld hinzufügen"
 
-#: views/list.php:275
+#: views/list.php:277
 msgid "Text"
 msgstr "Text"
 
-#: views/list.php:276
+#: views/list.php:278
 msgid "Textarea"
 msgstr "Textbereich"
 
-#: views/list.php:278
+#: views/list.php:280
 msgid "Checkbox"
 msgstr "Kontrollkästchen"
 
-#: views/list.php:279
+#: views/list.php:281
 msgid "Radio buttons"
 msgstr "Optionfelder"
 
-#: views/list.php:280
+#: views/list.php:282
 msgid "Dropdown menu"
 msgstr "Auswahlliste"
 
-#: views/list.php:281
+#: views/list.php:283
 msgid "Form title"
 msgstr "Formulartitel"
 
-#: views/list.php:282
+#: views/list.php:284
 msgid "HTML"
 msgstr "HTML"
 
-#: views/list.php:285
+#: views/list.php:287
 msgid "Load Default Form"
 msgstr "Standardformular laden"
 
-#: views/list.php:314
+#: views/list.php:311
+msgid "Field shortcode"
+msgstr "Feldkürzel"
+
+#: views/list.php:322
 msgid "This form on external sites? Sure!"
 msgstr "Diese Formular auf  externer Webseite? Sind Sie sicher!"
 
-#: views/list.php:315
+#: views/list.php:323
 msgid "Copy the code below and paste it into any other site that you have."
 msgstr "Kopieren Sie den nachfolgenden Code und fügen Sie ihn in Ihre andere Website ein."
 
-#: views/list.php:317
+#: views/list.php:325
 msgid "Custom CSS for external form."
 msgstr "Benutzerdefinierte CSS für externes Formular."
 
-#: views/list.php:318
+#: views/list.php:326
 msgid "This CSS will only affect the external form"
 msgstr "Diese CSS findet nur für beim externen Formular Verwendung."
 
-#: views/list.php:322
+#: views/list.php:330
 msgid "Here are the unsubscribe links"
 msgstr "Hier sind die Abmelde-Links"
 
-#: views/list.php:323
+#: views/list.php:331
 msgid "if your are using 3rd party software to send emails:"
 msgstr "wenn Sie Dritt-Software verwenden um Emails zu senden:"
 
-#: views/list.php:324
+#: views/list.php:332
 msgid "Link to instant unsubscribe:"
 msgstr "Link zum sofortigen abmelden:"
 
-#: views/list.php:327
+#: views/list.php:335
 msgid ""
 "You must replace the %s with the value of the ucode field of the exported "
 "subscribers list."
 msgstr "Sie müssen das %s mit dem Wert des ucode Feldes der exportierten Liste der Abonnenten ersetzen."
 
-#: views/list.php:329
+#: views/list.php:337
 msgid "One more thing,"
 msgstr "Ein weiterer Punkt,"
 
-#: views/list.php:330
+#: views/list.php:338
 msgid "you can put this form inside any post content with this short-code:"
 msgstr "sie können dieses Formular in jeden Beitrag mit folgendem Short-Code einfügen: "
 
-#: views/list.php:332
+#: views/list.php:340
 msgid "and you can make it horizontal with this shortcode"
 msgstr "und mit diesem Short-Code ist es möglich dies horizontal anzuordnen"
 
@@ -1869,6 +1888,10 @@ msgstr "Einführungspreis: $%d/Jahr (unverbindliche Preisempfehlung: $%d/Jahr) <
 msgid "Manage Subscribers"
 msgstr "Abonnenten verwalten"
 
+#: views/subscribers.php:20
+msgid "Form & List options"
+msgstr "Optionen Formulare & Listen "
+
 #: views/subscribers.php:30
 msgid "All Subscribers"
 msgstr "Alle Abonnenten"
@@ -2055,21 +2078,13 @@ msgstr "Mehrsprachiges WPNewsman Abonnenten Formular für Ihre Newsletter"
 msgid "WPNewsman Subscription Multilanguage Form"
 msgstr "Mehrsprachiges WPNewsman Abonnenten Formular "
 
-#: widget.php:8
-msgid "WPNewsman Subscription form for your newsletters"
-msgstr "WPNewsman Anmeldeformular für ihre Newsletter"
-
-#: widget.php:10
-msgid "WPNewsman Subscription Form"
-msgstr "WPNewsman Anmeldeformular"
-
-#: workers/class.mailer.php:174
+#: workers/class.mailer.php:157
 msgid ""
 "Too many consecutive errors. Please check your mail delivery settings and "
 "make sure you can send a test email. Last SMTP error: "
 msgstr "Zu viele aufeinanderfolgende Fehler. Bitte überprüfen sie ihre E-Mail Versandeinstellungen, und überprüfen sie, ob sie eine Test E-Mailsenden können. Letzter SMTP Fehler:"
 
-#: workers/class.mailer.php:204
+#: workers/class.mailer.php:181
 msgid "No \"confirmed\" subscribers found in the selected list(s)."
 msgstr "Keine \"bestätigten\" Abonnenten in der/den selektierten Liste(n) gefunden. "
 
@@ -2129,8 +2144,12 @@ msgid "Safe mode is turned off"
 msgstr "Abgesicherter Modus ist ausgeschalten"
 
 #: wpnewsman.php:182
-msgid "Safe mode is deprecated in PHP and not supported by the plugin"
-msgstr "Der abgesicherte Modus (safe mode) wird in PHP zukünftig nicht mehr unterstützt und wird deshalb vom Plugin ebefalls  nicht mehr unterstützt"
+msgid ""
+"Safe mode is deprecated in PHP and not supported by the plugin.(Set "
+"safe_mode = Off in php.ini. See <a "
+"href=\"http://www.php.net/manual/en/features.safe-mode.php\">Safe Mode on "
+"php.net</a>)"
+msgstr "Der Safe Mode  Betriebsmodus wird von PHP in Zukunft nicht mehr unterstützt und deshalb auch von diesem Plugin nicht mehr verwendet. (Setzen sie safe_mode = Off in der php.ini. Mehr dazu unter <a href=\"http://www.php.net/manual/en/features.safe-mode.php\">Safe Mode on php.net (Englisch)</a>)"
 
 #. Plugin Name of the plugin/theme
 msgid "G-Lock WPNewsman Lite"

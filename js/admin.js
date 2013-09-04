@@ -1254,6 +1254,14 @@ jQuery(function($){
 				ipp: 15
 			};
 
+			var ct = $.cookie("newsmanDefaultPostContentType") || 'fancy';
+			$('#newsman-content-type').val(ct);
+
+			$('#newsman-content-type').change(function(){
+				var ct = $('#newsman-content-type').val();
+				$.cookie("newsmanDefaultPostContentType", ct);				
+			})
+
 			postsSelector.getIDS = function(){
 				var ids = [];
 				$('.newsman-bcst-post.active input').each(function(i, el){

@@ -61,8 +61,9 @@
 		color: #B94A48;
 }
 
-.newsman-form-item.newsman-form-error input[type="text"] {
-	border: 1px solid #E49BA6;
+.newsman-form-item.newsman-form-error input[type="text"],
+.newsman-form-item.newsman-form-error select {
+	border: 1px solid #E49BA6 !important;
 }
 
 .newsman-options-panel {

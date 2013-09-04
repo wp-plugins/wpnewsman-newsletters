@@ -504,7 +504,8 @@
 				'posts_per_page' => $ipp,
 				'paged' => $page,
 				'orderby' => 'date',
-				'order' => 'DESC'
+				'order' => 'DESC',
+				'suppress_filters' => true
 			);
 
 			$today = getdate();
@@ -543,7 +544,7 @@
 			}
 
 			if ( isset($search) && $search ) {
-				$query = new WP_Query('posts_per_page='.$ipp.'&paged='.$page.'&post_type=post&s='.$search.'&order=DESC&orderby=date');
+				$query = new WP_Query('posts_per_page='.$ipp.'&paged='.$page.'&post_type=post&s='.$search.'&order=DESC&orderby=date&suppress_filters=1');
 			} else {
 				$query = new WP_Query($args);
 			}
@@ -1582,7 +1583,8 @@
 			$args = array(
 				'nopaging' => true,
 				'post__in' => $pids,
-				'post_type' => $postType
+				'post_type' => $postType,
+				'suppress_filters' => true
 			);
 
 			$output = '';
@@ -1590,8 +1592,12 @@
 			$query = new WP_Query($args);
 
 			$first = true;
+			$n = 0;
 
 			while ( $query->have_posts() ) {
+				$n += 1;
+				$newsman_loop_post_nr = $n;
+
 				$query->the_post();
 
 				$newsman_loop_post = $post;
