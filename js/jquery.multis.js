@@ -143,7 +143,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 		},
 
 		optionsLiClick: function(li) {			
-			this.addItem($(li).text());
+			this.addItem($('.multis-opt-name', li).text());
 		},
 
 		loadAvailable: function(done) {
@@ -156,9 +156,15 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 				that.optionsList.empty();
 				that.availableOptionsCount = 0;
 				$(that.availableItems).each(function(i, text){
-					if ( usedItems.indexOf(text) === -1 ) { // if not yet used
+					if ( usedItems.indexOf(text.name || text) === -1 ) { // if not yet used
 						that.availableOptionsCount += 1;
-						var li = $('<li>'+text+'</li>').appendTo(that.optionsList);
+						var li;
+						if ( typeof text !== 'string' ) {
+							li = $('<li><span class="multis-opt-name">'+text.name+'</span><span class="multis-opt-count">'+text.count+'</span></li>').appendTo(that.optionsList);	
+						} else {
+							li = $('<li><span class="multis-opt-name">'+text+'</span></li>').appendTo(that.optionsList);	
+						}
+						
 						li.click(function(){
 							that.optionsLiClick(this);
 						});

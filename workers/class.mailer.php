@@ -52,6 +52,8 @@ class newsmanMailer extends newsmanWorker {
 
 		$u = newsmanUtils::getInstance();
 
+		$u->log('Sender with pid '.getmypid().' for email '.$email->id.' started');
+
 		$sl = newsmanSentlog::getInstance();
 
 		$tStreamer = new newsmanTransmissionStreamer($email);

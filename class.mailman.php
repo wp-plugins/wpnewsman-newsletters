@@ -38,7 +38,8 @@ class newsmanMailMan {
 		foreach ($emails as $email) {
 
 			// double checke the status here to solve possible race condition
-			if ( !$email->isWorkerAlive() && $email->getStatus() === 'inprogress' ) {
+			if ( $email->workerPid && !$email->isWorkerAlive() && $email->getStatus() === 'inprogress' ) {
+				$this->u->log('Found email '.$email->id.' with dead worker('.$email->workerPid.'). Setting email to pending state.');
 				$email->releaseLocks();
 				$email->status = 'pending';
 				$email->workerPid = '';

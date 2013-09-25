@@ -13,9 +13,11 @@ class newsmanUtils {
 
 	var $base64Map = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 	var $l;
+	var $debugLogPath = '';
 
 	function __construct() {
 		$this->l = newsmanLocks::getInstance();
+		$this->debugLogPath = NEWSMAN_PLUGIN_PATH.DIRECTORY_SEPARATOR.'newsmanlog.txt';
 	}
 
 	function getPagesData() {
@@ -300,17 +302,22 @@ class newsmanUtils {
 	}	
 
 	public function log($msg) {		
-		$msg = '['.date('Y-m-d H:i:s').'] '.$msg."\n";
-		file_put_contents(NEWSMAN_PLUGIN_PATH.DIRECTORY_SEPARATOR.'newsmanlog.txt', $msg, FILE_APPEND);
-		// if (get_option('newsman_write_debug_log') != '1') {
-		// 	return;
-		// }
-		
-		// global $wpdb;	
-		// global $newsman_table_log;
-		// $sql = 'INSERT INTO '.$newsman_table_log.' VALUES(null, %s)';
-		
-		// $wpdb->query($wpdb->prepare($sql, $msg));
+		if ( defined('NEWSMAN_DEBUG') && NEWSMAN_DEBUG === true ) {
+			$msg = '['.date('Y-m-d H:i:s').'] '.$msg."\n";
+			file_put_contents($this->debugLogPath, $msg, FILE_APPEND);
+		}
+	}
+
+	public function readLog() {
+		$log = 'Log file does not exists';
+		if (file_exists($this->debugLogPath) ) {
+			$log = file_get_contents($this->debugLogPath);	
+		}
+		return $log;	
+	}
+
+	public function emptyLog() {
+		file_put_contents($this->debugLogPath, '');
 	}
 
 	function getAuthors($selected = '') {
@@ -1682,6 +1689,11 @@ class newsmanUtils {
 		}
 		return $list;
 	}
+
+	public function isResponsive($html) {
+		return preg_match('/<!--\s*NEWSMAN_RESPONSIVE\s*-->/i', $html);
+	}
+
 
 	/* --------------------------------------------------------------------------------------------------------- */
 	/* Locks */

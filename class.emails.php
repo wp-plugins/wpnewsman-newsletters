@@ -90,8 +90,12 @@ class newsmanEmail extends newsmanStorable {
 			if ( trim($this->html) === '' ) {
 				$this->p_html = $this->html;
 			} else {
-				$emo = new Emogrifier($this->html);
-				$this->p_html = $u->normalizeShortcodesInLinks( $emo->emogrify() );
+				if ( $u->isResponsive($this->html) ) {
+					$this->p_html = $u->normalizeShortcodesInLinks( $this->html );
+				} else {
+					$emo = new Emogrifier($this->html);
+					$this->p_html = $u->normalizeShortcodesInLinks( $emo->emogrify() );					
+				}
 			}
 		}
 	}
@@ -167,8 +171,20 @@ class newsmanEmail extends newsmanStorable {
 	}	
 
 	public function isWorkerAlive() {
-		$w = new newsmanWorkerAvatar($this->workerPid);
-		return $w->isRunning();
+		$maxWorkerTimout = 360; // 3 minutes
+
+		$u = newsmanUtils::getInstance();
+		$t = newsmanTimestamps::getInstance();
+
+		$ts = $t->getTS($this->workerPid);
+
+		$elapsed = time() - $ts;
+
+		$a = $elapsed <= $maxWorkerTimout;
+
+		$u->log('isWorkerAlive - workerPid('.$this->workerPid.') - isAlive = '.$a);
+		
+		return $a;
 	}
 
 	public function releaseLocks() {

@@ -70,6 +70,16 @@ ul.multis-options li {
 	padding: 5px;
 	border-top: 1px solid #ddd;
 	cursor: pointer;
+	position: relative;
+}
+
+ul.multis-options li .multis-opt-count {
+	float: right;
+	padding: 1px 5px;
+	background: #dfdfdf;
+	border-radius: 6px;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
 }
 
 ul.multis-options li:hover {

@@ -3,6 +3,7 @@
 require_once(__DIR__.DIRECTORY_SEPARATOR."class.utils.php");
 require_once(__DIR__.DIRECTORY_SEPARATOR."class.options.php");
 require_once(__DIR__.DIRECTORY_SEPARATOR."class.ajax-fork.php");
+require_once(__DIR__.DIRECTORY_SEPARATOR."class.timestamps.php");
 
 //require_once(__DIR__.DIRECTORY_SEPARATOR."lib/php-growl/class.growl.php");
 
@@ -134,22 +135,34 @@ class newsmanWorker extends newsmanWorkerBase {
 		}
 
 		$this->processMessages();
+		$this->clearTimestamp();
 	}
 
 	/*******************************************************
 	 * Message Loop Functions	 
 	 *******************************************************/
 
+	public function setTimestamp() {
+		$t = newsmanTimestamps::getInstance();
+		$t->setTS($this->workerId);
+	}
+
+	public function clearTimestamp() {
+		$t = newsmanTimestamps::getInstance();
+		$t->deleteTS($this->workerId);
+	}
 
 	public function processMessages() {
 
 		if ( $this->pm_iv !== null ) {
 			$now = microtime(true);	
 
-			if ( $now - $this->pm_iv < 0.2 ) { // return if < then 200 ms elased since last call
+			if ( $now - $this->pm_iv < 0.2 ) { // return if < then 200 ms elapsed since last call
 				return;
 			}
 		}
+
+		$this->setTimestamp();
 
 		$sql = "SELECT * FROM $this->_table WHERE `workerId` = %s AND `processed` = 0";
 		$sql = $this->_db->prepare($sql, $this->workerId);
@@ -186,7 +199,7 @@ class newsmanWorker extends newsmanWorkerBase {
 		
 		$params['newsman_worker_fork'] = get_called_class();
 		$params['ts'] = sprintf( '%.22F', microtime( true ) );
-		$params['workerId'] = microtime();
+		$params['workerId'] = $params['ts'].rand(1,100);
 
 		if ( defined('ALTERNATE_WP_CRON') && ALTERNATE_WP_CRON ) {
 			// passing url to the ajax forker
@@ -243,9 +256,11 @@ class newsmanWorkerAvatar extends newsmanWorkerBase {
 		parent::__construct();
 
 		$this->workerId = $workerId;		
+		$this->u = newsmanUtils::getInstance();
 	}
 
 	function __call($name, $arguments) {
+		$this->u->log("calling $name");
 		$opId = $this->_writeCall($name, $arguments);
 		$res = $this->_waitForResult($opId);
 		return $res;
@@ -263,13 +278,16 @@ class newsmanWorkerAvatar extends newsmanWorkerBase {
 	}
 
 	function _waitForResult($opId) {
-		$count = 50;
+		$totalWait = 10000000; // mks
+		$count = 0; // 50 * 100 ms = 5s 
 		$res = NULL;
 		while ( $res === NULL ) {
+			$count += 1;
 			$res = $this->_getOpResult($opId);
-			usleep(100000);
-			$count -= 1;
-			if ( $count === 0 ) { break; }
+			$s = 100000*$count;
+			usleep($s); // 100 ms
+			$totalWait -= $s;
+			if ( $totalWait <= 0 ) { break; }
 		}
 		if ( $res !== NULL ) {
 			$this->_clearOpResult($opId);
@@ -281,10 +299,20 @@ class newsmanWorkerAvatar extends newsmanWorkerBase {
 		$sql = "SELECT `result` from $this->_table WHERE `id` = %d AND `processed` = 1";
 		$sql = $this->_db->prepare($sql, $opId);
 
-		$v = $this->_db->get_var($sql);
-		if ( $v === NULL ) { return NULL; }
+		$res = $this->_db->get_results($sql, ARRAY_N);
+
+		$v = NULL;
+		if ( isset($res[0]) && isset($res[0][0]) ) {
+			$v = $res[0][0];
+		}
+
+		if ( $v === NULL ) {
+			$this->u->log('_getOpResult(opId = '.$opId.') - NULL');
+			return NULL;
+		}
 
 		$data = @unserialize($v);
+		$this->u->log('_getOpResult(opId = '.$opId.') - '.$v.', data - '.$data);
 		if ($v === 'b:0;' || $data !== false) {
 			return $data;
 		} else {

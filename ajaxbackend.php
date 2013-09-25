@@ -2158,5 +2158,15 @@
 			$this->respond(true, __('Success', NEWSMAN));
 		}
 
+		public function ajGetDebugLog() {
+			$log = $this->u->readLog();
+			$this->respond(true, __('Success', NEWSMAN), array('log' => $log));
+		}
+
+		public function ajEmptyDebugLog() {
+			$this->u->emptyLog();
+			$this->respond(true, __('Success', NEWSMAN));
+		}
+
 
 	}

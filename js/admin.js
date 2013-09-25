@@ -2874,12 +2874,12 @@ jQuery(function($){
 				}).fail(NEWSMAN.ajaxFailHandler);
 			}
 
-			var refreshTimer = null;
+			var tmr = null;
 
 			function runPolling() {
-				if ( !refreshTimer ) {
-					setTimeout(function() {
-						refreshTimer = null;
+				if ( !tmr ) {
+					tmr = setTimeout(function() {
+						tmr = null;
 						getUpdates();
 					}, 5000);
 				}
@@ -4098,7 +4098,13 @@ jQuery(function($){
 				}
 
 				function getBadge(tpl) {
-					return tpl.madeForNewsman ? '<img class="made-for-newsman" title="Made for WPNewsman" src="'+NEWSMAN_PLUGIN_URL+'/img/star.png"> ' : '';
+					var b = '';
+					if ( tpl.responsive ) {
+						b = '<img class="made-for-newsman" title="Responsive Template Made for WPNewsman" src="'+NEWSMAN_PLUGIN_URL+'/img/responsive.png"> ';
+					} else if ( tpl.madeForNewsman ) {
+						b = '<img class="made-for-newsman" title="Made for WPNewsman" src="'+NEWSMAN_PLUGIN_URL+'/img/star.png"> ';
+					}
+					return b;
 				}
 
 				function getButton(tpl, idx, storeIdx) {
@@ -4209,6 +4215,7 @@ jQuery(function($){
 							var lastTplIdx = store.templates.length-1;
 
 							$(store.templates).each(function(j, tpl){
+
 								if ( r === 0 ) { html.push('<tr class="newsman-templates-row" id="newsman-store-p-'+p+'">'); }
 								html.push([
 									'<td>',
@@ -4627,5 +4634,54 @@ jQuery(function($){
 	if ( typeof NEWSMANEXT !== 'undefined' && NEWSMANEXT.initAnalyticsControls) {
 		NEWSMANEXT.initAnalyticsControls();
 	}
+
+	// debug log page
+
+	var debugLogAR;
+	var enabledAR = false;
+	var debugLogARTimeout;
+	function getLog(done) {
+		$.ajax({
+			type: 'post',
+			url: ajaxurl,			
+			data: {
+				action: 'newsmanAjGetDebugLog'
+			}
+		}).success(function(data){
+			$('#debuglog').val(data.log);			
+		}).fail(NEWSMAN.ajaxFailHandler).always(done);
+	}
+	function runAR() {
+		debugLogARTimeout = setTimeout(function(){
+			if ( !enabledAR ) { return; }
+			getLog(function(){
+				if ( !enabledAR ) { return; }
+				runAR();
+			});
+		}, 3000);
+	}
+	if ( debugLogAR = $('#debug-log-auto-refresh').first() ) {
+		debugLogAR.change(function(){
+			enabledAR = debugLogAR.prop('checked');
+			if ( enabledAR ) {
+				runAR();
+			} else {
+				clearTimeout(debugLogARTimeout);				
+			}
+		});
+	}
+
+	$('#btn-empty-debug-log').click(function(){
+		$.ajax({
+			type: 'post',
+			url: ajaxurl,
+			data: {
+				action: 'newsmanAjEmptyDebugLog'
+			}
+		}).success(function(data){
+			showMessage(data.msg, 'success');
+			getLog();
+		});
+	});
 
 });

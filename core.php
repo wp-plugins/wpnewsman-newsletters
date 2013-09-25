@@ -11,6 +11,7 @@ require_once(__DIR__.DIRECTORY_SEPARATOR.'class.emailtemplates.php');
 require_once(__DIR__.DIRECTORY_SEPARATOR.'class.ajax-fork.php');
 require_once(__DIR__.DIRECTORY_SEPARATOR.'class.mailman.php');
 require_once(__DIR__.DIRECTORY_SEPARATOR.'class.sentlog.php');
+require_once(__DIR__.DIRECTORY_SEPARATOR.'class.timestamps.php');
 require_once(__DIR__.DIRECTORY_SEPARATOR.'ajaxbackend.php');
 
 require_once(__DIR__.DIRECTORY_SEPARATOR.'workers/class.mailer.php');
@@ -211,7 +212,9 @@ class newsman {
 
 	public function mailman() {
 		$this->cleanOldUnconfirmed();
-		$this->mailman->pokeWorkers();		
+		if ( !defined('NEWSMAN_DISABLE_WORKERS_CHECK') || !NEWSMAN_DISABLE_WORKERS_CHECK ) {
+			$this->mailman->pokeWorkers();
+		}		
 		$this->mailman->checkEmailsQueue();
 	}
 
@@ -792,6 +795,9 @@ class newsman {
 		$wpdb->query("DROP TABLE IF EXISTS ".$wpdb->prefix.newsmanAjaxFork::$table);
 		$sl = newsmanSentlog::getInstance();
 		$wpdb->query("DROP TABLE IF EXISTS ".$sl->tableName);
+
+		$tstmps = newsmanTimestamps::getInstance();
+		$tstmps->dropTable();
 
 		$pages = $this->options->get('activePages');
 		foreach ($pages as $pageId) {
@@ -1571,6 +1577,18 @@ class newsman {
 			array($this, 'pageOptions')
 		);
 
+		if ( defined('NEWSMAN_DEBUG') && NEWSMAN_DEBUG === true ) {
+			add_submenu_page(
+				'newsman-mailbox',
+				__('Debug Log', NEWSMAN),
+				__('Debug Log', NEWSMAN),
+				'publish_pages',
+				'newsman-debuglog',
+				array($this, 'pageDebugLog')
+			);			
+		}
+
+
 		$label = apply_filters('newsman_upgrade_to_pro', __('Upgrade to Pro', NEWSMAN));
 		
 		add_submenu_page(
@@ -1911,6 +1929,11 @@ class newsman {
 			return;
 		}
 
+		if ( isset($_GET['thanks']) ) {
+			include('views/thanks.php');
+			return;
+		}		
+
 		$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : false;
 		$page 	= isset($_REQUEST['page']) ? $_REQUEST['page'] : false;
 		$type 	= isset($_REQUEST['type']) ? $_REQUEST['type'] : false;
@@ -1970,6 +1993,10 @@ class newsman {
 			}			
 			include 'views/pro.php';
 		}
+	}
+
+	public function pageDebugLog() {
+		include 'views/debug-log.php';
 	}
 
 	public function echoTemplate() {
@@ -2300,18 +2327,18 @@ class newsman {
 	}
 
 	public function listNamesAsJSArr() {
-		$names = '[';
-			$lists = newsmanList::findAll();
+		$listsArr = array();
 
-			$c = '';
+		$lists = newsmanList::findAll();
 
-			foreach ($lists as $list) {
-				$names .= $c.'"'.addslashes($list->name).'"';
-				$c = ',';
-			}
+		foreach ($lists as $list) {
+			$listsArr[] = array(
+				'name' => $list->name,
+				'count' => $list->getTotal()
+			);
+		}
 
-		$names .= ']';
-		return $names;
+		return json_encode($listsArr);
 	}
 
 	public function pre_content_message($content) {
@@ -2515,6 +2542,12 @@ class newsman {
 			}
 		}
 	}	
+
+	/*		DEBUG 		*/
+
+	public function echoDebugLog() {		
+		echo htmlentities($this->utils->readLog());
+	}
 
 }
 

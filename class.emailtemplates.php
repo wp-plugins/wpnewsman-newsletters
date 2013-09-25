@@ -38,8 +38,12 @@ class newsmanEmailTemplate extends newsmanStorable {
 		if ( trim($this->html) === '' ) {
 			$this->p_html = $this->html;
 		} else {
-			$emo = new Emogrifier($this->html);
-			$this->p_html = $u->normalizeShortcodesInLinks( $emo->emogrify() );
+			if ( $u->isResponsive($this->html) ) {
+				$this->p_html = $u->normalizeShortcodesInLinks( $this->html );
+			} else {
+				$emo = new Emogrifier($this->html);
+				$this->p_html = $u->normalizeShortcodesInLinks( $emo->emogrify() );				
+			}
 		}
 		
 		return parent::save();
