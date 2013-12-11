@@ -331,12 +331,27 @@ class newsmanStorable {
 		// }
 	}
 
-	static function findAll($selector  = null, $args = array()) {
+	static function combineFieldsStr($fields) {
+		$f = '';
+		foreach ($fields as $key => $val) {
+			if ( $f !== '' ) { $f .= ', '; }			
+			if ( is_numeric($key) ) {
+				$f .= "`$val`";
+			} else {
+				$f .= "`$key` as '$val'";
+			}
+		}
+		return $f;
+	}
+
+	static function findAll($selector  = null, $args = array(), $opts = array()) {
 		static::ensureTable();
 		global $wpdb;
 		$tbl = $wpdb->prefix.static::$table;
 
-		$sql = "SELECT * FROM $tbl ";
+		$fields = isset($opts['fields']) ? static::combineFieldsStr($opts['fields']) : '*';
+
+		$sql = "SELECT $fields FROM $tbl ";
 
 		if ( $selector ) {
 			$sql .= " WHERE $selector";
@@ -372,7 +387,7 @@ class newsmanStorable {
 		return $storables;
 	}
 
-	static function findAllPaged($pg, $ipp, $selector  = null, $args = array()) {
+	static function findAllPaged($pg, $ipp, $selector  = null, $args = array(), $opts = array()) {
 		$start = ($pg-1)*$ipp;
 		$count = $ipp;
 		if ( !preg_match('/\bLIMIT\b\d+/i', $selector) ) {
@@ -381,7 +396,7 @@ class newsmanStorable {
 		$args[] = $start;
 		$args[] = $count;
 
-		return static::findAll($selector, $args);
+		return static::findAll($selector, $args, $opts);
 	}
 
 	static function count($selector  = null, $args = array()) {

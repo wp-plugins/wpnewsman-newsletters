@@ -23,7 +23,7 @@ jQuery(function($){
 		chrome  : navigator.vendor != undefined && navigator.vendor.indexOf('Google') != -1,
 		firefox : (navigator.userAgent.indexOf('Mozilla') != -1 && navigator.vendor != undefined && navigator.vendor == ''),
 		windows : navigator.platform.match(/^Win(32|64)$/i),
-	}
+	};
 
 	/**
 	 * addQuerystring() serialises object to querystring and
@@ -550,7 +550,6 @@ jQuery(function($){
 			direction: 'ltr'
 		});
 
-
 		$.extend(that, {
 			getInput: function(){
 				return this.input;
@@ -1029,7 +1028,4 @@ jQuery(function($){
 			});
 		}
 	});
-
-
-
 });

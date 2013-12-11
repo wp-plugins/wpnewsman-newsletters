@@ -8,77 +8,75 @@
 
 	var hookStateKey = ( window.navigator.platform.indexOf('Mac') > -1 ) ? 'metaKey' : 'ctrlKey';
 
-	var globalKeyHandler;	
+	window.globalKeyHandler =
+	globalKeyHandler = (function(){
+
+		var callbacks = [];
+		var bindedDocs = [];
+
+		function getFunkKeys(e) {
+			if ( e.originalEvent ) {
+				e = e.originalEvent;
+			} else if ( e.data && e.data.$ ) {
+				e = e.data.$;
+			}
+			return {
+				// 93 code is actually a right context menu key on PC keyboards, but it's a right command on a mac
+				metaKey: 	e.keyCode === 91 || e.keyCode === 92 || e.keyCode === 93 || e.metaKey,
+				shiftKey: 	e.keyCode === 16 || e.shiftKey,
+				ctrlKey: 	e.keyCode === 17 || e.ctrlKey,
+				altKey: 	e.keyCode === 18 || e.altKey
+			};
+		}			
+
+		function keydownHandler(e) {
+			var keys = getFunkKeys(e);
+			if ( keys[hookStateKey] ) {
+				for (var i = 0; i < callbacks.length; i++) {
+					callbacks[i](true, e);
+				}
+			}
+		}
+
+		function keyupHandler(e) {
+			var keys = getFunkKeys(e);
+			if ( keys[hookStateKey] ) {
+				for (var i = 0; i < callbacks.length; i++) {
+					callbacks[i](false, e);
+				}
+			}
+		}
+
+		return {
+			on: function(cb) {
+				var idx = jQuery.inArray(cb, callbacks);
+				if ( idx === -1 ) {
+					callbacks.push(cb);
+				}
+			},
+			off: function(cb) {
+				var idx = jQuery.inArray(cb, callbacks);
+				if ( idx > -1 ) {
+					callbacks.splice(idx, 1);
+				}
+			},
+			registerDoc: function(doc) {
+				// var idx = $.inArray(doc, bindedDocs);
+				// if ( idx === -1 ) {
+					jQuery(doc).keydown(keydownHandler);
+					jQuery(doc).keyup(keyupHandler);
+					bindedDocs.push(doc);
+					return true;
+				// }
+				// return false;
+			},
+			isDocRegistered: function(doc) {
+				return jQuery.inArray(doc, bindedDocs) > -1;
+			}
+		};
+	}());
 
 	jQuery(function($){
-
-		window.globalKeyHandler =
-		globalKeyHandler = (function(){
-
-			var callbacks = [];
-			var bindedDocs = [];
-
-			function getFunkKeys(e) {
-				if ( e.originalEvent ) {
-					e = e.originalEvent;
-				} else if ( e.data && e.data.$ ) {
-					e = e.data.$;
-				}
-				return {
-					// 93 code is actually a right context menu key on PC keyboards, but it's a right command on a mac
-					metaKey: 	e.keyCode === 91 || e.keyCode === 92 || e.keyCode === 93 || e.metaKey,
-					shiftKey: 	e.keyCode === 16 || e.shiftKey,
-					ctrlKey: 	e.keyCode === 17 || e.ctrlKey,
-					altKey: 	e.keyCode === 18 || e.altKey
-				};
-			}			
-
-			function keydownHandler(e) {
-				var keys = getFunkKeys(e);
-				if ( keys[hookStateKey] ) {
-					for (var i = 0; i < callbacks.length; i++) {
-						callbacks[i](true, e);
-					}
-				}
-			}
-
-			function keyupHandler(e) {
-				var keys = getFunkKeys(e);
-				if ( keys[hookStateKey] ) {
-					for (var i = 0; i < callbacks.length; i++) {
-						callbacks[i](false, e);
-					}
-				}
-			}
-
-			return {
-				on: function(cb) {
-					var idx = $.inArray(cb, callbacks);
-					if ( idx === -1 ) {
-						callbacks.push(cb);
-					}
-				},
-				off: function(cb) {
-					var idx = $.inArray(cb, callbacks);
-					if ( idx > -1 ) {
-						callbacks.splice(idx, 1);
-					}
-				},
-				registerDoc: function(doc) {
-					// var idx = $.inArray(doc, bindedDocs);
-					// if ( idx === -1 ) {
-						$(doc).keydown(keydownHandler);
-						$(doc).keyup(keyupHandler);
-						bindedDocs.push(doc);
-						return true;
-					// }
-					// return false;
-				},
-				isDocRegistered: function(doc) {
-					return $.inArray(doc, bindedDocs) > -1;
-				}
-			};
-		}());
 
 		globalKeyHandler.registerDoc(document);
 

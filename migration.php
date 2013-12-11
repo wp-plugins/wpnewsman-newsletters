@@ -50,6 +50,7 @@ $newsman_changes[] = array(
 function newsman_move_title_and_texts_from_list_params_to_form_els() {
 	// 1.2.0 changes. converting the form title, top and bottom texts into form elements
 	$lists = newsmanList::findAll();
+	$u = newsmanUtils::getInstance();
 
 	if ( $lists ) {
 		foreach ($lists as $list) {

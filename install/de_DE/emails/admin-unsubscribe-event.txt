@@ -1,5 +1,6 @@
 Ein Kontakt hat sich von ihrer Mailing-Liste [newsman wp="url"] abgemeldet.
---- plain ---Ein Kontakt hat sich von ihrer Mailing-Liste abgemeldet. Die Kontaktdetails sind nachfolgend angeführt: 
+--- plain ---
+Ein Kontakt hat sich von ihrer Mailing-Liste abgemeldet. Die Kontaktdetails sind nachfolgend angeführt: 
 
 [newsman sub="*"]
 

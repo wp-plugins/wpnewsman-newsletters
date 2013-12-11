@@ -10,13 +10,13 @@
 	</div>
 
 	<div style="overflow:hidden;">
-		<ul class="subsubsub" style="float:left; margin: 5px 0 0 0;">
+		<ul class="radio-links">
 			<li><a href="#/all" id="newsman-mailbox-all" class="newsman-flink current"><?php _e('All emails', NEWSMAN)?></a> |</li>
 			<li><a href="#/inprogress" id="newsman-mailbox-inprogress" class="newsman-flink"><?php _e('In progress'); ?></a> |</li>			
 			<li><a href="#/pending" id="newsman-mailbox-pending" class="newsman-flink"><?php _e('Pending'); ?></a> |</li>
 			<li><a href="#/sent" id="newsman-mailbox-sent" class="newsman-flink"><?php _e('Sent'); ?></a></li>
 		</ul>
-		<button style="float:right; display:none;" class="button subsubsub" id="newsman-search-cancel-btn"><?php _e('Remove Search Filter'); ?></button>
+		<button style="float:right; display:none;" class="button radio-links" id="newsman-search-cancel-btn"><?php _e('Remove Search Filter'); ?></button>
 	</div>
 
 	<div class="newsman-tbl-controls">

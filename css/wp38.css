@@ -1,0 +1,145 @@
+.wp_bootstrap {
+	background-color: transparent !important;
+}
+
+.wp_bootstrap input[type="radio"],
+.wp_bootstrap input[type="checkbox"] {
+	display: inline-block !important;
+	vertical-align: text-bottom !important;
+}
+
+.wp_bootstrap .table {
+	background-color: #fff !important;
+}
+
+.wp_bootstrap .tab-content {
+	background-color: #fff !important;
+	padding-top: 18px !important;
+	border: solid #DDD !important;
+	border-width: 0 1px 1px 1px !important;	
+	padding: 12px !important;
+}
+
+.wp_bootstrap .nav-tabs {
+	margin-bottom: 0px !important;
+}
+
+/*!
+ * Gridpak Beta CSS
+ *
+ * Generator - http://gridpak.com/
+ * Created by @erskinedesign
+ */
+ 
+ 
+
+/* Reusable column setup */
+/*.wp_bootstrap div[class*="span"] {
+    border:0px solid rgba(0,0,0,0);
+    float:left !important;
+    -webkit-box-sizing:border-box !important;
+    -moz-box-sizing:border-box !important;
+    box-sizing:border-box !important;
+    -moz-background-clip:padding-box !important;
+    -webkit-background-clip:padding-box !important;
+    background-clip:padding-box !important;
+
+    margin-left:2% !important;
+	padding:0 1.5% !important;    
+}
+*/
+
+
+    /* 1. 12 Column Grid 0px - Infinity 
+    ----------------------------------------------------------------------------- 
+    
+    Span 1:    6.5%
+    Span 2:    15.0%
+    Span 3:    23.5%
+    Span 4:    32.0%
+    Span 5:    40.5%
+    Span 6:    49.0%
+    Span 7:    57.5%
+    Span 8:    66.0%
+    Span 9:    74.5%
+    Span 10:    83.0%
+    Span 11:    91.5%
+    Span 12:    100%
+    
+    ----------------------------------------------------------------------------- */
+        
+/*	.wp_bootstrap div[class*="span"] {
+	    margin-left:2% !important;
+		padding:0 1.5% !important;
+	}
+
+	.wp_bootstrap .row,
+	.wp_bootstrap .row-fluid {
+		clear: both;
+	}
+
+	.wp_bootstrap .page-header form {
+		margin: 0 !important;
+	}
+
+	.wp_bootstrap .subsubsub {
+		float: left !important;
+	}
+
+	.wp_bootstrap .row div[class*="span"]:first-child,
+	.wp_bootstrap .row-fluid div[class*="span"]:first-child {
+	    margin-left:0 !important;
+	}
+
+	.span1 {
+	    width:6.5% !important;
+	}
+	.span2 {
+	    width:15.0% !important;
+	}
+	.span3 {
+	    width:23.5% !important;
+	}
+	.span4 {
+	    width:32.0% !important;
+	}
+	.span5 {
+	    width:40.5% !important;
+	}
+	.span6 {
+	    width:49.0% !important;
+	}
+	.span7 {
+	    width:57.5% !important;
+	}
+	.span8 {
+	    width:66.0% !important;
+	}
+	.span9 {
+	    width:74.5% !important;
+	}
+	.span10 {
+	    width:83.0% !important;
+	}
+	.span11 {
+	    width:91.5% !important;
+	}
+	.span12 {
+	    margin-left:0 !important;
+	    width:100% !important;
+	}*/
+
+/*
+.wp_bootstrap .nav-tabs > .active > a,
+.wp_bootstrap .nav-tabs > .active > a:hover,
+.wp_bootstrap .nav-tabs > .active > a:focus {
+	color: #555 !important;
+	border-color: #CCC !important;
+	background: #F7F7F7 !important;
+	-webkit-box-shadow: inset 0 1px 0 #FFF !important;
+	box-shadow: inset 0 1px 0 #FFF !important;
+	vertical-align: top !important;
+}
+
+
+*/

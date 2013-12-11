@@ -380,6 +380,9 @@
 
 			$where = null;
 			$args = array();
+			$opts = array(
+				'fields' => array('id', 'subject', 'to', 'created', 'status','msg')
+			);
 
 			if ( $q ) {
 				$where = 'subject regexp %s OR html regexp %s OR plain regexp %s';
@@ -403,7 +406,7 @@
 			$whereFind = $where . '  ORDER BY id DESC';
 
 			$stats = newsmanEmail::countAll('status', '1=1', array());
-			$emails = newsmanEmail::findAllPaged($pg, $ipp, $whereFind, $args);
+			$emails = newsmanEmail::findAllPaged($pg, $ipp, $whereFind, $args, $opts);
 			
 			$res['count'] = array(
 				'pending' => 0,
@@ -428,11 +431,8 @@
 
 			foreach ($emails as $email) {
 				$eml = $email->toJSON();
+				//$eml = $email;
 				$eml['created'] = strtotime($eml['created']);
-
-				// 1.4.0 hack
-				$emal['editor'] = 'wp'; // forcing to use ckeditor
-
 				$res['rows'][] = $eml;
 			}
 
@@ -1794,21 +1794,35 @@
 			global $newsman_current_list;
 			global $newsman_current_subscriber;
 
-			
-
 			$toEmail = $this->param('toEmail');
 			$entityId = $this->param('entity');
 			$entType = $this->param('entType');
 
-			$list = newsmanList::findOne('name = %s', array('default'));
-			$s = $list->newSub();
+			$testListName = '_Test';
+
+			$list = newsmanList::findOne('name = %s', array($testListName));
+
+			$subCreated = false;
+
+			if ( !$list ) {
+				$list = new newsmanList($testListName);
+				$list->save();
+			}
+
+			$s = $list->findSubscriber("email = %s", array($toEmail));
+
+			if ( !$s ) {
+				$s = $list->newSub();
+				$s->email = $toEmail;
+				$s->firstName = 'Test';
+				$s->lastName = 'User';
+				$s->confirm();
+				$s->save();
+				$subCreated = true;
+			}			
 
 			$newsman_current_list = $list;
 			$newsman_current_subscriber = $s;
-
-			$s->email = $toEmail;
-			$s->firstName = 'John';
-			$s->lastName = 'Doe';
 
 			$data = $s->toJSON();
 
@@ -1828,10 +1842,13 @@
 			$msg = $email->renderMessage($data);
 			$msg['html'] = $this->u->processAssetsURLs($msg['html'], $ent->assetsURL);
 
-			$r = $this->u->mail($msg, array( 'to' => $toEmail) );
+			$r = $this->u->mail($msg, array( 'to' => $toEmail ) );
 
 			if ( $r === true ) {
-				$this->respond(true, sprintf(__('Test email was sent to %s.', NEWSMAN), $toEmail));
+				$s = $subCreated ?
+					sprintf(__('Test email was sent to %s and subscriber with this email was created in "%s" list.', NEWSMAN), $toEmail, $testListName) :
+					sprintf(__('Test email was sent to %s.', NEWSMAN), $toEmail);
+				$this->respond(true, $s);
 			} else {
 				$this->respond(false, $r);
 			}			

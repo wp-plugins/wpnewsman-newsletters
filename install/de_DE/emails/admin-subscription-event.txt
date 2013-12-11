@@ -1,5 +1,6 @@
-Ein Kontakt ist ihrer Mailing-Liste [newsman wp="blogname"]
- beigetreten.--- plain ---Ein Kontakt ist ihrer Mailing-Liste beigetreten. Die Kontaktdetails sind nachfolgend angeführt:
+Ein Kontakt ist ihrer Mailing-Liste [newsman wp="blogname"] beigetreten.
+--- plain ---
+Ein Kontakt ist ihrer Mailing-Liste beigetreten. Die Kontaktdetails sind nachfolgend angeführt:
 
 [newsman sub="*"]
 --

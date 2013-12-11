@@ -1,15 +1,15 @@
 <!-- proto-->
 <div class="wrap wp_bootstrap">
 	<?php include("_header.php"); ?>
-	<div style="border-bottom: 1px solid #DADADA; overflow: hidden;">
+	<div class="page-header">
 		<h2><?php _e('Email Templates', NEWSMAN); ?></h2>
 	</div>
 
 	<div style="overflow:hidden;">
-		<button style="float:right; display:none;" class="button subsubsub" id="newsman-search-cancel-btn"><?php _e('Remove Search Filter', NEWSMAN); ?></button>
+		<button style="float:right; display:none;" class="button radio-links" id="newsman-search-cancel-btn"><?php _e('Remove Search Filter', NEWSMAN); ?></button>
 	</div>
 
-	<div class="newsman-tbl-controls row-fluid">
+	<div class="newsman-tbl-controls row">
 		
 		<div class="span6">
 			<a class="btn" href="<?php echo NEWSMAN_BLOG_ADMIN_URL.'admin.php?page=newsman-templates&action=create-template'; ?>" id="btn-new-tpl"><?php _e('New Template', NEWSMAN); ?></a>

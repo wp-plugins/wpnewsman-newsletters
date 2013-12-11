@@ -65,7 +65,7 @@
 				<div class="control-group">
 					<label class="control-label" for="newsman-email-to"><?php _e('To:', NEWSMAN); ?></label>
 					<div class="controls">
-						<div id="eml-to" type="text" class="multis span7" name="newsman_email_to">
+						<div id="eml-to" type="text" class="multis" name="newsman_email_to">
 							<?php $g = newsman::getInstance(); echo $g->getEmailToAsTags('li'); ?>
 						</div>
 					</div>
@@ -90,7 +90,7 @@
 				<div class="control-group">
 					<label class="control-label" for="newsman-email-subj"><?php _e('Subject:', NEWSMAN); ?></label>
 					<div class="controls">
-						<input type="text" class="span7" id="newsman-email-subj" value="<?php echo htmlentities( isset($ent) ? $ent->subject : $email->subject ); ?>">
+						<input type="text" class="span7" id="newsman-email-subj" value="<?php newsmanEEnt( isset($ent) ? $ent->subject : $email->subject ); ?>">
 					</div>
 				</div>
 
@@ -101,7 +101,7 @@
 				</div>				
 			</div>
 
-			<div class="span4">
+			<div class="span3">
 				<?php if( NEWSMAN_EDIT_ENTITY == 'email' ): ?>
 				<?php do_action('newsman_put_tracking_settings', $ent); ?>
 				<h3><?php _e('Sending', NEWSMAN); ?></h3>

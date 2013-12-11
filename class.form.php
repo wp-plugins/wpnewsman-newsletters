@@ -328,7 +328,7 @@ class newsmanForm {
 		$elId = $this->getElId();
 
 		return "<div $type class=\"newsman-form-item $req $it $elId\">".
-					'<label '.$lblSt.'>'.$item['label'].'</label>'.
+					'<label '.$lblSt.' class="newsman-form-item-label">'.$item['label'].'</label>'.
 					'<span style="display:none;" class="newsman-required-msg radio">'.__('Required', NEWSMAN).'</span>'.
 					'<select name="'.$this->specChr($item['name']).'">'.
 					$options.
@@ -387,7 +387,8 @@ class newsmanForm {
 				}				
 			}
 		}
-		$parsed['email'] = $_POST['newsman-email'];
+
+		$parsed['email'] = trim($_POST['newsman-email']);
 		return $parsed;
 	}
 

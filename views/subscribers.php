@@ -15,9 +15,9 @@
 <!-- proto-->
 <div class="wrap wp_bootstrap">
 	<?php include("_header.php"); ?>
-	<div style="border-bottom: 1px solid #DADADA; overflow: hidden;">
+	<div class="page-header">
 
-		<h2><?php _e('Manage Subscribers', NEWSMAN); ?><?php do_action('newsman_put_list_select', true); ?> <a href="<?php echo NEWSMAN_BLOG_ADMIN_URL; ?>admin.php?page=newsman-forms&amp;sub=subscribers&amp;action=editlist" id="btn-edit-form" class="btn"><?php echo htmlentities(__('Form & List options', NEWSMAN)); ?></a> <form id="subs-search-form" class="form-search" style="display: inline-block; float: right;">
+		<h2><?php _e('Manage Subscribers', NEWSMAN); ?><?php do_action('newsman_put_list_select', true); ?> <a href="<?php echo NEWSMAN_BLOG_ADMIN_URL; ?>admin.php?page=newsman-forms&amp;sub=subscribers&amp;action=editlist" id="btn-edit-form" class="btn"><?php newsmanEEnt(__('Form & List options', NEWSMAN)); ?></a> <form id="subs-search-form" class="form-search" style="display: inline-block; float: right;">
 			<input  id="newsman-subs-search" type="text" class="input-medium search-query">
 			<button id="newsman-subs-search-clear" style="display:none;" class="btn"><?php _e('Clear', NEWSMAN); ?></button>
 			<button id="newsman-subs-search-btn" type="submit" class="btn"><?php _e('Search', NEWSMAN); ?></button>
@@ -26,13 +26,13 @@
 	</div>
 
 	<div style="overflow:hidden;">
-		<ul class="subsubsub" style="float:left; margin: 5px 0 0 0;">
+		<ul class="radio-links">
 			<li><a href="#/all" id="newsman-subs-all" class="newsman-flink current"><?php _e('All Subscribers', NEWSMAN); ?></a> |</li>
 			<li><a href="#/confirmed" id="newsman-subs-confirmed" class="newsman-flink"><?php _e('Confirmed', NEWSMAN); ?></a> |</li>
 			<li><a href="#/unconfirmed" id="newsman-subs-unconfirmed" class="newsman-flink"><?php _e('Unconfirmed', NEWSMAN); ?></a> |</li>
 			<li><a href="#/unsubscribed" id="newsman-subs-unsubscribed" class="newsman-flink"><?php _e('Unsubscribed', NEWSMAN); ?></a></li>
 		</ul>
-		<button style="float:right; display:none;" class="button subsubsub" id="newsman-search-cancel-btn"><?php _e('Remove Search Filter', NEWSMAN); ?></button>
+		<button style="float:right; display:none;" class="button radio-links" id="newsman-search-cancel-btn"><?php _e('Remove Search Filter', NEWSMAN); ?></button>
 	</div>
 
 	<div class="newsman-tbl-controls">

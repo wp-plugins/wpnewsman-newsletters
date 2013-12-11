@@ -604,7 +604,7 @@ jQuery(function($){
 	}
 
 
-	var showMessage = NEWSMAN.showMessage = function(msg, type, cb, rawError) {
+	var showMessage = NEWSMAN.showMessage = function(msg, type, cb, rawError, pinMessage) {
 
 		var wrap = $('<div class="wp_bootstrap"></div>').appendTo(document.body);
 
@@ -663,7 +663,7 @@ jQuery(function($){
 				cb();
 			}
 		}
-		if ( type !== 'error' ) {
+		if ( type !== 'error' && !pinMessage ) {
 			setTimeout(close, 2000);
 		}		
 	};
@@ -2808,6 +2808,16 @@ jQuery(function($){
 				$('#newsman-mailbox tbody input').prop('checked', $(this).is(':checked'));
 			});
 
+			$(document, '#newsman-mailbox tbody input').click(function(e){
+				var n = $('#newsman-mailbox tbody input:checked').length;
+				$('#newsman-btn-compose-from-msg')[ ( n === 1 ) ? 'show' : 'hide' ]();				
+			});
+
+			$('#newsman-btn-compose-from-msg').click(function(e){
+				var id = $('#newsman-mailbox tbody input:checked')[0].value;
+				window.location = NEWSMAN_BLOG_ADMIN_URL+'/admin.php?page=newsman-mailbox&action=compose-from-email&id='+id;
+			});
+
 			function showSendingLog(emailId) {
 				showLoading();
 				var b = $('#newsman-modal-errorlog .modal-body').empty();
@@ -2955,7 +2965,6 @@ jQuery(function($){
 					}
 				}				
 			}
-
 
 			function fillCounters(cnt) {
 				if ( cnt ) {
@@ -4583,7 +4592,7 @@ jQuery(function($){
 						action: 'newsmanAjSendTestEmail'
 					}
 				}).done(function(data){
-					showMessage(data.msg, 'success');
+					showMessage(data.msg, 'success', null, null, true);
 				}).fail(NEWSMAN.ajaxFailHandler).always(function(){
 					$('.modal-loading-block', that).hide();
 					$('.btn[mr="ok"]', that).removeAttr('disabled');

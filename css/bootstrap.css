@@ -263,7 +263,9 @@ textarea {
           border-radius: 500px;
 }
 
-.wp_bootstrap .row {
+/*  GRID */
+
+/*.wp_bootstrap .row {
   margin-left: -20px;
   *zoom: 1;
 }
@@ -646,7 +648,130 @@ textarea {
 
 .wp_bootstrap .container-fluid:after {
   clear: both;
+}*/
+
+/* /GRID */
+
+
+/* NEW GRID */
+/* Reusable column setup */
+.wp_bootstrap div[class*="span"] {
+    border:0px solid rgba(0,0,0,0);
+    float:left;
+    -webkit-box-sizing:border-box;
+    -moz-box-sizing:border-box;
+    box-sizing:border-box;
+    -moz-background-clip:padding-box;
+    -webkit-background-clip:padding-box;
+    background-clip:padding-box;
+
+    margin-left:2%;
+  padding:0 1.5%;    
 }
+
+
+
+    /* 1. 12 Column Grid 0px - Infinity 
+    ----------------------------------------------------------------------------- 
+    
+    Span 1:    6.5%
+    Span 2:    15.0%
+    Span 3:    23.5%
+    Span 4:    32.0%
+    Span 5:    40.5%
+    Span 6:    49.0%
+    Span 7:    57.5%
+    Span 8:    66.0%
+    Span 9:    74.5%
+    Span 10:    83.0%
+    Span 11:    91.5%
+    Span 12:    100%
+    
+    ----------------------------------------------------------------------------- */
+        
+  .wp_bootstrap .row div[class*="span"],
+  .wp_bootstrap .row-fluid div[class*="span"] {
+      margin-left:2%;
+    padding:0 1.5%;
+  }
+
+  .wp_bootstrap .row,
+  .wp_bootstrap .row-fluid {
+/*    clear: both;*/
+  }
+
+.wp_bootstrap .row:before,
+.wp_bootstrap .row:after,
+.wp_bootstrap .row-fluid:before,
+.wp_bootstrap .row-fluid:after {
+  display: table;
+  line-height: 0;
+  content: "";
+}
+
+.wp_bootstrap .row:after,
+.wp_bootstrap .row-fluid:after {
+  clear: both;
+}
+
+  .wp_bootstrap .page-header form {
+    margin: 0;
+  }
+
+  .wp_bootstrap .subsubsub {
+    /*margin: 5px 0;*/
+    float: left;
+  }
+
+  .wp_bootstrap .row div[class*="span"]:first-child,
+  .wp_bootstrap .row-fluid div[class*="span"]:first-child {
+      margin-left: -1.5%;
+  }
+
+  .wp_bootstrap .row div[class*="span"]:last-child,
+  .wp_bootstrap .row-fluid div[class*="span"]:last-child {
+      padding-right: 0;
+  }
+
+
+  .wp_bootstrap .span1 {
+      width:6.5%;
+  }
+  .wp_bootstrap .span2 {
+      width:15.0%;
+  }
+  .wp_bootstrap .span3 {
+      width:23.5%;
+  }
+  .wp_bootstrap .span4 {
+      width:32.0%;
+  }
+  .wp_bootstrap .span5 {
+      width:40.5%;
+  }
+  .wp_bootstrap .span6 {
+      width:49.0%;
+  }
+  .wp_bootstrap .span7 {
+      width:57.5%;
+  }
+  .wp_bootstrap .span8 {
+      width:66.0%;
+  }
+  .wp_bootstrap .span9 {
+      width:74.5%;
+  }
+  .wp_bootstrap .span10 {
+      width:83.0%;
+  }
+  .wp_bootstrap .span11 {
+      width:91.5%;
+  }
+  .wp_bootstrap .span12 {
+      margin-left:0;
+      width:100%;
+  }
+/* /NEW GRID */
 
 .wp_bootstrap p {
   margin: 0 0 9px;

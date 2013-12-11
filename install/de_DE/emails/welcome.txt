@@ -1,5 +1,6 @@
 Herzlich willkommen bei [newsman me="name"]
---- plain ---Hallo! Danke, dass sie unseren Newsletter abonniert haben. Sie sind jetzt bei unserem Newsletter angemeldet und werden tolle Tipps, Tricks und Aktionen ein paar mal im Monat zugesendet bekommen. Wir geben Ihre E-Mail-Adresse und ihre persönlichen, privaten Angaben nicht an Dritte weiter. 
+--- plain ---
+Hallo! Danke, dass sie unseren Newsletter abonniert haben. Sie sind jetzt bei unserem Newsletter angemeldet und werden tolle Tipps, Tricks und Aktionen ein paar mal im Monat zugesendet bekommen. Wir geben Ihre E-Mail-Adresse und ihre persönlichen, privaten Angaben nicht an Dritte weiter. 
 
 Um zu gewährleisten, dass sie künftig tolle Tipps, Tricks und Angebote erhalten, fügen Sie bitte [newsman me = "email"] in Ihr E-Mail-Adressbuch oder in ihre Empfängerliste ein, damit unsere Newsletter nicht irrtümlich als Spam identifizert werden. Mit freundlichen Grüßen,
 [newsman me="name"]

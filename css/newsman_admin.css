@@ -2,6 +2,21 @@ input[type="text"], input[type="password"], input[type="number"], input[type="se
     -moz-box-sizing: content-box;
 }
 
+#newsman-editor {
+	max-width: 1040px;
+}
+
+.page-header {
+	padding-bottom: 8px;
+	border-bottom: 1px solid #DADADA !important;
+	overflow: hidden;
+	margin: 0 0 8px 0 !important;
+}
+
+.page-header h2 {
+	padding-bottom: 0;
+}
+
 #wpcontent {
 	margin-right: 20px;
 }
@@ -72,7 +87,7 @@ input[type="text"], input[type="password"], input[type="number"], input[type="se
 	-ms-transition: border linear 0.2s, box-shadow linear 0.2s;
 	-o-transition: border linear 0.2s, box-shadow linear 0.2s;
 	transition: border linear 0.2s, box-shadow linear 0.2s;
-	border-color: #DFDFDF;
+	border-color: #ccc !important;
 	background-color: white;  
 
 	width: 100%;
@@ -82,9 +97,9 @@ input[type="text"], input[type="password"], input[type="number"], input[type="se
 	margin-bottom: 9px;
 	font-size: 13px;
 
-	-webkit-border-radius: 3px;
-	-moz-border-radius: 3px;
-	border-radius: 3px;		
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;		
 }
 
 .multis-items:focus {
@@ -153,11 +168,7 @@ tr:hover .newsman-inline-controls {
 }
 
 .newsman-tbl-controls {
-	margin: 18px 0;
-}
-
-.newsman-tbl-controls [class*="span"]:first-child {
-	margin-left: 0;
+	margin-bottom: 8px;
 }
 
 .newsman-tbl-controls .btn-group {
@@ -226,15 +237,31 @@ tr:hover .newsman-inline-controls {
 	z-index: 999999;
 }
 
-.subsubsub a {
+.wp_bootstrap .radio-links {
+	list-style: none;
+	margin: 0 0 8px 0;
+	padding: 0;
+	font-size: 13px;
+	float: left;
+}
+
+.wp_bootstrap .radio-links li {
+	display: inline-block;
+	margin: 0;
+	padding: 0;
+	white-space: nowrap;
+}
+
+.radio-links a {
 	cursor: pointer;
 }
 
-.subsubsub a.current:hover,
-.subsubsub a.current {
+.radio-links a.current:hover,
+.radio-links a.current {
 	color: black !important;
 	text-decoration: none;	
 	cursor: default;
+	font-weight: 600;
 }
 
 .check-column {
@@ -1523,6 +1550,7 @@ input.newsman-field-options-radio-opt-input {
 
 #eml-to {
 	margin-left: 0 !important;
+	width: 540px;
 }
 #fb-panel {
 	padding-left: 20px;

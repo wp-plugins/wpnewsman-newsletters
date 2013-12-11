@@ -3,7 +3,6 @@ jQuery(function($){
 	$('.newsman-form-url').val(window.location.href);
 
 	$('form[name="newsman-nsltr"]').submit(function(e) {
-
 		var el, v, form = this, errors = {};
 
 		function err(msg, el) {

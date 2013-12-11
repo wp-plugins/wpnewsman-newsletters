@@ -105,12 +105,37 @@ class newsmanAPI {
 
 		if ( !$list ) {
 			$this->respond(false, sprintf( __( 'List with id "%s" is not found.', NEWSMAN), $listId), array(), '404 Not found');
-		}		
+		}
+
+		$email = strtolower($_REQUEST['email']);
+
+		if ( !emailValid($email) ) {
+			$this->respond(false, sprintf( __( 'Bad email address format "%s".', NEWSMAN), $email), array(), '400 Bad request');
+		}
+
+		$s = $list->findSubscriber("email = %s", $email);
+		if ( $s ) {
+			$st = $s->meta('status');
+			switch ( $res ) {
+				case NEWSMAN_SS_UNCONFIRMED:
+					// subscribed but not confirmed
+					$this->respond(false, sprintf( __( 'The email "%s" is already subscribed but not yet confirmed.', NEWSMAN), $s->email), array('status' => $res));
+				break;                
+				case NEWSMAN_SS_CONFIRMED:
+					// subscribed and confirmed
+					$this->respond(false, sprintf( __( 'The email "%s" is already subscribed and confirmed.', NEWSMAN), $s->email), array('status' => $res));
+				break;
+				case NEWSMAN_SS_UNSUBSCRIBED:
+					// unsubscribed
+					$this->respond(false, sprintf( __( 'The email "%s" is already already in the database but unsubscribed.', NEWSMAN), $s->email), array('status' => $res));
+				break;
+			}			
+			wp_die('Please, check your link. It seems to be broken.');
+		}
 
 		unset($_REQUEST['listId']);
 		unset($_REQUEST['key']);
 		unset($_REQUEST['method']);
-
 
 		$s = $list->newSub();
 		$s->fill($_REQUEST);

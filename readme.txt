@@ -3,8 +3,8 @@ Contributors: Neocoder, G-Lock Software
 Donate Link: http://wpnewsman.com/premium-newsletter-plugin-wordpress/
 Tags: wpnewsman, newsletter, newsletters, newsletter signup, newsletter widget, subscribers, post notification, email subscription, email marketing, email, emailing, subscription
 Requires at least: 3.5
-Tested up to: 3.6
-Stable tag: 1.6.2
+Tested up to: 3.8
+Stable tag: 1.6.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -120,6 +120,14 @@ We got a User Feedback page where you can [add or vote for new features](http://
 3. Subscriber management.
 
 == Changelog ==
+
+= 1.6.3 =
+* Fixed: work of the external form which showed full site pages in some cases.
+* Changed: mailbox underlying API output to increse performance.
+* Added: "Compose from message" option to create a new email based on a sent one.
+* Added: styling fixes for WordPress 3.8.
+* Added: stripping whitespaces from the beginning and end of email address in the subscription form.
+* Added: unsubscribe link in a test email works now.
 
 = 1.6.2 =
 * Fixed: sending duplicate emails on systems with high load or slow database server.

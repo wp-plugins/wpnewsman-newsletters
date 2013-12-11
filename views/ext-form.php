@@ -2,14 +2,18 @@
 <html>
   <head>
     <title>Glock Newsletter Subscription Form</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <!-- Bootstrap -->
     <link href="<?php echo NEWSMAN_PLUGIN_URL; ?>/css/bootstrap.min.css" rel="stylesheet">
     <link href="<?php echo NEWSMAN_PLUGIN_URL; ?>/css/newsman.css" rel="stylesheet">
     	
-	<!--[if gte IE 9]>
-	<link rel='stylesheet' id='newsman-ie9-css'  href='http://blog.dev/wp-content/plugins/wpnewsman/css/newsman-ie9.css?ver=1.3.1' type='text/css' media='all' />
-	<![endif]-->
+	<link rel='stylesheet' id='newsman-ie9-css'  href='<?php echo NEWSMAN_PLUGIN_URL; ?>/css/newsman-ie9.css?ver=1.3.1' type='text/css' media='all' />
+
 	<?php wp_print_scripts(); ?>
+	<?php
+		global $wp_scripts;
+		$wp_scripts->print_extra_script('newsmanform', true );
+	?>
   </head>
   <body class="wp_bootstrap">
 	<div class="form-container">
@@ -20,7 +24,7 @@ if ( !isset($_REQUEST['uid']) || empty($_REQUEST['uid']) ) {
 } else {
 	$uid = $_REQUEST['uid'];
 
-	$list = newsmanList::findOne('uid = %d', array($uid));
+	$list = newsmanList::findOne('uid = %s', array($uid));
 	$frm = new newsmanForm($uid);
 
 	echo '<style>'.$list->extcss.'</style>';

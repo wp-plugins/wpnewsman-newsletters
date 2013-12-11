@@ -484,7 +484,7 @@ class newsman {
 		}
 
 		if ( isset($link) ) {
-			return $this->getActionLink($link);
+			return $this->getActionLink($link, false, isset($ext));
 		}
 
 		return $content ? $content : '';
@@ -530,7 +530,7 @@ class newsman {
 
 	// links
 
-	public function getActionLink($type, $only_code = false) {
+	public function getActionLink($type, $only_code = false, $externalForm = false) {
 		global $newsman_current_subscriber;
 		global $newsman_current_email;
 		global $newsman_current_list;
@@ -549,6 +549,10 @@ class newsman {
 
 			if ( $type === 'email' ) {
 				$link.='&email='.$newsman_current_email->ucode;
+			}
+
+			if ( $externalForm ) {
+				$link .= '&extForm=1';
 			}
 
 			$link = apply_filters('newsman_apply_analytics', $link);
@@ -594,6 +598,8 @@ class newsman {
 			$newsman_current_list = $list;
 			$newsman_current_subscriber = $s->toJSON();
 
+			$use_excerpts = isset($_REQUEST['extForm']);
+
 			switch ( $type ) {
 
 				case 'confirmation': 
@@ -607,20 +613,35 @@ class newsman {
 						}
 						if ( $this->options->get('notifyAdmin') ) {
 							$this->notifyAdmin($list->id, NEWSMAN_ET_ADMIN_SUB_NOTIFICATION);
+						}	
+
+						if ( $use_excerpts ) {
+							$this->showActionExcerpt('confirmationSucceed');
+						} else {
+							$this->redirect( $this->getLink('confirmationSucceed', array('u' => $_REQUEST['code'] ) ) );	
 						}						
-						$this->redirect( $this->getLink('confirmationSucceed', array('u' => $_REQUEST['code'] ) ) );
 					}
 					break;					
 				case 'resend-confirmation':					
 					$this->sendEmail($list->id, NEWSMAN_ET_CONFIRMATION);
-					$this->redirect( $this->getLink('confirmationRequired', array('u' => $_REQUEST['code'] ) ) );
+
+					if ( $use_excerpts ) {
+						$this->showActionExcerpt('confirmationRequired');
+					} else {
+						$this->redirect( $this->getLink('confirmationRequired', array('u' => $_REQUEST['code'] ) ) );
+					}
 					break;
 				case 'unsubscribe':
 
 					if ( $this->options->get('useDoubleOptout') ) {
 
 						$this->sendEmail($list->id, NEWSMAN_ET_UNSUBSCRIBE_CONFIRMATION);
-						$this->redirect( $this->getLink('unsubscribeConfirmation', array('u' => $_REQUEST['code'] ) ) );
+
+						if ( $use_excerpts ) {
+							$this->showActionExcerpt('unsubscribeConfirmation');
+						} else {
+							$this->redirect( $this->getLink('unsubscribeConfirmation', array('u' => $_REQUEST['code'] ) ) );	
+						}
 
 					} else {
 						$s->unsubscribe();
@@ -634,7 +655,11 @@ class newsman {
 							$this->sendEmail($list->id, NEWSMAN_ET_UNSUBSCRIBE);
 						}
 
-						$this->redirect( $this->getLink('unsubscribeSucceed', array('u' => $_REQUEST['code'] ) ) );
+						if ( $use_excerpts ) {
+							$this->showActionExcerpt('unsubscribeSucceed');
+						} else {
+							$this->redirect( $this->getLink('unsubscribeSucceed', array('u' => $_REQUEST['code'] ) ) );	
+						}						
 					}
 					break;
 
@@ -650,7 +675,11 @@ class newsman {
 							$this->sendEmail($list->id, NEWSMAN_ET_UNSUBSCRIBE);
 						}
 
-						$this->redirect( $this->getLink('unsubscribeSucceed', array('u' => $_REQUEST['code'] ) ) );
+						if ( $use_excerpts ) {
+							$this->showActionExcerpt('unsubscribeSucceed');
+						} else {
+							$this->redirect( $this->getLink('unsubscribeSucceed', array('u' => $_REQUEST['code'] ) ) );
+						}
 					break;
 
 				case 'email':
@@ -893,6 +922,10 @@ class newsman {
 
 	public function loadScrtipsAndStyles() {
 
+		global $wp_version;
+
+		$is38 = !!preg_match('/^3\.8/i', $wp_version);
+
 		$page   = isset($_REQUEST['page']) ? $_REQUEST['page'] : '';
 		$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
 		$type   = isset($_REQUEST['type']) ? $_REQUEST['type'] : '';
@@ -933,6 +966,10 @@ class newsman {
 					wp_register_script('fileuploader-js', NEWSMAN_PLUGIN_URL.'/js/uploader/jquery.fileupload.js', array('jquery', 'jquery-ui-widget', 'fileuploader-iframe-transport-js'), NEWSMAN_VERSION);
 
 					wp_register_style('bootstrap', NEWSMAN_PLUGIN_URL.'/css/bootstrap.css', array(), NEWSMAN_VERSION);
+
+					if ( $is38 ) {
+						wp_enqueue_style('wp38-bootstrap-fixes', NEWSMAN_PLUGIN_URL.'/css/wp38.css', array(), NEWSMAN_VERSION);
+					}
 
 					wp_register_script('bootstrapjs', NEWSMAN_PLUGIN_URL.'/js/bootstrap.min.js', array('jquery'));
 					
@@ -1269,7 +1306,13 @@ class newsman {
 			$res = $frm->parse();
 
 			//Verify Email
-			$this->utils->emailValid($res['email'], true);
+			if ( !$this->utils->emailValid($res['email']) ) {
+				if ( $use_excerpts ) {
+					$this->showActionExcerpt('badEmail');
+				} else {
+					$this->redirect( $this->getLink('badEmail', array('u' => $_REQUEST['u']) ) );
+				}
+			}
 
 			$list = $frm->list;
 			$newsman_current_list = $frm->list;
@@ -1732,6 +1775,10 @@ class newsman {
 
 		$del = ( strpos($link, '?') === false ) ? '?' : '&';
 
+		if ( isset($_REQUEST['extForm']) ) {
+			$params['extForm'] = $_REQUEST['extForm'];
+		}
+
 		if ( count($params) ) {
 			foreach ( $params as $key => $value ) {
 				$link .= $del.$key.'='.$value;
@@ -1791,9 +1838,40 @@ class newsman {
 					wp_die($r);
 				}				
 			}
-		}		
+		}
 
+		if ( $action == 'compose-from-email' && $id ) {
 
+			$eml = newsmanEmail::findOne('id = %d', array( $id ));
+
+			if ( $eml ) {
+
+				$email = new newsmanEmail();
+
+				$email->type = 'email';	
+
+				$email->subject = $eml->subject.' '.__('Copy', NEWSMAN);
+				$email->html = $eml->html;
+				$email->plain = $eml->plain;
+				$email->assetsURL = $eml->assetsURL;
+				$email->assetsPath = $eml->assetsPath;
+				$email->particles = $eml->particles;
+
+				$email->status = 'draft';
+				$email->created = date('Y-m-d');
+
+				$r = $email->save();
+
+				if ( $r ) {					
+					$url = get_bloginfo('wpurl').'/wp-admin/admin.php?page=newsman-mailbox&action=edit&type=wp&id='.$email->id;
+					$this->redirect( $url );
+				} else {
+					wp_die($r);
+				}				
+			} else {
+				wp_die("Email with id $id is not found.");
+			}
+		}
 
 		// Action Pages
 
@@ -2596,3 +2674,12 @@ function newsmanGetDefaultForm() {
 	$n = newsman::getInstance();
 	return $n->getDefaultForm();
 }
+
+function newsmanEnt($str) {
+	return htmlentities($str, ENT_COMPAT, 'UTF-8');
+}
+
+function newsmanEEnt($str) {
+	echo newsmanEnt($str);
+}
+
