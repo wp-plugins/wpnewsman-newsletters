@@ -555,6 +555,10 @@ class newsman {
 				$link .= '&extForm=1';
 			}
 
+			if ( isset($_REQUEST['_form_lang']) ) {
+				$link .= '&_form_lang='.$_REQUEST['_form_lang'];
+			}
+
 			$link = apply_filters('newsman_apply_analytics', $link);
 
 			return $link;
@@ -723,6 +727,7 @@ class newsman {
 				'json' => $this->getDefaultForm()
 			),
 			'notifyAdmin' => true,
+			'notificationEmail' => get_option('admin_email'),
 			'mailer' => array(
 				'mdo' => 'phpmail', // sendmail, smtp
 				'smtp' => array(
@@ -913,7 +918,7 @@ class newsman {
 		$eml = $this->getTemplate($listId, $tplType);
 
 		$this->utils->mail($eml, array(
-			'to' => $this->options->get('sender.email'),
+			'to' => $this->options->get('notificationEmail'),
 			'vars' => $newsman_current_subscriber
 		));
 
@@ -924,7 +929,7 @@ class newsman {
 
 		global $wp_version;
 
-		$is38 = !!preg_match('/^3\.8/i', $wp_version);
+		$isNew38Style = preg_match('/^3\.(\d+)/i', $wp_version, $matches) && intval($matches[1]) >= 8;
 
 		$page   = isset($_REQUEST['page']) ? $_REQUEST['page'] : '';
 		$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
@@ -967,7 +972,7 @@ class newsman {
 
 					wp_register_style('bootstrap', NEWSMAN_PLUGIN_URL.'/css/bootstrap.css', array(), NEWSMAN_VERSION);
 
-					if ( $is38 ) {
+					if ( $isNew38Style ) {
 						wp_enqueue_style('wp38-bootstrap-fixes', NEWSMAN_PLUGIN_URL.'/css/wp38.css', array(), NEWSMAN_VERSION);
 					}
 
@@ -1483,7 +1488,10 @@ class newsman {
 
 			$doRedirect = !defined('DOING_AJAX') && !defined('DOING_CRON');
 
-			if ( isset($_REQUEST['action']) && $_REQUEST['action']=='activate-plugin' ) {
+			// Update plugin iframe URL: 
+			// update.php?action=activate-plugin&networkwide&plugin=wpnewsman-newsletters%2Fwpnewsman.php&_wpnonce=8f9c8f4c6d
+
+			if ( preg_match('/update\.php/', $_SERVER['SCRIPT_NAME']) && isset($_REQUEST['action']) && $_REQUEST['action']=='activate-plugin' ) {
 				$doRedirect = false;
 			}
 
@@ -1762,7 +1770,7 @@ class newsman {
 
  		if ( function_exists('icl_object_id') ) {
 
- 			$lang = 'en';
+ 			$lang = ICL_LANGUAGE_CODE;
 
 			if ( isset($_REQUEST['_form_lang']) ) {
 				$lang = $_REQUEST['_form_lang'];
@@ -1789,7 +1797,6 @@ class newsman {
 
 		return $link;
 	}
-
 
 	public function onInit($activation = false) {
 		new newsmanAJAX();
@@ -2078,10 +2085,21 @@ class newsman {
 	}
 
 	public function echoTemplate() {
+		global $newsman_current_subscriber;
+		global $newsman_current_list;
+
 		header("Content-Type: text/html; charset=utf-8");
 		header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
 		header("Pragma: no-cache"); 
 		header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); // Date in the past		
+
+		$list = newsmanList::findOne('id = %s', array($_REQUEST['list']));
+
+		if ( $list ) {
+			$s = $list->findSubscriber("id = %s", array($_REQUEST['sub']));
+			$newsman_current_list = $list;
+			$newsman_current_subscriber = $s->toJSON();		
+		}			
 
 		$id = $_REQUEST['id'];
 		$tpl = newsmanEmailTemplate::findOne('id=%d', array($id));
@@ -2115,7 +2133,7 @@ class newsman {
 			} else {
 				$c = $eml->html;
 			}
-			echo $this->utils->processAssetsURLs($c, $eml->assetsURL);
+			echo $eml->html; //echo $this->utils->processAssetsURLs($c, $eml->assetsURL);
 		}
 		die();
 	}	

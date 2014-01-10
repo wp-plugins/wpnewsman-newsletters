@@ -405,6 +405,39 @@ function newsman_migration_alter_emails_table() {
 	$wpdb->query($sql);
 }
 
+$newsman_changes[] = array(
+	'introduced_in' => $u->versionToNum('1.6.4-beta-5'),
+	'func' => 'newsman_migration_add_admin_notification_email_addr'
+);
+
+function newsman_migration_add_admin_notification_email_addr() {
+	$o = newsmanOptions::getInstance();
+	$o->set('notificationEmail', get_option('admin_email'));
+}
+
+
+$newsman_changes[] = array(
+	'introduced_in' => $u->versionToNum('1.6.4-beta-7'),
+	'func' => 'newsman_migration_alter_emails_table_apply_longtext_type'
+);
+
+function newsman_migration_alter_emails_table_apply_longtext_type() {
+	global $wpdb;
+
+	$email_cols = array('html','p_html', 'plain');
+	$tpl_cols = array('html','p_html', 'plain', 'p_plain');
+
+	$tbl = newsmanEmail::getTableName();	
+	foreach ($email_cols as $col) {
+		$wpdb->query("ALTER TABLE $tbl MODIFY COLUMN $col LONGTEXT NOT NULL DEFAULT ''");
+	}
+
+	$tbl = newsmanEmailTemplate::getTableName();
+	foreach ($tpl_cols as $col) {
+		$wpdb->query("ALTER TABLE $tbl MODIFY COLUMN $col LONGTEXT NOT NULL DEFAULT ''");
+	}
+}
+
 
 
 

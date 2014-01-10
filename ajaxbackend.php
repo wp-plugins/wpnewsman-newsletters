@@ -381,7 +381,7 @@
 			$where = null;
 			$args = array();
 			$opts = array(
-				'fields' => array('id', 'subject', 'to', 'created', 'status','msg')
+				'fields' => array('id', 'subject', 'to', 'created', 'schedule', 'status','msg')
 			);
 
 			if ( $q ) {
@@ -447,15 +447,15 @@
 			
 			$search		= $this->param('search', false);
 
-			$cats	= $this->param('cats', '[]');
-			$auths	= $this->param('auths', false);
+			$cats		= $this->param('cats', '[]');
+			$auths		= $this->param('auths', false);
 
-			$postType = $this->param('postType', 'post');
+			$postType 	= $this->param('postType', 'post');
 
-			$ipp = $this->param('ipp', 15);
-			$page = $this->param('page', 1);
+			$ipp 		= $this->param('ipp', 15);
+			$page 		= $this->param('page', 1);
 
-			$cats = json_decode('['.$cats.']');
+			$cats 		= json_decode('['.$cats.']');
 
 			$includePrivate = $this->param('includePrivate', 0);
 			$includePrivate = intval($includePrivate) ? true : false;			
@@ -485,7 +485,7 @@
 		    	orderby=title
 		    	order=ASC
 		    	
-				*  hour= - hour (from 0 to 23)
+				* hour= - hour (from 0 to 23)
 				* minute= - minute (from 0 to 60)
 				* second= - second (0 to 60)
 				* day= - day of the month (from 1 to 31)
@@ -495,8 +495,6 @@
 		    */
 
 			//$newsman_ajresponse['limit'] = $limit;
-
-			
 
 			$args = array(		
 				'post_type' => $postType,
@@ -508,7 +506,9 @@
 				'suppress_filters' => true
 			);
 
-			$today = getdate();
+			$ts = $this->u->current_time('timestamp');
+
+			$today = getdate( $ts );
 			if ( $selectRange ) {
 				$args['posts_per_page'] = -1;
 				switch ( $selectRange ) {
@@ -519,8 +519,8 @@
 						break;
 
 					case 'week':
-						$args['year']	= date('Y');
-						$args['w'] 		= date('W');
+						$args['year']	= date('Y', $ts);
+						$args['w'] 		= date('W', $ts);
 						break;
 
 					case 'month':
@@ -1254,8 +1254,6 @@
 		private function importSubscriber($list, $fields, $status, $row) {
 			$form = array();
 
-			
-
 			$s = $list->newSub();
 
 			$badEmail = false;
@@ -1329,7 +1327,8 @@
 					$c += 1;
 					if ( $c === 1 && $skipFirst ) {
 						continue;
-					}						
+					}
+					
 					if ( $this->importSubscriber($list, $fields, $st, $data) !== false ) {
 						$imported += 1;
 					}

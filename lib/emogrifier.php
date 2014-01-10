@@ -40,6 +40,14 @@ define('CACHE_CSS', 0);
 define('CACHE_SELECTOR', 1);
 define('CACHE_XPATH', 2);
 
+
+function xlog($msg) {     
+    $debugLogPath = NEWSMAN_PLUGIN_PATH.DIRECTORY_SEPARATOR.'newsmanlog.txt';
+    $msg = '['.date('Y-m-d H:i:s').'] '.$msg."\n";
+    file_put_contents($debugLogPath, $msg, FILE_APPEND);
+}
+
+
 class Emogrifier {
 
     // for calculating nth-of-type and nth-child selectors
@@ -56,7 +64,7 @@ class Emogrifier {
     // 1. because of client incompatibilities, it is better practice to send out HTML entities rather than unicode over email
     // 2. it translates any illegal XML characters that DOMDocument cannot work with
     // if you would like to preserve your original encoding, set this attribute to true.
-    public $preserveEncoding = false;
+    public $preserveEncoding = true;
 
     public function __construct($html = '', $css = '') {
         $this->html = $html;
@@ -103,6 +111,7 @@ class Emogrifier {
         }
 
         $encoding = mb_detect_encoding($body);
+
         $body = mb_convert_encoding($body, 'HTML-ENTITIES', $encoding);
 
         libxml_use_internal_errors(true);

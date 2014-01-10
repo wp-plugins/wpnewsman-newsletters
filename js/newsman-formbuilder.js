@@ -1,7 +1,10 @@
 jQuery(function($){
 
 	function fieldName(str) {
-		return str.replace(/\W+$/ig, '').replace(/\W+/ig, '-').toLowerCase();
+		console.log('> '+str);		
+		var s = str.replace(/[\s!@#$%\^&*\(\)?.,]+$/ig, '').replace(/[\s!@#$%\^&*\(\)?.,]+/ig, '-').toLowerCase();
+		console.log('< '+s);
+		return s;
 	}	
 
 	// Option elements

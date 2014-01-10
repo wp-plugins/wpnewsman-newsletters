@@ -3,8 +3,8 @@ Contributors: Neocoder, G-Lock Software
 Donate Link: http://wpnewsman.com/premium-newsletter-plugin-wordpress/
 Tags: wpnewsman, newsletter, newsletters, newsletter signup, newsletter widget, subscribers, post notification, email subscription, email marketing, email, emailing, subscription
 Requires at least: 3.5
-Tested up to: 3.8
-Stable tag: 1.6.3
+Tested up to: 3.9
+Stable tag: 1.6.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -48,9 +48,7 @@ WPNewsman plugin updated regularly with new features. Please see the <a href="ht
 
 = Email Newsletter Software related features =
 
-Compatible with G-Lock EasyMail 6 [The Best Newsletter Software](http://directemailsoftware.com/email-newsletter-software/ "The Best Newsletter Software for Windows 8") :
-
-* [Download in-house newsletter software free trial](http://directemailsoftware.com/downloads/ "in-house newsletter software download")
+Compatible with G-Lock EasyMail7 [Unique Email Marketing solution for Windows](http://easymail7.com/ "Unique Email Marketing solution for Windows") :
 
 = Translations in your language =
 
@@ -120,6 +118,15 @@ We got a User Feedback page where you can [add or vote for new features](http://
 3. Subscriber management.
 
 == Changelog ==
+
+= 1.6.4 =
+* Fixed: form fields with unicode names were not stored to the database.
+* Fixed: some Russian characters in the templates became broken during sending.
+* Fixed: sometimes in multilingual setup, links in system emails were pointing to the action pages in the different language.
+* Fixed: Schedule time was shown as 'Invalid Date' in the emails table.
+* Fixed: emails and email templates larger than 64k where truncated.
+* Added: ability to change the email address for admin notifications.
+* Fixed: Punctuation characters were removed at the begining of the post when using fancy excerpt mode. Special thank to our user Oleg for the fix.
 
 = 1.6.3 =
 * Fixed: work of the external form which showed full site pages in some cases.
@@ -330,6 +337,9 @@ We got a User Feedback page where you can [add or vote for new features](http://
 * First public release. Hello World! 
 
 == Upgrade Notice ==
+
+= 1.6.4 =
+Recommended upgrade.
 
 = 1.6.2 =
 Recommended upgrade. The bug that caused sending of multiple copies of email is fixed.

@@ -69,7 +69,7 @@ class newsmanStorable {
 				break;
 			case 'text':
 			default:
-				$native = 'TEXT NOT NULL DEFAULT ""';
+				$native = 'LONGTEXT NOT NULL DEFAULT ""';
 				break;
 		}
 		return strtolower($native);

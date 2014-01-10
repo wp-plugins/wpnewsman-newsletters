@@ -78,11 +78,15 @@
 						<label class="newsman-edit-label" for="newsman-sender-returnEmail"><?php _e('Return Email Address:', NEWSMAN); ?></label>
 						<input  type="text" size="40" name="newsman-sender-returnEmail" value="" />
 
+						<label class="newsman-edit-label" for="newsman-notificationEmail"><?php _e('Email Address for Admin Notifications:', NEWSMAN); ?></label>
+						<input  type="text" size="40" name="newsman-notificationEmail" value="" />
+
 						<div style="margin-top: 10px;">
 							<label class="checkbox" for="newsman-sendWelcome"><input type="checkbox" name="newsman-sendWelcome" value="1" /> <?php _e('Send Welcome Message', NEWSMAN); ?></label>
 							<label class="checkbox" for="newsman-sendUnsubscribed"><input type="checkbox" name="newsman-sendUnsubscribed" value="1" /> <?php _e('Send Unsubscribe Notification', NEWSMAN); ?></label>
 							<label class="checkbox" for="newsman-notifyAdmin"><input type="checkbox" name="newsman-notifyAdmin" value="1" /> <?php _e('Send Subscribe/Unsubscribe Event Notifications to Admin', NEWSMAN); ?></label>				
 						</div>
+
 					</div>
 					<div class="span4"></div>
 				</div>
