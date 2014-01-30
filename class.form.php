@@ -102,6 +102,10 @@ class newsmanForm {
 	}
 
 	private function getCypherField() {
+		$o = newsmanOptions::getInstance();
+		if ( $o->get('disableCypherField') ) {
+			return '';
+		}
 		$u = newsmanUtils::getInstance();
 
 		$lblSt = $this->useInlineLabels ? 'style="display: none;"' : '';
@@ -159,6 +163,7 @@ class newsmanForm {
 
 	private function validateHPFields() {
 		$u = newsmanUtils::getInstance();
+		$o = newsmanOptions::getInstance();
 
 		$hpFieldName = $_REQUEST['newsman-special-h'];
 		if ( !$hpFieldName ) { return false; }
@@ -166,26 +171,29 @@ class newsmanForm {
 		$hpFieldValue = $_REQUEST[$hpFieldName];
 		if ( $hpFieldValue !== '' ) { return false; }
 
-		if ( !isset($_REQUEST['newsman-special-c']) ) { return false; }
+		if ( !$o->get('disableCypherField') ) {
+			
+			if ( !isset($_REQUEST['newsman-special-c']) ) { return false; }
 
-		$cfFieldValueEnc = $_REQUEST['newsman-special-c'];
-		$cfFieldValueDec = $u->decrypt_pwd($cfFieldValueEnc);
+			$cfFieldValueEnc = $_REQUEST['newsman-special-c'];
+			$cfFieldValueDec = $u->decrypt_pwd($cfFieldValueEnc);
 
-		if ( !$cfFieldValueDec ) { return false; }
+			if ( !$cfFieldValueDec ) { return false; }
 
-		$cfFieldValueDecArr = explode('-', $cfFieldValueDec);
+			$cfFieldValueDecArr = explode('-', $cfFieldValueDec);
 
-		$ip = $cfFieldValueDecArr[0];
-		$ts = $cfFieldValueDecArr[1];
+			$ip = $cfFieldValueDecArr[0];
+			$ts = $cfFieldValueDecArr[1];
 
-		$validInterval = $ts + ( 5*60*60 ); // ts + 5 hours
+			$validInterval = $ts + ( 5*60*60 ); // ts + 5 hours
 
-		if ( $ip !== $u->peerip() ) { return false; }
+			if ( $ip !== $u->peerip() ) { return false; }
 
-		$now = time();
+			$now = time();
 
-		// if post "from future" or form data older than 5 hours
-		if ( $ts > $now || $validInterval < $now ) { return false; }
+			// if post "from future" or form data older than 5 hours
+			if ( $ts > $now || $validInterval < $now ) { return false; }			
+		}
 
 		return true;
 	}

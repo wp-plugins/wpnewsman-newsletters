@@ -4,7 +4,7 @@ Donate Link: http://wpnewsman.com/premium-newsletter-plugin-wordpress/
 Tags: wpnewsman, newsletter, newsletters, newsletter signup, newsletter widget, subscribers, post notification, email subscription, email marketing, email, emailing, subscription
 Requires at least: 3.5
 Tested up to: 3.9
-Stable tag: 1.6.4
+Stable tag: 1.6.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -55,9 +55,13 @@ Compatible with G-Lock EasyMail7 [Unique Email Marketing solution for Windows](h
 Translations are included in the plugin: 
 
 * French (completed)
-* German (completed)
-* Italian (55%)
 * Russian (completed)
+* German (Germany) (completed)
+* Polish (99%)
+* Italian (Italy) (50%)
+* Spanish (86%)
+* Portuguese (Brazil) (6%)
+* Hungarian (Hungary) (26%)
 
 * Your language: [get a Pro license in exchange for your translation](http://support.glocksoft.net/kb/articles/68-translation-of-wpnewsman-in-your-language). Join the translation teams on [our Transifex page](https://www.transifex.com/projects/p/g-lock-wpnewsman/).
 
@@ -118,6 +122,13 @@ We got a User Feedback page where you can [add or vote for new features](http://
 3. Subscriber management.
 
 == Changelog ==
+
+= 1.6.5 =
+* Fixed: plugin welcome screen appearance
+* Fixed: mailman event was not added in some cases
+* Added: saving of the last used test email address
+* Added: an option to disable honeypot cypher field
+* Fixed: missing email status message
 
 = 1.6.4 =
 * Fixed: form fields with unicode names were not stored to the database.

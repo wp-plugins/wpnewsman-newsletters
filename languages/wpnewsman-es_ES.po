@@ -1,95 +1,93 @@
 # Copyright (C) 2014 G-Lock WPNewsman Lite
 # This file is distributed under the same license as the G-Lock WPNewsman Lite package.
 # Translators:
-# seocombat <seocombat@gmail.com>, 2013
-# seocombat <seocombat@gmail.com>, 2013
-# amura <seosirena@gmail.com>, 2013-2014
-# amura <seosirena@gmail.com>, 2013
+# David Marín Carreño <davefx@gmail.com>, 2014
+# matiaspierrad <Matiaspierrad@hotmail.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: G-Lock WPNewsman Plugin for WordPress\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/wpnewsman\n"
 "POT-Creation-Date: 2014-01-29 10:49:42+00:00\n"
-"PO-Revision-Date: 2014-01-29 13:32+0000\n"
-"Last-Translator: amura <seosirena@gmail.com>\n"
-"Language-Team: Russian (Russia) (http://www.transifex.com/projects/p/g-lock-wpnewsman/language/ru_RU/)\n"
+"PO-Revision-Date: 2014-01-29 13:06+0000\n"
+"Last-Translator: seocombat <seocombat@gmail.com>\n"
+"Language-Team: Spanish (http://www.transifex.com/projects/p/g-lock-wpnewsman/language/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ru_RU\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Language: es\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ajaxbackend.php:102 api.php:83
 msgid "required parameter \"%s\" is missing in the request"
-msgstr "обязательный параметр \"%s\"отсутствует в запросе"
+msgstr "El parámetro requerido \"%s\" no se encuentra en la solicitud"
 
 #. translators: subscriber type
 #. translators: lists and forms table header
 #: ajaxbackend.php:112 core.php:1082 views/forms.php:24
 #: views/subscribers.php:31
 msgid "Confirmed"
-msgstr "Подтвержденные"
+msgstr "Confirmado"
 
 #. translators: subscriber type
 #. translators: lists and forms table header
 #: ajaxbackend.php:113 core.php:1080 views/forms.php:25
 #: views/subscribers.php:32
 msgid "Unconfirmed"
-msgstr "Неподтвержденные"
+msgstr "Sin confirmar"
 
 #. translators: subscriber type
 #. translators: lists and forms table header
 #: ajaxbackend.php:114 core.php:1084 views/forms.php:26
 #: views/subscribers.php:33
 msgid "Unsubscribed"
-msgstr "Отписанные"
+msgstr "Sin suscribir"
 
 #: ajaxbackend.php:121
 msgid "Cannot edit email. Email with id \"%s\" is not found."
-msgstr "Не удается отредактировать письмо. Письмо с ID \"%s\"не найдено."
+msgstr "No se puede editar el mensaje. No se encuentra el mensaje con id \"%s\"."
 
 #: ajaxbackend.php:125
 msgid "Cannot edit email. Email with id \"%s\" cannot be written."
-msgstr "Не удается отредактировать письмо. Письмо с ID \"%s\" не может быть записано."
+msgstr "No se puede editar el mensaje. No se puede escribir el mensaje con id \"%s\"."
 
 #: ajaxbackend.php:129
 msgid "Email does not have a \"%s\" property."
-msgstr "У письма отсутствует свойство \"%s\"."
+msgstr "El mensaje no tiene la propiedad \"%s\""
 
 #: ajaxbackend.php:134
 msgid "Cannot edit template. Template with id \"%s\" is not found."
-msgstr "Не удается изменить шаблон. Шаблон с идентификатором \"%s\"не найден."
+msgstr "No se puede editar la plantilla. No se encuentra la plantilla con id \"%s\""
 
 #: ajaxbackend.php:139
 msgid "Cannot edit template. Template with id \"%s\" cannot be written."
-msgstr "Не удается изменить шаблон. Шаблон с идентификатором \"%s\"не может быть записан."
+msgstr "No se pudo editar plantilla. No se puede escribir la plantilla con id \"%s\"."
 
 #: ajaxbackend.php:143 ajaxbackend.php:1307 api.php:107 api.php:181
 #: export_list.php:46
 msgid "List with id \"%s\" is not found."
-msgstr "Список подписчиков с идентификатором \"%s\" не найден."
+msgstr "No se encuentra la lista con id \"%s\""
 
 #: ajaxbackend.php:200
 msgid "WPNEWSMAN Bug Report from %s"
-msgstr "Отчет WPNEWSMAN об ошибках от %s"
+msgstr "Informe de errores WPNEWSMAN desde %s"
 
 #: ajaxbackend.php:211
 msgid "Bug report was sent to %s."
-msgstr "Отчет об ошибке был отправлен на %s."
+msgstr "Se envió informe de error a %s"
 
 #: ajaxbackend.php:246
 msgid "Your SMTP settings are correct"
-msgstr "Ваши настройки SMTP верны."
+msgstr "Su configuración SMTP es correcta"
 
 #: ajaxbackend.php:247
 msgid ""
 " If you read this message, your SMTP settings in the G-Lock WPNewsman plugin"
 " are correct"
-msgstr " Если вы читаете это сообщение, то Ваши настройки SMTP в плагине G-Lock WPNewsman верны."
+msgstr "Si puede leer este mensaje, la configuración SMTP del plugin G-Lock WPNeswman es correcta."
 
 #: ajaxbackend.php:255 ajaxbackend.php:1849
 msgid "Test email was sent to %s."
-msgstr "Тестовое письмо было отправлено на %s."
+msgstr "Mensaje de prueba enviado a %s"
 
 #: ajaxbackend.php:281 ajaxbackend.php:311 ajaxbackend.php:439
 #: ajaxbackend.php:781 ajaxbackend.php:825 ajaxbackend.php:1064
@@ -97,707 +95,704 @@ msgstr "Тестовое письмо было отправлено на %s."
 #: ajaxbackend.php:1656 ajaxbackend.php:1723 ajaxbackend.php:1733
 #: ajaxbackend.php:1888 ajaxbackend.php:2024
 msgid "success"
-msgstr "Готово"
+msgstr "Éxito"
 
 #: ajaxbackend.php:339
 msgid "Successfully deleted selected subscribers."
-msgstr "Выбранные подписчики были успешно удалены."
+msgstr "Se han borrado correctamente los suscriptores seleccionados"
 
 #: ajaxbackend.php:360
 msgid "Error: \"options\" request parameter was empty or not defined."
-msgstr "Ошибка: параметр \"options\" в запросе пуст или не определен."
+msgstr "Error: el parámetro \"options\" de la petición no se ha definido, o está vacío."
 
 #: ajaxbackend.php:365
 msgid "Options were successfully saved."
-msgstr "Параметры были успешно сохранены."
+msgstr "Opciones guardadas correctamente."
 
 #: ajaxbackend.php:629 ajaxbackend.php:880 ajaxbackend.php:907
 #: ajaxbackend.php:935 ajaxbackend.php:967 ajaxbackend.php:997
 #: ajaxbackend.php:1093 ajaxbackend.php:1123 ajaxbackend.php:1673
 #: ajaxbackend.php:1766
 msgid "Saved"
-msgstr "Сохранено"
+msgstr "Guardado"
 
 #: ajaxbackend.php:665
 msgid "Your email was successfully queued for sending."
-msgstr "Ваше письмо поставлено в очередь на отправку."
+msgstr "Su mensaje fue agregado correctamente a la cola de envíos."
 
 #: ajaxbackend.php:820 ajaxbackend.php:843
 msgid "Template does not have a \"%s\" property."
-msgstr "У шаблона отсутствует свойство \"%s\"."
+msgstr "La plantilla no tiene la propiedad \"%s\""
 
 #: ajaxbackend.php:1036
 msgid "You have successfully deleted %d template."
 msgid_plural "You have successfully deleted %d templates."
-msgstr[0] "Вы успешно удалили %d шаблон."
-msgstr[1] "Вы успешно удалили %d шаблона."
-msgstr[2] "Вы успешно удалили %d шаблонов."
+msgstr[0] "Ha borrado correctamente %d plantilla."
+msgstr[1] "Ha borrado correctamente %d plantillas."
 
 #: ajaxbackend.php:1152 ajaxbackend.php:1687
 msgid "Your email is successfully scheduled."
-msgstr "Ваше письмо поставлено в очередь на отправку."
+msgstr "Tu mensaje fue correctamente programado."
 
 #: ajaxbackend.php:1159
 msgid "Unrecognized \"send\" parameter - %s"
-msgstr "Неизвестный параметр \"отправить\" - %s"
+msgstr "Parámetro \"send\" no reconocido - %s"
 
 #: ajaxbackend.php:1211
 msgid "Emails were successfully unsubscribed."
-msgstr "Email адреса были успешно отписаны."
+msgstr "Las direcciones de correo se dieron de baja correctamente."
 
 #: ajaxbackend.php:1274 ajaxbackend.php:2133
 msgid "Bad email address"
-msgstr "Плохой электронный адрес "
+msgstr "Dirección de correo errónea"
 
 #: ajaxbackend.php:1362
 msgid "Please select a file to import"
-msgstr "Пожалуйста, выберите файл для импорта"
+msgstr "Seleccione un fichero a importar"
 
 #: ajaxbackend.php:1367
 msgid "Imported %d subscriber. Make sure you send him confirmation email."
 msgid_plural ""
 "Imported %d subscribers. Make sure you send them confirmation email."
-msgstr[0] "Импортирован %d подписчик. Рекомендуем послать ему письмо-подтверждение."
-msgstr[1] "Импортировано %d подписчика. Рекомендуем послать им письмо-подтверждение."
-msgstr[2] "Импортировано %d подписчиков. Рекомендуем послать им письмо-подтверждение."
+msgstr[0] "%d suscriptor se importó correctamente. Asegúrese de enviarle el mensaje de confirmación."
+msgstr[1] "%d suscriptores se importaron correctamente. Asegúrese de enviarles el mensaje de confirmación."
 
 #: ajaxbackend.php:1414 views/subscribers.php:75
 msgid "IP Address"
-msgstr "IP-адрес"
+msgstr "Dirección IP"
 
 #: ajaxbackend.php:1437
 msgid "Imported %d template."
 msgid_plural "Imported %d templates."
-msgstr[0] "Импортирован %d шаблон."
-msgstr[1] "Импортировано %d шаблона."
-msgstr[2] "Импортировано %d шаблонов."
+msgstr[0] "%d plantilla importada."
+msgstr[1] "%d plantillas importadas."
 
 #: ajaxbackend.php:1491
 msgid "Selected emails were successfully resumed"
-msgstr "Посылка выбранных писем успешно возобновлена."
+msgstr "Continuando con el envio de los mensajes seleccionados."
 
 #: ajaxbackend.php:1544 ajaxbackend.php:1631
 msgid "\"entType\" parameter value \"%s\" should be \"email\" or \"template\"."
-msgstr "Значение параметра \"EntType\" - \"%s\". Должно быть \"email\" или \"template\"."
+msgstr "El valor del parámetro \"entType\" debería ser \"email\" o \"template\"."
 
 #: ajaxbackend.php:1615
 msgid "Posts block successfully compiled"
-msgstr "Блок постов успешно собран."
+msgstr "Bloque de publicaciones compilado exitosamente"
 
 #: ajaxbackend.php:1627
 msgid ""
 "\"postTemplateType\" parameter value \"%s\" should be \"post_content\", "
 "\"post_excerpt\" or \"fancy_excerpt\"."
-msgstr "Значение параметра \"PostTemplateType\" - \"%s\". Должно быть \"post_content\", \"post_excerpt\" либо \"fancy_excerpt\"."
+msgstr "El valor \"%s\" del parámetro \"postTemplateType\" debe ser \"post_content\", \"post_excerpt\" o \"fancy_excerpt\"."
 
 #: ajaxbackend.php:1642
 msgid "Posts block successfully updated"
-msgstr "Блок постов успешно обновлен."
+msgstr "Bloque de publicaciones actualizado exitosamente"
 
 #: ajaxbackend.php:1691
 msgid "ReConfirmation system email template is not found."
-msgstr "Системный шаблон повторного подтверждения подписки не найден."
+msgstr "No se ha encontrado plantilla de correo de sistema de reconfirmación"
 
 #: ajaxbackend.php:1779
 msgid "List with the name \"%s\" already exists."
-msgstr "Список подписчиков с именем \"%s\" уже существует."
+msgstr "La lista con el nombre \"%s\" ya existe."
 
 #. translators: email property
 #: ajaxbackend.php:1784 views/addedit_email.php:65 views/mailbox.php:65
 msgid "Created"
-msgstr "Создано"
+msgstr "Creado"
 
 #: ajaxbackend.php:1848
 msgid ""
 "Test email was sent to %s and subscriber with this email was created in "
 "\"%s\" list."
-msgstr "Тестовое сообщение было отправлено на %s и подписчик с этим электронным адресом был добавлен в список and \"%s\"."
+msgstr "Se envió un mensaje de prueba a %s y el suscriptor con esta dirección se creó en la lista \"%s\"."
 
 #: ajaxbackend.php:1926
 msgid "Wrong \"type\" parameter. Must be \"csv\" or \"template\""
-msgstr "Неверный параметр \"type\".  Должен быть \"csv\" или \"template\""
+msgstr "Parámetro \"tipo\" erróneo. Debe ser \"csv\" o \"plantilla\""
 
 #: ajaxbackend.php:2156 ajaxbackend.php:2174 ajaxbackend.php:2179
 #: ajaxbackend.php:2184
 msgid "Success"
-msgstr "Успешно"
+msgstr "Éxito"
 
 #: ajaxbackend.php:2158
 msgid "Translation not found"
-msgstr "Перевод не найден"
+msgstr "Traducción no encontrada"
 
 #: api.php:113
 msgid "Bad email address format \"%s\"."
-msgstr "Неправильный формат электронного адреса \"%s\"."
+msgstr "Dirección de correo con formato erróneo \"%s\"."
 
 #: api.php:122
 msgid "The email \"%s\" is already subscribed but not yet confirmed."
-msgstr "Электронный адрес \"%s\" уже подписан, но не подтвержден."
+msgstr "La dirección \"%s\" ya está suscrita, pero aún no está confirmada."
 
 #: api.php:126
 msgid "The email \"%s\" is already subscribed and confirmed."
-msgstr "Электронный адрес \"%s\" уже подписан и подтвержден."
+msgstr "La dirección \"%s\" ya está suscrita y confirmada."
 
 #: api.php:130
 msgid "The email \"%s\" is already already in the database but unsubscribed."
-msgstr "Электронный адрес \"%s\" уже в базе данных, но отписан."
+msgstr "La dirección \"%s\" ya se encuentra en la base de datos, pero marcada como dada de baja."
 
 #. translators: Default subscription form
 #: class.form.php:60 core.php:237
 msgid "Subscribe"
-msgstr "Подписаться"
+msgstr "Suscribir"
 
 #: class.form.php:127 class.form.php:160 class.form.php:217 class.form.php:239
 #: class.form.php:259 class.form.php:276 class.form.php:309 class.form.php:340
 #: core.php:1105 views/list.php:69 views/list.php:91 views/list.php:108
 #: views/list.php:194 views/list.php:231
 msgid "Required"
-msgstr "Обязательное"
+msgstr "Obligatorio"
 
 #: class.form.php:387
 msgid ""
 "Something went wrong. Please contact the site administrator and describe the"
 " problem."
-msgstr "Что-то пошло не так. Пожалуйста, свяжитесь с администратором сайта и опишите проблему."
+msgstr "Algo fue mal. Contacte con el administrador del sitio y descríbale el problema."
 
 #: class.form.php:387 core.php:1086 core.php:1114
 msgid "Error"
-msgstr "Ошибка"
+msgstr "Error"
 
 #: class.list.php:56
 msgid "Cannot find free unique list ID. Recursive operations limit exceeded."
-msgstr "Не могу найти свободный уникальный идентификатор для списка подписчиков. Превышен лимит рекурсии."
+msgstr "No se puedo encontrar identificador de lista único. Límte de operaciones recursivas excedido."
 
 #: class.list.php:70
 msgid "\"name\" field could not be empty."
-msgstr "Поле \"имя\" не может быть пустым."
+msgstr "El campo \"nombr.e\" no puede quedar vacío"
 
 #: class.utils.php:27
 msgid "Already Subscribed and Verified"
-msgstr "Адрес уже подписан и подтвержден."
+msgstr "Suscrito y verificado con anterioridad"
 
 #: class.utils.php:33
 msgid "Bad email address format"
-msgstr "Неверный формат адреса электронной почты"
+msgstr "Dirección de correo electrónico con formato erróneo"
 
 #: class.utils.php:39
 msgid "Confirmation Required"
-msgstr "Требуется подтверждение"
+msgstr "Se requiere confirmación"
 
 #: class.utils.php:45
 msgid "Confirmation Successful"
-msgstr "Успешно подтвержено"
+msgstr "Confirmación realizada con éxito"
 
 #: class.utils.php:51
 msgid "Subscription not yet confirmed"
-msgstr "Подписка еще не подтверждена"
+msgstr "Suscripción por confirmar"
 
 #: class.utils.php:57
 msgid "Successfully unsubscribed"
-msgstr "Вы успешно отписаны от рассылки"
+msgstr "Dado de baja con éxito"
 
 #: class.utils.php:63 migration.php:181
 msgid "Please confirm your unsubscribe decision"
-msgstr "Пожалуйста, подтвердите ваш запрос на удаление вашего электронного адреса из нашей базы данных."
+msgstr "Por favor: confirme su decisión de darse de baja"
 
 #: class.utils.php:798
 msgid "Add new..."
-msgstr "Добавить новый ..."
+msgstr "Añadir nuevo..."
 
 #: class.utils.php:977 class.utils.php:1028 core.php:1539 core.php:1552
 msgid "Enter Subject Here"
-msgstr "Введите тему письма"
+msgstr "Introduzca el asunto aquí"
 
 #: class.utils.php:1148 core.php:1158 core.php:1869
 msgid "Copy"
-msgstr "Копировать"
+msgstr "Copiar"
 
 #: class.utils.php:1455
 msgid "Administrator notification - new subscriber"
-msgstr "Уведомление администратора - новый подписчик"
+msgstr "Notificación de administrador - Nuevo suscriptor"
 
 #: class.utils.php:1460
 msgid "Administrator notification - user unsubscribed"
-msgstr "Уведомление администратора - пользователь отписался"
+msgstr "Notificación de administrador - Baja de usuario"
 
 #: class.utils.php:1465
 msgid "Subscription confirmation"
-msgstr "Подтверждение подписки"
+msgstr "Confirmación de suscripción"
 
 #: class.utils.php:1470
 msgid "Unsubscribe notification"
-msgstr "Уведомление об отписке"
+msgstr "Notificación de baja"
 
 #: class.utils.php:1475
 msgid "Welcome letter, thanks for subscribing"
-msgstr "Приветственное письмо(\"спасибо за подписку\")"
+msgstr "Mensaje de bienvenida, gracias por suscribirse"
 
 #: class.utils.php:1480 migration.php:213
 msgid "Unsubscribe confirmation"
-msgstr "Подтверждение отписки"
+msgstr "Confirmación para darse de baja"
 
 #: class.utils.php:1485 migration.php:296
 msgid "Re-subscription confirmation"
-msgstr "Подтверждение повторной подписки"
+msgstr "Confirmación de re-suscripción"
 
 #: core.php:26 core.php:1955
 msgid "Every minute"
-msgstr "Каждую минуту"
+msgstr "Cada minuto"
 
 #. translators: Default subscription form
 #: core.php:227
 msgid "Subscription"
-msgstr "Подписка"
+msgstr "Suscripción"
 
 #. translators: Default subscription form
 #: core.php:229
 msgid "Enter your primary email address to get our free newsletter."
-msgstr "Введите ваш основной адрес электронной почты, чтобы получать нашу бесплатную информационную рассылку."
+msgstr "Introduzca su dirección de correo principal para obtener nuestro boletín gratuito."
 
 #. translators: Default subscription form
 #: core.php:231 views/subscribers.php:205 views/subscribers.php:213
 #: views/subscribers.php:221 views/subscribers.php:229
 #: views/subscribers.php:237
 msgid "First Name"
-msgstr "Имя"
+msgstr "Nombre"
 
 #. translators: Default subscription form
 #: core.php:233 views/subscribers.php:206 views/subscribers.php:214
 #: views/subscribers.php:222 views/subscribers.php:230
 #: views/subscribers.php:238
 msgid "Last Name"
-msgstr "Фамилия"
+msgstr "Apellido"
 
 #. translators: Default subscription form
 #: core.php:235 views/list.php:279 views/subscribers.php:73
 msgid "Email"
-msgstr "E-mail"
+msgstr "Dirección de correo"
 
 #. translators: Default subscription form
 #: core.php:239
 msgid ""
 "You can leave the list at any time. Removal instructions are included in "
 "each message."
-msgstr "Вы можете отписаться в любое время. Инструкции по отписке включены в каждое сообщение."
+msgstr "Puede abandonar la lista en cualquier momento. En cada mensaje se incluyen las instrucciones de baja."
 
 #: core.php:258 core.php:1648
 msgid "Upgrade to Pro"
-msgstr "Обновиться до Pro"
+msgstr "Actualizar a Pro"
 
 #: core.php:261
 msgid "Sent %d of %d emails."
-msgstr "Отправлено %d из %d писем."
+msgstr "Enviados %s de %s mensajes."
 
 #: core.php:262
 msgid ""
 "You reached the subscribers limit of the Lite version. %s to resume sending."
-msgstr "Вы достигли предела количества подписчиков Lite версии плагина. %s, чтобы возобновить отправку."
+msgstr "Ha alcanzado el número límite de suscriptores para la versión Lite. Pulse %s para continuar con el envío."
 
 #: core.php:387
 msgid ""
 "\"Post has no excerpt. Write something yourself or use fancy_excerpt "
 "option\""
-msgstr "\"Пост не имеет выдержки. Напишите что-то самостоятельно или используйте опцию fancy_excerpt\""
+msgstr "La publicación no tiene resumen. Escriba algo para emplear la opción \"resumen bonito\""
 
 #: core.php:585
 msgid "Wrong \"code\" parameter format"
-msgstr "Неправильный формат параметра \"code\""
+msgstr "Formato de parámetro \"code\" erróneo"
 
 #: core.php:591
 msgid "Your link seems to be broken."
-msgstr "Кажется ваша ссылка сломана."
+msgstr "Su enlace parece estar roto"
 
 #: core.php:597
 msgid "List with the unique code \"%s\" is not found"
-msgstr "Список подписчиков с уникальным кодом \"%s\" не найден."
+msgstr "No se encontró lista con el código único \"%s\""
 
 #: core.php:603
 msgid "Subscriber with the unique code \"%s\" is not found"
-msgstr "Подписчик с уникальным кодом \"%s\" не найден."
+msgstr "No se encontró suscriptor con el código único \"%s\""
 
 #: core.php:696
 msgid "Unique email id is missing in request."
-msgstr "Уникальный идентификатор email адреса отсутствует в запросе."
+msgstr "No se ha proporcionado id único de mensaje en la petición."
 
 #: core.php:701
 msgid "Email with unique code %s is not found."
-msgstr "Электронный адрес с уникальным кодом \"%s\" не найден."
+msgstr "No se ha encontrado mensaje con código único %s."
 
 #: core.php:950 core.php:1173
 msgid "Please fill all the required fields."
-msgstr "Пожалуйста, заполните все обязательные для заполнения поля."
+msgstr "Por favor, complete todos los campos obligatorios."
 
 #: core.php:951 core.php:1174
 msgid "Please check your email address."
-msgstr "Пожалуйста, проверьте ваш адрес электронной почты."
+msgstr "Por favor: compruebe su dirección de correo."
 
 #: core.php:1085
 msgid "Error: "
-msgstr "Ошибка: "
+msgstr "Error:"
 
 #: core.php:1087
 msgid "Done"
-msgstr "Завершено"
+msgstr "Hecho"
 
 #: core.php:1088
 msgid "Please select emails which you want to stop sending of."
-msgstr "Пожалуйста, выберите письма, отправку которых вы хотите остановить."
+msgstr "Seleccione las direcciones de correo a las que desea dejar de enviar mensajes."
 
 #: core.php:1089
 msgid "You have successfully stopped sending of selected emails."
-msgstr "Вы успешно прекратили отправку выбранных писем."
+msgstr "Ha dejado de enviar mensajes  al las direcciones seleccionadas."
 
 #: core.php:1090
 msgid "Please mark subscribers which you want to unsubscribe."
-msgstr "Пожалуйста, выберите подписчиков, которых вы хотите отписать."
+msgstr "Seleccione los suscriptores que desee desuscribir."
 
 #: core.php:1091
 msgid "You have successfully unsubscribed selected subscribers."
-msgstr "Вы успешно отписали выбранных подписчиков."
+msgstr "Se ha dado de baja correctamente a los suscriptores seleccionados."
 
 #: core.php:1092
 msgid "Please mark subscribers which you want to delete."
-msgstr "Пожалуйста, отметьте подписчиков, которых вы хотите удалить."
+msgstr "Seleccione los suscriptores que desea eliminar."
 
 #: core.php:1093
 msgid "You have successfully deleted selected subscribers."
-msgstr "Вы успешно удалили выбранных подписчиков."
+msgstr "Se ha eliminado correctamente a los suscriptores seleccionados."
 
 #: core.php:1094
 msgid "Please mark subscribers to change."
-msgstr "Пожалуйста, отметьте подписчиков статус которых вы хотите изменить."
+msgstr "Seleccione los suscriptores a cambiar."
 
 #: core.php:1095
 msgid "You have successfully changed status of selected subscribers."
-msgstr "Вы успешно изменили статус выбранных подписчиков."
+msgstr "Se ha cambiado correctamente el estado de los suscriptores seleccionados."
 
 #: core.php:1096
 msgid "Please mark subscribers which you want to send confirmation to."
-msgstr "Пожалуйста, отметьте подписчиков, которым вы хотите отправить подтверждение."
+msgstr "Seleccione los suscriptores a los que desea enviar confirmación."
 
 #: core.php:1097
 msgid "You have successfully send confirmation emails."
-msgstr "Письма подтверждения успешно отосланы."
+msgstr "Se han enviado correctamente los mensajes de confirmación. "
 
 #: core.php:1098
 msgid "All subscribers (#)"
-msgstr "Все подписчики (#)"
+msgstr "Todos los suscriptores (#)"
 
 #: core.php:1099
 msgid "Confirmed (#)"
-msgstr "Подтвержденные"
+msgstr "Confirmados (#)"
 
 #: core.php:1100
 msgid "Unconfirmed (#)"
-msgstr "Неподтвержденные (#)"
+msgstr "Sin confirmar (#)"
 
 #: core.php:1101
 msgid "Unsubscribed (#)"
-msgstr "Отписанные (#)"
+msgstr "Sin suscribir (#)"
 
 #: core.php:1102
 msgid "You have no subscribers yet."
-msgstr "У вас еще нет подписчиков."
+msgstr "Aún no tiene suscriptores."
 
 #: core.php:1103 views/mailbox-email.php:107
 msgid "Sending"
-msgstr "Отправка"
+msgstr "Enviando"
 
 #: core.php:1104
 msgid "Check me"
-msgstr "Отметь меня"
+msgstr "Seleccióneme"
 
 #: core.php:1106
 msgid "Choose an option"
-msgstr "Выберите опцию"
+msgstr "Elija una opción"
 
 #: core.php:1107
 msgid "new option 1"
-msgstr "новая опция 1"
+msgstr "nueva opción 1"
 
 #: core.php:1108
 msgid "Untitled"
-msgstr "Без названия"
+msgstr "Sin título"
 
 #: core.php:1109 views/addedit_email.php:71
 msgid "You have no emails yet."
-msgstr "У Вас еще нет писем."
+msgstr "Aún no tiene mensajes."
 
 #: core.php:1110
 msgid "You have no forms, yet"
-msgstr "Вы не создали форм подписки еще"
+msgstr "Aún no tiene formulario definido"
 
 #. translators: mailbox view link
 #: core.php:1111 core.php:1142 views/addedit_email.php:17 views/mailbox.php:24
 msgid "Sent"
-msgstr "Отправлено"
+msgstr "Enviados"
 
 #. translators: mailbox view link
 #: core.php:1112 core.php:1140 views/addedit_email.php:16 views/mailbox.php:23
 msgid "Pending"
-msgstr "В ожидании"
+msgstr "Pendientes"
 
 #: core.php:1113
 msgid "Draft"
-msgstr "Черновик"
+msgstr "Borradores"
 
 #: core.php:1115
 msgid "Sending..."
-msgstr "Посылка..."
+msgstr "Enviando.."
 
 #: core.php:1116
 msgid "Stopped"
-msgstr "Остановлена"
+msgstr "Detenido"
 
 #: core.php:1117
 msgid "Scheduled on"
-msgstr "Запланированно на"
+msgstr "Programado para el"
 
 #: core.php:1118
 msgid "You don't have any templates yet."
-msgstr "У вас пока нет шаблонов."
+msgstr "Aún no tiene plantillas."
 
 #: core.php:1119
 msgid "Create one?"
-msgstr "Хотите создать?"
+msgstr "¿Crear una?"
 
 #: core.php:1120
 msgid "Please mark the emails which you want to delete."
-msgstr "Пожалуйста, отметьте письма, которые вы хотите удалить."
+msgstr "Seleccione los mensajes que desea eliminar."
 
 #: core.php:1121
 msgid "You have successfully deleted selected emails."
-msgstr "Вы успешно удалили выбранные письма."
+msgstr "Ha eliminado correctamente los mensajes seleccionados."
 
 #: core.php:1122
 msgid "Please mark the templates which you want to delete."
-msgstr "Пожалуйста, отметьте шаблоны, которые вы хотите удалить."
+msgstr "Seleccione las plantillas que desea eliminar"
 
 #: core.php:1123
 msgid "Please mark the forms which you want to delete."
-msgstr "Пожалуйста, отметьте форму, которую Вы хотите удалить"
+msgstr "Seleccione los formularios que desea borrar."
 
 #: core.php:1124
 msgid "You have no templates yet."
-msgstr "У вас пока нет шаблонов."
+msgstr "Aún no tiene plantillas."
 
 #: core.php:1125
 msgid "All emails (#)"
-msgstr "Все письма (#)"
+msgstr "Todos los mensajes (#)"
 
 #: core.php:1126
 msgid "In progress (#)"
-msgstr "В процессе (#)"
+msgstr "En progreso (#)"
 
 #: core.php:1127
 msgid "Pending (#)"
-msgstr "В ожидании (#)"
+msgstr "Pendientes (#)"
 
 #: core.php:1128
 msgid "Sent (#)"
-msgstr "Отправленные (#):"
+msgstr "Enviados (#)"
 
 #: core.php:1129 views/mailbox-email.php:108 views/mailbox-email.php:113
 #: views/mailbox.php:45
 msgid "Resume"
-msgstr "Продолжить"
+msgstr "Continuar"
 
 #: core.php:1130
 msgid "Please fill the \"To:\" field."
-msgstr "Пожалуйста, заполните поле \"Кому: \"."
+msgstr "Por favor: rellene el campo \"Para:\""
 
 #: core.php:1131
 msgid "Please select emails first."
-msgstr "Пожалуйста, в первую очередь выберите письма."
+msgstr "Seleccione primero los mensajes."
 
 #: core.php:1132
 msgid "Please select"
-msgstr "Выберите"
+msgstr "Por favor, seleccione"
 
 #. translators: mailbox view link
 #: core.php:1134 views/addedit_email.php:14 views/mailbox.php:20
 msgid "All emails"
-msgstr "Все письма"
+msgstr "Todos los mensajes"
 
 #. translators: mailbox view link
 #: core.php:1136 views/addedit_email.php:15 views/mailbox.php:22
 msgid "In progress"
-msgstr "В процессе"
+msgstr "En progreso"
 
 #. translators: mailbox view link
 #: core.php:1138 views/mailbox.php:21
 msgid "Drafts"
-msgstr "Черновики"
+msgstr "Borradores"
 
 #: core.php:1143
 msgid "Sent %d of %d emails"
-msgstr "Отправлено %d из %d писем"
+msgstr "Enviados %d de %d mensajes"
 
 #: core.php:1144
 msgid "Status: "
-msgstr "Статус:"
+msgstr "Estado:"
 
 #: core.php:1145
 msgid "Email Errors"
-msgstr "Ошибки"
+msgstr "Errores de mensajes"
 
 #: core.php:1146
 msgid "Email Address"
-msgstr "Электронный адрес"
+msgstr "Dirección de correo"
 
 #: core.php:1147
 msgid "Error Message"
-msgstr "Ошибка"
+msgstr "Mensaje de error"
 
 #: core.php:1148 views/forms.php:31 views/mailbox-email.php:155
 #: views/mailbox.php:72 views/subscribers.php:82 views/templates.php:63
 #: views/templates.php:79 views/templates.php:95 views/templates.php:183
 msgid "Loading..."
-msgstr "Загрузка..."
+msgstr "Cargando.."
 
 #: core.php:1149 newsman-widget.php:51
 msgid "List:"
-msgstr "Список:"
+msgstr "Lista:"
 
 #: core.php:1150
 msgid "Bug report"
-msgstr "Сообщение об ошибке"
+msgstr "Informe de error"
 
 #: core.php:1151
 msgid "Load more..."
-msgstr "Загрузить больше..."
+msgstr "Cargar más.."
 
 #: core.php:1152
 msgid "Sorry, no posts matched your criteria."
-msgstr "Ни одна статья не соответствует выбранному критерию."
+msgstr "Lo siento, ninguna publicación encaja con sus criterios."
 
 #: core.php:1153
 msgid ""
 "Warning! You are close to the limit of %d subscribers you can send emails to"
 " in the Lite version of the plugin. Please, <a href=\"%s\">upgrade to the "
 "Pro version</a> to send emails without limitations."
-msgstr "Внимание! Вы почти достигли лимита в %d подписчиков, которым вы можете посылать письма, используя Lite версию плагина. Пожалуйста, <a href=\"%s\">обновите плагин до Pro версии</a>, чтобы иметь возможность посылать письма без ограничений."
+msgstr "¡Atención! Se está acercando al límite de %d suscriptores a los que puede enviar mensajes con la versión Lite del plugin. Por favor <a href=\"%s\">actualícese a la versión Pro</a> para enviar mensajes sin limitaciones."
 
 #: core.php:1154
 msgid ""
 "Warning! You exceeded the limit of %d subscribers you can send emails to in "
 "the Lite version of the plugin. Please, <a href=\"%s\">upgrade to the Pro "
 "version</a> to send emails without limitations."
-msgstr "Внимание! Вы превысили лимит в %d подписчиков, которым вы можете посылать письма, используя Lite версию плагина. Пожалуйста, <a href=\"%s\">обновите плагин до Pro версии</a>, чтобы иметь возможность посылать письма без ограничений."
+msgstr "¡Atención! Se ha superado el límite de %d suscriptores a los que puede enviar mensajes con la versión Lite del plugin. Por favor <a href=\"%s\">actualícese a la versión Pro</a> para enviar mensajes sin limitaciones."
 
 #. translators: lists and forms table header
 #: core.php:1155 views/forms.php:23 views/list.php:67 views/list.php:86
 #: views/list.php:106 views/list.php:141 views/list.php:192 views/list.php:229
 #: views/templates.php:58 views/templates.php:74 views/templates.php:90
 msgid "Name"
-msgstr "Название"
+msgstr "Nombre"
 
 #: core.php:1156
 msgid "Edit Form"
-msgstr "Редактировать форму"
+msgstr "Editar formulario"
 
 #: core.php:1157
 msgid "View Subscribers"
-msgstr "Просмотреть подписчиков"
+msgstr "Ver suscriptores"
 
 #: core.php:1159
 msgid "Edit"
-msgstr "Редактировать"
+msgstr "Editar"
 
 #: core.php:1160 views/addedit_email.php:39 views/addedit_email.php:102
 #: views/forms.php:15 views/forms.php:70 views/mailbox.php:46
 #: views/mailbox.php:105 views/subscribers.php:57 views/subscribers.php:116
 #: views/templates.php:28 views/templates.php:134 views/templates.php:149
 msgid "Delete"
-msgstr "Удалить"
+msgstr "Borrar"
 
 #: core.php:1161
 msgid "Export"
-msgstr "Экспортировать"
+msgstr "Exportar"
 
 #: core.php:1162
 msgid "Default System Templates"
-msgstr "Системные шаблоны по умолчанию"
+msgstr "Plantillas de sistema por defecto"
 
 #: core.php:1163
 msgid "System Template. Cannot be deleted."
-msgstr "Системный шаблон. Удаление невозможно."
+msgstr "Plantilla de sistema. No puede borrarse."
 
 #: core.php:1164
 msgid "Insert Posts"
-msgstr "Вставить посты"
+msgstr "Insertar publicaciones"
 
 #: core.php:1165
 msgid "Post(s) selected: %d"
-msgstr "Выбранные посты: %d"
+msgstr "Publicacion(es) seleccionada(s): %d"
 
 #: core.php:1166
 msgid "Select categories"
-msgstr "Выбрать категории"
+msgstr "Seleccionar categorías"
 
 #: core.php:1167
 msgid "# of # categories selected"
-msgstr "# из # категорий выбрано"
+msgstr "# de # categorías seleccionadas"
 
 #: core.php:1168
 msgid "Select author(s)"
-msgstr "Выбрать авторов"
+msgstr "Seleccionar autor(es)"
 
 #: core.php:1169
 msgid "# of # authors selected"
-msgstr "# из # авторов выбрано"
+msgstr "# de # autores seleccionados"
 
 #: core.php:1170 views/list.php:346
 msgid "Save"
-msgstr "Сохранить"
+msgstr "Guardar"
 
 #: core.php:1171
 msgid "Saved at"
-msgstr "Сохранено в"
+msgstr "Guardado el"
 
 #: core.php:1176
 msgid "Subscribe notification email sent to the administrator."
-msgstr "Письмо, уведомляющее администратора о подписке."
+msgstr "Mensaje de notificación de suscripción enviado al administrador."
 
 #: core.php:1177
 msgid "Unsubscribe notification email sent to the administrator."
-msgstr "Письмо, уведомляющее администратора об отписке."
+msgstr "Mensaje de baja de suscripción enviado al administrador."
 
 #: core.php:1178
 msgid "Email with the confirmation link sent to the user upon subscription."
-msgstr "Письмо со ссылкой для подтверждения подписки, отправляемое подписчику."
+msgstr "Mensaje con enlace de confirmación enviado al usuario tras suscripción."
 
 #: core.php:1179
 msgid ""
 "Email sent to the user that confirms that his email address was "
 "unsubscribed."
-msgstr "Письмо, уведомляющее пользователя о том, что его электронный адрес отписан."
+msgstr "Mensaje enviado al usuario que confirma que su dirección de correo fue dada de baja."
 
 #: core.php:1180
 msgid "Welcome message sent after the subscriber confirms his subscription."
-msgstr "Письмо-приветствие, отправляемое подписчику после подтверждения подписки."
+msgstr "Mensaje de bienvenida después de que el suscriptor confirme su suscripción."
 
 #: core.php:1181
 msgid "Email with a link to confirm the subscriber’s decision to unsubscribe."
-msgstr "Письмо со ссылкой для подтверждения отписки, отправляемое подписчику."
+msgstr "Mensaje con enlace para confirmar que el suscriptor desea darse de baja."
 
 #: core.php:1182
 msgid ""
 "Email with a link to re-confirm the subscription that is sent to ALL "
 "\"unconfirmed\" subscribers on the list."
-msgstr "Письмо со ссылкой для подтверждения подписки, отправляемое ВСЕМ подписчикам со статусом \"Неподтвержденные\"."
+msgstr "Mensaje con enlace para volver a confirmar la suscripción que se envía a TODOS los suscriptores \"no confirmados\" de la lista."
 
 #: core.php:1287
 msgid "Cannot unsubscribe email. Subscriber with unique code %s is not found."
-msgstr "Невозможно отписать электронный адрес. Абонент с уникальным кодом %s не найден."
+msgstr "No se puede dar de baja la dirección de correo. No se encuentra suscriptor con código único %s."
 
 #: core.php:1551
 msgid "Untitled templates"
-msgstr "Шаблоны без названия"
+msgstr "Plantillas sin nombre"
 
 #: core.php:1562
 msgid "Alternative Plain Text Body"
-msgstr "Альтернативный основной текст (обычный)"
+msgstr "Cuerpo de mensaje alternativo en texto plano "
 
 #: core.php:1580
 msgid "WPNewsman Lite"
@@ -805,83 +800,83 @@ msgstr "WPNewsman Lite"
 
 #: core.php:1593 core.php:1594 views/addedit_email.php:5 views/mailbox.php:9
 msgid "Mailbox"
-msgstr "Почтовый ящик"
+msgstr "Buzón"
 
 #: core.php:1611 core.php:1612 views/forms.php:5
 msgid "Lists and Forms"
-msgstr "Рассылки и Формы"
+msgstr "Listas y formularios"
 
 #: core.php:1620 core.php:1621 views/templates.php:5
 msgid "Email Templates"
-msgstr "Email-шаблоны"
+msgstr "Plantillas de mensajes"
 
 #: core.php:1629 core.php:1630 views/options.php:6
 msgid "Settings"
-msgstr "Настройки"
+msgstr "Ajustes"
 
 #: core.php:1639 core.php:1640 views/debug-log.php:11
 msgid "Debug Log"
-msgstr "Лог отладки"
+msgstr "Registro de depuración"
 
 #: core.php:1675
 msgid "Excerpt for external forms"
-msgstr "Выдержки для внешних формах"
+msgstr "Resumen para formularios externos"
 
 #: core.php:1895
 msgctxt "Action Page"
 msgid "Action Pages"
-msgstr "Страницы действий"
+msgstr "Páginas de acción"
 
 #: core.php:1896
 msgctxt "Action Page"
 msgid "Action Page"
-msgstr "Страница действий"
+msgstr "Página de acción"
 
 #: core.php:1897
 msgctxt "Action Page"
 msgid "Add New"
-msgstr "Добавить"
+msgstr "Añadir nuevo"
 
 #: core.php:1898
 msgctxt "Action Page"
 msgid "Add New Action Page"
-msgstr "Добавить Новую Страницу Действий"
+msgstr "Añadir nueva página de acción"
 
 #: core.php:1899
 msgctxt "Action Page"
 msgid "Edit Action Page"
-msgstr "Изменить Страницу Действий"
+msgstr "Editar página de acción"
 
 #: core.php:1900
 msgctxt "Action Page"
 msgid "New Action Page"
-msgstr "Новая Страница Действий"
+msgstr "Nueva página de acción"
 
 #: core.php:1901
 msgctxt "Action Page"
 msgid "View Action Page"
-msgstr "Просмотр страницы действий"
+msgstr "Ver página de acción"
 
 #: core.php:1902
 msgctxt "Action Page"
 msgid "Search Action Pages"
-msgstr "Поиск Страниц действий"
+msgstr "Buscar páginas de acción"
 
 #: core.php:1903
 msgid "Nothing found"
-msgstr "Ничего не найдено"
+msgstr "No se encontró nada"
 
 #: core.php:1904
 msgid "Nothing found in the Trash"
-msgstr "В Корзине ничего не найдено "
+msgstr "No se encontró nada en la papelera"
 
 #: core.php:2116 core.php:2174
 msgid "Error: Email template not found"
-msgstr "Ошибка: Email шаблон не найден"
+msgstr "Error: plantilla de mensaje no encontrada"
 
 #: core.php:2133
 msgid "Error: Email not found"
-msgstr "Ошибка: письмо не найдено"
+msgstr "Error: mensaje no encontrado"
 
 #: core.php:2227
 msgid "G-Lock WPNewsman"
@@ -889,169 +884,169 @@ msgstr "G-Lock WPNewsman"
 
 #: core.php:2265
 msgid "G-Lock WPNewsman subscription summary"
-msgstr "Сводка подписок из G-Lock WPNewsman"
+msgstr "Resumen de suscripción de G-Lock WPNewsman"
 
 #: core.php:2266
 msgid "Manage Forms and Lists"
-msgstr "Управление списками и формами"
+msgstr "Gestionar formularios y listas"
 
 #: core.php:2283 views/list.php:265
 msgid "List name"
-msgstr "Название списка подписчиков"
+msgstr "Nombre de lista"
 
 #: core.php:2284
 msgid "Today confirmed"
-msgstr "Подтверждено сегодня"
+msgstr "Confirmado hoy"
 
 #: core.php:2285
 msgid "Yesterday confirmed"
-msgstr "Подтверждено вчера"
+msgstr "Confirmado ayer"
 
 #: core.php:2286
 msgid "Total confirmed"
-msgstr "Подтверждено всего"
+msgstr "Total confirmados"
 
 #: core.php:2287
 msgid "Total unconfirmed"
-msgstr "Не подтвержено всего"
+msgstr "Total sin confirmar"
 
 #: core.php:2288
 msgid "Total unsubscribed"
-msgstr "Отписано всего"
+msgstr "Total dados de baja"
 
 #: core.php:2342
 msgid "Post Template"
-msgstr "Шаблон поста"
+msgstr "Plantillas de publicación"
 
 #: core.php:2348
 msgid "Click here"
-msgstr "Нажмите сюда"
+msgstr "Haga clic aquí"
 
 #: core.php:2351
 msgid ""
 "You can use this shortcode macro to add the unsubscribe link to your "
 "message:"
-msgstr "Вы можете использовать этот код для добавления ссылки на отписку в письмо:"
+msgstr "Puede emplear esta macro de código corto para añadir un enlace para darse de baja en su mensaje:"
 
 #: core.php:2355
 msgid ""
 "and these shortcode macros to add links to your social profiles (enter the "
 "URLs of your social profiles in the plugin Settings):"
-msgstr "и эти макросы, чтобы добавить ссылки на свои профили в социальных сетях (введите URL-адреса ваших социальных профилей в настройках плагина):"
+msgstr "y estas macros para añadir enlaces a sus perfiles sociales (introduzca las URLs de sus perfiles sociales en la configuración del plugin):"
 
 #: core.php:2363
 msgid "%s for more shortcode macros supported by WPNewsman."
-msgstr "%s для просмотра всех макросов, поддерживаемых WPNewsman."
+msgstr "%s para más macros de código corto soportadas por WPNewsman."
 
 #: core.php:2564
 msgid "List: "
-msgstr "Рассылка:"
+msgstr "Lista:"
 
 #: core.php:2576
 msgid "Page Template"
-msgstr "Шаблон страницы"
+msgstr "Plantilla de página"
 
 #: core.php:2578
 msgid "Default Template"
-msgstr "Темплата по умолчанию"
+msgstr "Plantilla predeterminada"
 
 #: export_list.php:26
 msgid "You are not authorized to access this resource."
-msgstr "Вы не авторизованы для доступа к этому ресурсу."
+msgstr "No tiene permisos para acceder a este recurso."
 
 #: export_list.php:41
 msgid "Please, provide correct \"listId\" parameter."
-msgstr "Пожалуйста, предоставьте правильный параметр \"ListId\"."
+msgstr "Por favor, indique un parámetro \"listid\" correcto."
 
 #: frmGetPosts.php:16
 msgid "Post"
-msgstr "Пост"
+msgstr "Publicación"
 
 #: frmGetPosts.php:17
 msgid "Page"
-msgstr "Страница"
+msgstr "Página"
 
 #: frmGetPosts.php:18
 msgid "Attachment"
-msgstr "Пристегнутый файл"
+msgstr "Adjunto"
 
 #: frmGetPosts.php:19
 msgid "Action Page"
-msgstr "Страница действий"
+msgstr "Página de acción"
 
 #: frmGetPosts.php:111
 msgid "Search..."
-msgstr "Поиск"
+msgstr "Buscar..."
 
 #: frmGetPosts.php:117 frmGetPosts.php:202
 msgid "Post type:"
-msgstr "Тип записи"
+msgstr "Tipo de publicación:"
 
 #: frmGetPosts.php:131 frmGetPosts.php:214
 msgid "Show private posts"
-msgstr "Показать приватные посты"
+msgstr "Mostrar publicaciones privadas"
 
 #: frmGetPosts.php:135 frmGetPosts.php:216
 msgid "Categories:"
-msgstr "Категории:"
+msgstr "Categorías:"
 
 #: frmGetPosts.php:151 frmGetPosts.php:228
 msgid "Show thumbnails placeholders"
-msgstr "Показывать места расположения пиктограмм"
+msgstr "Mostrar huecos de miniatura"
 
 #: frmGetPosts.php:156 frmGetPosts.php:230
 msgid "Authors:"
-msgstr "Авторы"
+msgstr "Autores:"
 
 #: frmGetPosts.php:175 frmGetPosts.php:241
 msgid "Use content:"
-msgstr "Используйте содержания:"
+msgstr "Usar contenido:"
 
 #: frmGetPosts.php:179 frmGetPosts.php:243
 msgid "Full post"
-msgstr "Пост полностью"
+msgstr "Publicación completa"
 
 #: frmGetPosts.php:180 frmGetPosts.php:244
 msgid "Excerpt"
-msgstr "Отрывок"
+msgstr "Resumen"
 
 #: frmGetPosts.php:181 frmGetPosts.php:245
 msgid "Fancy excerpt"
-msgstr "Авто-отрывок "
+msgstr "Resumen bonito"
 
 #: frmGetPosts.php:189 frmGetPosts.php:249
 msgid "Select post(s) for last:"
-msgstr "Выбрать посты за последний:"
+msgstr "Seleccionar publicacion(es) del último:"
 
 #: frmGetPosts.php:191 frmGetPosts.php:251 views/options.php:107
 msgid "Day"
-msgstr "день"
+msgstr "día"
 
 #: frmGetPosts.php:192 frmGetPosts.php:252
 msgid "Week"
-msgstr "неделю"
+msgstr "Semana"
 
 #: frmGetPosts.php:193 frmGetPosts.php:253
 msgid "Month"
-msgstr "месяц"
+msgstr "Mes"
 
 #: frmGetPosts.php:195 frmGetPosts.php:255
 msgid "Clear Selection"
-msgstr "Отменить выборку"
+msgstr "Borrar selección"
 
 #: newsman-widget.php:8
 msgid "WPNewsman Subscription form for your newsletters"
-msgstr "форма подписки WPNewsman для ваших рассылок"
+msgstr "Formulario de suscripción de WPNewsman para sus boletines"
 
 #: newsman-widget.php:10
 msgid "WPNewsman Subscription Form"
-msgstr "Форма подписки WPNewsman"
+msgstr "Formulario de suscripción de WPNewsman"
 
 #: views/_an_fs_method.php:3 views/_an_locale_changed.php:4
 #: views/_an_w3tc_configured.php:3 views/_an_wp_cron_error.php:4
 #: views/_an_wpcron_alternative_mode.php:4 views/subscribers.php:139
 msgid "Warning!"
-msgstr "Внимание!"
+msgstr "¡Atención!"
 
 #: views/_an_fs_method.php:4
 msgid ""
@@ -1059,7 +1054,7 @@ msgid ""
 " by the WPNewsman plugin. Some features such as the import of subscribers "
 "and import/installation of email templates may not work. Please, consider "
 "switching the wordpress configuration to use direct file system access."
-msgstr "В конфигурации вашего блога используется API \"%s\" WP_Filesystem, который не поддерживается плагином WPNewsman. Некоторые функции плагина, такие как импорт подписчиков и импорт/установка шаблонов писем могут не работать. Пожалуйста, переключите конфигурацию WordPress на использование прямого доступа к системным файлам."
+msgstr "Su configuración del blog emplea el API WP_Filesystem \"%s\" que no está soportado por el plugin WPNewsman. Algunas características tales como la importación de suscriptores y la importación/instalación de plantillas de mensajes pueden no funcionar. Por favor, considere cambiar la configuración de wordpress para emplear acceso directo a sistema de ficheros."
 
 #. translators: Replace the name of the language with the one you are
 #. translating to
@@ -1067,40 +1062,40 @@ msgstr "В конфигурации вашего блога использует
 msgid ""
 "You switched your blog to a new locale %s. Would you also like to replace "
 "the action pages and system email templates with English default versions?"
-msgstr "Вы переключили свой блог на новую локаль %s. Возможно, Вы так же хотите заменить страницы действий и системные email шаблоны стандартными, переведенными на Русский язык?"
+msgstr "Ha cambiado su blog al idioma %s. ¿Desea también reemplazar las páginas de acción y las plantillas de correo del sistema con las versiones predeterminadas en inglés?"
 
 #: views/_an_locale_changed.php:7
 msgid ""
 "Yes, please replace my action pages and system email templates with "
 "translated default versions."
-msgstr "Да, замените пожалуйста мои страницы действий и системные email шаблоны стандартными Русскими."
+msgstr "Sí, reemplazar mis páginas de acción y las plantillas de correo del sistema por las versiones traducidas predeterminadas."
 
 #. translators: Replace the name of the language with the one you are
 #. translating to
 #: views/_an_locale_changed.php:8
 msgid ""
 "No, I already translated them myself. Just take a note they are in English."
-msgstr "Нет, я уже перевел их сам. Просто пометьте их как переведенные на Русский."
+msgstr "No, ya las he traducido. Sólo tomar nota de que están en inglés."
 
 #: views/_an_locale_changed.php:10
 msgid "Let me choose."
-msgstr "Позвольте мне выбрать."
+msgstr "Dejarme elegir."
 
 #: views/_an_locale_changed.php:12
 msgid "Replace action pages"
-msgstr "Заменить страницы действий"
+msgstr "Reemplazar páginas de acción."
 
 #: views/_an_locale_changed.php:13
 msgid "Replace email templates"
-msgstr "Заменить email шаблоны"
+msgstr "Reemplazar plantillas de mensajes"
 
 #: views/_an_locale_changed.php:16
 msgid "Do nothing, I'm just checking"
-msgstr "Ничего не надо, я просто смотрю."
+msgstr "No hacer nada, sólo comprobar"
 
 #: views/_an_locale_changed.php:18
 msgid "Proceed"
-msgstr "Продолжить"
+msgstr "Proceder"
 
 #: views/_an_wp_cron_error.php:5
 msgid ""
@@ -1108,37 +1103,37 @@ msgid ""
 " means WP-Cron jobs and email sending on your site may not work. The problem"
 " was:<br /><strong>%s</strong>. Try to add this line %s to your <strong>wp-"
 "config.php</strong> file."
-msgstr "Была проблема с отправкой запроса к системе WP-Cron на вашем сайте. Это значит, что задачи WP-Cron и посылка писем на вашем сайте могут не работать. Проблема:<br /><strong>%s</strong>. Для устранения проблемы попробуйте добавить %s в ваш файл <strong>wp-config.php</strong>."
+msgstr "Hubo un problema al realizar una llamada al sistema WP-Cron de su blog. Esto implica que los trabajos WP-Cron y el envío de mensajes puede no funcionar en su sitio. El problema fue: <br/><strong>%s</strong>. Intente añadir la línea %s a su fichero <strong>wp-config.php</strong>."
 
 #: views/_an_wp_cron_error.php:7 views/_an_wpcron_alternative_mode.php:7
 msgid "Dismiss"
-msgstr "Отклонить"
+msgstr "Descartar"
 
 #: views/_an_wpcron_alternative_mode.php:5
 msgid ""
 "The wp-cron system on your blog works in alternative mode. Scheduled email "
 "sending will work only with WPNewsman admin page opened in the browser."
-msgstr "Система WP-Cron на вашем блоге работает в альтернативном режиме. Запрограммированная посылка писем будет работать только в том случае, когда страница администрирования WPNewsman открыта в браузере."
+msgstr "El sistema wp-cron de su blog funciona en modo alternativo. El envío de mensajes programado sólo funcionará si la página de administración de WPNewsman se abre en un navegador."
 
 #: views/_footer.php:8
 msgid "Debug Messages"
-msgstr "Письма для отладки"
+msgstr "Mensajes de depuraci"
 
 #: views/_footer.php:11
 msgid "Raw response"
-msgstr "Ответ"
+msgstr "Respuesta en texto plano"
 
 #: views/_footer.php:13
 msgid "Additional info"
-msgstr "Дополнительная информация"
+msgstr "Información adicional"
 
 #: views/_footer.php:15
 msgid "Note: you can remove all sensitive data before sending bug report."
-msgstr "Примечание: вы можете удалить секретные данные перед отправкой сообщения об ошибке."
+msgstr "Nota: puede eliminar cualquier dato sensible antes de enviar el informe de error."
 
 #: views/_footer.php:18
 msgid "Send Bug Report"
-msgstr "Отправить сообщение об ошибке."
+msgstr "Enviar informe de error"
 
 #: views/_footer.php:19 views/addedit_email.php:87 views/addedit_email.php:101
 #: views/addedit_email.php:115 views/forms.php:55 views/forms.php:69
@@ -1151,23 +1146,23 @@ msgstr "Отправить сообщение об ошибке."
 #: views/templates.php:148 views/templates.php:164 views/templates.php:190
 #: views/templates.php:219
 msgid "Close"
-msgstr "Закрыть"
+msgstr "Cerrar"
 
 #: views/_footer.php:30
 msgid "Rate (%s) WPNewsman on %s and make it even more awesome"
-msgstr "Оставьте свой обзор (%s) WPNewsman на %s"
+msgstr "Evalúe (%s) WPNewsman en %s y hága que sea incluso más alucinante"
 
 #: views/_footer.php:32
 msgid "Support & documentation"
-msgstr "Техническая поддержка и документация"
+msgstr "Soporte y documentación"
 
 #: views/_footer.php:32
 msgid "Request feature"
-msgstr "Чего-то не хватает? Жми сюда"
+msgstr "Solicitar funcionalidad"
 
 #: views/_footer.php:32
 msgid "Thanks!"
-msgstr "Спасибо!"
+msgstr "¡Gracias!"
 
 #: views/_footer.php:32
 msgid "WPNewsman: "
@@ -1175,34 +1170,34 @@ msgstr "WPNewsman:"
 
 #: views/addedit_email.php:7 views/mailbox.php:12 views/subscribers.php:23
 msgid "Search"
-msgstr "Поиск"
+msgstr "Buscar"
 
 #: views/addedit_email.php:19 views/subscribers.php:35 views/templates.php:9
 msgid "Remove Search Filter"
-msgstr "Удалить фильтр поиска"
+msgstr "Eliminar filtro de búsqueda"
 
 #: views/addedit_email.php:28 views/mailbox.php:33
 msgid "Compose"
-msgstr "Написать"
+msgstr "Redactar"
 
 #: views/addedit_email.php:40 views/mailbox.php:47
 msgid "Resend Confirmation Request"
-msgstr "Выслать запрос подтверждения"
+msgstr "Reenviar petición de confirmación"
 
 #. translators: email property
 #: views/addedit_email.php:63 views/mailbox.php:63
 msgid "Subject"
-msgstr "Тема"
+msgstr "Asunto"
 
 #. translators: email property
 #: views/addedit_email.php:64 views/mailbox.php:64
 msgid "To"
-msgstr "Кому"
+msgstr "Para"
 
 #. translators: email property
 #: views/addedit_email.php:66 views/mailbox.php:66 views/subscribers.php:76
 msgid "Status"
-msgstr "Статус"
+msgstr "Estado"
 
 #: views/addedit_email.php:81 views/addedit_email.php:95
 #: views/addedit_email.php:109 views/forms.php:63 views/mailbox.php:84
@@ -1211,235 +1206,235 @@ msgstr "Статус"
 #: views/subscribers.php:123 views/subscribers.php:153 views/templates.php:112
 #: views/templates.php:126 views/templates.php:142 views/templates.php:158
 msgid "Please, confirm..."
-msgstr "Пожалуйста, подтвердите ..."
+msgstr "Por favor, confirme.."
 
 #: views/addedit_email.php:84 views/mailbox.php:87 views/subscribers.php:95
 #: views/templates.php:115
 msgid "Are you sure you want to unsubscribe selected people?"
-msgstr "Вы уверены, что хотите отписать выбранных подписчиков?"
+msgstr "¿Está seguro de que desea dar de baja a las personas seleccionadas?"
 
 #: views/addedit_email.php:88 views/mailbox.php:91 views/subscribers.php:45
 #: views/subscribers.php:100 views/subscribers.php:300 views/templates.php:119
 msgid "Unsubscribe"
-msgstr "Отписать"
+msgstr "Dar de baja"
 
 #: views/addedit_email.php:98 views/subscribers.php:110
 msgid "Are you sure you want to delete selected subscribers?"
-msgstr "Вы действительно хотите удалить выбранных подписчиков?"
+msgstr "¿Estás seguro de que desea borrar los suscriptores seleccionados?"
 
 #: views/addedit_email.php:112 views/mailbox.php:115 views/subscribers.php:126
 #: views/templates.php:161
 msgid "Are you sure you want to change status of selected subscribers to %s?"
-msgstr "Вы уверены, что хотите изменить статус выбранных подписчиков на %s?"
+msgstr "¿Está seguro de que desea cambiar el estado de los suscriptores seleccionados a %s?"
 
 #: views/addedit_email.php:116 views/mailbox.php:119 views/subscribers.php:132
 #: views/templates.php:165
 msgid "Change"
-msgstr "Изменить"
+msgstr "Cambiar"
 
 #: views/forms.php:14 views/forms.php:41
 msgid "New List"
-msgstr "Новая рассылка"
+msgstr "Nueva lista"
 
 #: views/forms.php:46 views/mailbox-email.php:80
 msgid "Name:"
-msgstr "Название"
+msgstr "Nombre:"
 
 #: views/forms.php:49
 msgid "Please enter the name of a form"
-msgstr "Пожалуйста, введите имя формы."
+msgstr "Introduzca nombre de un formulario"
 
 #: views/forms.php:56 views/subscribers.php:315
 msgid "Create"
-msgstr "Создать"
+msgstr "Crear"
 
 #: views/forms.php:66
 msgid ""
 "Are you sure you want to delete selected forms and subscribers lists? This "
 "operation cannot be undone!"
-msgstr "Вы уверены, что хотите удалить выбранные формы и списки подписчиков? Операция удаления не может быть отменена!"
+msgstr "¿Está seguro de que desea borrar los formularios y listas de suscriptores seleccionados? ¡Esta operación no puede deshacerse!"
 
 #: views/list.php:9 views/list.php:303
 msgid "Form options"
-msgstr "Параметры формы"
+msgstr "Opciones de formulario"
 
 #: views/list.php:10 views/list.php:304
 msgid "Use inline labels"
-msgstr "Использовать встроенные названия полей"
+msgstr "Usar etiquetas en línea"
 
 #: views/list.php:24 views/list.php:42 views/list.php:66 views/list.php:84
 #: views/list.php:105 views/list.php:123 views/list.php:140 views/list.php:191
 #: views/list.php:228
 msgid "Field options"
-msgstr "Опции поля"
+msgstr "Opciones de campos"
 
 #: views/list.php:25
 msgid "Title"
-msgstr "Название"
+msgstr "Título"
 
 #: views/list.php:43
 msgid "HTML content"
-msgstr "содержание в формате HTML"
+msgstr "Contenido HTML"
 
 #: views/list.php:88
 msgid "Content"
-msgstr "Содержание"
+msgstr "Contenido"
 
 #: views/list.php:144
 msgid "Size"
-msgstr "Размер"
+msgstr "Tamaño"
 
 #: views/list.php:146
 msgid "Mini"
-msgstr "Минимальный"
+msgstr "Mini"
 
 #: views/list.php:147
 msgid "Small"
-msgstr "Маленький"
+msgstr "Pequeño"
 
 #: views/list.php:148
 msgid "Medium"
-msgstr "Средний"
+msgstr "Mediano"
 
 #: views/list.php:149
 msgid "Large"
-msgstr "Большой"
+msgstr "Grande"
 
 #: views/list.php:152
 msgid "Color"
-msgstr "Цвет"
+msgstr "Color"
 
 #: views/list.php:154
 msgid "Gray"
-msgstr "Серый"
+msgstr "Gris"
 
 #: views/list.php:155
 msgid "Pink"
-msgstr "Розовый"
+msgstr "Rosa"
 
 #: views/list.php:156
 msgid "Blue"
-msgstr "Голубой"
+msgstr "Azul"
 
 #: views/list.php:157
 msgid "Green"
-msgstr "Зеленый"
+msgstr "Verde"
 
 #: views/list.php:158
 msgid "Turquoise"
-msgstr "Бирюзовый"
+msgstr "Turquesa"
 
 #: views/list.php:159
 msgid "Black"
-msgstr "Черный"
+msgstr "Negro"
 
 #: views/list.php:160
 msgid "Dark Gray"
-msgstr "Темно-серый"
+msgstr "Gris oscuro"
 
 #: views/list.php:161
 msgid "Yellow"
-msgstr "Желтый"
+msgstr "Amarill"
 
 #: views/list.php:162
 msgid "Purple"
-msgstr "Фиолетовый"
+msgstr "Morado"
 
 #: views/list.php:163
 msgid "Dark blue"
-msgstr "Синий"
+msgstr "Azul oscuro"
 
 #: views/list.php:166
 msgid "Style"
-msgstr "Стиль"
+msgstr "Estilo"
 
 #: views/list.php:168
 msgid "None ( Theme native )"
-msgstr "Никакая (родная тема)"
+msgstr "Ninguno (tema nativo)"
 
 #: views/list.php:169
 msgid "Brick"
-msgstr "Прямоугольный"
+msgstr "Ladrillo"
 
 #: views/list.php:170
 msgid "Rounded"
-msgstr "Закругленный"
+msgstr "Redondeado"
 
 #: views/list.php:171
 msgid "Pill"
-msgstr "Круглый"
+msgstr "Pastilla"
 
 #: views/list.php:196
 msgid "Radio options"
-msgstr "Радио опции"
+msgstr "Opciones radio"
 
 #: views/list.php:198 views/list.php:235
 msgid "Add"
-msgstr "Добавить"
+msgstr "Añadir"
 
 #: views/list.php:200 views/list.php:237
 msgid "New option"
-msgstr "Новая опция"
+msgstr "Nueva opción"
 
 #: views/list.php:202
 msgid "Genders"
-msgstr "Пол"
+msgstr "Géneros"
 
 #: views/list.php:207 views/list.php:245
 msgid "Double click to edit"
-msgstr "Нажмите два раза для редактирования"
+msgstr "Doble clic para editar"
 
 #: views/list.php:233
 msgid "Select options"
-msgstr "Выберите опции"
+msgstr "Opciones de selección"
 
 #: views/list.php:239
 msgid "Countries"
-msgstr "Страны"
+msgstr "Países"
 
 #: views/list.php:240
 msgid "States"
-msgstr "Штаты"
+msgstr "Estados"
 
 #: views/list.php:257
 msgid "Edit subscribers list"
-msgstr "Редактировать список подписчиков"
+msgstr "Editar lista de suscriptores"
 
 #: views/list.php:266
 msgid "List Name"
-msgstr "Название списка"
+msgstr "Nombre de lista"
 
 #: views/list.php:273
 msgid "Form Builder"
-msgstr "Конструктор форм"
+msgstr "Constructor de formularios"
 
 #: views/list.php:275
 msgid "Add Field"
-msgstr "Добавить поле"
+msgstr "Añadir campo"
 
 #: views/list.php:277
 msgid "Text"
-msgstr "Текст"
+msgstr "Texto"
 
 #: views/list.php:278
 msgid "Textarea"
-msgstr "Текстовое поле"
+msgstr "Área de texto"
 
 #: views/list.php:280
 msgid "Checkbox"
-msgstr "Чекбокс"
+msgstr "Casilla de comprobación"
 
 #: views/list.php:281
 msgid "Radio buttons"
-msgstr "Радио-кнопки"
+msgstr "Botones radio"
 
 #: views/list.php:282
 msgid "Dropdown menu"
-msgstr "Выпадающее меню"
+msgstr "Menú desplegable"
 
 #: views/list.php:283
 msgid "Form title"
-msgstr "Заголовок формы"
+msgstr "Título de formulario"
 
 #: views/list.php:284
 msgid "HTML"
@@ -1447,169 +1442,169 @@ msgstr "HTML"
 
 #: views/list.php:287
 msgid "Load Default Form"
-msgstr "Загрузить стандартную форму"
+msgstr "Cargar formulario predeterminado"
 
 #: views/list.php:311
 msgid "Field shortcode"
-msgstr "Короткий код поля"
+msgstr "Código corto del campo"
 
 #: views/list.php:322
 msgid "This form on external sites? Sure!"
-msgstr "Хотите использовать эту форму на внешних сайтах? Пожалуйста!"
+msgstr "¿Desea este formulario en sitios externos? ¡Por supuesto!"
 
 #: views/list.php:323
 msgid "Copy the code below and paste it into any other site that you have."
-msgstr "Скопируйте код, приведенный ниже, и используйте его на любом другом сайте."
+msgstr "Copie el código de debajo y péguelo en cualquier otro sitio que tenga."
 
 #: views/list.php:325
 msgid "Custom CSS for external form."
-msgstr "Персональный CSS код для внешней формы"
+msgstr "CSS personalizado para formulario externo."
 
 #: views/list.php:326
 msgid "This CSS will only affect the external form"
-msgstr "Этот CSS код применим только для внешней формы"
+msgstr "Este CSS sólo afecta al formulario externo"
 
 #: views/list.php:330
 msgid "Here are the unsubscribe links"
-msgstr "Ссылки на отписку"
+msgstr "Estos son los enlaces para darse de baja"
 
 #: views/list.php:331
 msgid "if your are using 3rd party software to send emails:"
-msgstr "Если вы используете стороннюю программу для посылки электронных писем:"
+msgstr "Si emplea software de terceros para enviar mensajes:"
 
 #: views/list.php:332
 msgid "Link to instant unsubscribe:"
-msgstr "Ссылка на мгновенную отписку:"
+msgstr "Enlace a baja instantánea:"
 
 #: views/list.php:335
 msgid ""
 "You must replace the %s with the value of the ucode field of the exported "
 "subscribers list."
-msgstr "Вы должны заменить %s на значение поля ucode экспортированного списка подписчиков."
+msgstr "Debe reemplazar %s con el valor del campo ucode de la lista exportada de suscriptores."
 
 #: views/list.php:337
 msgid "One more thing,"
-msgstr "Еще кое-что,"
+msgstr "Una cosa más,"
 
 #: views/list.php:338
 msgid "you can put this form inside any post content with this short-code:"
-msgstr "Вы можете поместить эту форму в любом посте при помощи этого макроса:"
+msgstr "puede poner este formulario dentro de cualquier publicación con este código corto:"
 
 #: views/list.php:340
 msgid "and you can make it horizontal with this shortcode"
-msgstr "и можете расположить ее горизонтально при помощи этого макроса:"
+msgstr "y puede hacerlo horizontal con este código corto"
 
 #: views/mailbox-email.php:49
 msgid "Edit email"
-msgstr "Редактировать письмо"
+msgstr "Editar mensaje"
 
 #: views/mailbox-email.php:51
 msgid "Edit template"
-msgstr "Редактировать шаблон"
+msgstr "Editar plantilla"
 
 #: views/mailbox-email.php:66
 msgid "To:"
-msgstr "Кому:"
+msgstr "Para:"
 
 #: views/mailbox-email.php:91
 msgid "Subject:"
-msgstr "Тема:"
+msgstr "Asunto:"
 
 #: views/mailbox-email.php:108
 msgid "Send immediately"
-msgstr "Отправить немедленно"
+msgstr "Enviar inmediatamente"
 
 #: views/mailbox-email.php:109
 msgid "Schedule sending on"
-msgstr "Запланировать посылку на"
+msgstr "Programar envio el"
 
 #: views/mailbox-email.php:113 views/mailbox-email.php:158
 #: views/subscribers.php:160
 msgid "Send"
-msgstr "Отправить"
+msgstr "Enviar"
 
 #: views/mailbox-email.php:116 views/mailbox-email.php:144
 msgid "Send test email"
-msgstr "Отправить тестовое письмо"
+msgstr "Enviar mensaje de prueba"
 
 #: views/mailbox-email.php:122
 msgid "Email particles"
-msgstr "Части письма"
+msgstr "Partículas del mensaje"
 
 #: views/mailbox-email.php:122
 msgid "Template particles"
-msgstr "Части шаблона"
+msgstr "Partículas de la plantilla"
 
 #: views/mailbox-email.php:123
 msgid "Edit Post Template"
-msgstr "Редактировать шаблон поста"
+msgstr "Editar plantilla de publicación"
 
 #: views/mailbox-email.php:124
 msgid "Edit Post Divider Template"
-msgstr "Редактировать разделитель постов"
+msgstr "Editar plantilla de divisor de publicaciones"
 
 #: views/mailbox-email.php:149
 msgid "Email address:"
-msgstr "Адрес электронной почты"
+msgstr "Dirección de correo:"
 
 #: views/mailbox-email.php:155
 msgid "Sending email..."
-msgstr "Отправка электронной почты ..."
+msgstr "Enviando mensaje..."
 
 #: views/mailbox-email.php:157 views/subscribers.php:145
 msgid "Cancel"
-msgstr "Отменить"
+msgstr "Cancelar"
 
 #: views/mailbox.php:11 views/subscribers.php:22
 msgid "Clear"
-msgstr "Очистить"
+msgstr "Borrar"
 
 #: views/mailbox.php:37
 msgid "From Template"
-msgstr "Из шаблона"
+msgstr "A partir de plantilla"
 
 #: views/mailbox.php:38
 msgid "Quick Message"
-msgstr "Быстрое сообщение"
+msgstr "Mensaje rápido"
 
 #: views/mailbox.php:42
 msgid "Compose from Message"
-msgstr "Создать из сообщения."
+msgstr "Redactar a partir de mensaje"
 
 #: views/mailbox.php:44
 msgid "Stop"
-msgstr "Остановить"
+msgstr "Parar"
 
 #: views/mailbox.php:67
 msgid "Status message"
-msgstr "Статус"
+msgstr "Mensaje de estado"
 
 #: views/mailbox.php:101
 msgid "Are you sure you want to delete selected emails?"
-msgstr "Вы действительно хотите удалить выбранные сообщения?"
+msgstr "¿Está seguro de que desea borrar los mensajes seleccionados?"
 
 #: views/mailbox.php:126
 msgid "Select template:"
-msgstr "Выберите шаблон"
+msgstr "Seleccionar plantilla:"
 
 #: views/mailbox.php:140
 msgid "Sending log"
-msgstr "Журнал отправки"
+msgstr "Enviar registro"
 
 #. translators: Options page tab title
 #: views/options.php:17
 msgid "General"
-msgstr "Общие"
+msgstr "General"
 
 #. translators: Options page tab title
 #: views/options.php:19 views/options.php:76
 msgid "Email Settings"
-msgstr "Настройки электронной почты"
+msgstr "Configuración de correo"
 
 #. translators: Options page tab title
 #: views/options.php:21
 msgid "Delivery Settings"
-msgstr "Параметры доставки"
+msgstr " Ajustes de envío"
 
 #. translators: Options page tab title
 #: views/options.php:23
@@ -1619,54 +1614,54 @@ msgstr "API"
 #. translators: Options page tab title
 #: views/options.php:25 views/options.php:193
 msgid "Uninstallation"
-msgstr "Деинсталляция"
+msgstr "Desinstalar"
 
 #: views/options.php:34
 msgid "Delete subscribers who didn't confirm their subscription within 7 days"
-msgstr "Удалить подписчиков, которые не подтвердили свою подписку в течение 7 дней"
+msgstr "Borrar suscriptores que no confirman su suscripción en 7 días"
 
 #: views/options.php:35
 msgid "Use double opt-out procedure"
-msgstr "Использовать двойную процедуру отписки"
+msgstr "Usar procedimiento de baja con doble confirmación"
 
 #: views/options.php:37
 msgid "Plugin statistics on the dashboard"
-msgstr "Плагин статистики на приборной панели"
+msgstr "Estadísticas del plugin en el dashboard"
 
 #: views/options.php:38
 msgid "Do not show"
-msgstr "Не показывать"
+msgstr "No mostrar"
 
 #: views/options.php:39
 msgid "Show in the activity box (Right Now)"
-msgstr "Показать поле активности (прямо сейчас)"
+msgstr "Mostrar en la caja de actividad (Justo ahora)"
 
 #: views/options.php:40
 msgid "Show in the separate widget"
-msgstr "Показать в отдельном виджете"
+msgstr "Mostrar en widget separado"
 
 #: views/options.php:43
 msgid "Anti-Spam"
-msgstr "Анти-спам"
+msgstr ""
 
 #: views/options.php:44
 msgid "Disable advanced honeypot technique"
-msgstr "Выключить продвинутую \"honeypot\" технику"
+msgstr ""
 
 #: views/options.php:45
 msgid ""
 "Check this option only if you use static cashing solution like Google "
 "PageSpeed for your web server or get \"Something went wrong. Please contact "
 "the site administrator and describe the problem.\" error after subscription."
-msgstr "Включите эту опцию только, если вы используете статическое запоминающее устройство такое, как Google PageSpeed, для вашего сервера или получаете ошибку \"Что-то пошло не так. Пожалуйста, контактируйте администратора сайта и опишите проблему.\" после подписки."
+msgstr ""
 
 #: views/options.php:48
 msgid "Social profiles links"
-msgstr "Ссылки на социальные профили"
+msgstr "Enlaces de perfiles sociales"
 
 #: views/options.php:62
 msgid "Important!"
-msgstr "Важно!"
+msgstr "¡Importante!"
 
 #: views/options.php:63
 msgid ""
@@ -1676,146 +1671,146 @@ msgid ""
 "service as described in <a "
 "href=\"http://support.glocksoft.net/kb/articles/69-how-to-make-wordpress-"
 "cron-work\">this tutorial</a>."
-msgstr "Если на ваш сайт не будут заходить посетители, планировщик задач WordPress не будет работать. Как правило, это задерживает отправку. Если вы наблюдаете задержку отправки, установите cron job: на вашем сервере или использовать бесплатный cron сервис, как описано в <a href=\"http://support.glocksoft.net/kb/articles/69-how-to-make-wordpress-cron-work\">этом уроке</a>."
+msgstr "Si su sitio no tiene visitas, el programador de tareas de WordPress no se ejecutará. Esto, normalmente, retrasa los envíos. Si está experimentando envíos retrasados o inconsistentes, establezca una tarea cron en su servidor o emplee un servicio cron gratuito según se indica en <a href=\"http://support.glocksoft.net/kb/articles/69-how-to-make-wordpress-cron-work\">este tutorial</a>."
 
 #: views/options.php:65
 msgid "Your blog's wp-cron URL:"
-msgstr "URL wp-cron вашего блога:"
+msgstr "URL de wp-cron de su blog:"
 
 #: views/options.php:77
 msgid "From Name:"
-msgstr "От имени:"
+msgstr "Nombre de remitente:"
 
 #: views/options.php:80
 msgid "From Email:"
-msgstr "С адреса:"
+msgstr "Email de remitente:"
 
 #: views/options.php:83
 msgid "Return Email Address:"
-msgstr "Адрес возврата электронной почты:"
+msgstr "Dirección de correo de respuesta:"
 
 #: views/options.php:86
 msgid "Email Address for Admin Notifications:"
-msgstr "Электронный адрес для получения администратором уведомлений"
+msgstr "Dirección de correo para notificaciones de administración:"
 
 #: views/options.php:90
 msgid "Send Welcome Message"
-msgstr "Отправлять приветственное сообщение"
+msgstr "Enviar mensaje de bienvenida"
 
 #: views/options.php:91
 msgid "Send Unsubscribe Notification"
-msgstr "Отправлять уведомление об отписке"
+msgstr "Enviar notificación de baja en lista"
 
 #: views/options.php:92
 msgid "Send Subscribe/Unsubscribe Event Notifications to Admin"
-msgstr "Отправлять уведомления администратору о Подписке / Отписке"
+msgstr "Enviar notificaciones de eventos de alta o baja al administrador"
 
 #: views/options.php:102
 msgid "Email Delivery Settings"
-msgstr "Настройки доставки электронной почты"
+msgstr "Configuración de envío de mensajes"
 
 #: views/options.php:106
 msgid "Throttling"
-msgstr "Регулирование нагрузки"
+msgstr "Aceleración"
 
 #: views/options.php:107
 msgid "Limit sending to "
-msgstr "Ограничить посылку "
+msgstr "Limitar envío a"
 
 #: views/options.php:107
 msgid "emails per"
-msgstr "письмами в"
+msgstr "correos por"
 
 #: views/options.php:107
 msgid "Minute"
-msgstr "минуту"
+msgstr "minuto"
 
 #: views/options.php:107
 msgid "Hour"
-msgstr "час"
+msgstr "hora"
 
 #: views/options.php:114
 msgid "Advice!"
-msgstr "Совет!"
+msgstr "¡Consejo!"
 
 #: views/options.php:114
 msgid " We strongly recommend that you use custom SMTP server option."
-msgstr " Мы настоятельно рекомендуем вам использовать собственный SMTP сервер."
+msgstr "Recomendamos encarecidamente que emplee la opción de servidor SMTP personalizado."
 
 #: views/options.php:115
 msgid "Use PHP Mail"
-msgstr "Использовать PHP Mail"
+msgstr "Usar PHP Mail"
 
 #: views/options.php:116
 msgid "Use Sendmail Directly (*nix only)"
-msgstr "Использовать Sendmail на прямую (*nix только)"
+msgstr "Usar directamente sendmail (sólo para *nix)"
 
 #: views/options.php:117
 msgid "Use Custom SMTP Server"
-msgstr "Использовать SMTP сервер"
+msgstr "Usar servidor SMTP personalizado"
 
 #: views/options.php:122
 msgid "Load GMail Settings"
-msgstr "Загрузить настройки для GMail"
+msgstr "Cargar ajustes de GMail"
 
 #: views/options.php:123
 msgid "Load Amazon SES SMTP Settings"
-msgstr "Загрузить настройки Amazon SES SMTP"
+msgstr "Cargar ajustes SMTP de Amazon SES"
 
 #: views/options.php:127
 msgid "Hostname:"
-msgstr "Имя хоста"
+msgstr "Servidor:"
 
 #: views/options.php:130
 msgid "Username:"
-msgstr "Имя пользователя:"
+msgstr "Nombre de usuario:"
 
 #: views/options.php:133
 msgid "Password:"
-msgstr "Пароль:"
+msgstr "Contraseña:"
 
 #: views/options.php:136
 msgid "Port:"
-msgstr "Порт"
+msgstr "Puerto:"
 
 #: views/options.php:140
 msgid "Secure Connection"
-msgstr "Безопасное соединение"
+msgstr "Conexión segura"
 
 #: views/options.php:142
 msgid "Don't Use"
-msgstr "Не использовать"
+msgstr "No usar"
 
 #: views/options.php:143
 msgid "Use Start TLS"
-msgstr "Использовать (Start TLS)"
+msgstr "Usar Start TLS"
 
 #: views/options.php:144
 msgid "Use SSL"
-msgstr "Использовать SSL"
+msgstr "Usar SSL"
 
 #: views/options.php:150
 msgid "Test your settings:"
-msgstr "Проверьте свои настройки:"
+msgstr "Probar configuración:"
 
 #: views/options.php:153
 msgid "Send Test Email"
-msgstr "Отправить тестовое письмо"
+msgstr "Enviar mensaje de prueba"
 
 #: views/options.php:161
 msgid "Have an Amazon SES account?"
-msgstr "У вас есть аккаунт Amazon SES?"
+msgstr "¿Tiene una cuenta Amazon SES?"
 
 #: views/options.php:162
 msgid ""
 "Take a look at our article on <a href=\"http://www.glocksoft.com/how-to-use-"
 "amazon-ses-smtp-interface-to-send-emails/\">how to use Amazon SES SMTP "
 "interface</a>."
-msgstr "Взгляните на нашу статью о том, <a href=\"http://www.glocksoft.com/how-to-use-amazon-ses-smtp-interface-to-send-emails/\">как использовать SMTP интерфейс Amazon SES</a>."
+msgstr "Eche un vistazo a nuestro artículo en <a href=\"http://www.glocksoft.com/how-to-use-amazon-ses-smtp-interface-to-send-emails/\">cómo emplear la interfaz SMTP Amazon SES</a>."
 
 #: views/options.php:166
 msgid "Need Professional SMTP Server?"
-msgstr "Нужен профессиональный SMTP-сервер?"
+msgstr "¿Necesita un servidor SMTP profesional?"
 
 #: views/options.php:167
 msgid ""
@@ -1823,77 +1818,77 @@ msgid ""
 "SMTP.com, one of the best SMTP providers on the Internet to offer you a Free"
 " smtp account. You can get a Free 28-day trial account on <a "
 "href=\"http://www.smtp.com/glocksoft\">http://www.smtp.com/glocksoft</a>."
-msgstr "Хотя вы можете использовать любой SMTP сервис с нашим плагином, мы сотрудничаем с SMTP.com, одним из лучших SMTP сервисов в Интернете, чтобы предложить вам бесплатный аккаунт SMTP. Вы можете получить бесплатную 28-дневную пробную учетную запись на <a href=\"http://www.smtp.com/glocksoft\">http://www.smtp.com/glocksoft</a>."
+msgstr "Aunque puede emplear cualquier servicio SMTP con nuestro plugin, hemos llegado a un acuerdo con SMTP.com, uno de los mejores proveedores de Internet, para que le ofrezcan una cuenta smtp gratuita. Puede obtener una cuenta gratuita de prueba durante 28 días en <a href=\"http://www.smtp.com/glocksoft\">http://www.smtp.com/glocksoft</a>."
 
 #: views/options.php:176
 msgid "API key"
-msgstr "Ключ API"
+msgstr "Clave API"
 
 #: views/options.php:179
 msgid "API endpoint"
-msgstr "Ссылка API"
+msgstr "Punto final API"
 
 #: views/options.php:185
 msgid "API description"
-msgstr "Документация по API"
+msgstr "Descripción de API"
 
 #: views/options.php:197
 msgid "Delete subscribers' lists during uninstallation"
-msgstr "Удалить списки подписчиков при деинсталляции"
+msgstr "Borrar listas de suscriptores durante desinstalación"
 
 #: views/options.php:198
 msgid ""
 "Checking this option will remove all the subscribers' data during the plugin"
 " uninstallation. Be careful, there is no undo."
-msgstr "При включении этой опции все данные подписчиков будут удалены. Будьте осторожны, эту операцию невозможно отменить."
+msgstr "Activar esta opción eliminará todos los datos de suscriptores durante la desinstalación del plugin. Emplear con cuidado: no puede deshacerse."
 
 #: views/options.php:200
 msgid "Uninstall now"
-msgstr "Деинсталлировать сейчас"
+msgstr "Desinstalar ahora"
 
 #: views/options.php:212
 msgid "Update Options"
-msgstr "Сохранить"
+msgstr "Actualizar opciones"
 
 #: views/options.php:222
 msgid ""
 "Are you sure you want to uninstall WPNewsman Plugin and all of its settings?"
-msgstr "Вы уверены, что хотите деинсталлировать плагин WPNewsman и все его настройки?"
+msgstr "¿Está seguro de que desea desinstalar el plugin WPNewsman y todos sus ajustes?"
 
 #: views/options.php:226
 msgid "Uninstall"
-msgstr "Деинсталлировать"
+msgstr "Desinstalar"
 
 #: views/pro.php:3
 msgid "Top 5 Reasons to Upgrade to WPNewsman Pro"
-msgstr "5 главных причин для обновления до WPNewsman Pro"
+msgstr "5 razones para actualizar a WPNewsman Pro"
 
 #: views/pro.php:7
 msgid ""
 "WPNewsman Pro is a significant upgrade over WPNewsman Lite that will allow "
 "you to:"
-msgstr "WPNewsman Pro - это обновление для WPNewsman Lite, которое позволит вам:"
+msgstr "WPNewsman Pro es una actualización significativa sobre WPNewsman Lite, y le permitirá:"
 
 #: views/pro.php:9
 msgid ""
 "<strong>Send to unlimited number of subscribers</strong> (vs. 2000 "
 "subscribers in the Lite version) using Amazon SES SMTP settings and enjoy "
 "high deliverability rate like big email service providers."
-msgstr "<strong>Посылать письма неограниченному количеству подписчиков</strong> (против 2000 подписчиков в версии Lite), используя SMTP настройки Amazon SES, и иметь высокий процент доставленных писем, как в случае использования крупных провайдеров электронной почты."
+msgstr "<strong>Envíe a un número ilimitado de suscriptores</strong> (máx. 2000 suscriptores en la versión Lite) empleando la configuración SMTP de Amazon SES y disfrute de una alta tasa de envío como los grandes proveedores de servicios de mensajería electrónica."
 
 #: views/pro.php:10
 msgid ""
 "<strong>Automatically process bounced emails</strong> after each mailing and"
 " maintain your list clean and verified -- you protect your IP from being "
 "blacklisted for continuous sending to invalid email addresses."
-msgstr "<strong>Автоматически обрабатывать вернувшиеся письма</strong> после каждой посылки и поддерживать список проверенных рабочих адресов электронной почты -- таким образом вы защищаете ваш IP адрес от попадания в \"черные\" списки."
+msgstr "<strong>Procese automáticamente los correos rebotados</strong> tras cada campaña de envío y mantenga su lista limpia y verificada -- proteja su IP de ser introducida en listas negras por enviar continuamente mensajes a direcciones de correo no válidas."
 
 #: views/pro.php:11
 msgid ""
 "<strong>Embed subscription forms on external sites</strong> (not necessarily"
 " WordPress) and collect subscribers into one main database in WordPress. "
 "More subscribers, more potentional buyers!"
-msgstr "<strong>Размещать формы подписки на внешних сайтах</strong> (не обязательно на сайтах WordPress) и собирать подписчиков в единую базу данных на WordPress. Больше подписчиков, больше потенциальных покупателей!"
+msgstr "<strong>Incrustar formularios de suscripción en sitios externos</strong> (no necesariamente basados en Wordpress) y  recopilar suscriptores en una base de datos principal de Wordpress. Cuanto más suscriptores, más compradores potenciales."
 
 #: views/pro.php:12
 msgid ""
@@ -1902,7 +1897,7 @@ msgid ""
 "the queue and get priority help. Visit our support site <a "
 "href=\"http://support.glocksoft.net\" "
 "target=\"_blank\">http://support.glocksoft.net</a>"
-msgstr "<strong>Получать приоритетную техническую поддержку</strong>. Мы предоставляем документацию и поддержку всем пользователям плагина, но пользователи Pro версии имеют приоритет. Наш сайт технической поддержки <a href=\"http://support.glocksoft.net\" target=\"_blank\">http://support.glocksoft.net</a>"
+msgstr "<strong>Conseguir soporte prioritario</strong>. Proporcionamos documentación y soporte para todos, pero los usuarios de WPNewsman Pro evitan la cola y tienen prioridad. Visite nuestro sitio de soporte <a href=\"http://support.glocksoft.net\" target=\"_blank\">http://support.glocksoft.net</a>"
 
 #: views/pro.php:13
 msgid ""
@@ -1912,252 +1907,252 @@ msgid ""
 "various marketing campaigns are in bringing visitors to your website "
 "(visits, page views, etc.), how well these visitors convert and how much "
 "revenue they generate."
-msgstr "<strong>Отслеживать нажатие ссылок при помощи Google Analytics или Piwik</strong> и получать информацию о том, кто из посетителей вашего сайта пришел на сайт по ссылке из письма. Используя Google Analytics или Piwik, вы можете оценить эффективность различных писем в отношении привлечения посетителей на ваш сайт (посещения, просмотры страницы и т.д.), степень конвертации посетителей в покупателей и размер полученной от них прибыли."
+msgstr "<strong>Mezclar rastreo remoto de Google Analytics o Piwik en enlaces</strong>. Averigüe cuales de sus visitantes llegaron al sitio a través de sus boletines. El rastreo de campañas en Piwik o Google Analytics le permite rastrear la tasa de efectividad de sus campañas de marketing en relación al número de visitantes que traen a su sitio web (visitas, vistas de página, etc.), la tasa de conversión de estos visitantes y el beneficio que generan."
 
 #: views/pro.php:16
 msgid "License & Terms"
-msgstr "Лицензия и основные положения"
+msgstr "Licencia y condiciones"
 
 #: views/pro.php:17
 msgid ""
 "Our Pro license is available per domain or single sub domain. Read Our <a "
 "href=\"http://wpnewsman.com/terms-conditions/\">Terms and Conditions</a>."
-msgstr "Лицензия на Pro версию работает только для одного домена или суб-домена. Смотрите наши <a href=\"http://wpnewsman.com/terms-conditions/\">Условия использования</a>."
+msgstr "Nuestra licencia Pro está disponible por dominio o subdominio único. Lea <a href=\"http://wpnewsman.com/terms-conditions/\">Términos y condiciones</a>."
 
 #: views/pro.php:23
 msgid "Upgrade to Pro for $%d/year"
-msgstr "Купить Pro версию за $%d/год"
+msgstr "Actualizar a Pro por %d dólares al año "
 
 #: views/pro.php:26
 msgid ""
 "Special introductory price: $%d/year (retail price: $%d/year) <br> To "
 "activate the PRO version, you'll need to download an extra plugin WPNewsman "
 "Pro Extension."
-msgstr "Специальная начальная цена: $%d/год (розничная цена: $%d/год) <br> Для активации Pro версии вам необходимо будет загрузить дополнительный плагин  WPNewsman Pro Extension."
+msgstr "Oferta especial: %d dólares al año (precio normal: %d dólares al año) <br> Para activar la versión PRO, necesita descargar el plugin adicional WPNewsman Pro Extension."
 
 #: views/subscribers.php:20
 msgid "Manage Subscribers"
-msgstr "Управление подписчиками"
+msgstr "Gestionar suscriptores"
 
 #: views/subscribers.php:20
 msgid "Form & List options"
-msgstr "Опции формы и списка"
+msgstr "Opciones de formulario y lista"
 
 #: views/subscribers.php:30
 msgid "All Subscribers"
-msgstr "Все подписчики"
+msgstr "Todos los suscriptores"
 
 #: views/subscribers.php:50
 msgid "Bulk unsubscribe"
-msgstr "Массовая отписка"
+msgstr "Dar de baja por lotes"
 
 #: views/subscribers.php:52
 msgid "Change to Unconfirmed"
-msgstr "Сделать неподтвержденными"
+msgstr "Cambiar a \"Sin confirmar\""
 
 #: views/subscribers.php:53
 msgid "Change to Confirmed"
-msgstr "Сделать подтвержденными"
+msgstr "Cambiar a \"Confirmados\""
 
 #: views/subscribers.php:59
 msgid "Export to CSV"
-msgstr "Экспорт в CSV"
+msgstr "Exportar a CSV"
 
 #: views/subscribers.php:60
 msgid "Import from CSV"
-msgstr "Импорт из CSV"
+msgstr "Importar de CSV"
 
 #: views/subscribers.php:61
 msgid "Validate email addresses"
-msgstr "Проверить электронные адреса"
+msgstr "Validar direcciones de correo"
 
 #: views/subscribers.php:65
 msgid "Send Re-Subscribe Request"
-msgstr "Отправить новый запрос на подтверждение подписки"
+msgstr "Enviar petición de re-suscripción"
 
 #: views/subscribers.php:74
 msgid "Date"
-msgstr "Дата"
+msgstr "Fecha"
 
 #: views/subscribers.php:77
 msgid "Form Data"
-msgstr "Данные формы"
+msgstr "Datos de formulario"
 
 #: views/subscribers.php:98
 msgid "Unsubscribe all"
-msgstr "Отписать всех"
+msgstr "Dar de baja a todos"
 
 #: views/subscribers.php:113 views/subscribers.php:114
 msgid "Delete all"
-msgstr "Удалить всех"
+msgstr "Borrar todos"
 
 #: views/subscribers.php:129 views/subscribers.php:130
 msgid "Change all"
-msgstr "Изменить всех"
+msgstr "Cambiar todos"
 
 #: views/subscribers.php:142
 msgid ""
 "This action will send re-subscribe request <strong>to all unconfirmed "
 "subscribers</strong> in the list."
-msgstr "Плагин отправит новый запрос на подтверждение подписки <strong>ВСЕМ подписчикам со статусом \"Неподтвержденные\"</strong> в списке."
+msgstr "Esta acción enviará una petición de re-suscripción a <strong>todos los suscriptores sin confirmar</strong> de la lista."
 
 #: views/subscribers.php:146
 msgid "Send re-subscribe request"
-msgstr "Отправить новый запрос на подтверждение подписки"
+msgstr "Enviar petición de re-suscripción"
 
 #: views/subscribers.php:156
 msgid ""
 "Are you sure you want to re-send confirmation emails to selected "
 "subscribers?"
-msgstr "Вы уверены, что вы хотите отправить новый запрос на подтверждение подписки всем выбранным подписчикам?"
+msgstr "¿Seguro de que desea reenviar mensajes de confirmación a los suscriptores seleccionados?"
 
 #: views/subscribers.php:167
 msgid " list:"
-msgstr " список подписчиков"
+msgstr "lista:"
 
 #: views/subscribers.php:172
 msgid "Uploaded files"
-msgstr "Загруженные файлы"
+msgstr "Ficheros subidos"
 
 #: views/subscribers.php:175
 msgid "Import options"
-msgstr "Параметры импорта"
+msgstr "Opciones de importación"
 
 #: views/subscribers.php:183
 msgid "Please select a file to import."
-msgstr "Пожалуйста, выберите файл для импорта."
+msgstr "Seleccione un fichero a importar."
 
 #: views/subscribers.php:191
 msgid " Skip first row"
-msgstr " Пропустить первую строку"
+msgstr "Saltar primera fila"
 
 #: views/subscribers.php:204 views/subscribers.php:212
 #: views/subscribers.php:220 views/subscribers.php:228
 #: views/subscribers.php:236
 msgid "email"
-msgstr "E-mail"
+msgstr "email"
 
 #: views/subscribers.php:273
 msgid "Please enable JavaScript to use file uploader."
-msgstr "Пожалуйста, включите JavaScript, чтобы использовать загрузчик файлов."
+msgstr "Por favor, habilite Javascript para subir ficheros."
 
 #: views/subscribers.php:279 views/templates.php:189
 msgid "Upload a file"
-msgstr "Загрузить файл"
+msgstr "Subir fichero"
 
 #: views/subscribers.php:280 views/templates.php:191
 msgid "Import"
-msgstr "Импортировать"
+msgstr "Importar"
 
 #: views/subscribers.php:288
 msgid "Bulk unsubscribe:"
-msgstr "Массовая отписка:"
+msgstr "Dar de baja por lotes:"
 
 #: views/subscribers.php:292
 msgid ""
 "Enter an email addresses which you want to unsubscribe. Place each email on "
 "a separate row."
-msgstr "Введите адреса электронной почты которые вы хотите отписать. Поместите каждое адрес на новой строке."
+msgstr "Introduzca las direcciones de correo electrónico que desea dar de baja. Indique cada dirección en una fila distinta."
 
 #: views/subscribers.php:299
 msgid " Unsubscribe from all lists"
-msgstr " Отписать из всех списков"
+msgstr "Darse de baja de todas las listas"
 
 #: views/subscribers.php:309
 msgid "Add new list:"
-msgstr "Добавить новый список:"
+msgstr "Añadir nueva lista:"
 
 #: views/templates.php:15
 msgid "New Template"
-msgstr "Новый шаблон"
+msgstr "Nueva plantilla"
 
 #: views/templates.php:19
 msgid "Install New Templates"
-msgstr "Поставить новые шаблоны писем"
+msgstr "Instalar nuevas plantillas"
 
 #: views/templates.php:23
 msgid "From Templates Store..."
-msgstr "Из хранилища шаблонов..."
+msgstr "Desde repositorio de plantillas..."
 
 #: views/templates.php:24
 msgid "From File..."
-msgstr "Из файла..."
+msgstr "Desde fichero..."
 
 #: views/templates.php:42
 msgid "My Templates"
-msgstr "Мои шаблоны"
+msgstr "Mis plantillas"
 
 #: views/templates.php:45
 msgid "System Templates"
-msgstr "Системные шаблоны"
+msgstr "Plantillas de sistema"
 
 #: views/templates.php:129
 msgid ""
 "Some of selected templates have resources shared with other email templates "
 "or emails."
-msgstr "Некоторые из выбранных шаблонов содержат ресурсы, используемые другими шаблонами или письмами."
+msgstr "Algunas de las plantillas seleccionadas tiene recursos compartidos con otros mensajes o plantillas de mensaje."
 
 #: views/templates.php:130
 msgid "Are you sure you want to delete selected templates?"
-msgstr "Вы действительно хотите удалить выбранные шаблоны?"
+msgstr "¿Está seguro de que desea borrar las plantillas seleccionadas?"
 
 #: views/templates.php:135
 msgid "Delete with resources"
-msgstr "Удалить вместе с ресурсами"
+msgstr "Borrar con recursos"
 
 #: views/templates.php:145
 msgid "Are you sure you want to delete this template?"
-msgstr "Вы уверены, что хотите удалить этот шаблон?"
+msgstr "¿Está seguro de que desea borrar esta plantilla?"
 
 #: views/templates.php:172
 msgid "Import Template"
-msgstr "Импортировать шаблон"
+msgstr "Importar plantilla"
 
 #: views/templates.php:178
 msgid "Template file name"
-msgstr "Имя файла шаблона"
+msgstr "Nombre de fichero de plantilla"
 
 #: views/templates.php:199
 msgid "Get more templates"
-msgstr "Получить больше шаблонов"
+msgstr "Obtener más plantillas"
 
 #: widget-wpml.php:10
 msgid "WPNewsman multilanguage subscription form for your newsletters"
-msgstr "Многоязычная форма подписки на вашу рассылку"
+msgstr "Formulario de suscripción multiidioma para sus boletines"
 
 #: widget-wpml.php:13
 msgid "WPNewsman Subscription Multilanguage Form"
-msgstr "Многоязычная форма подписки"
+msgstr "Formulario de suscripción multiidioma de WPNewsman"
 
 #: workers/class.mailer.php:159
 msgid ""
 "Too many consecutive errors. Please check your mail delivery settings and "
 "make sure you can send a test email. Last SMTP error: "
-msgstr "Слишком много последовательных ошибок. Пожалуйста, проверьте настройки доставки почты и убедитесь, что вы можете отправить тестовое письмо. Последняя ошибка SMTP: "
+msgstr "Demasiados errores consecutivos. Por favor, compruebe la configuración de envío de correo y asegúrese de que el puede enviar un mensaje de prueba. Último error de SMTP:"
 
 #: workers/class.mailer.php:183
 msgid "No \"confirmed\" subscribers found in the selected list(s)."
-msgstr "В выбранных списках нет подтвержденных подписчиков."
+msgstr "No existen suscriptores \"confirmados\" en ninguna de las listas seleccionadas."
 
 #: wpnewsman.php:137
 msgid "PHP version >= 5.3"
-msgstr "PHP версии >= 5.3"
+msgstr "Versión PHP >= 5.3"
 
 #: wpnewsman.php:138
 msgid "You have PHP %s installed."
-msgstr "У вас установлен PHP %s."
+msgstr "Tiene instalado PHP  %s"
 
 #: wpnewsman.php:146
 msgid "Single-site mode"
-msgstr "режим одного сайта"
+msgstr "Modo sitio único"
 
 #: wpnewsman.php:147
 msgid "Doesn't work in MultiSite setup."
-msgstr "Не работает в режиме нескольких сайтов."
+msgstr "No funciona en configuracion multisitio"
 
 #: wpnewsman.php:154
 msgid "MCrypt library"
-msgstr "Библиотека MCrypt"
+msgstr "Librería MCrypt"
 
 #: wpnewsman.php:155
 msgid ""
@@ -2165,11 +2160,11 @@ msgid ""
 " Read <a href=\"http://php.net/manual/en/mcrypt.setup.php\">how to "
 "Install/Configure</a> or contact your hosting provider if you're on a shared"
 " hosting."
-msgstr "Библиотека MCrypt необходима для безопасного хранения ваших паролей в базе данных. Читайте здесь, <a href=\"http://php.net/manual/en/mcrypt.setup.php\">как ее поставить/сконфигурировать</a> или контактируйте вашего хостинг провайдера, если вы используете разделенный хостинг."
+msgstr "Se requiere la biblioteca MCrypt para almacenar sus contraseñas de manera segura en la base de datos. Lea <a href=\"http://php.net/manual/es/mcrypt.setup.php\">cómo instalar/configurar</a> o contacte con su proveedor de alojamiento si emplea un alojamiento compartido."
 
 #: wpnewsman.php:162
 msgid "MBString extension"
-msgstr "Расширение MBString"
+msgstr "Extensión MBString"
 
 #: wpnewsman.php:163
 msgid ""
@@ -2178,21 +2173,21 @@ msgid ""
 "href=\"http://www.php.net/manual/en/mbstring.installation.php\">how to "
 "Install/Configure</a> or contact your hosting provider if you're on a shared"
 " hosting."
-msgstr "Дополнение MBString необходимо для правильной обработки символов формата не Unicode. Читайте здесь, <a href=\"http://www.php.net/manual/en/mbstring.installation.php\">как его поставить/сконфигурировать</a> или контактируйте вашего хостинг провайдера, если вы используете разделенный хостинг."
+msgstr "La extensión MBString es necesaria para procesar correctamente los caracteres no unicode. Lea <a href=\"http://www.php.net/manual/es/mbstring.installation.php\">cómo instalarla/configurarla</a> o contacte con su proveedor de alojamiento si emplea un alojamiento compartido."
 
 #: wpnewsman.php:173
 msgid "Direct filesystem access"
-msgstr "Прямой доступ к системе файлов"
+msgstr "Acceso directo a sistema de ficheros"
 
 #: wpnewsman.php:174
 msgid ""
 "Since version 1.5.7 direct access to the filesystem is required. Make sure "
 "that the uploads directory is writable by the <strong>%s</strong> user."
-msgstr "Начиная с версии 1.5.7 необходим прямой доступ к системе файлов. Убедитесь, что пользователь <strong>%s</strong> может сохранять данные в директорию \"Загрузки\"."
+msgstr "Desde la versión 1.5.7 se requiere acceso directo al sistema de ficheros. Asegúrese de que el directorio uploads es escribible por el usuario <strong>%s</strong>."
 
 #: wpnewsman.php:181
 msgid "Safe mode is turned off"
-msgstr "Безопасный режим выключен"
+msgstr "Modo seguro desconectado"
 
 #: wpnewsman.php:182
 msgid ""
@@ -2200,7 +2195,7 @@ msgid ""
 "safe_mode = Off in php.ini. See <a "
 "href=\"http://www.php.net/manual/en/features.safe-mode.php\">Safe Mode on "
 "php.net</a>)"
-msgstr "Использование безопасного режима в PHP не рекомендуется. Плагин не поддерживает безопасный режим. (Отключите безопасный режим в файле php.ini: safe_mode = Off. Больше информации здесь <a href=\"http://www.php.net/manual/en/features.safe-mode.php\">Safe Mode on php.net</a>)"
+msgstr "El modo seguro es considerado obsoleto en PHP y no está soportado por el plugin. (Establezca safe_mode = Off en php.ini. Vea <a href=\"http://www.php.net/manual/es/features.safe-mode.php\">Modo seguro en php.net</a>)"
 
 #. Plugin Name of the plugin/theme
 msgid "G-Lock WPNewsman Lite"
@@ -2218,11 +2213,11 @@ msgid ""
 " from your WordPress site. You get complete freedom and a lower cost "
 "compared to Email Service Providers. Free yourself from paying for expensive"
 " email campaigns. WPNewsman plugin updated regularly with new features."
-msgstr "Вы получаете простое, но мощное WordPress решение для рассылки. Теперь вы легко можете добавить формы подписки в виджеты, статьи и страницы, импортировать и управлять списками, создавать и отправлять красивые письма прямо с вашего WordPress сайта. Вы получаете полную свободу и меньшую стоимость по сравнению с поставщиками услуг электронных рассылок. "
+msgstr "Funcionalidad de boletines newsletters sencilla pero potente para Wordpress. Ahora puede añadir fácilmente formularios de suscripción con confirmación doble en widgets, artículos y páginas, importar y gestionar sus listas, así como crear y enviar boletines directamente desde su sitio WordPress. Obtenga libertad absoluta y un coste menor en comparación con proveedores de servicio de envíos de mensajes. Líbrese de pagar caras campañas de envío de mensajes. El plugin WPNewsman se actualiza regularmente con nuevas características."
 
 #. Author of the plugin/theme
 msgid "Alex Ladyga - G-Lock Software"
-msgstr "Алексей Ладыга - G-Lock Software"
+msgstr "Alex Ladyga - G-Lock Software"
 
 #. Author URI of the plugin/theme
 msgid "http://www.glocksoft.com"

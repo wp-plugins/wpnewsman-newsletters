@@ -381,7 +381,7 @@
 			$where = null;
 			$args = array();
 			$opts = array(
-				'fields' => array('id', 'subject', 'to', 'created', 'schedule', 'status','msg')
+				'fields' => array('id', 'subject', 'to', 'created', 'schedule', 'status','msg', 'recipients', 'sent')
 			);
 
 			if ( $q ) {

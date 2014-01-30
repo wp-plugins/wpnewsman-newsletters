@@ -4572,6 +4572,9 @@ jQuery(function($){
 			}
 		}
 
+		var testEmail = $.cookie("newsmanTestEmailAddress") || '';
+		$('#test-email-addr').val(testEmail);
+
 		showModal('#newsman-modal-send-test', function(mr){
 			var that = this;
 			if ( mr == 'ok' ) {
@@ -4582,13 +4585,17 @@ jQuery(function($){
 					window.NEWSMAN_ENT_TYPE = 'email';
 				}
 
+				testEmail = $('#test-email-addr').val();
+
+				$.cookie("newsmanTestEmailAddress", testEmail);
+
 				$.ajax({
 					type: 'POST',
 					url: ajaxurl,
 					data: {
 						entType: NEWSMAN_ENT_TYPE,
 						entity: NEWSMAN_ENTITY_ID,
-						toEmail: $('#test-email-addr').val(),
+						toEmail: testEmail,
 						action: 'newsmanAjSendTestEmail'
 					}
 				}).done(function(data){

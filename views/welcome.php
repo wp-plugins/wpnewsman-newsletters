@@ -47,6 +47,6 @@
 			</div>
 		</div>
 		
-		<a class="btn btn-primary btn-large" href="admin.php?page=newsman-settings">Thanks! Now take me to WPNewsman</a>
+		<a class="btn btn-primary btn-large" href="<?php echo isset($_GET['return']) ? $_GET['return'] : 'admin.php?page=newsman-settings'; ?>">Thanks! Now take me to WPNewsman</a>
 	</div>
 </div>

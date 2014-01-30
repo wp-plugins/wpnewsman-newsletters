@@ -147,7 +147,7 @@
 			<form>
 				<?php $o = newsmanOptions::getInstance();?>
 				<label for="test-email-addr"><?php _e('Email address:', NEWSMAN); ?></label>
-				<input type="text" name="email" id="test-email-addr" value="<?php echo $o->get('sender.email');?>">
+				<input type="text" name="email" id="test-email-addr" value="">
 			</form>
 		</div>
 		<div class="modal-footer">

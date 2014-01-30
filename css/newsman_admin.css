@@ -1572,4 +1572,7 @@ input.newsman-field-options-radio-opt-input {
 	margin-left: -3px;
 }
 
-
+.newsman-notice {
+	font-style: italic;
+	color: #999;
+}

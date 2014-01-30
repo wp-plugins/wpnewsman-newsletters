@@ -366,8 +366,13 @@ class newsman {
 		}
 
 		if ( isset($badge) || in_array('badge', $attr) ) {
-			return '<img src="'.NEWSMAN_PLUGIN_URL.'/img/newsman-badge.png" />';
+			return ( !!get_option('newsman_code') && defined('NEWSMANP') ) ? '' : '<a href="http://wpnewsman.com/?pk_campaign=freemium-plugin"><img src="'.NEWSMAN_PLUGIN_URL.'/img/newsman-badge.png" /></a>';
 		}
+
+		if ( isset($badge2) || in_array('badge2', $attr) ) {
+			return ( !!get_option('newsman_code') && defined('NEWSMANP') ) ? '' : '<a style="display:block; text-align: center;" href="http://wpnewsman.com/?pk_campaign=freemium-plugin"><img src="'.NEWSMAN_PLUGIN_URL.'/img/newsman-badge2.png" /></a>';
+		}
+
 
 		if ( isset($newsman_current_email) && ( isset($subject) || in_array('subject', $attr) ) ) {
 			return $newsman_current_email->subject;
@@ -936,8 +941,6 @@ class newsman {
 		$type   = isset($_REQUEST['type']) ? $_REQUEST['type'] : '';
 
 		wp_enqueue_style('newsman_menu_icon', NEWSMAN_PLUGIN_URL.'/css/menuicon.css');
-		
-		$NEWSMAN_PAGE = strpos($page, 'newsman') !== false;
 
 		// this scripts should be loaded on all pages.
 		wp_register_script('newsmanform', NEWSMAN_PLUGIN_URL.'/js/newsmanform.js', array('jquery'), NEWSMAN_VERSION);
@@ -956,7 +959,7 @@ class newsman {
 		
 				global $wp_scripts;
 
-				if ( $NEWSMAN_PAGE ) {
+				if ( defined('NEWSMAN_PAGE') ) {
 					do_action('newsman_get_ext_script');
 
 					wp_enqueue_script('jquery-ui-core', array('jquery'));
@@ -981,7 +984,10 @@ class newsman {
 					wp_register_script('director', NEWSMAN_PLUGIN_URL.'/js/director.js');
 					wp_register_script('hashroute', NEWSMAN_PLUGIN_URL.'/js/hashroute.js');
 
-					if ( isset($_REQUEST['action']) && $_REQUEST['action'] === 'newsman-frame-get-posts' ) {
+					if ( (isset($_REQUEST['action']) && $_REQUEST['action'] === 'newsman-frame-get-posts') || 
+						 (isset($_REQUEST['page']) && $_REQUEST['page'] === 'newsman-mailbox' ) ||
+						 (isset($_REQUEST['page']) && $_REQUEST['page'] === 'newsman-templates' )
+					   ) {
 						wp_enqueue_script('jquery-cookie', NEWSMAN_PLUGIN_URL.'/js/jquery.cookie.js', array('jquery'));
 					}
 				}
@@ -1001,7 +1007,7 @@ class newsman {
 					wp_enqueue_script('newsman-ko-sortable', NEWSMAN_PLUGIN_URL.'/js/knockout-sortable.min.js', array('newsman-ko'));
 				}
 
-				if ( $NEWSMAN_PAGE || defined('INSERT_POSTS_FRAME') ) {
+				if ( defined('NEWSMAN_PAGE') || defined('INSERT_POSTS_FRAME') ) {
 
 
 					//wp_dequeue_script
@@ -1216,13 +1222,8 @@ class newsman {
 	public function onAdminEnqueueScripts() {
 		// This is a hack for a Classipress 3.1.9 
 		// which loads it's dependent sctips on all admin pages
-
-		$NEWSMAN_PAGE = false;
-		if ( isset( $_REQUEST['page'] ) ) {
-			$NEWSMAN_PAGE = strpos($_REQUEST['page'], 'newsman') !== false;	
-		}
 		
-		if ( $NEWSMAN_PAGE && function_exists( 'scb_init' ) ) {
+		if ( defined('NEWSMAN_PAGE') && function_exists( 'scb_init' ) ) {
 			if ( wp_script_is('datepicker') )   { 
 				wp_dequeue_script('datepicker'); 
 			}
@@ -1499,19 +1500,23 @@ class newsman {
 			
 			delete_option('NEWSMAN_DOING_UPDATE');
 			if ( $doRedirect ) {
-				wp_redirect(NEWSMAN_BLOG_ADMIN_URL.'admin.php?page=newsman-mailbox&welcome=1');	
+				wp_redirect(NEWSMAN_BLOG_ADMIN_URL.'admin.php?page=newsman-mailbox&welcome=1&return='.$_SERVER['REQUEST_URI']);	
 			} else {
 				$this->options->set('showWelcomeScreen', true);
 			}			
 		}
-
-		if ( $this->options->get('showWelcomeScreen') && !defined('DOING_AJAX') && !defined('DOING_CRON') ) {
-			$this->options->set('showWelcomeScreen', false);
-			wp_redirect(NEWSMAN_BLOG_ADMIN_URL.'admin.php?page=newsman-mailbox&welcome=1');	
-		}
 	}
 
 	public function onAdminInit() {
+
+		if ( defined('NEWSMAN_PAGE') && 
+			 $this->options->get('showWelcomeScreen') &&
+			 !defined('DOING_AJAX') &&
+			 !defined('DOING_CRON') 
+		   ) {
+			$this->options->set('showWelcomeScreen', false);
+			wp_redirect(NEWSMAN_BLOG_ADMIN_URL.'admin.php?page=newsman-mailbox&welcome=1&return='.$_SERVER['REQUEST_URI']);	
+		}
 
 		$this->tryUpdate();
 
@@ -1698,12 +1703,6 @@ class newsman {
 	public function onActivate() {
 		$this->activation = true;
 
-		// Schedule events
-		
-		if ( !wp_next_scheduled('newsman_mailman_event') ) {
-			wp_schedule_event( time(), '1min', 'newsman_mailman_event');
-		}
-
 		if ( !isset($this->wplang) ) {
 			$this->setLocale();
 		}
@@ -1800,6 +1799,16 @@ class newsman {
 
 	public function onInit($activation = false) {
 		new newsmanAJAX();
+
+		if ( isset( $_REQUEST['page'] ) && strpos($_REQUEST['page'], 'newsman') !== false ) {
+			define('NEWSMAN_PAGE', true);
+		}
+
+		// Schedule events
+		
+		if ( !wp_next_scheduled('newsman_mailman_event') ) {
+			wp_schedule_event( time(), '1min', 'newsman_mailman_event');
+		}
 
 		$page   = isset($_REQUEST['page']) ? $_REQUEST['page'] : false;
 		$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : false;

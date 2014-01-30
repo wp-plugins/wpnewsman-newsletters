@@ -40,6 +40,11 @@
 							<label class="radio"><input type="radio" name="newsman-dashboardStats" value="widget" /> <?php _e('Show in the separate widget', NEWSMAN); ?></label>
 						</div>
 						<div style="margin-top: 10px;">
+							<h3 style="margin-bottom: 5px;"><?php _e('Anti-Spam', NEWSMAN); ?></h3>
+							<label class="checkbox" for="newsman_disable_cypher_field"><input id="newsman_disable_cypher_field" type="checkbox" name="newsman-disableCypherField" value="1" /> <?php _e("Disable advanced honeypot technique", NEWSMAN); ?></label>
+							<p class="newsman-notice"><?php _e('Check this option only if you use static cashing solution like Google PageSpeed for your web server or get "Something went wrong. Please contact the site administrator and describe the problem." error after subscription.', NEWSMAN); ?></p>
+						</div>
+						<div style="margin-top: 10px;">
 							<h3 style="margin-bottom: 5px;"><?php _e('Social profiles links', NEWSMAN); ?></h3>
 							<label>Twitter</label>
 							<input type="text" name="newsman-social-twitter">
