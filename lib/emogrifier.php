@@ -1,86 +1,107 @@
 <?php
-/*
-UPDATES
-
-    2008-08-10  Fixed CSS comment stripping regex to add PCRE_DOTALL (changed from '/\/\*.*\*\//U' to '/\/\*.*\*\//sU')
-    2008-08-18  Added lines instructing DOMDocument to attempt to normalize HTML before processing
-    2008-10-20  Fixed bug with bad variable name... Thanks Thomas!
-    2008-03-02  Added licensing terms under the MIT License
-                Only remove unprocessable HTML tags if they exist in the array
-    2009-06-03  Normalize existing CSS (style) attributes in the HTML before we process the CSS.
-                Made it so that the display:none stripper doesn't require a trailing semi-colon.
-    2009-08-13  Added support for subset class values (e.g. "p.class1.class2").
-                Added better protection for bad css attributes.
-                Fixed support for HTML entities.
-    2009-08-17  Fixed CSS selector processing so that selectors are processed by precedence/specificity, and not just in order.
-    2009-10-29  Fixed so that selectors appearing later in the CSS will have precedence over identical selectors appearing earlier.
-    2009-11-04  Explicitly declared static functions static to get rid of E_STRICT notices.
-    2010-05-18  Fixed bug where full url filenames with protocols wouldn't get split improperly when we explode on ':'... Thanks Mark!
-                Added two new attribute selectors
-    2010-06-16  Added static caching for less processing overhead in situations where multiple emogrification takes place
-    2010-07-26  Fixed bug where '0' values were getting discarded because of php's empty() function... Thanks Scott!
-    2010-09-03  Added checks to invisible node removal to ensure that we don't try to remove non-existent child nodes of parents that have already been deleted
-    2011-04-08  Fixed errors in CSS->XPath conversion for adjacent sibling selectors and id/class combinations... Thanks Bob V.!
-    2011-06-08  Fixed an error where CSS @media types weren't being parsed correctly... Thanks Will W.!
-    2011-08-03  Fixed an error where an empty selector at the beginning of the CSS would cause a parse error on the next selector... Thanks Alexei T.!
-    2011-10-13  Fully fixed a bug introduced in 2011-06-08 where selectors at the beginning of the CSS would be parsed incorrectly... Thanks Thomas A.!
-    2011-10-26  Added an option to allow you to output emogrified code without extended characters being turned into HTML entities.
-                Moved static references to class attributes so they can be manipulated.
-                Added the ability to clear out the (formerly) static cache when CSS is reloaded.
-    2011-12-22  Fixed a bug that was overwriting existing inline styles from the original HTML... Thanks Sagi L.!
-    2012-01-31  Fixed a bug that was introduced with the 2011-12-22 revision... Thanks Sagi L. and M. Bąkowski!
-                Added extraction of <style> blocks within the HTML due to popular demand.
-                Added several new pseudo-selectors (first-child, last-child, nth-child, and nth-of-type).
-    2012-02-07  Fixed some recent code introductions to use class constants rather than global constants.
-                Fixed some recent code introductions to make it cleaner to read.
-    2012-05-01  Made removal of invisible nodes operate in a case-insensitive manner... Thanks Juha P.!
-*/
 
 define('CACHE_CSS', 0);
 define('CACHE_SELECTOR', 1);
 define('CACHE_XPATH', 2);
 
-
-function xlog($msg) {     
-    $debugLogPath = NEWSMAN_PLUGIN_PATH.DIRECTORY_SEPARATOR.'newsmanlog.txt';
-    $msg = '['.date('Y-m-d H:i:s').'] '.$msg."\n";
-    file_put_contents($debugLogPath, $msg, FILE_APPEND);
-}
-
-
 class Emogrifier {
-
-    // for calculating nth-of-type and nth-child selectors
+    /**
+     * for calculating nth-of-type and nth-child selectors
+     *
+     * @var integer
+     */
     const INDEX = 0;
+
+    /**
+     * for calculating nth-of-type and nth-child selectors
+     *
+     * @var integer
+     */
     const MULTIPLIER = 1;
 
+    /**
+     * @var string
+     */
+    const ID_ATTRIBUTE_MATCHER = '/(\\w+)?\\#([\\w\\-]+)/';
+
+    /**
+     * @var string
+     */
+    const CLASS_ATTRIBUTE_MATCHER = '/(\\w+|[\\*\\]])?((\\.[\\w\\-]+)+)/';
+
+    /**
+     * @var string
+     */
     private $html = '';
+
+    /**
+     * @var string
+     */
     private $css = '';
-    private $unprocessableHTMLTags = array('wbr');
+
+    /**
+     * @var array<string>
+     */
+    private $unprocessableHtmlTags = array('wbr');
+
+    /**
+     * @var array<array>
+     */
     private $caches = array();
 
-    // this attribute applies to the case where you want to preserve your original text encoding.
-    // by default, emogrifier translates your text into HTML entities for two reasons:
-    // 1. because of client incompatibilities, it is better practice to send out HTML entities rather than unicode over email
-    // 2. it translates any illegal XML characters that DOMDocument cannot work with
-    // if you would like to preserve your original encoding, set this attribute to true.
-    public $preserveEncoding = true;
+    /**
+     * This attribute applies to the case where you want to preserve your original text encoding.
+     *
+     * By default, emogrifier translates your text into HTML entities for two reasons:
+     *
+     * 1. Because of client incompatibilities, it is better practice to send out HTML entities rather than unicode over email.
+     *
+     * 2. It translates any illegal XML characters that DOMDocument cannot work with.
+     *
+     * If you would like to preserve your original encoding, set this attribute to TRUE.
+     *
+     * @var boolean
+     */
+    public $preserveEncoding = FALSE;
 
+    /**
+     * @param string $html
+     * @param string $css
+     */
     public function __construct($html = '', $css = '') {
-        $this->html = $html;
-        $this->css  = $css;
-        $this->clearCache();
+        $this->setHtml($html);
+        $this->setCss($css);
     }
 
-    public function setHTML($html = '') { $this->html = $html; }
-    public function setCSS($css = '') {
+    /**
+     * @param string $html
+     *
+     * @return void
+     */
+    public function setHtml($html = '') {
+        $this->html = $html;
+    }
+
+    /**
+     * @param string $css
+     *
+     * @return void
+     */
+    public function setCss($css = '') {
         $this->css = $css;
         $this->clearCache(CACHE_CSS);
     }
 
-    public function clearCache($key = null) {
+    /**
+     * @param integer|NULL $key
+     *
+     * @return void
+     */
+    public function clearCache($key = NULL) {
         if (!is_null($key)) {
-            if (isset($this->caches[$key])) $this->caches[$key] = array();
+            if (isset($this->caches[$key])) {
+                $this->caches[$key] = array();
+            }
         } else {
             $this->caches = array(
                 CACHE_CSS       => array(),
@@ -90,56 +111,87 @@ class Emogrifier {
         }
     }
 
-    // there are some HTML tags that DOMDocument cannot process, and will throw an error if it encounters them.
-    // in particular, DOMDocument will complain if you try to use HTML5 tags in an XHTML document.
-    // these functions allow you to add/remove them if necessary.
-    // it only strips them from the code (does not remove actual nodes).
-    public function addUnprocessableHTMLTag($tag) { $this->unprocessableHTMLTags[] = $tag; }
-    public function removeUnprocessableHTMLTag($tag) {
-        if (($key = array_search($tag,$this->unprocessableHTMLTags)) !== false)
-            unset($this->unprocessableHTMLTags[$key]);
+    /**
+     * There are some HTML tags that DOMDocument cannot process, and it will throw an error if it encounters them.
+     * In particular, DOMDocument will complain if you try to use HTML5 tags in an XHTML document.
+     *
+     * This method allows you to add them if necessary.
+     *
+     * It only strips them from the code (i.e., it does not actually remove any nodes).
+     *
+     * @param string $tag
+     *
+     * @return void
+     */
+    public function addUnprocessableHtmlTag($tag) {
+        $this->unprocessableHtmlTags[] = $tag;
     }
 
-    // applies the CSS you submit to the html you submit. places the css inline
+    /**
+     * There are some HTML tags that DOMDocument cannot process, and it will throw an error if it encounters them.
+     * In particular, DOMDocument will complain if you try to use HTML5 tags in an XHTML document.
+     *
+     * This method allows you to remove them if necessary.
+     *
+     * It only strips them from the code (i.e., it does not actually remove any nodes).
+     *
+     * @param string $tag
+     *
+     * @return void
+     */
+    public function removeUnprocessableHtmlTag($tag) {
+        if (($key = array_search($tag, $this->unprocessableHtmlTags)) !== FALSE) {
+            unset($this->unprocessableHtmlTags[$key]);
+        }
+    }
+
+    /**
+     * Applies the CSS you submit to the HTML you submit.
+     *
+     * This method places the CSS inline.
+     *
+     * @return string
+     *
+     * @throws BadMethodCallException
+     */
     public function emogrify() {
+        if ($this->html === '') {
+            throw new BadMethodCallException('Please set some HTML first before calling emogrify.', 1390393096);
+        }
+
         $body = $this->html;
 
         // remove any unprocessable HTML tags (tags that DOMDocument cannot parse; this includes wbr and many new HTML5 tags)
-        if (count($this->unprocessableHTMLTags)) {
-            $unprocessableHTMLTags = implode('|',$this->unprocessableHTMLTags);
-            $body = preg_replace("/<\/?($unprocessableHTMLTags)[^>]*>/i",'',$body);
+        if (count($this->unprocessableHtmlTags)) {
+            $unprocessableHtmlTags = implode('|', $this->unprocessableHtmlTags);
+            $body = preg_replace("/<\\/?($unprocessableHtmlTags)[^>]*>/i", '', $body);
         }
 
         $encoding = mb_detect_encoding($body);
-
         $body = mb_convert_encoding($body, 'HTML-ENTITIES', $encoding);
 
-        libxml_use_internal_errors(true);
+        $xmlDocument = new DOMDocument;
+        $xmlDocument->encoding = $encoding;
+        $xmlDocument->strictErrorChecking = FALSE;
+        $xmlDocument->formatOutput = TRUE;
+        $xmlDocument->loadHTML($body);
+        $xmlDocument->normalizeDocument();
 
-        $xmldoc = new DOMDocument;
-        $xmldoc->encoding = $encoding;
-        $xmldoc->strictErrorChecking = false;
-        $xmldoc->formatOutput = true;
-        $xmldoc->loadHTML($body);
-        $xmldoc->normalizeDocument();
-
-        libxml_clear_errors();
-
-        $xpath = new DOMXPath($xmldoc);
+        $xpath = new DOMXPath($xmlDocument);
 
         // before be begin processing the CSS file, parse the document and normalize all existing CSS attributes (changes 'DISPLAY: none' to 'display: none');
         // we wouldn't have to do this if DOMXPath supported XPath 2.0.
         // also store a reference of nodes with existing inline styles so we don't overwrite them
-        $vistedNodes = $vistedNodeRef = array();
+        $visitedNodes = $visitedNodeReferences = array();
         $nodes = @$xpath->query('//*[@style]');
         foreach ($nodes as $node) {
-            $normalizedOrigStyle = preg_replace('/[A-z\-]+(?=\:)/Se',"strtolower('\\0')", $node->getAttribute('style'));
+            $normalizedOrigStyle = preg_replace_callback('/[A-z\\-]+(?=\\:)/S', create_function('$m', 'return strtolower($m[0]);'), $node->getAttribute('style'));
 
             // in order to not overwrite existing style attributes in the HTML, we have to save the original HTML styles
             $nodeKey = md5($node->getNodePath());
-            if (!isset($vistedNodeRef[$nodeKey])) {
-                $vistedNodeRef[$nodeKey] = $this->cssStyleDefinitionToArray($normalizedOrigStyle);
-                $vistedNodes[$nodeKey]   = $node;
+            if (!isset($visitedNodeReferences[$nodeKey])) {
+                $visitedNodeReferences[$nodeKey] = $this->cssStyleDefinitionToArray($normalizedOrigStyle);
+                $visitedNodes[$nodeKey]   = $node;
             }
 
             $node->setAttribute('style', $normalizedOrigStyle);
@@ -158,11 +210,16 @@ class Emogrifier {
 
         // filter the CSS
         $search = array(
-            '/\/\*.*\*\//sU', // get rid of css comment code
-            '/^\s*@import\s[^;]+;/misU', // strip out any import directives
-            '/^\s*@media\s[^{]+{\s*}/misU', // strip any empty media enclosures
-            '/^\s*@media\s+((aural|braille|embossed|handheld|print|projection|speech|tty|tv)\s*,*\s*)+{.*}\s*}/misU', // strip out all media types that are not 'screen' or 'all' (these don't apply to email)
-            '/^\s*@media\s[^{]+{(.*})\s*}/misU', // get rid of remaining media type enclosures
+            // get rid of css comment code
+            '/\\/\\*.*\\*\\//sU',
+            // strip out any import directives
+            '/^\\s*@import\\s[^;]+;/misU',
+            // strip any empty media enclosures
+            '/^\\s*@media\\s[^{]+{\\s*}/misU',
+            // strip out all media types that are not 'screen' or 'all' (these don't apply to email)
+            '/^\\s*@media\\s+((aural|braille|embossed|handheld|print|projection|speech|tty|tv)\\s*,*\\s*)+{.*}\\s*}/misU',
+            // get rid of remaining media type enclosures
+            '/^\\s*@media\\s[^{]+{(.*})\\s*}/misU',
         );
 
         $replace = array(
@@ -175,43 +232,45 @@ class Emogrifier {
 
         $css = preg_replace($search, $replace, $css);
 
-        $csskey = md5($css);
-        if (!isset($this->caches[CACHE_CSS][$csskey])) {
-
+        $cssKey = md5($css);
+        if (!isset($this->caches[CACHE_CSS][$cssKey])) {
             // process the CSS file for selectors and definitions
-            preg_match_all('/(^|[^{}])\s*([^{]+){([^}]*)}/mis', $css, $matches, PREG_SET_ORDER);
+            preg_match_all('/(^|[^{}])\\s*([^{]+){([^}]*)}/mis', $css, $matches, PREG_SET_ORDER);
 
-            $all_selectors = array();
+            $allSelectors = array();
             foreach ($matches as $key => $selectorString) {
                 // if there is a blank definition, skip
-                if (!strlen(trim($selectorString[3]))) continue;
+                if (!strlen(trim($selectorString[3]))) {
+                    continue;
+                }
 
                 // else split by commas and duplicate attributes so we can sort by selector precedence
-                $selectors = explode(',',$selectorString[2]);
+                $selectors = explode(',', $selectorString[2]);
                 foreach ($selectors as $selector) {
-
                     // don't process pseudo-elements and behavioral (dynamic) pseudo-classes; ONLY allow structural pseudo-classes
-                    if (strpos($selector, ':') !== false && !preg_match('/:\S+\-(child|type)\(/i', $selector)) continue;
+                    if (strpos($selector, ':') !== FALSE && !preg_match('/:\\S+\\-(child|type)\\(/i', $selector)) {
+                        continue;
+                    }
 
-                    $all_selectors[] = array('selector' => trim($selector),
+                    $allSelectors[] = array('selector' => trim($selector),
                                              'attributes' => trim($selectorString[3]),
-                                             'line' => $key, // keep track of where it appears in the file, since order is important
+                                             // keep track of where it appears in the file, since order is important
+                                             'line' => $key,
                     );
                 }
             }
 
             // now sort the selectors by precedence
-            usort($all_selectors, array($this,'sortBySelectorPrecedence'));
+            usort($allSelectors, array($this,'sortBySelectorPrecedence'));
 
-            $this->caches[CACHE_CSS][$csskey] = $all_selectors;
+            $this->caches[CACHE_CSS][$cssKey] = $allSelectors;
         }
 
-        foreach ($this->caches[CACHE_CSS][$csskey] as $value) {
-
+        foreach ($this->caches[CACHE_CSS][$cssKey] as $value) {
             // query the body for the xpath selector
-            $nodes = $xpath->query($this->translateCSStoXpath(trim($value['selector'])));
+            $nodes = $xpath->query($this->translateCssToXpath(trim($value['selector'])));
 
-            foreach($nodes as $node) {
+            foreach ($nodes as $node) {
                 // if it has a style attribute, get it, process it, and append (overwrite) new stuff
                 if ($node->hasAttribute('style')) {
                     // break it up into an associative array
@@ -219,9 +278,11 @@ class Emogrifier {
                     $newStyleArr = $this->cssStyleDefinitionToArray($value['attributes']);
 
                     // new styles overwrite the old styles (not technically accurate, but close enough)
-                    $combinedArr = array_merge($oldStyleArr,$newStyleArr);
+                    $combinedArray = array_merge($oldStyleArr, $newStyleArr);
                     $style = '';
-                    foreach ($combinedArr as $k => $v) $style .= (strtolower($k) . ':' . $v . ';');
+                    foreach ($combinedArray as $k => $v) {
+                        $style .= (strtolower($k) . ':' . $v . ';');
+                    }
                 } else {
                     // otherwise create a new style
                     $style = trim($value['attributes']);
@@ -231,13 +292,15 @@ class Emogrifier {
         }
 
         // now iterate through the nodes that contained inline styles in the original HTML
-        foreach ($vistedNodeRef as $nodeKey => $origStyleArr) {
-            $node = $vistedNodes[$nodeKey];
-            $currStyleArr = $this->cssStyleDefinitionToArray($node->getAttribute('style'));
+        foreach ($visitedNodeReferences as $nodeKey => $originalStyleArray) {
+            $node = $visitedNodes[$nodeKey];
+            $currentStyleArray = $this->cssStyleDefinitionToArray($node->getAttribute('style'));
 
-            $combinedArr = array_merge($currStyleArr, $origStyleArr);
+            $combinedArray = array_merge($currentStyleArray, $originalStyleArray);
             $style = '';
-            foreach ($combinedArr as $k => $v) $style .= (strtolower($k) . ':' . $v . ';');
+            foreach ($combinedArray as $k => $v) {
+                $style .= (strtolower($k) . ':' . $v . ';');
+            }
 
             $node->setAttribute('style', $style);
         }
@@ -249,93 +312,153 @@ class Emogrifier {
         $nodes = $xpath->query('//*[contains(translate(translate(@style," ",""),"NOE","noe"),"display:none")]');
         // The checks on parentNode and is_callable below ensure that if we've deleted the parent node,
         // we don't try to call removeChild on a nonexistent child node
-        if ($nodes->length > 0)
-            foreach ($nodes as $node)
-                if ($node->parentNode && is_callable(array($node->parentNode,'removeChild')))
-                        $node->parentNode->removeChild($node);
+        if ($nodes->length > 0) {
+            foreach ($nodes as $node) {
+                if ($node->parentNode && is_callable(array($node->parentNode,'removeChild'))) {
+                    $node->parentNode->removeChild($node);
+                }
+            }
+        }
 
         if ($this->preserveEncoding) {
-            return mb_convert_encoding($xmldoc->saveHTML(), $encoding, 'HTML-ENTITIES');
+            return mb_convert_encoding($xmlDocument->saveHTML(), $encoding, 'HTML-ENTITIES');
         } else {
-            return $xmldoc->saveHTML();
+            return $xmlDocument->saveHTML();
         }
     }
 
-    private function sortBySelectorPrecedence($a, $b) {
-        $precedenceA = $this->getCSSSelectorPrecedence($a['selector']);
-        $precedenceB = $this->getCSSSelectorPrecedence($b['selector']);
+    /**
+     * @param array $a
+     * @param array $b
+     *
+     * @return integer
+     */
+    private function sortBySelectorPrecedence(array $a, array $b) {
+        $precedenceA = $this->getCssSelectorPrecedence($a['selector']);
+        $precedenceB = $this->getCssSelectorPrecedence($b['selector']);
 
-        // we want these sorted ascendingly so selectors with lesser precedence get processed first and
-        // selectors with greater precedence get sorted last
+        // We want these sorted in ascending order so selectors with lesser precedence get processed first and
+        // selectors with greater precedence get sorted last.
         return ($precedenceA == $precedenceB) ? ($a['line'] < $b['line'] ? -1 : 1) : ($precedenceA < $precedenceB ? -1 : 1);
     }
 
-    private function getCSSSelectorPrecedence($selector) {
-        $selectorkey = md5($selector);
-        if (!isset($this->caches[CACHE_SELECTOR][$selectorkey])) {
+    /**
+     * @param string $selector
+     *
+     * @return integer
+     */
+    private function getCssSelectorPrecedence($selector) {
+        $selectorKey = md5($selector);
+        if (!isset($this->caches[CACHE_SELECTOR][$selectorKey])) {
             $precedence = 0;
             $value = 100;
-            $search = array('\#','\.',''); // ids: worth 100, classes: worth 10, elements: worth 1
+            // ids: worth 100, classes: worth 10, elements: worth 1
+            $search = array('\\#','\\.','');
 
             foreach ($search as $s) {
-                if (trim($selector == '')) break;
-                $num = 0;
-                $selector = preg_replace('/'.$s.'\w+/','',$selector,-1,$num);
-                $precedence += ($value * $num);
+                if (trim($selector == '')) {
+                    break;
+                }
+                $number = 0;
+                $selector = preg_replace('/' . $s . '\\w+/', '', $selector, -1, $number);
+                $precedence += ($value * $number);
                 $value /= 10;
             }
-            $this->caches[CACHE_SELECTOR][$selectorkey] = $precedence;
+            $this->caches[CACHE_SELECTOR][$selectorKey] = $precedence;
         }
 
-        return $this->caches[CACHE_SELECTOR][$selectorkey];
+        return $this->caches[CACHE_SELECTOR][$selectorKey];
     }
 
-    // right now we support all CSS 1 selectors and most CSS2/3 selectors.
-    // http://plasmasturm.org/log/444/
-    private function translateCSStoXpath($css_selector) {
-
-        $css_selector = trim($css_selector);
-        $xpathkey = md5($css_selector);
-        if (!isset($this->caches[CACHE_XPATH][$xpathkey])) {
+    /**
+     * Right now, we support all CSS 1 selectors and most CSS2/3 selectors.
+     *
+     * @see http://plasmasturm.org/log/444/
+     *
+     * @param string $cssSelector
+     *
+     * @return string
+     */
+    private function translateCssToXpath($cssSelector) {
+        $cssSelector = trim($cssSelector);
+        $xpathKey = md5($cssSelector);
+        if (!isset($this->caches[CACHE_XPATH][$xpathKey])) {
             // returns an Xpath selector
             $search = array(
-                               '/\s+>\s+/', // Matches any element that is a child of parent.
-                               '/\s+\+\s+/', // Matches any element that is an adjacent sibling.
-                               '/\s+/', // Matches any element that is a descendant of an parent element element.
-                               '/([^\/]+):first-child/i', // first-child pseudo-selector
-                               '/([^\/]+):last-child/i', // last-child pseudo-selector
-                               '/(\w)\[(\w+)\]/', // Matches element with attribute
-                               '/(\w)\[(\w+)\=[\'"]?(\w+)[\'"]?\]/', // Matches element with EXACT attribute
-                               '/(\w+)?\#([\w\-]+)/e', // Matches id attributes
-                               '/(\w+|[\*\]])?((\.[\w\-]+)+)/e', // Matches class attributes
-
+                // Matches any element that is a child of parent.
+                '/\\s+>\\s+/',
+                // Matches any element that is an adjacent sibling.
+                '/\\s+\\+\\s+/',
+                // Matches any element that is a descendant of an parent element element.
+                '/\\s+/',
+                // first-child pseudo-selector
+                '/([^\\/]+):first-child/i',
+                // last-child pseudo-selector
+                '/([^\\/]+):last-child/i',
+                // Matches element with attribute
+                '/(\\w)\\[(\\w+)\\]/',
+                // Matches element with EXACT attribute
+                '/(\\w)\\[(\\w+)\\=[\'"]?(\\w+)[\'"]?\\]/',
             );
             $replace = array(
-                               '/',
-                               '/following-sibling::*[1]/self::',
-                               '//',
-                               '*[1]/self::\\1',
-                               '*[last()]/self::\\1',
-                               '\\1[@\\2]',
-                               '\\1[@\\2="\\3"]',
-                               "(strlen('\\1') ? '\\1' : '*').'[@id=\"\\2\"]'",
-                               "(strlen('\\1') ? '\\1' : '*').'[contains(concat(\" \",@class,\" \"),concat(\" \",\"'.implode('\",\" \"))][contains(concat(\" \",@class,\" \"),concat(\" \",\"',explode('.',substr('\\2',1))).'\",\" \"))]'",
+                '/',
+                '/following-sibling::*[1]/self::',
+                '//',
+                '*[1]/self::\\1',
+                '*[last()]/self::\\1',
+                '\\1[@\\2]',
+                '\\1[@\\2="\\3"]',
             );
 
-            $css_selector = '//'.preg_replace($search, $replace, $css_selector);
+            $cssSelector = '//' . preg_replace($search, $replace, $cssSelector);
 
-            // advanced selectors are going to require a bit more advanced emogrification
-            // if we required PHP 5.3 we could do this with closures
-            $css_selector = preg_replace_callback('/([^\/]+):nth-child\(\s*(odd|even|[+\-]?\d|[+\-]?\d?n(\s*[+\-]\s*\d)?)\s*\)/i', array($this, 'translateNthChild'), $css_selector);
-            $css_selector = preg_replace_callback('/([^\/]+):nth-of-type\(\s*(odd|even|[+\-]?\d|[+\-]?\d?n(\s*[+\-]\s*\d)?)\s*\)/i', array($this, 'translateNthOfType'), $css_selector);
+            $cssSelector = preg_replace_callback(self::ID_ATTRIBUTE_MATCHER, array($this, 'matchIdAttributes'), $cssSelector);
+            $cssSelector = preg_replace_callback(self::CLASS_ATTRIBUTE_MATCHER, array($this, 'matchClassAttributes'), $cssSelector);
 
-            $this->caches[CACHE_SELECTOR][$xpathkey] = $css_selector;
+            // Advanced selectors are going to require a bit more advanced emogrification.
+            // When we required PHP 5.3, we could do this with closures.
+            $cssSelector = preg_replace_callback(
+                '/([^\\/]+):nth-child\\(\s*(odd|even|[+\-]?\\d|[+\\-]?\\d?n(\\s*[+\\-]\\s*\\d)?)\\s*\\)/i',
+                array($this, 'translateNthChild'), $cssSelector
+            );
+            $cssSelector = preg_replace_callback(
+                '/([^\\/]+):nth-of-type\\(\s*(odd|even|[+\-]?\\d|[+\\-]?\\d?n(\\s*[+\\-]\\s*\\d)?)\\s*\\)/i',
+                array($this, 'translateNthOfType'), $cssSelector
+            );
+
+            $this->caches[CACHE_SELECTOR][$xpathKey] = $cssSelector;
         }
-        return $this->caches[CACHE_SELECTOR][$xpathkey];
+        return $this->caches[CACHE_SELECTOR][$xpathKey];
     }
 
-    private function translateNthChild($match) {
+    /**
+     * @param array $match
+     *
+     * @return string
+     */
+    private function matchIdAttributes(array $match) {
+        return (strlen($match[1]) ? $match[1] : '*') . '[@id="' . $match[2] . '"]';
+    }
 
+    /**
+     * @param array $match
+     *
+     * @return string
+     */
+    private function matchClassAttributes(array $match) {
+        return (strlen($match[1]) ? $match[1] : '*') . '[contains(concat(" ",@class," "),concat(" ","' .
+            implode(
+                '"," "))][contains(concat(" ",@class," "),concat(" ","',
+                explode('.', substr($match[2], 1))
+            ) . '"," "))]';
+    }
+
+    /**
+     * @param array $match
+     *
+     * @return string
+     */
+    private function translateNthChild(array $match) {
         $result = $this->parseNth($match);
 
         if (isset($result[self::MULTIPLIER])) {
@@ -350,8 +473,12 @@ class Emogrifier {
         }
     }
 
-    private function translateNthOfType($match) {
-
+    /**
+     * @param array $match
+     *
+     * @return string
+     */
+    private function translateNthOfType(array $match) {
         $result = $this->parseNth($match);
 
         if (isset($result[self::MULTIPLIER])) {
@@ -366,46 +493,66 @@ class Emogrifier {
         }
     }
 
-    private function parseNth($match) {
-
+    /**
+     * @param array $match
+     *
+     * @return array
+     */
+    private function parseNth(array $match) {
         if (in_array(strtolower($match[2]), array('even','odd'))) {
             $index = strtolower($match[2]) == 'even' ? 0 : 1;
             return array(self::MULTIPLIER => 2, self::INDEX => $index);
-        // if there is a multiplier
-        } else if (stripos($match[2], 'n') === false) {
+        } elseif (stripos($match[2], 'n') === FALSE) {
+            // if there is a multiplier
             $index = intval(str_replace(' ', '', $match[2]));
             return array(self::INDEX => $index);
         } else {
-
             if (isset($match[3])) {
-                $multiple_term = str_replace($match[3], '', $match[2]);
+                $multipleTerm = str_replace($match[3], '', $match[2]);
                 $index = intval(str_replace(' ', '', $match[3]));
             } else {
-                $multiple_term = $match[2];
+                $multipleTerm = $match[2];
                 $index = 0;
             }
 
-            $multiplier = str_ireplace('n', '', $multiple_term);
+            $multiplier = str_ireplace('n', '', $multipleTerm);
 
-            if (!strlen($multiplier)) $multiplier = 1;
-            elseif ($multiplier == 0) return array(self::INDEX => $index);
-            else $multiplier = intval($multiplier);
+            if (!strlen($multiplier)) {
+                $multiplier = 1;
+            } elseif ($multiplier == 0) {
+                return array(self::INDEX => $index);
+            } else {
+                $multiplier = intval($multiplier);
+            }
 
-            while ($index < 0) $index += abs($multiplier);
+            while ($index < 0) {
+                $index += abs($multiplier);
+            }
 
             return array(self::MULTIPLIER => $multiplier, self::INDEX => $index);
         }
     }
 
+    /**
+     * @param string $style
+     *
+     * @return array
+     */
     private function cssStyleDefinitionToArray($style) {
-        $definitions = explode(';',$style);
-        $retArr = array();
-        foreach ($definitions as $def) {
-            if (empty($def) || strpos($def, ':') === false) continue;
-            list($key,$value) = explode(':',$def,2);
-            if (empty($key) || strlen(trim($value)) === 0) continue;
-            $retArr[trim($key)] = trim($value);
+        $definitions = explode(';', $style);
+        $returnArray = array();
+
+        foreach ($definitions as $definition) {
+            if (empty($definition) || strpos($definition, ':') === FALSE) {
+                continue;
+            }
+            list($key, $value) = explode(':', $definition, 2);
+            if (empty($key) || strlen(trim($value)) === 0) {
+                continue;
+            }
+            $returnArray[trim($key)] = trim($value);
         }
-        return $retArr;
+
+        return $returnArray;
     }
 }

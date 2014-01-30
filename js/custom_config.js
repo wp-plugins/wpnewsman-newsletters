@@ -26,17 +26,16 @@ CKEDITOR.editorConfig = function( config ) {
 	// config.plugins = 'dialogui,dialog,about,a11yhelp,basicstyles,blockquote,clipboard,panel,floatpanel,menu,contextmenu,resize,button,toolbar,elementspath,list,indent,enterkey,entities,popup,filebrowser,floatingspace,listblock,richcombo,format,htmlwriter,horizontalrule,wysiwygarea,image,fakeobjects,link,magicline,maximize,pastetext,pastefromword,removeformat,sourcearea,specialchar,menubutton,scayt,stylescombo,tab,table,tabletools,undo,wsc,panelbutton,colorbutton,font,justify,liststyle';
 	// config.skin = 'moono';
 	// %REMOVE_END%
-	
+
+	config.extraPlugins = 'ui_newsman_label,newsman_autosave,iframedialog,newsman_insert_posts,newsman_add_wp_media,newsman_save,newsmanshortcodes';	
 
 	config.fullPage = true;
 
-	config.entities = false;
-	config.basicEntities = true;
-	//config.entities_latin = false;
+	config.entities = true; // true - use encoded entities in HTML output
+	config.basicEntities = false; // encode basic entities like ", ', etc.
+	// config.entities_latin = false;
 
 	config.resize_enabled = true;
-
-	config.extraPlugins = 'ui_newsman_label,newsman_autosave,iframedialog,newsman_insert_posts,newsman_add_wp_media,newsman_save,newsmanshortcodes';
 
 	config.enterMode = CKEDITOR.ENTER_BR;
 	config.shiftEnterMode = CKEDITOR.ENTER_P;	
