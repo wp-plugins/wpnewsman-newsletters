@@ -1,0 +1,27 @@
+Confirmación de Baja
+--- plain ---
+Hola,
+
+Hemos recibido una petición para eliminarlo de nuestra lista de correo. Para asegurarnos que usted es el dueño de esta dirección de email le hemos enviado este mensaje.
+
+Para confirmar su decisión de darse de baja, por favor diríjase al enlace de abajo
+
+[newsman link="confirm-unsubscribe"]
+
+Si no desea darse de baja, sólo ignore o elimine este mensaje.
+
+Sinceramente,
+[newsman me="name"]
+[newsman me="email"]
+[newsman wp="url"]
+--- html ---
+<p>Hola,</p>
+<p>Hemos recibido una petición para eliminarlo de nuestra lista de correo. Para asegurarnos que usted es el dueño de esta dirección de email le hemos enviado este mensaje.</p>
+<p>Para confirmar su decisión de darse de baja, por favor diríjase al enlace de abajo</p>
+<p><a href="[newsman link='unsubscribe-confirmation']">Por favor denme de baja</a></p>
+<p>Si no desea darse de baja, sólo ignore o elimine este mensaje.</p>
+<p>&nbsp;</p>
+<p>Sinceramente,<br>
+[newsman me="name"]<br>
+[newsman me="email"]<br>
+<a href="[newsman wp='url']">[newsman wp="url"]</a></p>

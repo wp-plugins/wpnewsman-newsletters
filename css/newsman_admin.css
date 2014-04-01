@@ -791,6 +791,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f6f8f9', end
 #upload-list-wrap {
 	max-height: 285px;
 	overflow-y: auto;
+	padding-bottom: 10px;
 }
 
 #file-import-settings {
@@ -915,6 +916,10 @@ select.map-select {
 #newsman-modal-import {
 	width: 900px;
 	margin-left: -450px;
+}
+
+#newsman-modal-import .modal-body {
+	overflow-y: hidden;
 }
 
 .import-controls {

@@ -182,7 +182,7 @@ class newsmanEmail extends newsmanStorable {
 
 		$a = $elapsed <= $maxWorkerTimout;
 
-		$u->log('isWorkerAlive - workerPid('.$this->workerPid.') - isAlive = '.$a);
+		$u->log('[isWorkerAlive] workerPid('.$this->workerPid.') -> isAlive: '.$a);
 		
 		return $a;
 	}
@@ -191,5 +191,12 @@ class newsmanEmail extends newsmanStorable {
 		$u = newsmanUtils::getInstance();
 		$u->releaseLock('newsman-worker-'.$this->id);
 	}
+
+	public function getPublishURL() {
+		$blogurl = get_bloginfo('wpurl');
+
+		return "$blogurl/?newsman=email&email=".$this->ucode;
+
+	} 
 
 }

@@ -141,8 +141,11 @@ class newsmanMailer extends newsmanWorker {
 					break;
 				}
 
+				$u->log('Sending to '.$t->email.': Server response: '.$r);
 				if ( strpos($r, 'Invalid address') !== false ) {
 					$t->errorCode = NEWSMAN_ERR_INVALID_EMAIL_ADDR;	
+					// unsubscribe
+					$u->unsubscribeFromLists($t->email, __('Bad Email Address', NEWSMAN), true);
 				} else {
 					$t->errorCode = NEWSMAN_ERR_TEMP_ERROR;
 				}
@@ -156,6 +159,7 @@ class newsmanMailer extends newsmanWorker {
 			}
 
 			if ( $errorsCount >= 5 ) {
+				$u->log('Too many consecutive errors. Sending will be stopped.');
 				$lastError = __('Too many consecutive errors. Please check your mail delivery settings and make sure you can send a test email. Last SMTP error: ', NEWSMAN).$lastError;
 				$errorStop = true;
 				break;

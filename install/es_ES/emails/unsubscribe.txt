@@ -1,0 +1,27 @@
+Confirmación de Petición de Eliminación
+--- plain ---
+Hola,
+
+Se está enviando este correo electrónico para notificarle que hemos recibido una solicitud para eliminar el siguiente registro de nuestra lista de correo:
+
+Email: [newsman sub="email"]
+
+Este registro fue removido de nuestra base de datos en línea y también se eliminará de cualquier archivo de copia de seguridad en breve.
+
+Si usted recibe más correo electrónico no deseado de nuestro sistema, por favor háganoslo saber a través de la información de contacto a continuación y estaremos encantados de abordar la cuestión de inmediato.
+
+Sinceramente,
+[newsman me="name"]
+[newsman me="email"]
+[newsman wp="url"]
+--- html ---
+<p>Hola,</p>
+<p>Se está enviando este correo electrónico para notificarle que hemos recibido una solicitud para eliminar el siguiente registro de nuestra lista de correo:</p>
+<p>Email: [newsman sub="email"]</p>
+<p>Este registro fue removido de nuestra base de datos en línea y también se eliminará de cualquier archivo de copia de seguridad en breve.</p>
+<p>Si usted recibe más correo electrónico no deseado de nuestro sistema, por favor háganoslo saber a través de la información de contacto a continuación y estaremos encantados de abordar la cuestión de inmediato.</p>
+<p>&nbsp;</p>
+<p>Sinceramente,<br>
+[newsman me="name"]<br>
+[newsman me="email"]<br>
+<a href="[newsman wp='url']">[newsman wp="url"]</a></p>

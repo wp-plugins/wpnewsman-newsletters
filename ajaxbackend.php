@@ -381,12 +381,12 @@
 			$where = null;
 			$args = array();
 			$opts = array(
-				'fields' => array('id', 'subject', 'to', 'created', 'schedule', 'status','msg', 'recipients', 'sent')
+				'fields' => array('id', 'subject', 'to', 'created', 'schedule', 'status','msg', 'recipients', 'sent', 'ucode')
 			);
 
 			if ( $q ) {
 				$where = 'subject regexp %s OR html regexp %s OR plain regexp %s';
-				$q = preg_quote($q);
+				$q = $this->u->preg_quote($q);
 
 				if ( $show === 'all' ) {
 					$args = array( $q, $q, $q );
@@ -432,6 +432,7 @@
 			foreach ($emails as $email) {
 				$eml = $email->toJSON();
 				//$eml = $email;
+				$eml['publicURL'] = $email->getPublishURL();
 				$eml['created'] = strtotime($eml['created']);
 				$res['rows'][] = $eml;
 			}
@@ -1079,7 +1080,7 @@
 				return;
 			}
 
-			$rx = '/('.preg_quote($selector).'\s*\{[\s\S]*?\/\*\@editable\*\/'.preg_quote($name).':)([^;]*)(;[\s\S]*?\})/i';
+			$rx = '/('.$this->u->preg_quote($selector).'\s*\{[\s\S]*?\/\*\@editable\*\/'.$this->u->preg_quote($name).':)([^;]*)(;[\s\S]*?\})/i';
 
 			$tpl->html = preg_replace($rx, '${1}'.$value.'${3}', $tpl->html);
 
@@ -1107,7 +1108,7 @@
 				return;
 			}
 
-			$rx = '/('.preg_quote($selector).'\s*\{[\s\S]*?\/\*\@editable\*\/'.preg_quote($name).':)([^;]*)(;[\s\S]*?\})/i';
+			$rx = '/('.$this->u->preg_quote($selector).'\s*\{[\s\S]*?\/\*\@editable\*\/'.$this->u->preg_quote($name).':)([^;]*)(;[\s\S]*?\})/i';
 
 			
 

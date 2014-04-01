@@ -255,7 +255,7 @@ class newsmanForm {
 
 		return 	"<div $type class=\"newsman-form-item $req $it $elId\">".
 					$lbl.
-					'<input type="text" name="newsman-email" '.$ph.' value="'.$this->specChr($item['value']).'">'.
+					'<input type="email" name="newsman-email" '.$ph.' value="'.$this->specChr($item['value']).'">'.
 					'<span class="newsman-required-msg" style="display:none;">'.__('Required', NEWSMAN).'</span>'.
 				'</div>';
 	}	
@@ -404,8 +404,7 @@ class newsmanForm {
 		global $post;		
 
 		if ( !is_array($this->decodedForm) ) {
-			echo '<p class="error">The form settings are corrupted.</p>';
-			return;
+			return '<p class="error">The form settings are corrupted.</p>';
 		}
 		$il = $this->useInlineLabels ? ' inline-labels' : '';
 		$hor = $this->horizontal ? ' newsman-form-horizontal' : '';

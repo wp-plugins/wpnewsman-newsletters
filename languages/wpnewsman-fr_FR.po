@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: G-Lock WPNewsman Plugin for WordPress\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/wpnewsman\n"
-"POT-Creation-Date: 2014-01-29 10:49:42+00:00\n"
-"PO-Revision-Date: 2014-01-29 13:17+0000\n"
+"POT-Creation-Date: 2014-03-31 12:57:00+00:00\n"
+"PO-Revision-Date: 2014-03-31 13:08+0000\n"
 "Last-Translator: amura <seosirena@gmail.com>\n"
 "Language-Team: French (http://www.transifex.com/projects/p/g-lock-wpnewsman/language/fr/)\n"
 "MIME-Version: 1.0\n"
@@ -25,21 +25,21 @@ msgstr "le paramètre requis «%s» manque dans la demande"
 
 #. translators: subscriber type
 #. translators: lists and forms table header
-#: ajaxbackend.php:112 core.php:1082 views/forms.php:24
+#: ajaxbackend.php:112 core.php:1088 views/forms.php:24
 #: views/subscribers.php:31
 msgid "Confirmed"
 msgstr "Confirmés"
 
 #. translators: subscriber type
 #. translators: lists and forms table header
-#: ajaxbackend.php:113 core.php:1080 views/forms.php:25
+#: ajaxbackend.php:113 core.php:1086 views/forms.php:25
 #: views/subscribers.php:32
 msgid "Unconfirmed"
 msgstr "Non confirmés"
 
 #. translators: subscriber type
 #. translators: lists and forms table header
-#: ajaxbackend.php:114 core.php:1084 views/forms.php:26
+#: ajaxbackend.php:114 core.php:1090 views/forms.php:26
 #: views/subscribers.php:33
 msgid "Unsubscribed"
 msgstr "Désabonnés"
@@ -64,8 +64,8 @@ msgstr "Impossible de modifier le modèle. Le modèle avec le code unique \"%s\"
 msgid "Cannot edit template. Template with id \"%s\" cannot be written."
 msgstr "Impossible de modifier le modèle. Le modèle avec le numéro unique \"% s\" ne peut pas être écrit."
 
-#: ajaxbackend.php:143 ajaxbackend.php:1307 api.php:107 api.php:181
-#: export_list.php:46
+#: ajaxbackend.php:143 ajaxbackend.php:1308 api.php:107 api.php:181
+#: core.php:2686
 msgid "List with id \"%s\" is not found."
 msgstr "La liste avec le code unique \"%s\" n'est pas trouvée."
 
@@ -87,15 +87,15 @@ msgid ""
 " are correct"
 msgstr "Si vous lisez ce message, vos paramètres SMTP dans le plugin G-Lock WPNewsman sont corrects."
 
-#: ajaxbackend.php:255 ajaxbackend.php:1849
+#: ajaxbackend.php:255 ajaxbackend.php:1850
 msgid "Test email was sent to %s."
 msgstr "Le message de test a été envoyé à %s."
 
-#: ajaxbackend.php:281 ajaxbackend.php:311 ajaxbackend.php:439
-#: ajaxbackend.php:781 ajaxbackend.php:825 ajaxbackend.php:1064
-#: ajaxbackend.php:1347 ajaxbackend.php:1397 ajaxbackend.php:1416
-#: ajaxbackend.php:1656 ajaxbackend.php:1723 ajaxbackend.php:1733
-#: ajaxbackend.php:1888 ajaxbackend.php:2024
+#: ajaxbackend.php:281 ajaxbackend.php:311 ajaxbackend.php:440
+#: ajaxbackend.php:782 ajaxbackend.php:826 ajaxbackend.php:1065
+#: ajaxbackend.php:1348 ajaxbackend.php:1398 ajaxbackend.php:1417
+#: ajaxbackend.php:1657 ajaxbackend.php:1724 ajaxbackend.php:1734
+#: ajaxbackend.php:1889 ajaxbackend.php:2025
 msgid "success"
 msgstr "succès"
 
@@ -111,115 +111,115 @@ msgstr "Erreur: le paramètre \"options\" demande était vide ou non défini."
 msgid "Options were successfully saved."
 msgstr "Les options ont été sauvegardées avec succès."
 
-#: ajaxbackend.php:629 ajaxbackend.php:880 ajaxbackend.php:907
-#: ajaxbackend.php:935 ajaxbackend.php:967 ajaxbackend.php:997
-#: ajaxbackend.php:1093 ajaxbackend.php:1123 ajaxbackend.php:1673
-#: ajaxbackend.php:1766
+#: ajaxbackend.php:630 ajaxbackend.php:881 ajaxbackend.php:908
+#: ajaxbackend.php:936 ajaxbackend.php:968 ajaxbackend.php:998
+#: ajaxbackend.php:1094 ajaxbackend.php:1124 ajaxbackend.php:1674
+#: ajaxbackend.php:1767
 msgid "Saved"
 msgstr "Sauvegardé"
 
-#: ajaxbackend.php:665
+#: ajaxbackend.php:666
 msgid "Your email was successfully queued for sending."
 msgstr "Votre message a été mis en attente pour l'envoi."
 
-#: ajaxbackend.php:820 ajaxbackend.php:843
+#: ajaxbackend.php:821 ajaxbackend.php:844
 msgid "Template does not have a \"%s\" property."
 msgstr "Le modèle n'a pas de \"%s\" propriété."
 
-#: ajaxbackend.php:1036
+#: ajaxbackend.php:1037
 msgid "You have successfully deleted %d template."
 msgid_plural "You have successfully deleted %d templates."
 msgstr[0] "Vous avez supprimé le modèle %d avec succès."
 msgstr[1] "Vous avez supprimé les modèles %d avec succès."
 
-#: ajaxbackend.php:1152 ajaxbackend.php:1687
+#: ajaxbackend.php:1153 ajaxbackend.php:1688
 msgid "Your email is successfully scheduled."
 msgstr "Votre message est inscrit dans l'ordre de l'envoi."
 
-#: ajaxbackend.php:1159
+#: ajaxbackend.php:1160
 msgid "Unrecognized \"send\" parameter - %s"
 msgstr "Le paramètre inconnu \"envoyer\" - %s"
 
-#: ajaxbackend.php:1211
+#: ajaxbackend.php:1212
 msgid "Emails were successfully unsubscribed."
 msgstr "Les adresses emails ont été désabonnés avec succès."
 
-#: ajaxbackend.php:1274 ajaxbackend.php:2133
+#: ajaxbackend.php:1275 ajaxbackend.php:2134
 msgid "Bad email address"
 msgstr "Mauvais adresse email"
 
-#: ajaxbackend.php:1362
+#: ajaxbackend.php:1363
 msgid "Please select a file to import"
 msgstr "S'il vous plaît sélectionnez le fichier à importer"
 
-#: ajaxbackend.php:1367
+#: ajaxbackend.php:1368
 msgid "Imported %d subscriber. Make sure you send him confirmation email."
 msgid_plural ""
 "Imported %d subscribers. Make sure you send them confirmation email."
 msgstr[0] "%d abonné a été importé. Assurez-vous de lui envoyer le message de confirmation."
 msgstr[1] "%d abonnés ont été importés. Assurez-vous de leur envoyer les messages de confirmation."
 
-#: ajaxbackend.php:1414 views/subscribers.php:75
+#: ajaxbackend.php:1415 views/subscribers.php:75
 msgid "IP Address"
 msgstr "Adresse IP"
 
-#: ajaxbackend.php:1437
+#: ajaxbackend.php:1438
 msgid "Imported %d template."
 msgid_plural "Imported %d templates."
 msgstr[0] "Modèles importés: %d."
 msgstr[1] "Modèles importés: %d."
 
-#: ajaxbackend.php:1491
+#: ajaxbackend.php:1492
 msgid "Selected emails were successfully resumed"
 msgstr "L'envoi des messages séléctionnés a été recommencé avec succès."
 
-#: ajaxbackend.php:1544 ajaxbackend.php:1631
+#: ajaxbackend.php:1545 ajaxbackend.php:1632
 msgid "\"entType\" parameter value \"%s\" should be \"email\" or \"template\"."
 msgstr "La valeur \"%s\" du paramètre \"entType\" doit être \"email\" ou \"modèle\"."
 
-#: ajaxbackend.php:1615
+#: ajaxbackend.php:1616
 msgid "Posts block successfully compiled"
 msgstr "Le bloque des articles est compilé avec succès."
 
-#: ajaxbackend.php:1627
+#: ajaxbackend.php:1628
 msgid ""
 "\"postTemplateType\" parameter value \"%s\" should be \"post_content\", "
 "\"post_excerpt\" or \"fancy_excerpt\"."
 msgstr "La valeur \"%s\" du paramètre \"postTemplateType\" doit être \"post_content\", \"post_excerpt\" ou \"fancy_excerpt\"."
 
-#: ajaxbackend.php:1642
+#: ajaxbackend.php:1643
 msgid "Posts block successfully updated"
 msgstr "Le bloque des articles est mis à jour avec succès."
 
-#: ajaxbackend.php:1691
+#: ajaxbackend.php:1692
 msgid "ReConfirmation system email template is not found."
 msgstr "Le modèle d'email de système de confirmer l'abonnement de nouveau n'est pas trouvé."
 
-#: ajaxbackend.php:1779
+#: ajaxbackend.php:1780
 msgid "List with the name \"%s\" already exists."
 msgstr "La liste avec le nom \"%s\" existe déjà."
 
 #. translators: email property
-#: ajaxbackend.php:1784 views/addedit_email.php:65 views/mailbox.php:65
+#: ajaxbackend.php:1785 views/addedit_email.php:65 views/mailbox.php:65
 msgid "Created"
 msgstr "Créé"
 
-#: ajaxbackend.php:1848
+#: ajaxbackend.php:1849
 msgid ""
 "Test email was sent to %s and subscriber with this email was created in "
 "\"%s\" list."
 msgstr "Le message de test a été envoyé à %s et l'abonné avec cette adresse email a été créé dans la liste \"%s\"."
 
-#: ajaxbackend.php:1926
+#: ajaxbackend.php:1927
 msgid "Wrong \"type\" parameter. Must be \"csv\" or \"template\""
 msgstr "Le paramètre \"type\" est incorrect.  Il doit être \"csv\" ou \"template\""
 
-#: ajaxbackend.php:2156 ajaxbackend.php:2174 ajaxbackend.php:2179
-#: ajaxbackend.php:2184
+#: ajaxbackend.php:2157 ajaxbackend.php:2175 ajaxbackend.php:2180
+#: ajaxbackend.php:2185
 msgid "Success"
 msgstr "Succès"
 
-#: ajaxbackend.php:2158
+#: ajaxbackend.php:2159
 msgid "Translation not found"
 msgstr "La traduction n'est pas trouvée"
 
@@ -246,7 +246,7 @@ msgstr "S'abonner"
 
 #: class.form.php:127 class.form.php:160 class.form.php:217 class.form.php:239
 #: class.form.php:259 class.form.php:276 class.form.php:309 class.form.php:340
-#: core.php:1105 views/list.php:69 views/list.php:91 views/list.php:108
+#: core.php:1111 views/list.php:69 views/list.php:91 views/list.php:108
 #: views/list.php:194 views/list.php:231
 msgid "Required"
 msgstr "Requis"
@@ -257,7 +257,7 @@ msgid ""
 " problem."
 msgstr "Quelque chose s'est passé mal. S'il vous plait, contactez l'administrateur du site et décrivez le problème."
 
-#: class.form.php:387 core.php:1086 core.php:1114
+#: class.form.php:387 core.php:1092 core.php:1120
 msgid "Error"
 msgstr "Erreur:"
 
@@ -297,47 +297,47 @@ msgstr "Le désabonnement est réussi"
 msgid "Please confirm your unsubscribe decision"
 msgstr "S'il vous plaît, confirmez votre décision de vous désabonner"
 
-#: class.utils.php:798
+#: class.utils.php:802
 msgid "Add new..."
 msgstr "Ajouter nouveau"
 
-#: class.utils.php:977 class.utils.php:1028 core.php:1539 core.php:1552
+#: class.utils.php:981 class.utils.php:1032 core.php:1547 core.php:1560
 msgid "Enter Subject Here"
 msgstr "Entrez le Sujet ici"
 
-#: class.utils.php:1148 core.php:1158 core.php:1869
+#: class.utils.php:1152 core.php:1164 core.php:1877
 msgid "Copy"
 msgstr "Copier"
 
-#: class.utils.php:1455
+#: class.utils.php:1466
 msgid "Administrator notification - new subscriber"
 msgstr "La notification de l'administrateur - nouvel abonné"
 
-#: class.utils.php:1460
+#: class.utils.php:1471
 msgid "Administrator notification - user unsubscribed"
 msgstr "La notification de l'administrateur - utilisateur s'est désabonné"
 
-#: class.utils.php:1465
+#: class.utils.php:1476
 msgid "Subscription confirmation"
 msgstr "La confirmation d'abonnement"
 
-#: class.utils.php:1470
+#: class.utils.php:1481
 msgid "Unsubscribe notification"
 msgstr "La notification de désabonnement"
 
-#: class.utils.php:1475
+#: class.utils.php:1486
 msgid "Welcome letter, thanks for subscribing"
 msgstr "Le message de bienvenue, merci de votre abonnement"
 
-#: class.utils.php:1480 migration.php:213
+#: class.utils.php:1491 migration.php:213
 msgid "Unsubscribe confirmation"
 msgstr "Confirmation de désabonnement"
 
-#: class.utils.php:1485 migration.php:296
+#: class.utils.php:1496 migration.php:296
 msgid "Re-subscription confirmation"
 msgstr "Confirmation d'abonnement de nouveau"
 
-#: core.php:26 core.php:1955
+#: core.php:26 core.php:1968
 msgid "Every minute"
 msgstr "Chaque minute"
 
@@ -377,7 +377,7 @@ msgid ""
 "each message."
 msgstr "Vous pouvez quitter la liste à tout moment. Les instructions comment se désabonner sont inclus dans chaque message."
 
-#: core.php:258 core.php:1648
+#: core.php:258 core.php:1656
 msgid "Upgrade to Pro"
 msgstr "Mettre à niveau la version Pro"
 
@@ -390,292 +390,288 @@ msgid ""
 "You reached the subscribers limit of the Lite version. %s to resume sending."
 msgstr "Vous avez atteint la limite d'abonnés dans la version Lite. %s pour reprendre l'envoi."
 
-#: core.php:387
+#: core.php:393
 msgid ""
 "\"Post has no excerpt. Write something yourself or use fancy_excerpt "
 "option\""
 msgstr "\"L'article n'a pas d'extrait. Ecrivez quelque chose vous-même ou utilisez l'option fancy_excerpt\""
 
-#: core.php:585
-msgid "Wrong \"code\" parameter format"
-msgstr "Le format incorrect du paramètre \"code\""
-
-#: core.php:591
+#: core.php:595
 msgid "Your link seems to be broken."
 msgstr "Votre lien semble être rompu."
 
-#: core.php:597
+#: core.php:601
 msgid "List with the unique code \"%s\" is not found"
 msgstr "La liste avec le code unique \"%s\" n'est pas trouvée."
 
-#: core.php:603
+#: core.php:607
 msgid "Subscriber with the unique code \"%s\" is not found"
 msgstr "L'abonné avec le code unique \"%s\" n'est pas trouvé."
 
-#: core.php:696
+#: core.php:702
 msgid "Unique email id is missing in request."
 msgstr "Le code unique de l'adresse email manque dans la demande."
 
-#: core.php:701
+#: core.php:707
 msgid "Email with unique code %s is not found."
 msgstr "L'adresse email avec le code unique \"%s\" n'est pas trouvée."
 
-#: core.php:950 core.php:1173
+#: core.php:956 core.php:1181
 msgid "Please fill all the required fields."
 msgstr "S'il vous plaît remplissez tous les champs obligatoires."
 
-#: core.php:951 core.php:1174
+#: core.php:957 core.php:1182
 msgid "Please check your email address."
 msgstr "S'il vous plaît vérifiez votre adresse email."
 
-#: core.php:1085
+#: core.php:1091
 msgid "Error: "
 msgstr "Erreur:"
 
-#: core.php:1087
+#: core.php:1093
 msgid "Done"
 msgstr "Fini"
 
-#: core.php:1088
+#: core.php:1094
 msgid "Please select emails which you want to stop sending of."
 msgstr "S'il vous plaît, sélectionnez les messages dont vous voulez arrêter l'envoi."
 
-#: core.php:1089
+#: core.php:1095
 msgid "You have successfully stopped sending of selected emails."
 msgstr "Vous avez arrête l'envoi des messages sélectionnés avec succès."
 
-#: core.php:1090
+#: core.php:1096
 msgid "Please mark subscribers which you want to unsubscribe."
 msgstr "S'il vous plaît, sélectionnez les abonnés que vous voulez désabonner."
 
-#: core.php:1091
+#: core.php:1097
 msgid "You have successfully unsubscribed selected subscribers."
 msgstr "Vous avez désabonné les abonnés sélectionnés avec succès."
 
-#: core.php:1092
+#: core.php:1098
 msgid "Please mark subscribers which you want to delete."
 msgstr "S'il vous plaît, sélectionnez les abonnés que vous voulez supprimer."
 
-#: core.php:1093
+#: core.php:1099
 msgid "You have successfully deleted selected subscribers."
 msgstr "Vous avez supprimé les abonnés sélectionnés avec succès."
 
-#: core.php:1094
+#: core.php:1100
 msgid "Please mark subscribers to change."
 msgstr "S'il vous plaît, sélectionnez les abonnés dont vous voulez changer le statut."
 
-#: core.php:1095
+#: core.php:1101
 msgid "You have successfully changed status of selected subscribers."
 msgstr "Vous avez changé le statut des abonnés sélectionnés avec succès."
 
-#: core.php:1096
+#: core.php:1102
 msgid "Please mark subscribers which you want to send confirmation to."
 msgstr "S'il vous plaît, sélectionnez les abonnés à qui vous voulez envoyer le message de confirmation."
 
-#: core.php:1097
+#: core.php:1103
 msgid "You have successfully send confirmation emails."
 msgstr "Vous avez envoyé les messages de confirmation avec succès."
 
-#: core.php:1098
+#: core.php:1104
 msgid "All subscribers (#)"
 msgstr "Tous les abonnés (#)"
 
-#: core.php:1099
+#: core.php:1105
 msgid "Confirmed (#)"
 msgstr "Confirmés (#)"
 
-#: core.php:1100
+#: core.php:1106
 msgid "Unconfirmed (#)"
 msgstr "Non confirmés (#) "
 
-#: core.php:1101
+#: core.php:1107
 msgid "Unsubscribed (#)"
 msgstr "Desabonnés  (#)"
 
-#: core.php:1102
+#: core.php:1108
 msgid "You have no subscribers yet."
 msgstr "Vous n'avez pas encore d'abonnés."
 
-#: core.php:1103 views/mailbox-email.php:107
+#: core.php:1109 views/mailbox-email.php:107
 msgid "Sending"
 msgstr "Envoi"
 
-#: core.php:1104
+#: core.php:1110
 msgid "Check me"
 msgstr "Cochez-moi"
 
-#: core.php:1106
+#: core.php:1112
 msgid "Choose an option"
 msgstr "Sélectionnez une option"
 
-#: core.php:1107
+#: core.php:1113
 msgid "new option 1"
 msgstr "Nouvelle option 1"
 
-#: core.php:1108
+#: core.php:1114
 msgid "Untitled"
 msgstr "Sans titre"
 
-#: core.php:1109 views/addedit_email.php:71
+#: core.php:1115 views/addedit_email.php:71
 msgid "You have no emails yet."
 msgstr "Vous n'avez pas encore de messages."
 
-#: core.php:1110
+#: core.php:1116
 msgid "You have no forms, yet"
 msgstr "Vous n'avez pas de formulaires encore."
 
 #. translators: mailbox view link
-#: core.php:1111 core.php:1142 views/addedit_email.php:17 views/mailbox.php:24
+#: core.php:1117 core.php:1148 views/addedit_email.php:17 views/mailbox.php:24
 msgid "Sent"
 msgstr "Envoyé"
 
 #. translators: mailbox view link
-#: core.php:1112 core.php:1140 views/addedit_email.php:16 views/mailbox.php:23
+#: core.php:1118 core.php:1146 views/addedit_email.php:16 views/mailbox.php:23
 msgid "Pending"
 msgstr "En attente"
 
-#: core.php:1113
+#: core.php:1119
 msgid "Draft"
 msgstr "Brouillon"
 
-#: core.php:1115
+#: core.php:1121
 msgid "Sending..."
 msgstr "Envoi..."
 
-#: core.php:1116
+#: core.php:1122
 msgid "Stopped"
 msgstr "Stoppé"
 
-#: core.php:1117
+#: core.php:1123
 msgid "Scheduled on"
 msgstr "Inscrit dans l'order d'envoi a"
 
-#: core.php:1118
+#: core.php:1124
 msgid "You don't have any templates yet."
 msgstr "Vous n'avez pas encore de modèles."
 
-#: core.php:1119
+#: core.php:1125
 msgid "Create one?"
 msgstr "Créer ?"
 
-#: core.php:1120
+#: core.php:1126
 msgid "Please mark the emails which you want to delete."
 msgstr "S'il vous plaît, sélectionnez les messages que vous voulez supprimer."
 
-#: core.php:1121
+#: core.php:1127
 msgid "You have successfully deleted selected emails."
 msgstr "Vous avez supprimé les messages sélectionnés avec succès."
 
-#: core.php:1122
+#: core.php:1128
 msgid "Please mark the templates which you want to delete."
 msgstr "S'il vous plaît, sélectionnez les modèles que vous voulez supprimer."
 
-#: core.php:1123
+#: core.php:1129
 msgid "Please mark the forms which you want to delete."
 msgstr "S'il vous plaît, séléctionnez les formulaires que vous voulez supprimer."
 
-#: core.php:1124
+#: core.php:1130
 msgid "You have no templates yet."
 msgstr "Vous n'avez pas encore de modèles."
 
-#: core.php:1125
+#: core.php:1131
 msgid "All emails (#)"
 msgstr "Tous les messages (#)"
 
-#: core.php:1126
+#: core.php:1132
 msgid "In progress (#)"
 msgstr "En progression (#)"
 
-#: core.php:1127
+#: core.php:1133
 msgid "Pending (#)"
 msgstr "En attente (#)"
 
-#: core.php:1128
+#: core.php:1134
 msgid "Sent (#)"
 msgstr "Envoyés (#)"
 
-#: core.php:1129 views/mailbox-email.php:108 views/mailbox-email.php:113
+#: core.php:1135 views/mailbox-email.php:108 views/mailbox-email.php:113
 #: views/mailbox.php:45
 msgid "Resume"
 msgstr "Recommencer"
 
-#: core.php:1130
+#: core.php:1136
 msgid "Please fill the \"To:\" field."
 msgstr "S'il vous plaît, remplissez le champ \"A:\"."
 
-#: core.php:1131
+#: core.php:1137
 msgid "Please select emails first."
 msgstr "S'il vous plaît, sélectionnez les adresses emails d'abord."
 
-#: core.php:1132
+#: core.php:1138
 msgid "Please select"
 msgstr "S'il vous plaît, choisissez"
 
 #. translators: mailbox view link
-#: core.php:1134 views/addedit_email.php:14 views/mailbox.php:20
+#: core.php:1140 views/addedit_email.php:14 views/mailbox.php:20
 msgid "All emails"
 msgstr "Tous les messages"
 
 #. translators: mailbox view link
-#: core.php:1136 views/addedit_email.php:15 views/mailbox.php:22
+#: core.php:1142 views/addedit_email.php:15 views/mailbox.php:22
 msgid "In progress"
 msgstr "En progression"
 
 #. translators: mailbox view link
-#: core.php:1138 views/mailbox.php:21
+#: core.php:1144 views/mailbox.php:21
 msgid "Drafts"
 msgstr "Brouillons"
 
-#: core.php:1143
+#: core.php:1149
 msgid "Sent %d of %d emails"
 msgstr "Envoyé %d de %d messages"
 
-#: core.php:1144
+#: core.php:1150
 msgid "Status: "
 msgstr "Statut:"
 
-#: core.php:1145
+#: core.php:1151
 msgid "Email Errors"
 msgstr "Erreurs:"
 
-#: core.php:1146
+#: core.php:1152
 msgid "Email Address"
 msgstr "Adresse email"
 
-#: core.php:1147
+#: core.php:1153
 msgid "Error Message"
 msgstr "Message d'erreur"
 
-#: core.php:1148 views/forms.php:31 views/mailbox-email.php:155
-#: views/mailbox.php:72 views/subscribers.php:82 views/templates.php:63
+#: core.php:1154 views/forms.php:31 views/mailbox-email.php:158
+#: views/mailbox.php:73 views/subscribers.php:82 views/templates.php:63
 #: views/templates.php:79 views/templates.php:95 views/templates.php:183
 msgid "Loading..."
 msgstr "Chargement en cours ..."
 
-#: core.php:1149 newsman-widget.php:51
+#: core.php:1155 newsman-widget.php:51
 msgid "List:"
 msgstr "Liste:"
 
-#: core.php:1150
+#: core.php:1156
 msgid "Bug report"
 msgstr "Compte rendu d'erreurs"
 
-#: core.php:1151
+#: core.php:1157
 msgid "Load more..."
 msgstr "Charger plus..."
 
-#: core.php:1152
+#: core.php:1158
 msgid "Sorry, no posts matched your criteria."
 msgstr "Aucun article ne correspond à vos critères."
 
-#: core.php:1153
+#: core.php:1159
 msgid ""
 "Warning! You are close to the limit of %d subscribers you can send emails to"
 " in the Lite version of the plugin. Please, <a href=\"%s\">upgrade to the "
 "Pro version</a> to send emails without limitations."
 msgstr "Attention! Vous allez ganger la limite de %d abonnés à qui vous pouvez envoyer les messages dans la version Lite du plugin. S'il vous plaît, <a href=\"%s\">mettez à niveau la version Pro</a> pour pouvoir envoyer les messages sans limitations."
 
-#: core.php:1154
+#: core.php:1160
 msgid ""
 "Warning! You exceeded the limit of %d subscribers you can send emails to in "
 "the Lite version of the plugin. Please, <a href=\"%s\">upgrade to the Pro "
@@ -683,280 +679,284 @@ msgid ""
 msgstr "Attention! Vous avez dépassé la limite de %d abonnés à qui vous pouvez envoyer les messages dans la version Lite du plugin. S'il vous plaît, <a href=\"%s\">mettez à niveau la version Pro</a> pour pouvoir envoyer les messages sans limitations."
 
 #. translators: lists and forms table header
-#: core.php:1155 views/forms.php:23 views/list.php:67 views/list.php:86
+#: core.php:1161 views/forms.php:23 views/list.php:67 views/list.php:86
 #: views/list.php:106 views/list.php:141 views/list.php:192 views/list.php:229
 #: views/templates.php:58 views/templates.php:74 views/templates.php:90
 msgid "Name"
 msgstr "Nom"
 
-#: core.php:1156
+#: core.php:1162
 msgid "Edit Form"
 msgstr "Modifier le formulaire"
 
-#: core.php:1157
+#: core.php:1163
 msgid "View Subscribers"
 msgstr "Voir les abonnés"
 
-#: core.php:1159
+#: core.php:1165
 msgid "Edit"
 msgstr "Modifier"
 
-#: core.php:1160 views/addedit_email.php:39 views/addedit_email.php:102
+#: core.php:1166 views/addedit_email.php:39 views/addedit_email.php:102
 #: views/forms.php:15 views/forms.php:70 views/mailbox.php:46
-#: views/mailbox.php:105 views/subscribers.php:57 views/subscribers.php:116
+#: views/mailbox.php:106 views/subscribers.php:57 views/subscribers.php:116
 #: views/templates.php:28 views/templates.php:134 views/templates.php:149
 msgid "Delete"
 msgstr "Supprimer"
 
-#: core.php:1161
+#: core.php:1167
 msgid "Export"
 msgstr "Exporter"
 
-#: core.php:1162
+#: core.php:1168
 msgid "Default System Templates"
 msgstr "Modèles du système par défaut"
 
-#: core.php:1163
+#: core.php:1169
 msgid "System Template. Cannot be deleted."
 msgstr "Modèle du système. Il ne peut pas être supprimé."
 
-#: core.php:1164
+#: core.php:1170
 msgid "Insert Posts"
 msgstr "Insérer les articles"
 
-#: core.php:1165
+#: core.php:1171
 msgid "Post(s) selected: %d"
 msgstr "Article(s) sélectionné(s): %d"
 
-#: core.php:1166
+#: core.php:1172
 msgid "Select categories"
 msgstr "Choisir les catégories"
 
-#: core.php:1167
+#: core.php:1173
 msgid "# of # categories selected"
 msgstr "# de # catégories sélectionnées"
 
-#: core.php:1168
+#: core.php:1174
 msgid "Select author(s)"
 msgstr "Choisir les auteurs"
 
-#: core.php:1169
+#: core.php:1175
 msgid "# of # authors selected"
 msgstr "# de # auteurs sélectionnés"
 
-#: core.php:1170 views/list.php:346
+#: core.php:1176 views/list.php:346
 msgid "Save"
 msgstr "Sauvegarder"
 
-#: core.php:1171
+#: core.php:1177
 msgid "Saved at"
 msgstr "Sauvegardé vers"
 
-#: core.php:1176
+#: core.php:1179
+msgid "View in browser"
+msgstr "Voir dans le navigateur"
+
+#: core.php:1184
 msgid "Subscribe notification email sent to the administrator."
 msgstr "La notification de l'abonnement envoyé à l'administrateur."
 
-#: core.php:1177
+#: core.php:1185
 msgid "Unsubscribe notification email sent to the administrator."
 msgstr "La notification du désabonnement envoyé à l'administrateur."
 
-#: core.php:1178
+#: core.php:1186
 msgid "Email with the confirmation link sent to the user upon subscription."
 msgstr "Le message avec le lien de confirmation envoyé à l'utilisateur lors de l'abonnement."
 
-#: core.php:1179
+#: core.php:1187
 msgid ""
 "Email sent to the user that confirms that his email address was "
 "unsubscribed."
 msgstr "Le message envoyé à l'utilisateur qui confirme que son adresse e-mail a été désabonné."
 
-#: core.php:1180
+#: core.php:1188
 msgid "Welcome message sent after the subscriber confirms his subscription."
 msgstr "Le message de bienvenue envoyé à l'abonné après qu'il confirme son abonnement."
 
-#: core.php:1181
+#: core.php:1189
 msgid "Email with a link to confirm the subscriber’s decision to unsubscribe."
 msgstr "Le message avec le lien pour confirmer la décision de l'abonné de se désabonner."
 
-#: core.php:1182
+#: core.php:1190
 msgid ""
 "Email with a link to re-confirm the subscription that is sent to ALL "
 "\"unconfirmed\" subscribers on the list."
 msgstr "Le message avec le lien de reconfirmer l'abonnement qui est envoyé à tous les abonnés \"non confirmées\" sur la liste."
 
-#: core.php:1287
+#: core.php:1295
 msgid "Cannot unsubscribe email. Subscriber with unique code %s is not found."
 msgstr "Impossible de désabonner l'adresse email. L'abonné avec le code unique %s n'est pas trouvé."
 
-#: core.php:1551
+#: core.php:1559
 msgid "Untitled templates"
 msgstr "Modèle sans titre"
 
-#: core.php:1562
+#: core.php:1570
 msgid "Alternative Plain Text Body"
 msgstr "La version texte pur de message"
 
-#: core.php:1580
+#: core.php:1588
 msgid "WPNewsman Lite"
 msgstr "WPNewsman Lite"
 
-#: core.php:1593 core.php:1594 views/addedit_email.php:5 views/mailbox.php:9
+#: core.php:1601 core.php:1602 views/addedit_email.php:5 views/mailbox.php:9
 msgid "Mailbox"
 msgstr "Boîte aux lettres"
 
-#: core.php:1611 core.php:1612 views/forms.php:5
+#: core.php:1619 core.php:1620 views/forms.php:5
 msgid "Lists and Forms"
 msgstr "Listes et Formulaires"
 
-#: core.php:1620 core.php:1621 views/templates.php:5
+#: core.php:1628 core.php:1629 views/templates.php:5
 msgid "Email Templates"
 msgstr "Modèles de messages"
 
-#: core.php:1629 core.php:1630 views/options.php:6
+#: core.php:1637 core.php:1638 views/options.php:6
 msgid "Settings"
 msgstr "Paramètres"
 
-#: core.php:1639 core.php:1640 views/debug-log.php:11
+#: core.php:1647 core.php:1648 views/debug-log.php:11
 msgid "Debug Log"
 msgstr "Journal de débogage"
 
-#: core.php:1675
+#: core.php:1683
 msgid "Excerpt for external forms"
 msgstr "Extrait pour des formes extérieures"
 
-#: core.php:1895
+#: core.php:1908
 msgctxt "Action Page"
 msgid "Action Pages"
 msgstr "Pages d'actions"
 
-#: core.php:1896
+#: core.php:1909
 msgctxt "Action Page"
 msgid "Action Page"
 msgstr "Page d'action"
 
-#: core.php:1897
+#: core.php:1910
 msgctxt "Action Page"
 msgid "Add New"
 msgstr "Ajouter nouveau"
 
-#: core.php:1898
+#: core.php:1911
 msgctxt "Action Page"
 msgid "Add New Action Page"
 msgstr "Ajouter une nouvelle page d'action"
 
-#: core.php:1899
+#: core.php:1912
 msgctxt "Action Page"
 msgid "Edit Action Page"
 msgstr "Modifier la page d'action"
 
-#: core.php:1900
+#: core.php:1913
 msgctxt "Action Page"
 msgid "New Action Page"
 msgstr "Nouvelle page d'action"
 
-#: core.php:1901
+#: core.php:1914
 msgctxt "Action Page"
 msgid "View Action Page"
 msgstr "Voir la page d'action"
 
-#: core.php:1902
+#: core.php:1915
 msgctxt "Action Page"
 msgid "Search Action Pages"
 msgstr "Chercher les pages d'actions"
 
-#: core.php:1903
+#: core.php:1916
 msgid "Nothing found"
 msgstr "Rien est trouvé"
 
-#: core.php:1904
+#: core.php:1917
 msgid "Nothing found in the Trash"
 msgstr "Rien est trouvé dans la corbeille"
 
-#: core.php:2116 core.php:2174
+#: core.php:2129 core.php:2187
 msgid "Error: Email template not found"
 msgstr "Erreur: le modèle de message n'est pas trouvé"
 
-#: core.php:2133
+#: core.php:2146
 msgid "Error: Email not found"
 msgstr "Erreur: l'adresse email n'est pas trouvée"
 
-#: core.php:2227
+#: core.php:2240
 msgid "G-Lock WPNewsman"
 msgstr "G-Lock WPNewsman"
 
-#: core.php:2265
+#: core.php:2278
 msgid "G-Lock WPNewsman subscription summary"
 msgstr "Résumé d'abonnements de G-Lock WPNewsman"
 
-#: core.php:2266
+#: core.php:2279
 msgid "Manage Forms and Lists"
 msgstr "Gérer les formulaires et listes"
 
-#: core.php:2283 views/list.php:265
+#: core.php:2296 views/list.php:265
 msgid "List name"
 msgstr "Nom de la liste"
 
-#: core.php:2284
+#: core.php:2297
 msgid "Today confirmed"
 msgstr "Confirmés aujourd'hui"
 
-#: core.php:2285
+#: core.php:2298
 msgid "Yesterday confirmed"
 msgstr "Confirmés hier"
 
-#: core.php:2286
+#: core.php:2299
 msgid "Total confirmed"
 msgstr "Tous confirmés "
 
-#: core.php:2287
+#: core.php:2300
 msgid "Total unconfirmed"
 msgstr "Tous non confirmés "
 
-#: core.php:2288
+#: core.php:2301
 msgid "Total unsubscribed"
 msgstr "Tous désabonnés"
 
-#: core.php:2342
+#: core.php:2355
 msgid "Post Template"
 msgstr "Modèle d'article"
 
-#: core.php:2348
+#: core.php:2361
 msgid "Click here"
 msgstr "Cliquez ici"
 
-#: core.php:2351
+#: core.php:2364
 msgid ""
 "You can use this shortcode macro to add the unsubscribe link to your "
 "message:"
 msgstr "Vous pouvez utiliser ce code short pour ajouter le lien de désabonnement à votre message:"
 
-#: core.php:2355
+#: core.php:2368
 msgid ""
 "and these shortcode macros to add links to your social profiles (enter the "
 "URLs of your social profiles in the plugin Settings):"
 msgstr "et ces codes shorts pour ajouter les liens de vos profils sociaux (entrez les liens de vos profils sociaux dans les Paramètres du plugin):"
 
-#: core.php:2363
+#: core.php:2376
 msgid "%s for more shortcode macros supported by WPNewsman."
 msgstr "%s pour plus de codes shorts soutenus par WPNewsman."
 
-#: core.php:2564
+#: core.php:2577
 msgid "List: "
 msgstr "Liste:"
 
-#: core.php:2576
+#: core.php:2589
 msgid "Page Template"
 msgstr "Modèle de page"
 
-#: core.php:2578
+#: core.php:2591
 msgid "Default Template"
 msgstr "Modèle par défaut"
 
-#: export_list.php:26
+#: core.php:2666
 msgid "You are not authorized to access this resource."
 msgstr "Vous n'êtes pas autorisé à accéder à cette ressource."
 
-#: export_list.php:41
+#: core.php:2681
 msgid "Please, provide correct \"listId\" parameter."
 msgstr "S'il vous plaît, fournissez le paramètre \"listid\" correctement."
 
@@ -1139,8 +1139,8 @@ msgstr "Envoyer le rapport de bogue"
 
 #: views/_footer.php:19 views/addedit_email.php:87 views/addedit_email.php:101
 #: views/addedit_email.php:115 views/forms.php:55 views/forms.php:69
-#: views/mailbox-email.php:119 views/mailbox.php:90 views/mailbox.php:104
-#: views/mailbox.php:118 views/mailbox.php:133 views/mailbox.php:146
+#: views/mailbox-email.php:119 views/mailbox.php:91 views/mailbox.php:105
+#: views/mailbox.php:119 views/mailbox.php:134 views/mailbox.php:147
 #: views/options.php:225 views/subscribers.php:99 views/subscribers.php:115
 #: views/subscribers.php:131 views/subscribers.php:159
 #: views/subscribers.php:281 views/subscribers.php:301
@@ -1202,20 +1202,20 @@ msgid "Status"
 msgstr "Statut"
 
 #: views/addedit_email.php:81 views/addedit_email.php:95
-#: views/addedit_email.php:109 views/forms.php:63 views/mailbox.php:84
-#: views/mailbox.php:98 views/mailbox.php:112 views/options.php:219
+#: views/addedit_email.php:109 views/forms.php:63 views/mailbox.php:85
+#: views/mailbox.php:99 views/mailbox.php:113 views/options.php:219
 #: views/subscribers.php:92 views/subscribers.php:107
 #: views/subscribers.php:123 views/subscribers.php:153 views/templates.php:112
 #: views/templates.php:126 views/templates.php:142 views/templates.php:158
 msgid "Please, confirm..."
 msgstr "S'il vous plaît, confirmez..."
 
-#: views/addedit_email.php:84 views/mailbox.php:87 views/subscribers.php:95
+#: views/addedit_email.php:84 views/mailbox.php:88 views/subscribers.php:95
 #: views/templates.php:115
 msgid "Are you sure you want to unsubscribe selected people?"
 msgstr "Etes-vous sûrs de vouloir désabonner les personnes sélectionnées?"
 
-#: views/addedit_email.php:88 views/mailbox.php:91 views/subscribers.php:45
+#: views/addedit_email.php:88 views/mailbox.php:92 views/subscribers.php:45
 #: views/subscribers.php:100 views/subscribers.php:300 views/templates.php:119
 msgid "Unsubscribe"
 msgstr "Désabonner"
@@ -1224,12 +1224,12 @@ msgstr "Désabonner"
 msgid "Are you sure you want to delete selected subscribers?"
 msgstr "Etes-vous sûrs de vouloir supprimer les abonnés sélectionnées?"
 
-#: views/addedit_email.php:112 views/mailbox.php:115 views/subscribers.php:126
+#: views/addedit_email.php:112 views/mailbox.php:116 views/subscribers.php:126
 #: views/templates.php:161
 msgid "Are you sure you want to change status of selected subscribers to %s?"
 msgstr "Êtes-vous sûrs de vouloir changer le statut d'abonnés sélectionnés à %s?"
 
-#: views/addedit_email.php:116 views/mailbox.php:119 views/subscribers.php:132
+#: views/addedit_email.php:116 views/mailbox.php:120 views/subscribers.php:132
 #: views/templates.php:165
 msgid "Change"
 msgstr "Changer"
@@ -1520,12 +1520,12 @@ msgstr "Envoyer immédiatement"
 msgid "Schedule sending on"
 msgstr "Programmer l'envoi sur"
 
-#: views/mailbox-email.php:113 views/mailbox-email.php:158
+#: views/mailbox-email.php:113 views/mailbox-email.php:161
 #: views/subscribers.php:160
 msgid "Send"
 msgstr "Envoyer"
 
-#: views/mailbox-email.php:116 views/mailbox-email.php:144
+#: views/mailbox-email.php:116 views/mailbox-email.php:147
 msgid "Send test email"
 msgstr "Envoyer un message de test"
 
@@ -1545,15 +1545,28 @@ msgstr "Editer le modèle d'article"
 msgid "Edit Post Divider Template"
 msgstr "Editer le modèle séparateur d'articles "
 
-#: views/mailbox-email.php:149
+#: views/mailbox-email.php:127
+msgid "Publish this email"
+msgstr "Publier ce message"
+
+#: views/mailbox-email.php:128
+msgid ""
+"You can make the email to be accessible by other people on the web with <a "
+"href=\"%s\">this link</a>. Shortcodes for the subscriber's data do not work "
+"in the published email. It's a good idea to hide unsubscribe links with <a "
+"target=\"_blank\" href=\"http://wpnewsman.com/documentation/short-codes-for-"
+"email-messages/#conditional-pair-shortcodes\">conditional shortcodes</a>"
+msgstr "Vous pouvez faire le message être accessible par d'autres personnes sur le web avec <a href=\"%s\">ce lien</a>. Les codes shorts pour les données de l'abonné ne fonctionnent pas dans le message publié. C'est une bonne idée de cacher les liens de désabonnement avec <a target=\"_blank\" href=\"http://wpnewsman.com/documentation/short-codes-for-email-messages/#conditional-pair-shortcodes\">les codes shorts conditionnels</a>."
+
+#: views/mailbox-email.php:152
 msgid "Email address:"
 msgstr "Adresse email:"
 
-#: views/mailbox-email.php:155
+#: views/mailbox-email.php:158
 msgid "Sending email..."
 msgstr "Envoi du message en cours..."
 
-#: views/mailbox-email.php:157 views/subscribers.php:145
+#: views/mailbox-email.php:160 views/subscribers.php:145
 msgid "Cancel"
 msgstr "Annuler"
 
@@ -1577,19 +1590,24 @@ msgstr "Composer du message."
 msgid "Stop"
 msgstr "Stopper"
 
+#. translators: email property
 #: views/mailbox.php:67
+msgid "Public URL"
+msgstr "Lien publique"
+
+#: views/mailbox.php:68
 msgid "Status message"
 msgstr "Statut"
 
-#: views/mailbox.php:101
+#: views/mailbox.php:102
 msgid "Are you sure you want to delete selected emails?"
 msgstr "Êtes-vous sûrs de vouloir supprimer les messages sélectionnés?"
 
-#: views/mailbox.php:126
+#: views/mailbox.php:127
 msgid "Select template:"
 msgstr "Sélectionnez le modèle:"
 
-#: views/mailbox.php:140
+#: views/mailbox.php:141
 msgid "Sending log"
 msgstr "Registre d'envoi"
 
@@ -2126,13 +2144,17 @@ msgstr "Le formulaire d'abonnement multilingue de WPNewsman pour vos bulletins"
 msgid "WPNewsman Subscription Multilanguage Form"
 msgstr "Le formulaire d'abonnement multilingue de WPNewsman"
 
-#: workers/class.mailer.php:159
+#: workers/class.mailer.php:148
+msgid "Bad Email Address"
+msgstr "Adresse email invalide "
+
+#: workers/class.mailer.php:163
 msgid ""
 "Too many consecutive errors. Please check your mail delivery settings and "
 "make sure you can send a test email. Last SMTP error: "
 msgstr "Trop d'erreurs consécutives. S'il vous plaît, vérifiez vos paramètres d'envoi et assurez-vous que vous pouvez envoyer un message de test avec succès. La dernière erreur SMTP:"
 
-#: workers/class.mailer.php:183
+#: workers/class.mailer.php:187
 msgid "No \"confirmed\" subscribers found in the selected list(s)."
 msgstr "Les abonnés \"confirmés\" ne sont pas trouvés dans les listes selectionnées."
 

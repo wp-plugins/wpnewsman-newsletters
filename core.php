@@ -348,6 +348,12 @@ class newsman {
 
 		//newsmanShortCode
 
+		if ( isset($fn) ) {
+			$fn_args = ( isset($args) ) ? explode(',', $args) : array();
+			var_dump($fn);
+			return call_user_func_array($fn, $fn_args);
+		}
+
 		if ( isset($profileurl) ) {
 			switch ( $profileurl ) {
 				case 'twitter':
@@ -581,31 +587,31 @@ class newsman {
 		if ( isset($_REQUEST['newsman']) && in_array($_REQUEST['newsman'], $this->linkTypes) ) {
 			$type = $_REQUEST['newsman'];
 
-			if ( strpos($_REQUEST['code'], ':') === false ) {
-				wp_die( __('Wrong "code" parameter format', NEWSMAN) );
+			if ( strpos($_REQUEST['code'], ':') !== false ) {
+
+				$uArr = explode(':', $_REQUEST['code']);
+
+				if ( $uArr[0] == '' || $uArr[1] == '' ) {
+					wp_die( __('Your link seems to be broken.', NEWSMAN) );
+				}
+
+				$list = newsmanList::findOne('uid = %s', array($uArr[0]));
+
+				if ( !$list ) {
+					wp_die( sprintf( __('List with the unique code "%s" is not found', NEWSMAN), $uArr[0]) );
+				}
+
+				$s = $list->findSubscriber("ucode = %s", $uArr[1]);
+
+				if ( !$s ) {
+					wp_die(  sprintf( __('Subscriber with the unique code "%s" is not found', NEWSMAN), $uArr[1]) );
+				}
+
+				$newsman_current_ucode = $_REQUEST['code'];
+				$newsman_current_list = $list;
+				$newsman_current_subscriber = $s->toJSON();
+
 			}	
-
-			$uArr = explode(':', $_REQUEST['code']);
-
-			if ( $uArr[0] == '' || $uArr[1] == '' ) {
-				wp_die( __('Your link seems to be broken.', NEWSMAN) );
-			}
-
-			$list = newsmanList::findOne('uid = %s', array($uArr[0]));
-
-			if ( !$list ) {
-				wp_die( sprintf( __('List with the unique code "%s" is not found', NEWSMAN), $uArr[0]) );
-			}
-
-			$s = $list->findSubscriber("ucode = %s", $uArr[1]);
-
-			if ( !$s ) {
-				wp_die(  sprintf( __('Subscriber with the unique code "%s" is not found', NEWSMAN), $uArr[1]) );
-			}
-
-			$newsman_current_ucode = $_REQUEST['code'];
-			$newsman_current_list = $list;
-			$newsman_current_subscriber = $s->toJSON();
 
 			$use_excerpts = isset($_REQUEST['extForm']);
 
@@ -631,7 +637,7 @@ class newsman {
 						}						
 					}
 					break;					
-				case 'resend-confirmation':					
+				case 'resend-confirmation':
 					$this->sendEmail($list->id, NEWSMAN_ET_CONFIRMATION);
 
 					if ( $use_excerpts ) {
@@ -1169,6 +1175,8 @@ class newsman {
 						'nOFNAuthorsSelected' => __('# of # authors selected', NEWSMAN),
 						'save' => __('Save', NEWSMAN),
 						'savedAt' => __('Saved at', NEWSMAN),
+
+						'viewInBrowser' => __('View in browser', NEWSMAN),
 
 						'pleaseFillAllTheRequiredFields' => __('Please fill all the required fields.', NEWSMAN),
 						'pleaseCheckYourEmailAddress' => __('Please check your email address.', NEWSMAN),
@@ -1730,7 +1738,7 @@ class newsman {
 		$lists = newsmanList::findAll();
 
 		foreach ($lists as $list) {			
-			newsmanStorable::$table = preg_replace('/^'.preg_quote($wpdb->prefix).'/i', '', $list->tblSubscribers);
+			newsmanStorable::$table = preg_replace('/^'.$this->utils->preg_quote($wpdb->prefix).'/i', '', $list->tblSubscribers);
 			newsmanStorable::$props = array(
 				'id' => 'autoinc',
 				'ts' => 'datetime',
@@ -1887,6 +1895,11 @@ class newsman {
 			} else {
 				wp_die("Email with id $id is not found.");
 			}
+		}
+
+		if ( $page == 'newsman-forms' && $action == 'export_newsman_list' ) {
+			$this->export_newsman_list();
+			exit();
 		}
 
 		// Action Pages
@@ -2646,7 +2659,42 @@ class newsman {
 				$offset += $limit;
 			}
 		}
-	}	
+	}
+
+	function export_newsman_list() {
+		if ( !current_user_can('newsman_wpNewsman') ) {
+			wp_die( __('You are not authorized to access this resource.', NEWSMAN) , 'Not authorized', array( 'response' => 401 ));
+		}
+
+		$listId = intval($_GET['listId']);
+
+		if ( isset($_GET['type']) ) {
+			$type = strtolower($_GET['type']);
+			if ( !in_array($type, array('all', 'confirmed', 'unconfirmed', 'unsubscribed')) ) {
+				$type = 'all';
+			}
+		} else {
+			$type = 'all';
+		}
+
+		if ( !$listId ) {
+			wp_die( __('Please, provide correct "listId" parameter.', NEWSMAN) , 'Bad request', array( 'response' => 400 ));
+		}
+
+		$list = newsmanList::findOne('id = %d', array($listId));
+		if ( !$list ) {
+			wp_die( sprintf( __( 'List with id "%s" is not found.', NEWSMAN), $listId) , 'Not found', array( 'response' => 404 ));
+		}		
+
+		$u = newsmanUtils::getInstance();
+
+		$fileName = date("Y-m-d").'-'.$list->name;
+		$fileName = $u->sanitizeFileName($fileName).'.csv';
+
+
+		$list->exportToCSV($fileName, $type);
+	}
+
 
 	/*		DEBUG 		*/
 

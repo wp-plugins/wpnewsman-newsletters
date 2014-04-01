@@ -2000,7 +2000,7 @@ jQuery(function($){
 		});
 
 		$('#newsman-btn-export').click(function(){
-			window.location = NEWSMAN_PLUGIN_URL+'/export_list.php?listId=' + ($('#newsman-lists').val() || '1')+'&type='+pageState.show;
+			window.location = NEWSMAN_BLOG_ADMIN_URL+'admin.php?page=newsman-forms&action=export_newsman_list&listId=' + ($('#newsman-lists').val() || '1')+'&type='+pageState.show;
 		});
 
 		$('#newsman-btn-import').click(function(){
@@ -3027,11 +3027,11 @@ jQuery(function($){
 
 				// showLoading
 				var tbody = $('#newsman-mgr-subscribers tbody').empty();
-				$('<tr><td colspan="6" class="blank-row"><img src="'+NEWSMAN_PLUGIN_URL+'/img/ajax-loader.gif"> '+newsmanL10n.loading+'</td></tr>').appendTo(tbody);
+				$('<tr><td colspan="7" class="blank-row"><img src="'+NEWSMAN_PLUGIN_URL+'/img/ajax-loader.gif"> '+newsmanL10n.loading+'</td></tr>').appendTo(tbody);
 
 				function noData() {
 					var tbody = $('#newsman-mailbox tbody').empty();
-					$('<tr><td colspan="6" class="blank-row">'+newsmanL10n.youHaveNoEmailsYet+'</td></tr>').appendTo(tbody);
+					$('<tr><td colspan="7" class="blank-row">'+newsmanL10n.youHaveNoEmailsYet+'</td></tr>').appendTo(tbody);
 				}
 
 				function fieldsToHTML(obj) {
@@ -3090,6 +3090,7 @@ jQuery(function($){
 									'<td>'+formatTo(r.to)+'</td>',
 									'<td>'+formatTS(r.created)+'</td>',
 									'<td id="newsman-eml-'+r.id+'-status"></td>',
+									'<td><a href="'+r.publicURL+'">'+newsmanL10n.viewInBrowser+'</a></td>',
 									'<td id="newsman-eml-'+r.id+'-msg">'+formatMsg(r)+'</td>',
 								'</tr>'].join('')).appendTo(tbody);
 

@@ -4,7 +4,7 @@ Donate Link: http://wpnewsman.com/premium-newsletter-plugin-wordpress/
 Tags: wpnewsman, newsletter, newsletters, newsletter signup, newsletter widget, subscribers, post notification, email subscription, email marketing, email, emailing, subscription
 Requires at least: 3.5
 Tested up to: 3.9
-Stable tag: 1.6.6
+Stable tag: 1.6.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -59,7 +59,7 @@ Translations are included in the plugin:
 * German (Germany) (completed)
 * Polish (99%)
 * Italian (Italy) (50%)
-* Spanish (86%)
+* Spanish (99%)
 * Portuguese (Brazil) (6%)
 * Hungarian (Hungary) (26%)
 
@@ -122,6 +122,14 @@ We got a User Feedback page where you can [add or vote for new features](http://
 3. Subscriber management.
 
 == Changelog ==
+
+= 1.6.7 =
+* Fixed handling of shortcodes pointing to deleted forms.
+* Fixed export to CSV bug occurred on some WordPress installations.
+* Added email publishing feature.
+* Added Spanish translation
+* Fixed antispam beacon encoding which affected the work of bounce-handler
+* Added [newsman fn=] shortcode. For example, output the post author name - [newsman fn='the_author']
 
 = 1.6.6 =
 * Fixed: after saving and sending emails and email templates &nbsp; html entity was converted to question mark("?")

@@ -61,9 +61,10 @@
 					<tr>
 						<th scope="col" class="check-column"><input id="newsman-checkall" type="checkbox"></th>
 						<th style="width: 300px;" scope="col"><?php /* translators: email property */ _e('Subject', NEWSMAN); ?></th>
-						<th style="width: 200px;" scope="col"><?php /* translators: email property */ _e('To', NEWSMAN); ?></th>
+						<th style="width: 150px;" scope="col"><?php /* translators: email property */ _e('To', NEWSMAN); ?></th>
 						<th style="width: 130px;" scope="col"><?php /* translators: email property */ _e('Created', NEWSMAN); ?></th>
 						<th style="width: 100px;" scope="col"><?php /* translators: email property */ _e('Status', NEWSMAN); ?></th>
+						<th style="width: 100px;"><?php /* translators: email property */ _e('Public URL', NEWSMAN); ?></th>
 						<th scope="col"><?php _e('Status message', NEWSMAN); ?></th>
 					</tr>
 				</thead>

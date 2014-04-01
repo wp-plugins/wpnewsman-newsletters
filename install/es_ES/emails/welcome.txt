@@ -1,0 +1,53 @@
+Bienvenida de [newsman me="name"]
+--- plain ---
+Hola,
+
+Gracias por su suscripción. Ahora está suscrito a mi boletín de noticias, y obtendrá grandes consejos, trucos y estrategias unas cuantas veces al mes. ¡Espero que obtenga algún valor de él! ¡Es el lugar donde todas mis mejores publicaciones van!
+
+Nosotros no compartiremos su dirección de correo electrónico con terceros, y mantendremos su información personal privada y segura.
+
+Para asegurarse de recibir futuros grandes consejos, trucos y ofertas de sólo suscriptores, por favor añada [newsman me = "email"] a su libreta de direcciones de correo electrónico o de la lista de remitentes seguros.
+
+Sinceramente,
+[newsman me="name"]
+[newsman me="email"]
+[newsman wp="url"]
+--
+Usted está recibiendo este email porque se suscribió a nuestro boletín de noticias en [newsman sub="ts"] en [newsman wp="url"].
+
+Puede darse de baja usando el enlace de abajo:[newsman link="unsubscribe"]
+--- html ---
+<p>Hola,</p>
+<p>Gracias por su suscripción. Ahora está registrado a mi boletín de noticias y obtendrá grandes consejos, trucos y estrategias unas cuantas veces al mes. ¡Espero que obtenga algún valor de él! ¡Es el lugar donde todas mis mejores publicaciones van!<p>Nosotros no compartiremos su dirección de correo electrónico con terceros, y mantendremos su información personal privada y segura.</p>
+<p>Para asegurarse de recibir futuros grandes consejos, trucos y ofertas de sólo suscriptores, por favor añada [newsman me = "email"] a su libreta de direcciones de correo electrónico o de la lista de remitentes seguros</p>
+<p>&nbsp;</p>
+<p>Sinceramente,<br>
+[newsman me="name"]<br>
+[newsman me="email"]<br>
+<a href="[newsman wp='url']">[newsman wp="url"]</a></p>
+<p>&nbsp;<p>
+<table bgcolor="#eeeeee" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #eeeeee; background-position: top; background-repeat: repeat-x; border-top-color: #dddddd; border-top-style: solid; border-top-width: 2px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px;"> 
+ <tbody> 
+	<tr> 
+	 <td colspan="4" style="height: 28px; white-space : nowrap;">&nbsp;</td> 
+	</tr> 
+	<tr> 
+	 <td style="width: 25px;"></td> 
+	 <td width="10"></td> 
+	 <td style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 11px; line-height: 17px; color: #777; text-shadow: 0 1px 0 #ffffff;"> 
+		<div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 11px; line-height: 17px; color: #666; text-shadow: 0 1px 0 #ffffff;">
+			Usted está recibiendo este email porque se suscribió a nuestro boletín de noticias en [newsman sub="ts"] en <a href="[newsman wp='url']" style="border: none; color: #0084b4; text-decoration: none;">[newsman wp="blogname"]</a> desde IP: [newsman sub="ip"]
+		</div> 
+		<div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 11px; line-height: 17px; color: #666; text-shadow: 0 1px 0 #ffffff;">
+		 Puede darse de baja usando el enlace de abajo: 
+		 <a href="[newsman link='unsubscribe']" style="border: none; color: #0084b4; text-decoration: none;">darse de baja aquí</a>.</div> 
+		<div>
+		 <a href="#" style="border: none; color: #0084b4; text-decoration: none; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; text-decoration: none; font-size: 11px; line-height: 17px; color: #999999; text-shadow: 0 1px 0 #ffffff;">Derechos de autor (C) [newsman wp="blogname"]. <span style="white-space: nowrap;">Todos los derechos reservados.</span></a>
+		</div> </td> 
+	 <td style="width: 75px;"></td> 
+	</tr> 
+	<tr> 
+	 <td colspan="3" height="25"></td> 
+	</tr> 
+ </tbody> 
+</table>

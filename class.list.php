@@ -116,6 +116,8 @@ class newsmanList extends newsmanStorable {
 	public function getStats($q = false, $ext = false) {
 		global $wpdb;
 
+		$u = newsmanUtils::getInstance();
+
 		$stats = array();
 		$stats['confirmed'] = 0;
 		$stats['unconfirmed'] = 0;
@@ -123,7 +125,7 @@ class newsmanList extends newsmanStorable {
 		$stats['all'] = 0;		
 
 		if ( $q ) {
-			$sql = $wpdb->prepare("SELECT COUNT(id) as cnt, status FROM $this->tblSubscribers WHERE email regexp %s group BY status", preg_quote($q));
+			$sql = $wpdb->prepare("SELECT COUNT(id) as cnt, status FROM $this->tblSubscribers WHERE email regexp %s group BY status", $u->preg_quote($q));
 		} else {
 			$sql = "SELECT COUNT(id) as cnt, status FROM $this->tblSubscribers group BY status";
 		}		
@@ -334,6 +336,8 @@ class newsmanList extends newsmanStorable {
 	public function getSubscribers($offset = 0, $limit = 100, $type = 'all', $q = false) {
 		global $wpdb;
 
+		$u = newsmanUtils::getInstance();
+
 		$sel = '';
 
 		if ( $type !== 'all' ) {
@@ -359,7 +363,7 @@ class newsmanList extends newsmanStorable {
 		if ( $q ) {
 			$word = empty($sel) ? ' WHERE' : ' AND';
 			$sel .= $word.' email regexp %s';
-			$sel = $wpdb->prepare($sel, preg_quote($q));
+			$sel = $wpdb->prepare($sel, $u->preg_quote($q));
 		}
 
 		$sql = "SELECT * FROM $this->tblSubscribers ".$sel." ORDER BY `ts` DESC LIMIT %d, %d";

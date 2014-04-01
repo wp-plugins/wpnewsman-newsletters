@@ -31,7 +31,7 @@ class newsmanMailMan {
 	}
 
 	// shoud be run	by WP every minute
-	// check if workers alive
+	// checks if workers are still alive
 	public function pokeWorkers() {
 		$emails = newsmanEmail::findAll('status = %s', array('inprogress'));
 

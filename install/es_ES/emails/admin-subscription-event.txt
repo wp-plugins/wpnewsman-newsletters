@@ -1,0 +1,11 @@
+Un contacto se ha unido a su lista de correo a  [newsman wp="blogname"]
+--- plain ---
+Un contacto se ha unido a su lista de correo. Los detalles del contacto son los siguientes:
+
+[newsman sub="*"]
+--[newsman wp="url"]/wp-admin/ -> WPNewsman -> Configuración
+--- html ---
+<p> Un contacto se ha unido a su lista de correo. Los detalles del contacto son los siguientes:</p>
+<ul>[newsman sub="*" tag="li"]</ul>
+<p>--</p>
+<p><a href="[newsman wp='url']/wp-admin/">[newsman wp="url"]/wp-admin/</a> -> WPNewsman -> Configuración</p>

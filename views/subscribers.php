@@ -166,7 +166,7 @@
 			<button class="close" data-dismiss="modal">×</button>
 			<h3>Import subscribers into <span id="import-list-name"></span><?php _e(' list:', NEWSMAN); ?></h3>
 		</div>
-		<div class="modal-body" style="height: 330px;">	
+		<div class="modal-body" style="height: 337px;">	
 			<div class="row-fluid" id="import-form-titles">
 				<div class="span3">
 					<h4><?php _e('Uploaded files', NEWSMAN); ?></h4>					
@@ -190,7 +190,7 @@
 								<div class="span3">
 									<label class="checkbox"><input id="skip-first-row" type="checkbox"><?php _e(' Skip first row', NEWSMAN); ?></label>
 								</div>
-								<div class="span5 status-radio">
+								<div class="span6 status-radio">
 									<span>Status: <label for="st-confirmed" class="radio"><input id="st-confirmed" type="radio" name="apply-status" value="confirmed" checked="checked"> Confirmed</label>  <label for="st-unconfirmed" class="radio"><input id="st-unconfirmed" type="radio" name="apply-status" value="unconfirmed"> Unconfirmed</label></span>
 								</div>
 							</div>

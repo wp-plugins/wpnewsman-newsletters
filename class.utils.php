@@ -454,10 +454,14 @@ class newsmanUtils {
 		if ( is_array($vars) ) {
 			foreach($vars as $key => $value) {
 				// replace singe variables 
-				$tmpstr = preg_replace('/\$'.preg_quote($key).'/si', $value,$tmpstr);
+				$tmpstr = preg_replace('/\$'.$this->preg_quote($key).'/si', $value,$tmpstr);
 			}			
 		}
 		return $tmpstr;
+	}
+
+	public function preg_quote($str, $delim = '/') {
+		return str_replace($delim, '\\'.$delim, preg_quote($str));
 	}
 
 	// just the excerpt
@@ -505,7 +509,7 @@ class newsmanUtils {
 	}	
 
 	function changeSectionType($html, $section, $newtype) {
-		$res = preg_match('/<(\w+)[^>]*?gsedit="'.preg_quote($section).'"[^>]*?>/i', $html, $matches, PREG_OFFSET_CAPTURE);
+		$res = preg_match('/<(\w+)[^>]*?gsedit="'.$this->preg_quote($section).'"[^>]*?>/i', $html, $matches, PREG_OFFSET_CAPTURE);
 
 		if ( $res && !empty($matches) ) {
 			// firstChart offset  +  matched str length'
@@ -586,7 +590,7 @@ class newsmanUtils {
 	}
 
 	function replaceSectionContent($html, $section, $newContent, $sectionKey = 'gsedit') {
-		$res = preg_match('/<(\w+)[^>]*?'.preg_quote($sectionKey).'="'.preg_quote($section).'"[^>]*?>/i', $html, $matches, PREG_OFFSET_CAPTURE);
+		$res = preg_match('/<(\w+)[^>]*?'.$this->preg_quote($sectionKey).'="'.$this->preg_quote($section).'"[^>]*?>/i', $html, $matches, PREG_OFFSET_CAPTURE);
 
 
 
@@ -640,7 +644,7 @@ class newsmanUtils {
 	}
 
 	public function getSectionContent($html, $key, $value) {
-		$res = preg_match('/<(\w+)[^>]*?'.preg_quote($key).'="'.preg_quote($value).'"[^>]*?>/i', $html, $matches, PREG_OFFSET_CAPTURE);
+		$res = preg_match('/<(\w+)[^>]*?'.$this->preg_quote($key).'="'.$this->preg_quote($value).'"[^>]*?>/i', $html, $matches, PREG_OFFSET_CAPTURE);
 
 		if ( $res && !empty($matches) ) {
 			// firstChart offset  +  matched str length'
@@ -1174,16 +1178,23 @@ class newsmanUtils {
 
 	function encEmail($email) {
 		$o = newsmanOptions::getInstance();
-		return strtr(base64_encode($email), $this->base64Map, $o->get('base64TrMap'));
+		return strtr( $this->base64EncodeU($email), $this->base64Map, $o->get('base64TrMap'));
 	}
 
 	function decEmail($enc_email) {
 		$o = newsmanOptions::getInstance();
-		return base64_decode(strtr($enc_email, $o->get('base64TrMap'), $this->base64Map));
+		$baseString = strtr($enc_email, $o->get('base64TrMap'), $this->base64Map);
+		// proper email encoding landed in 1.6.7 version
+		// TODO: remove normal base64 check and fix in class.bounced.php in few version
+		$isNormalBase64 = preg_match('#[\+\/]+#', $baseString);
+
+		return $isNormalBase64 ? base64_decode($baseString) : $this->base64DecodeU($baseString);
 	}	
 
-	function unsubscribeFromLists($email, $statusStr) {
-		$email = $this->extractEmail($email);
+	function unsubscribeFromLists($email, $statusStr, $raw = false) {
+		if ( !$raw ) {
+			$email = $this->extractEmail($email);	
+		}		
 		$lists = newsmanList::findAll();
 		$opts = '';
 		foreach ($lists as $lst) {

@@ -33,6 +33,7 @@ CKEDITOR.editorConfig = function( config ) {
 
 	config.entities = true; // true - use encoded entities in HTML output
 	config.basicEntities = false; // encode basic entities like ", ', etc.
+	config.entities_additional = '';
 	// config.entities_latin = false;
 
 	config.resize_enabled = true;

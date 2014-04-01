@@ -1,0 +1,35 @@
+[newsman wp="blogname"]: Por favor, confirme su email
+--- plain ---
+Hola,
+
+¡Le va a encantar [newsman wp="blogname"]! Antes de empezar a enviarle la información que solicitó, queremos estar seguros que tenemos su permiso. 
+
+Haga clic en el enlace de abapo para darnos permiso de enviarle información. ¡Es fácil y rápido! Si no puede hacer clic en la URL de abajo, por favor copie la URL y péguela en su navegador.
+
+CONFIRME HACIENDO CLIC EN ESTA URL:
+
+[newsman link="confirmation"]
+
+Si no se desea suscribir, simplemente ignore este mensaje.
+
+Saludos Cordiales,
+[newsman wp="blogname"]
+--
+Petición generada por:
+IP: [newsman sub="ip"]
+Date: [newsman sub="ts"]
+URL: [newsman wp="url"]
+--- html ---
+<p>Hola,</p>
+<p>¡Le va a encantar [newsman wp="blogname"]! Antes de empezar a enviarle la información que solicitó, queremos estar seguros que tenemos su permiso.</p>
+<p>Haga clic en el enlace de abapo para darnos permiso de enviarle información. ¡Es fácil y rápido! Si no puede hacer clic en la URL de abajo, por favor copie la URL y péguela en su navegador.</p>
+<p> CONFIRME HACIENDO CLIC EN ESTA URL:</p>
+<p><a href="[newsman link='confirmation']">[newsman link="confirmation"]</a></p>
+<p>Si no se desea suscribir, simplemente ignore este mensaje.</p>
+<p>&nbsp;</p>
+<p>Saludos Cordiales,<br>
+	[newsman wp="blogname"]<br>
+	<a href="[newsman wp='url']">[newsman wp="url"]</a></p>
+<p style="font-size: x-small">
+   Petición generada por:<br>
+   IP:&nbsp;[newsman sub="ip"], date:&nbsp;[newsman sub="ts"]</p>

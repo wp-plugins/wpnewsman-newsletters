@@ -123,7 +123,10 @@
 					<p><button id="btn-edit-post-tpl" class="btn"><?php _e('Edit Post Template', NEWSMAN); ?></button></p>
 					<p><button id="btn-edit-divider-tpl" class="btn"><?php _e('Edit Post Divider Template', NEWSMAN); ?></button></p>
 				</div>
-								
+
+				<h4 style="margin: 1.5em 0 1em;"><?php _e('Publish this email', NEWSMAN); ?></h4>				
+				<p><?php printf(__('You can make the email to be accessible by other people on the web with <a href="%s">this link</a>. Shortcodes for the subscriber\'s data do not work in the published email. It\'s a good idea to hide unsubscribe links with <a target="_blank" href="http://wpnewsman.com/documentation/short-codes-for-email-messages/#conditional-pair-shortcodes">conditional shortcodes</a>', NEWSMAN), (NEWSMAN_EDIT_ENTITY === 'email') ? $ent->getPublishURL() : '#error' ); ?>.</p>
+
 				<h4 style="margin: 1.5em 0 1em;">wpNewsman Shortcodes <a href="http://codex.wordpress.org/Shortcode_API"><i class="icon-question-sign"></i></a></h4>
 				<?php $g = newsman::getInstance(); $g->putApShortcodesMetabox(); ?>
 			</div>
