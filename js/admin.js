@@ -3299,6 +3299,26 @@ jQuery(function($){
 				listId: null
 			};
 
+			$(document).on('click', 'a.restore-tpl', function(e){
+				e.preventDefault();
+				e.stopPropagation();
+
+				if ( !confirm(newsmanL10n.areYouSureYouWantToRestoreStockTemplate) ) {
+					return;
+				}
+
+				$.ajax({
+					type: 'POST',
+					url: ajaxurl,
+					data: {
+						action: 'newsmanAjReinstallStockTemplate',
+						name: $(this).attr('tpl-name')
+					}
+				}).done(function(data){
+					getTemplates();
+				}).fail(NEWSMAN.ajaxFailHandler);
+			});
+
 			function newTemplate(name, type) {
 				var q = {
 					action: 'newsmanAjCreateEmailTemplate',
@@ -3688,12 +3708,20 @@ jQuery(function($){
 
 					var assignedListLbl = ( r.assigned_list > 0 && r.assigned_list_name ) ? '<span class="label label-info">'+r.assigned_list_name+'</span>' : '';
 
+					var stock = ['digest', 'basic'];
+
+					var reinstall = '';
+					if ( stock.indexOf(r.name) >= 0 ) {
+						reinstall = ' | <a class="restore-tpl" tpl-name="'+r.name+'" href="#restore">'+newsmanL10n.sRestore+'</a>';
+					}
+					
+
 					var row = $(['<tr>',
 							'<td><input value="'+r.id+'" type="checkbox"'+(r.system ? ' disabled="disabled"' : '')+'></td>',
 							'<td>',
 								'<a href="'+editURL+'" class="newsman-template-name">'+icon+' '+r.name+'</a>',
 								assignedListLbl,
-								!r.system ? '<div class="newsman-inline-controls"><a class="newsman-duplicate-tpl" href="#">'+newsmanL10n.copy+'</a> | <a href="'+editURL+'">'+newsmanL10n.sEdit+'</a> | <a class="newsman-delete-tpl" href="#">'+newsmanL10n.sDelete+'</a> | <a href="'+NEWSMAN_BLOG_ADMIN_URL+'admin.php?page=newsman-templates&action=download&id='+r.id+'">'+newsmanL10n.sExport+'</a></div>':'',
+								!r.system ? '<div class="newsman-inline-controls"><a class="newsman-duplicate-tpl" href="#">'+newsmanL10n.copy+'</a> | <a href="'+editURL+'">'+newsmanL10n.sEdit+'</a> | <a class="newsman-delete-tpl" href="#">'+newsmanL10n.sDelete+'</a> | <a href="'+NEWSMAN_BLOG_ADMIN_URL+'admin.php?page=newsman-templates&action=download&id='+r.id+'">'+newsmanL10n.sExport+'</a>'+reinstall+'</div>':'',
 							'</td>',
 						'</tr>'].join(''))[ prepend ? 'prependTo' : 'appendTo' ](tbody);
 

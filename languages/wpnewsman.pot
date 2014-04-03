@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the G-Lock WPNewsman Lite package.
 msgid ""
 msgstr ""
-"Project-Id-Version: G-Lock WPNewsman Lite 1.6.7-beta-4\n"
+"Project-Id-Version: G-Lock WPNewsman Lite 1.6.8\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/wpnewsman\n"
-"POT-Creation-Date: 2014-03-31 12:57:00+00:00\n"
+"POT-Creation-Date: 2014-04-03 11:52:37+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -58,7 +58,7 @@ msgid "Cannot edit template. Template with id \"%s\" cannot be written."
 msgstr ""
 
 #: ajaxbackend.php:143 ajaxbackend.php:1308 api.php:107 api.php:181
-#: core.php:2686
+#: core.php:2688
 msgid "List with id \"%s\" is not found."
 msgstr ""
 
@@ -208,7 +208,7 @@ msgid "Wrong \"type\" parameter. Must be \"csv\" or \"template\""
 msgstr ""
 
 #: ajaxbackend.php:2157 ajaxbackend.php:2175 ajaxbackend.php:2180
-#: ajaxbackend.php:2185
+#: ajaxbackend.php:2185 ajaxbackend.php:2191
 msgid "Success"
 msgstr ""
 
@@ -290,47 +290,47 @@ msgstr ""
 msgid "Please confirm your unsubscribe decision"
 msgstr ""
 
-#: class.utils.php:802
+#: class.utils.php:805
 msgid "Add new..."
 msgstr ""
 
-#: class.utils.php:981 class.utils.php:1032 core.php:1547 core.php:1560
+#: class.utils.php:984 class.utils.php:1035 core.php:1549 core.php:1562
 msgid "Enter Subject Here"
 msgstr ""
 
-#: class.utils.php:1152 core.php:1164 core.php:1877
+#: class.utils.php:1176 core.php:1164 core.php:1879
 msgid "Copy"
 msgstr ""
 
-#: class.utils.php:1466
+#: class.utils.php:1490
 msgid "Administrator notification - new subscriber"
 msgstr ""
 
-#: class.utils.php:1471
+#: class.utils.php:1495
 msgid "Administrator notification - user unsubscribed"
 msgstr ""
 
-#: class.utils.php:1476
+#: class.utils.php:1500
 msgid "Subscription confirmation"
 msgstr ""
 
-#: class.utils.php:1481
+#: class.utils.php:1505
 msgid "Unsubscribe notification"
 msgstr ""
 
-#: class.utils.php:1486
+#: class.utils.php:1510
 msgid "Welcome letter, thanks for subscribing"
 msgstr ""
 
-#: class.utils.php:1491 migration.php:213
+#: class.utils.php:1515 migration.php:213
 msgid "Unsubscribe confirmation"
 msgstr ""
 
-#: class.utils.php:1496 migration.php:296
+#: class.utils.php:1520 migration.php:296
 msgid "Re-subscription confirmation"
 msgstr ""
 
-#: core.php:26 core.php:1968
+#: core.php:26 core.php:1970
 msgid "Every minute"
 msgstr ""
 
@@ -370,7 +370,7 @@ msgid ""
 "each message."
 msgstr ""
 
-#: core.php:258 core.php:1656
+#: core.php:258 core.php:1658
 msgid "Upgrade to Pro"
 msgstr ""
 
@@ -408,11 +408,11 @@ msgstr ""
 msgid "Email with unique code %s is not found."
 msgstr ""
 
-#: core.php:956 core.php:1181
+#: core.php:956 core.php:1182
 msgid "Please fill all the required fields."
 msgstr ""
 
-#: core.php:957 core.php:1182
+#: core.php:957 core.php:1183
 msgid "Please check your email address."
 msgstr ""
 
@@ -701,252 +701,260 @@ msgid "Export"
 msgstr ""
 
 #: core.php:1168
-msgid "Default System Templates"
+msgid "Restore"
 msgstr ""
 
 #: core.php:1169
-msgid "System Template. Cannot be deleted."
+msgid "Default System Templates"
 msgstr ""
 
 #: core.php:1170
-msgid "Insert Posts"
+msgid "System Template. Cannot be deleted."
 msgstr ""
 
 #: core.php:1171
-msgid "Post(s) selected: %d"
+msgid "Insert Posts"
 msgstr ""
 
 #: core.php:1172
-msgid "Select categories"
+msgid "Post(s) selected: %d"
 msgstr ""
 
 #: core.php:1173
-msgid "# of # categories selected"
+msgid "Select categories"
 msgstr ""
 
 #: core.php:1174
-msgid "Select author(s)"
+msgid "# of # categories selected"
 msgstr ""
 
 #: core.php:1175
+msgid "Select author(s)"
+msgstr ""
+
+#: core.php:1176
 msgid "# of # authors selected"
 msgstr ""
 
-#: core.php:1176 views/list.php:346
+#: core.php:1177 views/list.php:346
 msgid "Save"
 msgstr ""
 
-#: core.php:1177
+#: core.php:1178
 msgid "Saved at"
 msgstr ""
 
-#: core.php:1179
+#: core.php:1180
 msgid "View in browser"
 msgstr ""
 
 #: core.php:1184
-msgid "Subscribe notification email sent to the administrator."
-msgstr ""
-
-#: core.php:1185
-msgid "Unsubscribe notification email sent to the administrator."
+msgid "Are you sure you want to restore stock template?"
 msgstr ""
 
 #: core.php:1186
-msgid "Email with the confirmation link sent to the user upon subscription."
+msgid "Subscribe notification email sent to the administrator."
 msgstr ""
 
 #: core.php:1187
+msgid "Unsubscribe notification email sent to the administrator."
+msgstr ""
+
+#: core.php:1188
+msgid "Email with the confirmation link sent to the user upon subscription."
+msgstr ""
+
+#: core.php:1189
 msgid ""
 "Email sent to the user that confirms that his email address was unsubscribed."
 msgstr ""
 
-#: core.php:1188
+#: core.php:1190
 msgid "Welcome message sent after the subscriber confirms his subscription."
 msgstr ""
 
-#: core.php:1189
+#: core.php:1191
 msgid "Email with a link to confirm the subscriber’s decision to unsubscribe."
 msgstr ""
 
-#: core.php:1190
+#: core.php:1192
 msgid ""
 "Email with a link to re-confirm the subscription that is sent to ALL "
 "\"unconfirmed\" subscribers on the list."
 msgstr ""
 
-#: core.php:1295
+#: core.php:1297
 msgid "Cannot unsubscribe email. Subscriber with unique code %s is not found."
 msgstr ""
 
-#: core.php:1559
+#: core.php:1561
 msgid "Untitled templates"
 msgstr ""
 
-#: core.php:1570
+#: core.php:1572
 msgid "Alternative Plain Text Body"
 msgstr ""
 
-#: core.php:1588
+#: core.php:1590
 msgid "WPNewsman Lite"
 msgstr ""
 
-#: core.php:1601 core.php:1602 views/addedit_email.php:5 views/mailbox.php:9
+#: core.php:1603 core.php:1604 views/addedit_email.php:5 views/mailbox.php:9
 msgid "Mailbox"
 msgstr ""
 
-#: core.php:1619 core.php:1620 views/forms.php:5
+#: core.php:1621 core.php:1622 views/forms.php:5
 msgid "Lists and Forms"
 msgstr ""
 
-#: core.php:1628 core.php:1629 views/templates.php:5
+#: core.php:1630 core.php:1631 views/templates.php:5
 msgid "Email Templates"
 msgstr ""
 
-#: core.php:1637 core.php:1638 views/options.php:6
+#: core.php:1639 core.php:1640 views/options.php:6
 msgid "Settings"
 msgstr ""
 
-#: core.php:1647 core.php:1648 views/debug-log.php:11
+#: core.php:1649 core.php:1650 views/debug-log.php:11
 msgid "Debug Log"
 msgstr ""
 
-#: core.php:1683
+#: core.php:1685
 msgid "Excerpt for external forms"
-msgstr ""
-
-#: core.php:1908
-msgctxt "Action Page"
-msgid "Action Pages"
-msgstr ""
-
-#: core.php:1909
-msgctxt "Action Page"
-msgid "Action Page"
 msgstr ""
 
 #: core.php:1910
 msgctxt "Action Page"
-msgid "Add New"
+msgid "Action Pages"
 msgstr ""
 
 #: core.php:1911
 msgctxt "Action Page"
-msgid "Add New Action Page"
+msgid "Action Page"
 msgstr ""
 
 #: core.php:1912
 msgctxt "Action Page"
-msgid "Edit Action Page"
+msgid "Add New"
 msgstr ""
 
 #: core.php:1913
 msgctxt "Action Page"
-msgid "New Action Page"
+msgid "Add New Action Page"
 msgstr ""
 
 #: core.php:1914
 msgctxt "Action Page"
-msgid "View Action Page"
+msgid "Edit Action Page"
 msgstr ""
 
 #: core.php:1915
 msgctxt "Action Page"
-msgid "Search Action Pages"
+msgid "New Action Page"
 msgstr ""
 
 #: core.php:1916
-msgid "Nothing found"
+msgctxt "Action Page"
+msgid "View Action Page"
 msgstr ""
 
 #: core.php:1917
+msgctxt "Action Page"
+msgid "Search Action Pages"
+msgstr ""
+
+#: core.php:1918
+msgid "Nothing found"
+msgstr ""
+
+#: core.php:1919
 msgid "Nothing found in the Trash"
 msgstr ""
 
-#: core.php:2129 core.php:2187
+#: core.php:2131 core.php:2189
 msgid "Error: Email template not found"
 msgstr ""
 
-#: core.php:2146
+#: core.php:2148
 msgid "Error: Email not found"
 msgstr ""
 
-#: core.php:2240
+#: core.php:2242
 msgid "G-Lock WPNewsman"
 msgstr ""
 
-#: core.php:2278
+#: core.php:2280
 msgid "G-Lock WPNewsman subscription summary"
 msgstr ""
 
-#: core.php:2279
+#: core.php:2281
 msgid "Manage Forms and Lists"
 msgstr ""
 
-#: core.php:2296 views/list.php:265
+#: core.php:2298 views/list.php:265
 msgid "List name"
 msgstr ""
 
-#: core.php:2297
+#: core.php:2299
 msgid "Today confirmed"
 msgstr ""
 
-#: core.php:2298
+#: core.php:2300
 msgid "Yesterday confirmed"
 msgstr ""
 
-#: core.php:2299
+#: core.php:2301
 msgid "Total confirmed"
 msgstr ""
 
-#: core.php:2300
+#: core.php:2302
 msgid "Total unconfirmed"
 msgstr ""
 
-#: core.php:2301
+#: core.php:2303
 msgid "Total unsubscribed"
 msgstr ""
 
-#: core.php:2355
+#: core.php:2357
 msgid "Post Template"
 msgstr ""
 
-#: core.php:2361
+#: core.php:2363
 msgid "Click here"
 msgstr ""
 
-#: core.php:2364
+#: core.php:2366
 msgid ""
 "You can use this shortcode macro to add the unsubscribe link to your message:"
 msgstr ""
 
-#: core.php:2368
+#: core.php:2370
 msgid ""
 "and these shortcode macros to add links to your social profiles (enter the "
 "URLs of your social profiles in the plugin Settings):"
 msgstr ""
 
-#: core.php:2376
+#: core.php:2378
 msgid "%s for more shortcode macros supported by WPNewsman."
 msgstr ""
 
-#: core.php:2577
+#: core.php:2579
 msgid "List: "
 msgstr ""
 
-#: core.php:2589
+#: core.php:2591
 msgid "Page Template"
 msgstr ""
 
-#: core.php:2591
+#: core.php:2593
 msgid "Default Template"
 msgstr ""
 
-#: core.php:2666
+#: core.php:2668
 msgid "You are not authorized to access this resource."
 msgstr ""
 
-#: core.php:2681
+#: core.php:2683
 msgid "Please, provide correct \"listId\" parameter."
 msgstr ""
 

@@ -473,10 +473,13 @@ class newsmanUtils {
 		// \w[\w'-]* allows for any word character (a-zA-Z0-9_) and also contractions
 		// and hyphenated words like 'range-finder' or "it's"
 		// the /s flags means that . matches \n, so this can match multiple lines
-		$text = preg_replace("/^(\W*(\w[\w'-]*\b\W*){1,$number_of_words}).*/ms", '\\1', $text);
+		//$text = preg_replace("/^(\W*(\w[\w'-]*\b\W*){1,$number_of_words}).*/ms", '\\1', $text);
+		preg_match('/^([\S]+\s+){50}/m', $text, $matches);
+
+		return str_replace("\n", "", $matches[0]);
 
 		// strip out newline characters from our excerpt
-		return str_replace("\n", "", $text);
+		//return str_replace("\n", "", $text);
 	}
 
 	function fancyExcerpt($content, $maxLength = 350) {
@@ -1109,8 +1112,8 @@ class newsmanUtils {
 	public function installStockTemplates() {
 		$o = newsmanOptions::getInstance();
 
+		// this is just to not to accidentally reinstall templates
 		$basicTplId = $o->get('basicTemplate');
-
 		if ( $basicTplId ) { return; }
 
 		$dir = NEWSMAN_PLUGIN_PATH.DIRECTORY_SEPARATOR.'email-templates'.DIRECTORY_SEPARATOR;
@@ -1126,6 +1129,27 @@ class newsmanUtils {
 				}
 			}
 			closedir($handle);
+		}
+	}
+
+	/**
+	 * ReInstalles template bundled with the plugin
+	 */
+	public function reInstallStockTemplate($name) {
+		$o = newsmanOptions::getInstance();
+
+		$tpl = newsmanEmailTemplate::findOne('`name` = %s and `system` != 1', array( $name ) );
+
+		if ( $tpl ) {
+			$tpl->remove();
+		}
+
+		$dir = NEWSMAN_PLUGIN_PATH.DIRECTORY_SEPARATOR.'email-templates'.DIRECTORY_SEPARATOR;
+		$url = NEWSMAN_PLUGIN_URL.'/email-templates/';
+
+		$id = $this->registerTemplate($dir.$name, $url.$name);
+		if ( $name === 'basic' ) {
+			$o->set('basicTemplate', $id);
 		}
 	}
 

@@ -2185,5 +2185,11 @@
 			$this->respond(true, __('Success', NEWSMAN));
 		}
 
+		public function ajReinstallStockTemplate() {
+			$name = $this->param('name');
+			$this->u->reInstallStockTemplate($name);
+			$this->respond(true, __('Success', NEWSMAN));
+		}
+
 
 	}

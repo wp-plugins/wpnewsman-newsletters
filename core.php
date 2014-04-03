@@ -1165,6 +1165,7 @@ class newsman {
 						'sEdit' => __('Edit', NEWSMAN),
 						'sDelete' => __('Delete', NEWSMAN),
 						'sExport' => __('Export', NEWSMAN),
+						'sRestore' => __('Restore', NEWSMAN),
 						'defaultSystemTemplates' => __('Default System Templates', NEWSMAN),
 						'systemTemplateCannotBeDeleted' => __('System Template. Cannot be deleted.', NEWSMAN),
 						'insertPosts' => __('Insert Posts', NEWSMAN),
@@ -1180,6 +1181,7 @@ class newsman {
 
 						'pleaseFillAllTheRequiredFields' => __('Please fill all the required fields.', NEWSMAN),
 						'pleaseCheckYourEmailAddress' => __('Please check your email address.', NEWSMAN),
+						'areYouSureYouWantToRestoreStockTemplate' => __('Are you sure you want to restore stock template?', NEWSMAN),
 
 						'NEWSMAN_ET_ADMIN_SUB_NOTIFICATION' => __('Subscribe notification email sent to the administrator.', NEWSMAN),
 						'NEWSMAN_ET_ADMIN_UNSUB_NOTIFICATION' => __('Unsubscribe notification email sent to the administrator.', NEWSMAN),
@@ -1828,7 +1830,7 @@ class newsman {
 				$this->echoTemplate();
 			} elseif ( $action == 'download' ) {
 				$this->downloadTemplate();
-			}			
+			}
 		} elseif ( $page == 'newsman-mailbox' && $action == 'source' ) {
 			$this->echoEmail();
 		}
