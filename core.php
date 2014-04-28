@@ -211,7 +211,10 @@ class newsman {
 	}
 
 	public function mailman() {
-		$this->cleanOldUnconfirmed();
+		if ( $this->options->get('cleanUnconfirmed') ) {
+			$this->cleanOldUnconfirmed();
+		}
+
 		if ( !defined('NEWSMAN_DISABLE_WORKERS_CHECK') || !NEWSMAN_DISABLE_WORKERS_CHECK ) {
 			$this->mailman->pokeWorkers();
 		}		
@@ -456,7 +459,7 @@ class newsman {
 
 		if ( !empty($wp) ) {
 			switch ($wp) {
-				case 'blogname': return get_option('blogname');
+				case 'blogname': return html_entity_decode(get_option('blogname'), ENT_QUOTES);
 				case 'url': return $this->utils->addTrSlash( get_bloginfo('url') );
 				case 'wpurl': return $this->utils->addTrSlash( get_bloginfo('wpurl') );
 				case 'blogdescription': return get_option('blogdescription');
@@ -868,6 +871,7 @@ class newsman {
 		$tpl = newsmanEmailTemplate::findOne('`assigned_list` = %d AND `system_type` = %d', array($listId, $tplType));
 
 		if ( $tpl ) {
+
 			$email['subject'] = do_shortcode( $tpl->subject );
 			$email['html']    = do_shortcode( $tpl->p_html );
 			$email['plain']   = do_shortcode( $tpl->plain );
@@ -940,7 +944,7 @@ class newsman {
 
 		global $wp_version;
 
-		$isNew38Style = preg_match('/^3\.(\d+)/i', $wp_version, $matches) && intval($matches[1]) >= 8;
+		$isNew38Style = (intval(preg_replace('/[^\d]+/i', '', $wp_version)) >= 38);
 
 		$page   = isset($_REQUEST['page']) ? $_REQUEST['page'] : '';
 		$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';

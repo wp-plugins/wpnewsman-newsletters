@@ -4,7 +4,7 @@ Donate Link: http://wpnewsman.com/premium-newsletter-plugin-wordpress/
 Tags: wpnewsman, newsletter, newsletters, newsletter signup, newsletter widget, subscribers, post notification, email subscription, email marketing, email, emailing, subscription
 Requires at least: 3.5
 Tested up to: 3.9
-Stable tag: 1.6.8
+Stable tag: 1.6.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -14,13 +14,13 @@ Powerful, easy to use, and easy to customize subscription and newsletter plugin
 
 = WPNewsman is built to be extremely easy to use and to be very user friendly! =
 
-An email newsletter is one of the most convenient and easy ways to keep in touch with your clients and prospects. With WPNewsman you can easily convert your website visitors into newsletter subscribers through double optin subscription forms in widgets, articles and pages, import and manage your lists, create and send beautiful newsletters directly from your WordPress site.
+An email newsletter is one of the most convenient and easy ways to keep in touch with your clients and prospects. With WPNewsman you can easily convert your website visitors into newsletter subscribers through confirmed optin subscription forms in widgets, articles and pages, import and manage your lists, create and send beautiful newsletters directly from your WordPress site. It helps you build huge lists, take control of your email and make your business more profitable. You get a powerful yet easy to use and customize self-hosted newsletter platform for WordPress -- no-brainer alternative to restrictive email service providers with expensive monthly plans.
 
-Check it out! Download Right Now and Take Control of Your Email Campaigns. 
+Check it out! Download Right Now and Send EMails for FREE... 
 
 = WPNewsman Pro =
 
-*WPNewsman Pro* is a **significant upgrade** to *WPNewsman Lite* that allows you to embed forms on external sites, send newsletters to an unlimited number of subscribers, track the recipient's actions with Google Analytics or Piwik, and keep your mailing lists verified and clean. You get **complete freedom and lower cost** compared to Email Service Providers' rigid requirements. You can learn more about *WPNewsman Pro* here:
+*WPNewsman Pro* is a **significant upgrade** to *WPNewsman Lite* that allows you to embed forms on external sites, send newsletters to an unlimited number of subscribers, track the recipient's actions with Google Analytics or Piwik, and keep your mailing lists verified and clean. Unlike other autoresponder systems, you can just import your contacts and leads and get started. No messing around with re-confirmation of leads or facing an inquisition about how you built your list… You have FULL control of your email campaigns and are not relying on third party services that ultimately control your profit at their whim. You can learn more about *WPNewsman Pro* here:
 
 [Home](http://wpnewsman.com/ "Home") | [Review](http://wpnewsman.com/review-newsletter-plugin-wordpress/ "Review") | [Upgrade to WPNewsman Pro](http://wpnewsman.com/premium-newsletter-plugin-wordpress/ "Upgrade to WPNewsman Pro")
 
@@ -123,8 +123,13 @@ We got a User Feedback page where you can [add or vote for new features](http://
 
 == Changelog ==
 
+= 1.6.9 =
+
+* Fixed escaping of apostrophe/single quote mark in a blog title when using the [newsman wp="blogname"] shortcode.
+* Fixed removing of unconfirmed subscriber in 7 days despite the settings.
+
 = 1.6.8 =
-* Fixed fancy_excerpt for non-english characters.
+* Fixed fancy_excerpt mode for non-english characters.
 * Added restore option for bundled email templates: Digest and Basic.
 
 = 1.6.7 =
