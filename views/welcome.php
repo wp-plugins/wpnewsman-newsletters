@@ -3,7 +3,7 @@
 	<div class="newsman-welcome">
 		<h1>Welcome to WPNewsman <?php echo NEWSMAN_VERSION; ?></h1>
 		
-		<?php if ( !get_option('newsman_old_version') ): ?>
+		<?php if ( !get_option('newsman_version') ): ?>
 			<div class="about-text">Thank you for installing WPNewsman. We hope you'll like it!</div>
 		<?php else: ?>
 			<div class="about-text">You updated and have better newsletter gadget!</div>

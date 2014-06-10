@@ -27,26 +27,26 @@
 	</div>
 
 	<div class="newsman-tbl-controls row">
-		<div class="span6">
+		<div class="span7">
 			<div class="btn-group">
 				<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
 					<i class="icon-pencil"></i> <?php _e('Compose', NEWSMAN); ?>
 					<span class="caret"></span>
 				</a>
 				<ul class="dropdown-menu">
-					<li><a id="btn-compose" href="<?php echo get_bloginfo("wpurl"); ?>/wp-admin/admin.php?page=newsman-mailbox&amp;action=compose"><i class="icon-pencil"></i> <?php _e('From Template', NEWSMAN); ?></a></li>
-					<li><a href="<?php echo get_bloginfo("wpurl"); ?>/wp-admin/admin.php?page=newsman-mailbox&amp;action=compose&amp;type=wp"><i class="icon-font"></i> <?php _e('Quick Message', NEWSMAN); ?></a></li>
+					<li><a id="btn-compose" href="<?php echo get_bloginfo("wpurl"); ?>/wp-admin/admin.php?page=newsman-mailbox&amp;action=compose-from-tpl"><i class="icon-pencil"></i> <?php _e('From Template', NEWSMAN); ?></a></li>
+					<li><a href="<?php echo get_bloginfo("wpurl"); ?>/wp-admin/admin.php?page=newsman-mailbox&amp;action=compose"><i class="icon-font"></i> <?php _e('Quick Message', NEWSMAN); ?></a></li>
 				</ul>
 			</div>			
 
 			<button id="newsman-btn-compose-from-msg" type="button" class="btn btn-primary" style="display: none;"><?php _e('Compose from Message', NEWSMAN); ?></button>
 
-			<button id="newsman-btn-stop" type="button" class="btn"><?php _e('Stop', NEWSMAN); ?></button>
-			<button id="newsman-btn-resume" type="button" class="btn"><?php _e('Resume', NEWSMAN); ?></button>
-			<button id="newsman-btn-delete" style="margin: 0 3px;" type="button" class="btn btn-danger"><?php _e('Delete', NEWSMAN); ?></button>
+			<button id="newsman-btn-stop" type="button" class="btn"><i class="icon icon-stop"></i> <?php _e('Stop', NEWSMAN); ?></button>
+			<button id="newsman-btn-start" type="button" class="btn"><i class="icon icon-play"></i> <?php _e('Start', NEWSMAN); ?></button>
+			<button id="newsman-btn-delete" style="margin: 0 3px;" type="button" class="btn btn-danger"><i class="icon icon-white icon-trash"></i> <?php _e('Delete', NEWSMAN); ?></button>
 			<button id="newsman-btn-reconfirm" style="margin: 0 3px 0 2em; display: none;" type="button" class="btn"><?php _e('Resend Confirmation Request', NEWSMAN); ?></button>			
 		</div>
-		<div class="span6" style="text-align: right;">
+		<div class="span5" style="text-align: right;">
 			<div class="pagination" style="display: none;">
 				<ul>
 				</ul>
@@ -56,7 +56,50 @@
 
 	<div class="row-fluid">
 		<div class="span12">
-			<table id="newsman-mailbox" class="table table-striped table-bordered">
+			<div id="newsman-mailbox" class="newsman-mailbox">
+
+<!-- 				<div class="newsman-email">
+					<div class="newsman-email-checkmark">
+						<i class="icon-ok"></i>
+					</div>
+					<div class="newsman-email-general">
+						<div class="newsman-email-subject">
+							<a href="http://blog.dev/wp-admin/admin.php?page=newsman-mailbox&amp;action=edit&amp;type=null&amp;id=37">test</a>
+						</div>					
+						<div class="newsman-email-to">
+							<span class="label label-info">island test</span>
+						</div>					
+						<div class="newsman-email-status-message">Sent 1785 of 1785 emails</div>
+						<ul class="newsman-email-meta">
+							<li class="newsman-email-created">
+								<span class="newsman-tbl-emails-created" title="April 3 2014 3:00 AM" style="border-bottom: 1px dashed #cacaca; cursor: default;">a month ago</span>
+							</li>
+							<li class="newsman-email-public-url">
+								<a href="http://blog.dev/?newsman=email&amp;email=1iyPHEodHCLLJW3cAVmvHUmvKNM">View in browser</a>
+							</li>
+							<li class="newsman-email-status">
+								<span class="newsman-tbl-emails-status"><i class="icon-ok"></i> Sent</span>
+							</li>
+							<li class="newsman-email-delete">
+								<a href="#">Delete</a>
+							</li>
+						</ul>
+					</div>
+					<div class="newsman-email-stats">
+						<div class="newsman-email-opens">
+							<div class="nfo">
+								<span class="num">150</span>
+								<span class="lbl">opens</span>	
+							</div>							
+						</div>
+						<div class="newsman-email-clicks"><span class="num">74</span><span class="lbl">clicks</span></div>
+						<div class="newsman-email-unsubscribes"><span class="num">26</span><span class="lbl">unsubscribes</span></div>						
+					</div>
+				</div> -->
+
+			</div>
+
+<!-- 			<table id="newsman-mailbox" class="table table-striped table-bordered">
 				<thead>
 					<tr>
 						<th scope="col" class="check-column"><input id="newsman-checkall" type="checkbox"></th>
@@ -73,7 +116,7 @@
 						<td colspan="6" class="blank-row"><img src="<?php echo NEWSMAN_PLUGIN_URL; ?>/img/ajax-loader.gif"> <?php _e('Loading...', NEWSMAN); ?></td>
 					</tr>
 				</tbody>
-			</table>			
+			</table> -->			
 		</div>
 	</div>
 

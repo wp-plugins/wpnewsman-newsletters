@@ -58,6 +58,8 @@ class newsmanMailMan {
 
 		foreach ($emails as $email) {
 
+			$this->u->log('[checkEmailsQueue] forking sender worker_lock: %s, email_id: %s', $email->id, $email->id);
+
 			newsmanMailer::fork(array(
 				'worker_lock' => $email->id,
 				'email_id' => $email->id

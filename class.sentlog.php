@@ -131,13 +131,17 @@ class newsmanSentlog {
 		$ln = $this->u->parseListName($listName);
 
 		$list = newsmanList::findOne('name = %s', array($ln->name) );
+
 		$list->selectionType = $ln->selectionType;
 
 		if ( !$list ) {
+			$this->u->log('[getPendingFromList] List with the name %s is not found', $listName);
 			die("List with the name $listName is not found");
 		}
 
 		$subs = $list->getPendingBatch($emailId, $limit, $ln->selectionType);	
+
+		$this->u->log('[getPendingFromList] pending batch %s', print_r($subs, true));
 
 		$result = array();
 
@@ -404,6 +408,9 @@ class newsmanTransmissionStreamer {
 		$this->buffer = array_merge($this->buffer, 
 			$this->sl->getPendingFromList($this->email->id, $this->currentList, $this->batchSize)
 		);
+
+		$u = newsmanUtils::getInstance();
+		$u->log('[fillBuffer] buffer %s', print_r($this->buffer, true));
 
 		if ( !count($this->buffer) ) { // buffer is empty, no data left in this list, switching to another
 			$this->currentList = null;

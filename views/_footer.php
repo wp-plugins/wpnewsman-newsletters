@@ -27,9 +27,9 @@
 				$nwsmn_rateURL = '<a target="_blank" href="http://wordpress.org/support/view/plugin-reviews/wpnewsman-newsletters">★★★★★</a>';
 				$nwsmn_pluginURL = '<a target="_blank" href="http://wordpress.org/support/view/plugin-reviews/wpnewsman-newsletters">wordpress.org</a>';
 
-				$nwsmn_rateStr = __('Rate (%s) WPNewsman on %s and make it even more awesome', NEWSMAN);
+				$nwsmn_rateStr = __('Rate (%s) WPNewsman on %s to help their creators make it better', NEWSMAN);
 			?>			
-			<span><?php printf($nwsmn_rateStr, $nwsmn_rateURL, $nwsmn_pluginURL); ?></span> | <a href="http://wpnewsman.com/documentation/"><?php echo __("Support & documentation", NEWSMAN); ?></a> | <a href="http://support.glocksoft.net/feedback"><?php _e("Request feature", NEWSMAN); ?></a> | <a href="<?php echo NEWSMAN_BLOG_ADMIN_URL.'admin.php?page=newsman-mailbox&thanks=1'; ?>"><?php _e("Thanks!", NEWSMAN); ?></a> | <span><?php _e("WPNewsman: ", NEWSMAN); echo nwsmn_get_prop('version'); ?></span>
+			<span><?php printf($nwsmn_rateStr, $nwsmn_rateURL, $nwsmn_pluginURL); ?></span> | <a href="http://wpnewsman.com/documentation/"><?php echo __("Documentation", NEWSMAN); ?></a> | <a href="http://support.glocksoft.net/feedback"><?php _e("Request feature", NEWSMAN); ?></a> | <a href="<?php echo NEWSMAN_BLOG_ADMIN_URL.'admin.php?page=newsman-mailbox&thanks=1'; ?>"><?php _e("Thanks!", NEWSMAN); ?></a> | <span><?php _e("WPNewsman: ", NEWSMAN); echo nwsmn_get_prop('version'); ?></span>
 
 </div>
 		<?php

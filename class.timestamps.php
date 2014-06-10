@@ -39,7 +39,7 @@ class newsmanTimestamps {
 	}
 
 	public function dropTable() {
-		$sql = "DROP TABLE IF EXISTS $this->table WHERE";
+		$sql = "DROP TABLE IF EXISTS ".$this->table;
 		return $this->db->query($sql) === 1;
 
 	}

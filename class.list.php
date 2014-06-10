@@ -25,15 +25,12 @@ class newsmanList extends newsmanStorable {
 
 	static $linkFields = array('confirmation-link', 'resend-confirmation-link', 'unsubscribe-link');
 
-	var $form;
-	var $uid;
-	var $name;
-
 	// main selection type used in major queries,
 	// this value is modifed by the sender to get "unconfirmed" subset of the list
 	var $selectionType = NEWSMAN_SS_CONFIRMED;
 
 	function __construct($listName = 'default', $load = false) {
+		parent::__construct();
 		$this->name = $listName;
 		if ( !$load ) {
 
@@ -152,6 +149,7 @@ class newsmanList extends newsmanStorable {
 			$stats['all'] = $all;
 		}
 
+		/*
 		if ( $ext ) {
 			// today confirmed
 			$sql = "select count(*) from $this->tblSubscribers where status = ".NEWSMAN_SS_CONFIRMED." and DATE(ts) = CURDATE()";
@@ -164,6 +162,7 @@ class newsmanList extends newsmanStorable {
 			$res = $wpdb->get_var($sql);
 			$stats['confirmedYesterday'] = $res ? $res : 0;
 		}
+		//*/
 
 		return $stats;
 	}
@@ -292,7 +291,17 @@ class newsmanList extends newsmanStorable {
 
 		$sql = $wpdb->prepare($sql, $emailId, $this->id, $limit);
 
+		$u = newsmanUtils::getInstance();		
+		if ( defined('NEWSMAN_DEBUG_EXPOSE_QUERIES') && NEWSMAN_DEBUG_EXPOSE_QUERIES === true ) {
+			$u->log('[getPendingBatch] SQL: '.$sql);
+		}
+
 		$rows = $wpdb->get_results($sql, ARRAY_A);
+
+		if ( defined('NEWSMAN_DEBUG_EXPOSE_QUERIES') && NEWSMAN_DEBUG_EXPOSE_QUERIES === true ) {
+			$u->log('[getPendingBatch] SQL RESULT: '.print_r($rows, true));
+		}
+
 
 		$res = array();
 

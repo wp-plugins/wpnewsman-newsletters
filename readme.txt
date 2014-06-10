@@ -4,7 +4,7 @@ Donate Link: http://wpnewsman.com/premium-newsletter-plugin-wordpress/
 Tags: wpnewsman, newsletter, newsletters, newsletter signup, newsletter widget, subscribers, post notification, email subscription, email marketing, email, emailing, subscription
 Requires at least: 3.5
 Tested up to: 3.9
-Stable tag: 1.6.9
+Stable tag: 1.7.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -122,6 +122,12 @@ We got a User Feedback page where you can [add or vote for new features](http://
 3. Subscriber management.
 
 == Changelog ==
+
+= 1.7.0 =
+
+* Added email analyitcs.
+* Removed advanced honeypot technique which caused "Something went wrong..." error in some cases.
+* Lots of small bugfixes and improvements.
 
 = 1.6.9 =
 
@@ -368,6 +374,9 @@ We got a User Feedback page where you can [add or vote for new features](http://
 * First public release. Hello World! 
 
 == Upgrade Notice ==
+
+= 1.7.0 =
+Recommended upgrade. Lots of small bug fixes and improvements plus new email analytics feature.
 
 = 1.6.6 =
 Recommended upgrade.

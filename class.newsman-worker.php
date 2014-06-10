@@ -39,6 +39,11 @@ class newsmanWorkerBase {
 		}
 	}
 
+	static function dropTable() {
+		global $wpdb;
+		return $wpdb->query("DROP TABLE IF EXISTS ".$wpdb->prefix."newsman_mqueue");
+	}	
+
 	private function tableExists() {
 		$sql = $this->_db->prepare("show tables like '%s';", $this->_table);
 		return $this->_db->get_var($sql) == $this->_table;
@@ -195,6 +200,8 @@ class newsmanWorker extends newsmanWorkerBase {
 		$o = newsmanOptions::getInstance();
 		$secret = $o->get('secret');
 
+		$u = newsmanUtils::getInstance();
+
 		$workerURL = NEWSMAN_PLUGIN_URL.'/worker.php';
 		
 		$params['newsman_worker_fork'] = get_called_class();
@@ -202,6 +209,7 @@ class newsmanWorker extends newsmanWorkerBase {
 		$params['workerId'] = $params['ts'].rand(1,100);
 
 		if ( defined('ALTERNATE_WP_CRON') && ALTERNATE_WP_CRON ) {
+			$u->log('[newsmanWorker::fork] ALTERNATE_WP_CRON MODE');
 			// passing url to the ajax forker
 			$fork = new newsmanAjaxFork();
 			$fork->ts = $params['ts'];
@@ -211,9 +219,13 @@ class newsmanWorker extends newsmanWorkerBase {
 			$fork->save();
 			
 		} else {
+			$u->log('[newsmanWorker::fork] NORMAL MODE');
+			$u->log('[newsmanWorker::fork] worker url %s', $workerURL);
+			$u->log('[newsmanWorker::fork] worker url params %s', print_r($params, true));
 			// exposing secret only in loopback requests
+
 			$params['secret'] = $secret;
-			wp_remote_post(
+			$r = wp_remote_post(
 				$workerURL,
 				array(
 					'timeout' => 0.01,
@@ -221,6 +233,8 @@ class newsmanWorker extends newsmanWorkerBase {
 					'body' => $params
 				)
 			);
+
+			$u->log('[newsmanWorker::fork] '.print_r($r , true));
 		}
 		return $params['workerId'];
 	}

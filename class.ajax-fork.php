@@ -15,6 +15,7 @@ class newsmanAjaxFork extends newsmanStorable {
 
 
 	function __construct() {
+		parent::__construct();
 		$this->method = 'get';
 	}
 

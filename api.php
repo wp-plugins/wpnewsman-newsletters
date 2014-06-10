@@ -109,7 +109,9 @@ class newsmanAPI {
 
 		$email = strtolower($_REQUEST['email']);
 
-		if ( !emailValid($email) ) {
+		$u = newsmanUtils::getInstance();
+
+		if ( !$u->emailValid($email) ) {
 			$this->respond(false, sprintf( __( 'Bad email address format "%s".', NEWSMAN), $email), array(), '400 Bad request');
 		}
 

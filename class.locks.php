@@ -24,6 +24,11 @@ class newsmanLocks {
 		$this->createTable();
 	}
 
+	static function dropTable() {
+		global $wpdb;
+		return $wpdb->query("DROP TABLE IF EXISTS ".$wpdb->prefix."newsman_locks");
+	}
+
 	private function createTable() {
 		if ( !$this->tableExists() ) {
 			$sql = "CREATE TABLE $this->table (

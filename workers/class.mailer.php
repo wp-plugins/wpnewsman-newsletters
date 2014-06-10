@@ -17,11 +17,14 @@ class newsmanMailer extends newsmanWorker {
 			if ( $eml ) {
 
 				if ( $eml->status == 'inprogress' && ( !isset($_REQUEST['force']) || $_REQUEST['force'] !== '1' ) ) {
+					$u->log('Email with id %s is already in progress. Sender wont start', $eml->id);
 					die('Email is already processed by other worker. Use "force=1" in the query to run another worker anyway.');
 				} else if ( $eml->status != 'stopped' ) {
 					$eml->status = 'inprogress';
 					$eml->workerPid = $this->workerId;
 					$eml->save();
+
+					$u->log('Updating eml workerPid to %s', $this->workerId);
 
 					$this->launchSender($eml);
 				}
@@ -48,25 +51,32 @@ class newsmanMailer extends newsmanWorker {
 	private function launchSender($email) {
 		global $newsman_current_list;
 
-		$this->processMessages();
-
 		$u = newsmanUtils::getInstance();
 
-		$u->log('Sender with pid '.getmypid().' for email '.$email->id.' started');
+		$u->log('[launchSender]: processMessages');
+
+		$this->processMessages();		
+
+		$u->log('[launchSender] Sender with pid '.getmypid().' for email '.$email->id.' started');
 
 		$sl = newsmanSentlog::getInstance();
 
 		$tStreamer = new newsmanTransmissionStreamer($email);
 
+		$u->log('[launchSender] created transmissionStreamer');
+
 		$email->recipients = $tStreamer->getTotal();
 		$email->msg = '';
 		$email->save();
+
+		$u->log('[launchSender] streamer recipients %s', $email->recipients);
 
 		$nmn = newsman::getInstance();
 
 		$o = newsmanOptions::getInstance();
 		$throttlingTimeout = 0;
 		$thr = $o->get('mailer.throttling.on');
+		$u->log('[launchSender] mailer.throttling.on = %s', $thr ? 'true' : 'false');
 		if ( $thr ) {
 			$limit = intval($o->get('mailer.throttling.limit'));
 			switch ( $o->get('mailer.throttling.period') ) {
@@ -99,9 +109,15 @@ class newsmanMailer extends newsmanWorker {
 		$email->p_html = $u->processAssetsURLs($email->p_html, $email->assetsURL);
 		$email->p_html = $u->compileThumbnails($email->p_html);	
 
+		$u->log('[launchSender] processMessages()...');
+
 		$this->processMessages();
 
+		$u->log('[launchSender] getTransmission() ...');
+
 		while ( $t = $tStreamer->getTransmission() ) {
+
+			$u->log('[launchSender] getTransmission = %s', print_r($t, true));
 
 			$this->processMessages();
 
@@ -175,6 +191,8 @@ class newsmanMailer extends newsmanWorker {
 			}
 			$ts = microtime(true);
 		}
+
+		$u->log('[launchSender] No more transmissions');
 
 		if ( $this->stopped ) {
 			$email->status = 'stopped';

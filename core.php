@@ -12,7 +12,9 @@ require_once(__DIR__.DIRECTORY_SEPARATOR.'class.ajax-fork.php');
 require_once(__DIR__.DIRECTORY_SEPARATOR.'class.mailman.php');
 require_once(__DIR__.DIRECTORY_SEPARATOR.'class.sentlog.php');
 require_once(__DIR__.DIRECTORY_SEPARATOR.'class.timestamps.php');
+require_once(__DIR__.DIRECTORY_SEPARATOR.'class.analytics.php');
 require_once(__DIR__.DIRECTORY_SEPARATOR.'ajaxbackend.php');
+require_once(__DIR__.DIRECTORY_SEPARATOR.'class.locks.php');
 
 require_once(__DIR__.DIRECTORY_SEPARATOR.'workers/class.mailer.php');
 require_once(__DIR__.DIRECTORY_SEPARATOR.'class.zip.php');
@@ -71,6 +73,8 @@ class newsman {
 	var $mailman;
 	var $activation = false;
 
+	var $analytics;
+
 	var $registeredWorkers = array();
 
 	var $linkTypes = array('confirmation', 'resend-confirmation', 'unsubscribe', 'email', 'unsubscribe-confirmation');
@@ -89,6 +93,8 @@ class newsman {
 	} 
 
 	public function __construct() {
+
+		$this->analytics = newsmanAnalytics::getInstance();
 
 		$newsman_error_message = '';
 		$newsman_success_message = '';
@@ -245,8 +251,6 @@ class newsman {
 		return '{"useInlineLabels":true,"elements":[{"type":"title","value":"'.$s['dfTitle'].'"},{"type":"html","value":"'.$s['dfHeader'].'"},{"type":"text","label":"'.$s['dfFirstName'].'","name":"first-name","value":""},{"type":"text","label":"'.$s['dfLastName'].'","name":"last-name","value":""},{"type":"email","label":"'.$s['dfEmail'].'","name":"email","value":"","required":true},{"type":"submit","value":"'.$s['dfSubmit'].'","size":"small","color":"gray","style":"rounded"},{"type":"html","value":"'.$s['dfFooter'].'"}]}';
 	}
 
-
-
 	public function actionPagesCommentsOff( $data ) {
 		if ( $data['post_type'] == 'newsman_ap' ) {
 			$data['comment_status'] = 'close';
@@ -272,7 +276,8 @@ class newsman {
 	}
 
 	private function redirect($link){
-		wp_redirect($link);
+		header('Cache-Control: no-cache'); // workaround for Chrome redirect caching bug
+		wp_redirect($link, 303);
 		echo " ";
 		exit();
 	}
@@ -375,11 +380,11 @@ class newsman {
 		}
 
 		if ( isset($badge) || in_array('badge', $attr) ) {
-			return ( !!get_option('newsman_code') && defined('NEWSMANP') ) ? '' : '<a href="http://wpnewsman.com/?pk_campaign=freemium-plugin"><img src="'.NEWSMAN_PLUGIN_URL.'/img/newsman-badge.png" /></a>';
+			return ( !!get_option('newsman_code') && defined('NEWSMANP') ) ? '' : '<a href="http://wpnewsman.com/?pk_campaign=freemium-plugin"><img border="0" src="'.NEWSMAN_PLUGIN_URL.'/img/newsman-badge.png" /></a>';
 		}
 
 		if ( isset($badge2) || in_array('badge2', $attr) ) {
-			return ( !!get_option('newsman_code') && defined('NEWSMANP') ) ? '' : '<a style="display:block; text-align: center;" href="http://wpnewsman.com/?pk_campaign=freemium-plugin"><img src="'.NEWSMAN_PLUGIN_URL.'/img/newsman-badge2.png" /></a>';
+			return ( !!get_option('newsman_code') && defined('NEWSMANP') ) ? '' : '<a style="display:block; text-align: center;" href="http://wpnewsman.com/?pk_campaign=freemium-plugin"><img border="0" src="'.NEWSMAN_PLUGIN_URL.'/img/newsman-badge2.png" /></a>';
 		}
 
 
@@ -432,7 +437,7 @@ class newsman {
 				$r = '';
 
 				foreach ($newsman_current_subscriber as $key => $value) {
-					if ( $tag ) {
+					if ( isset($tag) ) {
 						$r .= "<$tag>$key : $value</$tag>\n";
 					} else {
 						$r .= "$key : $value\n";
@@ -561,7 +566,7 @@ class newsman {
 
 			$link = "$blogurl/?newsman=$type&code=".$newsman_current_list->uid.':'.$ucode;
 
-			if ( $type === 'email' ) {
+			if ( in_array($type, array('email', 'unsubscribe')) ) {
 				$link.='&email='.$newsman_current_email->ucode;
 			}
 
@@ -581,6 +586,35 @@ class newsman {
 		}
 	}
 
+	public function trackUnsubscribe() {
+
+		global $newsman_current_subscriber;		
+		global $newsman_current_email;
+		global $newsman_current_list;
+
+		$sd = new newsmanAnSubDetails();
+		$sd->emailId = $newsman_current_email->id;
+		$sd->listId = $newsman_current_list->id;
+		$sd->subId = $newsman_current_subscriber['id'];
+		$sd->emailAddr = $newsman_current_subscriber['email'];
+		$sd->ip = $this->utils->peerip();
+
+		$res = $sd->unsubscribe();
+
+		$this->utils->log('[trackUnsubscribe] newsmanAnSubDetails->unsubscribe res %d', $res);
+
+		if ( $res === NEWSMAN_UNIQUE_OPEN ) { // unique operation
+			$tl = new newsmanAnTimeline();
+			$tl->emailId = $newsman_current_email->id;
+			$tl->unsubscribe();
+			$tl->open();
+			$newsman_current_email->incOpens();
+		}
+
+
+		$newsman_current_email->incUnsubscribes();
+	}
+
 	public function processActionLink() {
 		global $newsman_current_subscriber;		
 		global $newsman_current_email;
@@ -596,6 +630,10 @@ class newsman {
 
 				if ( $uArr[0] == '' || $uArr[1] == '' ) {
 					wp_die( __('Your link seems to be broken.', NEWSMAN) );
+				}
+
+				if ( isset($_REQUEST['email']) ) {
+					$newsman_current_email = newsmanEmail::findOne('ucode = %s', array($_REQUEST['email']));
 				}
 
 				$list = newsmanList::findOne('uid = %s', array($uArr[0]));
@@ -673,6 +711,8 @@ class newsman {
 							$this->sendEmail($list->id, NEWSMAN_ET_UNSUBSCRIBE);
 						}
 
+						$this->trackUnsubscribe();
+
 						if ( $use_excerpts ) {
 							$this->showActionExcerpt('unsubscribeSucceed');
 						} else {
@@ -692,6 +732,8 @@ class newsman {
 						if ( $this->options->get('sendUnsubscribed') ) {
 							$this->sendEmail($list->id, NEWSMAN_ET_UNSUBSCRIBE);
 						}
+
+						$this->trackUnsubscribe();
 
 						if ( $use_excerpts ) {
 							$this->showActionExcerpt('unsubscribeSucceed');
@@ -824,10 +866,8 @@ class newsman {
 		$this->importWPUsers();
 	}
 
-	public function uninstall() {
+	public function uninstall($removeSubs = false) {
 		global $wpdb;
-
-		$removeSubs = $this->options->get('uninstall.deleteSubscribers');
 
 		if ( $removeSubs ) {
 			$lists = newsmanList::findAll();
@@ -838,9 +878,18 @@ class newsman {
 			$wpdb->query("DROP TABLE IF EXISTS ".$wpdb->prefix.newsmanList::$table);
 		}
 
-		$wpdb->query("DROP TABLE IF EXISTS ".$wpdb->prefix.newsmanEmail::$table);
-		$wpdb->query("DROP TABLE IF EXISTS ".$wpdb->prefix.newsmanEmailTemplate::$table);
-		$wpdb->query("DROP TABLE IF EXISTS ".$wpdb->prefix.newsmanAjaxFork::$table);
+		newsmanEmail::dropTable();
+		newsmanEmailTemplate::dropTable();
+		newsmanAjaxFork::dropTable();
+
+		newsmanAnClicks::dropTable();
+		newsmanAnLink::dropTable();
+		newsmanAnSubDetails::dropTable();
+		newsmanAnTimeline::dropTable();
+
+		newsmanLocks::dropTable();
+		newsmanWorkerBase::dropTable();
+
 		$sl = newsmanSentlog::getInstance();
 		$wpdb->query("DROP TABLE IF EXISTS ".$sl->tableName);
 
@@ -915,7 +964,6 @@ class newsman {
 			$email->particles = $tpl->particles;
 
 			$email->status = 'pending'; // $eml->status = 'pending';
-			$email->created = date('Y-m-d');
 
 			$email->save();
 
@@ -976,14 +1024,21 @@ class newsman {
 					wp_enqueue_script('jquery-ui-datepicker', array('jquery'));					
 					//wp_enqueue_script('jquery-ui-draggable', array('jquery'));
 
+					wp_enqueue_script('newsman_momentjs', NEWSMAN_PLUGIN_URL.'/js/moment-with-langs.min.js', array(), NEWSMAN_VERSION);
+
 					wp_enqueue_style('jquery-tipsy-css', NEWSMAN_PLUGIN_URL.'/css/tipsy.css');
 					wp_enqueue_script('jquery-tipsy', NEWSMAN_PLUGIN_URL.'/js/jquery.tipsy.js', array('jquery'));
+
+					wp_enqueue_script('newsman-jquery-easy-pie-chart', NEWSMAN_PLUGIN_URL.'/js/jquery.easypiechart.js', array('jquery'));
+					wp_enqueue_script('newsman-chart-js', NEWSMAN_PLUGIN_URL.'/js/Chart.js', array('jquery'));
 
 					wp_register_style('fileuploader-css', NEWSMAN_PLUGIN_URL.'/css/fileuploader.css', array(), NEWSMAN_VERSION);
 					wp_register_script('fileuploader-iframe-transport-js', NEWSMAN_PLUGIN_URL.'/js/uploader/jquery.iframe-transport.js', array('jquery'), NEWSMAN_VERSION);	
 					wp_register_script('fileuploader-js', NEWSMAN_PLUGIN_URL.'/js/uploader/jquery.fileupload.js', array('jquery', 'jquery-ui-widget', 'fileuploader-iframe-transport-js'), NEWSMAN_VERSION);
 
 					wp_register_style('bootstrap', NEWSMAN_PLUGIN_URL.'/css/bootstrap.css', array(), NEWSMAN_VERSION);
+
+					wp_enqueue_style('newsman-font-css', NEWSMAN_PLUGIN_URL.'/css/newsman-font/style.css', array(), NEWSMAN_VERSION);
 
 					if ( $isNew38Style ) {
 						wp_enqueue_style('wp38-bootstrap-fixes', NEWSMAN_PLUGIN_URL.'/css/wp38.css', array(), NEWSMAN_VERSION);
@@ -1085,7 +1140,17 @@ class newsman {
 
 					wp_enqueue_script('newsmanwidgets');
 
+					if ( defined('NEWSMANP') ) {
+						$newsmanIsProVersion = 'newsman-pro-version';
+						$viewStatsHint = '';
+					} else {
+						$wpnewsmanLP = 'http://wpnewsman.com/documentation/track-opens-clicks-unsubscribes/';
+						$viewStatsHint = sprintf(__('Full Email Statistics & Click Tracking available in <a href="%s">the Pro version</a>', NEWSMAN), $wpnewsmanLP);
+						$newsmanIsProVersion = 'newsman-lite-version';
+					}
+
 					wp_localize_script( 'newsman-admin', 'newsmanL10n', array(
+						'newsmanVersionClass' => $newsmanIsProVersion,
 						/* translators: subscriber type */
 						'unconfirmed' => __('Unconfirmed', NEWSMAN),
 						/* translators: subscriber type */
@@ -1182,6 +1247,9 @@ class newsman {
 						'savedAt' => __('Saved at', NEWSMAN),
 
 						'viewInBrowser' => __('View in browser', NEWSMAN),
+
+						'viewStats' => __('View Stats', NEWSMAN),
+						'viewStatsHint' => $viewStatsHint,
 
 						'pleaseFillAllTheRequiredFields' => __('Please fill all the required fields.', NEWSMAN),
 						'pleaseCheckYourEmailAddress' => __('Please check your email address.', NEWSMAN),
@@ -1536,7 +1604,7 @@ class newsman {
 
 		$this->configureW3TC();
 
-		// page=newsman-mailbox&action=compose&type=wp
+		// page=newsman-mailbox&action=compose
 		$page = isset($_REQUEST['page']) ? $_REQUEST['page'] : null;
 		$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 		$type = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
@@ -1546,9 +1614,8 @@ class newsman {
 			exit();
 		}
 
-		if ( $page === 'newsman-mailbox' && $action === 'compose' && $type === 'wp' ) {
+		if ( $page === 'newsman-mailbox' && $action === 'compose' ) {
 			$ent = new newsmanEmail();
-			$ent->editor = 'wp';
 
 			$ent->subject = __('Enter Subject Here', NEWSMAN);
 
@@ -1556,7 +1623,7 @@ class newsman {
 			$ent->particles = $defParticles ? $defParticles : '';
 
 			$ent->save();
-			wp_redirect(NEWSMAN_BLOG_ADMIN_URL.'admin.php?page=newsman-mailbox&action=edit&type=wp&id='.$ent->id);
+			wp_redirect(NEWSMAN_BLOG_ADMIN_URL.'admin.php?page=newsman-mailbox&action=edit&id='.$ent->id);
 		}
 
 		if ( $page === 'newsman-templates' && $action === 'create-template' ) {
@@ -1721,8 +1788,8 @@ class newsman {
 			$this->setLocale();
 		}
 
-		$this->install();
 		$this->ensureEnvironment();
+		$this->install();
 
 		// adding capability
 		$role = get_role('administrator');
@@ -1736,6 +1803,32 @@ class newsman {
 
 	public function ensureEnvironment() {
 		global $wpdb;
+
+		$this->utils->log('[ensureEnvironment] ------------ ');
+
+		newsmanEmail::ensureTable();
+		newsmanEmail::ensureDefinition();
+
+		newsmanEmailTemplate::ensureTable();
+		newsmanEmailTemplate::ensureDefinition();
+
+		newsmanAnClicks::ensureTable();
+		newsmanAnClicks::ensureDefinition();
+
+		newsmanAnLink::ensureTable();
+		newsmanAnLink::ensureDefinition();
+
+		newsmanAnSubDetails::ensureTable();
+		newsmanAnSubDetails::ensureDefinition();
+
+		newsmanAnTimeline::ensureTable();
+		newsmanAnTimeline::ensureDefinition();	
+
+		newsmanAjaxFork::ensureTable();
+		newsmanAjaxFork::ensureDefinition();
+
+		newsmanList::ensureTable();
+		newsmanList::ensureDefinition();	
 
 		// modify lists tables
 		$nsTable = newsmanStorable::$table;
@@ -1814,8 +1907,9 @@ class newsman {
 	public function onInit($activation = false) {
 		new newsmanAJAX();
 
-		if ( isset( $_REQUEST['page'] ) && strpos($_REQUEST['page'], 'newsman') !== false ) {
+		if ( isset( $_REQUEST['page'] ) && strpos($_REQUEST['page'], 'newsman') !== false && !defined('NEWSMAN_PAGE') ) {
 			define('NEWSMAN_PAGE', true);
+			header('Cache-Control: no-cache'); // workaround for Chrome redirect caching bug
 		}
 
 		// Schedule events
@@ -1857,12 +1951,11 @@ class newsman {
 				$email->particles = $tpl->particles;
 
 				$email->status = 'draft';
-				$email->created = date('Y-m-d');
 
 				$r = $email->save();
 
 				if ( $r ) {					
-					$url = get_bloginfo('wpurl').'/wp-admin/admin.php?page=newsman-mailbox&action=edit&type=wp&id='.$email->id;
+					$url = get_bloginfo('wpurl').'/wp-admin/admin.php?page=newsman-mailbox&action=edit&id='.$email->id;
 					$this->redirect( $url );
 				} else {
 					wp_die($r);
@@ -1888,12 +1981,11 @@ class newsman {
 				$email->particles = $eml->particles;
 
 				$email->status = 'draft';
-				$email->created = date('Y-m-d');
 
 				$r = $email->save();
 
 				if ( $r ) {					
-					$url = get_bloginfo('wpurl').'/wp-admin/admin.php?page=newsman-mailbox&action=edit&type=wp&id='.$email->id;
+					$url = get_bloginfo('wpurl').'/wp-admin/admin.php?page=newsman-mailbox&action=edit&id='.$email->id;
 					$this->redirect( $url );
 				} else {
 					wp_die($r);
@@ -2051,6 +2143,15 @@ class newsman {
 		$page 	= isset($_REQUEST['page']) ? $_REQUEST['page'] : false;
 		$type 	= isset($_REQUEST['type']) ? $_REQUEST['type'] : false;
 		$id 	= isset($_REQUEST['id']) ? $_REQUEST['id'] : false;
+
+		if ( isset($_GET['action']) && $_GET['action'] == 'stats' ) {
+			if ( defined('NEWSMANP') ) {
+				$np = newsmanPro::getInstance();
+				$np->showStatsPage();
+				return;
+			}
+		}
+
 
 		if ( $action == 'view' ) {
 
@@ -2243,6 +2344,9 @@ class newsman {
 
 	public function registerDashboardWidget() {
 		global $newsman_full_plugin_name;
+		if ( !current_user_can( 'newsman_wpNewsman' ) ) {
+			return;
+		}
 		wp_add_dashboard_widget('dashboard_glnt', __('G-Lock WPNewsman', NEWSMAN), array($this, 'showStatsAsWidget'));
 	}
 
@@ -2291,17 +2395,12 @@ class newsman {
 		    $total_unsubs = 0;
 		    $total_unconf = 0;
 
-			$lists = newsmanList::findAll();
-			$listsNames = array();
-
 		    echo '
 		    <div style="overflow-y: auto;">     
 		    <table style="width:99%;" class="newsman-dboard-summary">
 		        <thead>
 		            <tr>
 		            	<th>'.__('List name', NEWSMAN).'</th>
-		                <th style="width: 100px;">'.__('Today confirmed', NEWSMAN).'</th>
-		                <th style="width: 120px;">'.__('Yesterday confirmed', NEWSMAN).'</th>
 		                <th style="width: 90px;">'.__('Total confirmed', NEWSMAN).'</th>
 		                <th style="width: 105px;">'.__('Total unconfirmed', NEWSMAN).'</th>
 		                <th style="width: 110px;">'.__('Total unsubscribed', NEWSMAN).'</th>
@@ -2317,8 +2416,6 @@ class newsman {
 				$s = $list->getStats(false, 'extended');
 				echo '<tr>
 					<th><a href="'.NEWSMAN_BLOG_ADMIN_URL.'admin.php?page=newsman-forms&sub=subscribers#/'.$list->id.'/all">'.$list->name.'</a></th>
-					<td>'.$s['confirmedToday'].'</td>
-					<td>'.$s['confirmedYesterday'].'</td>
 					<td style="color: green;">'.$s['confirmed'].'</td>
 					<td style="color: orange;">'.$s['unconfirmed'].'</td>
 					<td style="color: red;">'.$s['unsubscribed'].'</td>					
@@ -2333,19 +2430,8 @@ class newsman {
 		$this->putStats(true);
 	}
 
-	public function showStatsAsWidget($sidebar_args) {
-		if ( is_array($sidebar_args) ) {
-		    extract($sidebar_args, EXTR_SKIP);
-		}
-
-		echo $before_widget;
-		echo $before_title;
-		echo $widget_name;
-		echo $after_title;
-
+	public function showStatsAsWidget() {
 		$this->putStats();
-
-		echo $after_widget;
 	}
 
 	public function add_shortcode_metabox() {
@@ -2723,6 +2809,18 @@ if ( !function_exists('nwsmn_get_prop') ) {
 		return $g->$name;
 	}
 }
+if ( !function_exists('newsmanAdminHeader') ) {
+	function newsmanAdminHeader() {
+		include(__DIR__.DIRECTORY_SEPARATOR."views/_header.php");
+	}	
+}
+
+if ( !function_exists('newsmanAdminFooter') ) {
+	function newsmanAdminFooter() {
+		include(__DIR__.DIRECTORY_SEPARATOR."views/_footer.php");
+	}	
+}
+
 
 function newsmanCheckedValue($htmlVal, $checked, $applyFalsy = false) {
 	if ( !$checked && $applyFalsy ) {		

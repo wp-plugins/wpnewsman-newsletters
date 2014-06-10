@@ -6,10 +6,12 @@
 	require_once(__DIR__.DIRECTORY_SEPARATOR.'class.list.php');
 	require_once(__DIR__.DIRECTORY_SEPARATOR.'class.emailtemplates.php');
 	require_once(__DIR__.DIRECTORY_SEPARATOR.'class.sentlog.php');
+	require_once(__DIR__.DIRECTORY_SEPARATOR.'class.geo-db-reader.php');
 
 	if ( !defined('NEWSMAN_SS_UNCONFIRMED') )  { define('NEWSMAN_SS_UNCONFIRMED', 0);  }
 	if ( !defined('NEWSMAN_SS_CONFIRMED') )    { define('NEWSMAN_SS_CONFIRMED', 1);    }
 	if ( !defined('NEWSMAN_SS_UNSUBSCRIBED') ) { define('NEWSMAN_SS_UNSUBSCRIBED', 2); }
+
 
 	ignore_user_abort(true);
 	set_time_limit(0);
@@ -38,8 +40,6 @@
 
 		public function respond($state, $msg, $params = array(), $stop = true) {
 			global $db;
-
-			
 
 			$msg = array(
 				'state' => $state,
@@ -86,7 +86,7 @@
 			}			   
 		}
 
-		public function param($param) {			
+		public function param($param) {
 
 			if ( defined('NEWSMAN_TESTS') ) {
 				global $AJ_PARAMS;
@@ -381,7 +381,11 @@
 			$where = null;
 			$args = array();
 			$opts = array(
-				'fields' => array('id', 'subject', 'to', 'created', 'schedule', 'status','msg', 'recipients', 'sent', 'ucode')
+				'fields' => array(
+					'id', 'subject', 'to', 'created', 'schedule', 'status',
+					'msg', 'recipients', 'sent', 'ucode', 'opens', 'clicks',
+					'unsubscribes'
+				)
 			);
 
 			if ( $q ) {
@@ -617,7 +621,6 @@
 
 			$email->schedule = intval($ts);
 
-			$email->editor = 'wp';
 			$email->status = 'draft';
 
 			$r = $email->save();
@@ -650,8 +653,6 @@
 			$email->subject = $subj;
 			$email->html = $contentHtml;
 			$email->plain = $contentPlain;
-
-			$email->editor = 'wp';
 
 			if ( $send == 'now' ) {
 				$email->status = 'pending';
@@ -976,6 +977,8 @@
 			$html = $this->param('html');
 			$plain = $this->param('plain');
 			$subj = $this->param('subj');
+			$emailAnalytics = $this->param('emailAnalytics') == '1';
+
 
 			$eml = newsmanEmail::findOne('id = %d', array($id));
 
@@ -987,6 +990,7 @@
 			$eml->html = $html;
 			$eml->plain = $plain;
 			$eml->subject = $subj;
+			$eml->emailAnalytics = $emailAnalytics;
 
 			$res = $eml->save();
 
@@ -1039,8 +1043,6 @@
 
 		public function ajDeleteEmails() {
 
-			
-
 			$ids = $this->param('ids');
 			$all = ( $this->param('all', '0') === '1' );
 			$set = $this->u->jsArrToMySQLSet($ids);
@@ -1048,14 +1050,16 @@
 			$r = 0;
 
 			if ( $all ) {
-				$tpls = newsmanEmail::findAll('`status` != "inprogress"');
+				$emails = newsmanEmail::findAll('`status` != "inprogress"');
 			} else {
-				$tpls = newsmanEmail::findAll('`id` in '.$set.' and `status` != "inprogress"');
+				$emails = newsmanEmail::findAll('`id` in '.$set.' and `status` != "inprogress"');
 			}
 
-			foreach ($tpls as $tpl) {
-				$this->u->tryRemoveTemplateAssets($tpl->assetsPath);
-				$tpl->remove();
+			$this->u->log('[ajDeleteEmails]: found %d templates', count($emails));
+
+			foreach ($emails as $eml) {
+				$this->u->tryRemoveTemplateAssets($eml->assetsPath);
+				$eml->remove();
 				$r += 1;
 			}
 
@@ -1822,9 +1826,7 @@
 			}			
 
 			$newsman_current_list = $list;
-			$newsman_current_subscriber = $s;
-
-			$data = $s->toJSON();
+			$newsman_current_subscriber = $s->toJSON();
 
 			$ent = $this->getEntityById($entityId, $entType);
 
@@ -1833,13 +1835,15 @@
 			} else {
 				$email = new newsmanEmail();
 
+				$email->emailAnalytics = false; // tunring of analytics for templates
+
 				$email->subject = $ent->subject;
 				$email->p_html = $ent->p_html;
 				$email->plain = $ent->plain;
 			}
 
 
-			$msg = $email->renderMessage($data);
+			$msg = $email->renderMessage($newsman_current_subscriber);
 			$msg['html'] = $this->u->processAssetsURLs($msg['html'], $ent->assetsURL);
 
 			$r = $this->u->mail($msg, array( 'to' => $toEmail ) );
@@ -1908,8 +1912,11 @@
 		}		
 
 		public function  ajRunUninstall() {
+
+			$deleteSubs = (boolean)intval($this->param('deleteSubs'));
+
 			$g = newsman::getInstance();
-			$g->uninstall();
+			$g->uninstall($deleteSubs);
 			deactivate_plugins(NEWSMAN_PLUGIN_PATHNAME);
 			if ( defined('NEWSMANP_PLUGIN_PATHNAME') ) {
 				deactivate_plugins(NEWSMANP_PLUGIN_PATHNAME);	
@@ -2033,13 +2040,23 @@
 			$type = $this->param('type', '');
 			$camp = $this->param('campaign', '');
 
-			$email = newsmanEmail::findOne('id = %d', array( $emlId ) );			
+			$this->u->log('[ajSetEmailAnalytics] id: '.$emlId);
+
+			$email = newsmanEmail::findOne('id = %s', array( $emlId ) );
 
 			if ( $email ) {
 				$email->analytics = $type;
 				$email->campName = $camp;
-				$email->save();
-				$this->respond(true, 'success');
+				$r = $email->save();
+
+				$u = newsmanUtils::getInstance();
+				$u->log('[ajSetEmailAnalytics] '.print_r($r, true));
+
+
+				$this->respond(true, 'success 123', array(
+					'type' => $type,
+					'camp' => $camp
+				));
 			} else {
 				$this->errEmailNotFound($emlId);				
 			}
@@ -2190,6 +2207,135 @@
 			$this->u->reInstallStockTemplate($name);
 			$this->respond(true, __('Success', NEWSMAN));
 		}
+
+		// analytics
+
+		private function getLocalName($arrNames) {
+			$locale = get_locale();
+			$locale = strtr($locale, '_', '-');
+			$shortLocale = substr($locale, 0, 2);
+
+			$shortLocaleName = '';
+
+			if ( !$arrNames ) {
+				return '';
+			}
+
+			foreach ($arrNames as $name_loc => $name) {
+				if ( $name_loc === $locale ) {
+					// exact locate match
+					return $name;
+				} elseif ( $shortLocale == $name_loc ) { // short locale match, eg. just "en" instead of "en_GB"
+					$shortLocaleName = $name;
+				}
+			}
+
+			return ( $shortLocaleName ) ? $shortLocaleName : $arrNames['en'];
+		}
+
+		public function ajGetRecipinetsActivity() {
+			$emlId 	= intval($this->param('emlId'));
+
+			$pg		= intval($this->param('pg','1'));
+			$ipp	= intval($this->param('ipp','25'));
+
+			$selector = 'emailId = %d';
+			$args = array($emlId);
+
+			$listNames = array();
+
+			try {
+				$reader = new newsmanGeoLiteDbReader();			
+				$geoDBexists = true;
+			} catch (Exception $e) {
+				$geoDBexists = false;
+			}			
+
+			$res = array();
+			$res['count'] = intval(newsmanAnSubDetails::count($selector, $args));
+			$res['rows'] = array();
+
+			$subs = newsmanAnSubDetails::findAllPaged($pg, $ipp, $selector, $args);
+
+			foreach ($subs as $s) {
+				$x = array();
+				$x['email'] = $s->emailAddr;
+				$x['opens'] = $s->opens;
+				$x['clicks'] = $s->clicks;
+				$x['unsubscribed'] = $s->unsubscribed;
+				$x['listId'] = $s->listId;
+
+				if ( $geoDBexists ) {
+					try {
+						$record = @$reader->city($s->ip);
+						$x['location'] = array(
+							'city' =>  $this->getLocalName( $record->city->names ),
+							'sub' => $this->getLocalName( $record->mostSpecificSubdivision->names ),
+							'country' => $this->getLocalName( $record->country->names )
+						);
+					} catch (Exception $e) {
+						$x['location'] = array(
+							'city' => __('Unknown', NEWSMAN),
+							'sub' => __('Unknown', NEWSMAN),
+							'country' => __('Unknown', NEWSMAN)
+						);
+					}					
+				} else {
+					$x['location'] = array(
+						// 'city' => __('No Data. GeoLite DB was not downloaded', NEWSMAN),
+						// 'sub' => __('No Data. GeoLite DB was not downloaded', NEWSMAN),
+						'country' => __('Error: no data. Please download GeoLite2 database <a href="'.NEWSMAN_BLOG_ADMIN_URL.'admin.php?page=newsman-settings">in the settings</a>', NEWSMAN)
+					);
+				}
+
+
+
+				if ( isset($listNames[$s->listId] ) ) {
+					$x['listName'] = $listNames[$s->listId];
+				} else {
+					$list = newsmanList::findOne('id = %d', array($s->listId));
+					if ( $list ) {
+						$x['listName'] = $list->name;
+					} else {
+						$x['listName'] = 'DELETED';
+					}
+					$listNames[$s->listId] = $x['listName'];
+				}
+				
+				$res['rows'][] = $x;
+			}
+
+			$this->respond(true, 'success', $res);
+		}
+
+
+		public function ajGetLinkClicksDetails() {
+			$emlId 	= intval($this->param('emlId'));
+
+			$pg		= intval($this->param('pg','1'));
+			$ipp	= intval($this->param('ipp','25'));
+
+			$selector = 'emailId = %d';
+			$args = array($emlId);
+
+			$res = array();
+			$res['count'] = intval(newsmanAnLink::count($selector, $args));
+			$res['rows'] = array();		
+
+ 			$links = newsmanAnLink::findAllPaged($pg, $ipp, $selector, $args);
+
+ 			foreach ($links as $link) {
+ 				$r = array(
+ 					'url' => $link->URL,
+ 					'uniqueClicks' => $link->uniqueClicks
+ 				);
+ 				$res['rows'][] = $r;
+ 			}
+
+			$this->respond(true, 'success', $res);
+		}
+
+
 
 
 	}

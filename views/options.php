@@ -39,11 +39,7 @@
 							<label class="radio"><input type="radio" name="newsman-dashboardStats" value="abox" /> <?php _e('Show in the activity box (Right Now)', NEWSMAN); ?></label>					
 							<label class="radio"><input type="radio" name="newsman-dashboardStats" value="widget" /> <?php _e('Show in the separate widget', NEWSMAN); ?></label>
 						</div>
-						<div style="margin-top: 10px;">
-							<h3 style="margin-bottom: 5px;"><?php _e('Anti-Spam', NEWSMAN); ?></h3>
-							<label class="checkbox" for="newsman_disable_cypher_field"><input id="newsman_disable_cypher_field" type="checkbox" name="newsman-disableCypherField" value="1" /> <?php _e("Disable advanced honeypot technique", NEWSMAN); ?></label>
-							<p class="newsman-notice"><?php _e('Check this option only if you use static cashing solution like Google PageSpeed for your web server or get "Something went wrong. Please contact the site administrator and describe the problem." error after subscription.', NEWSMAN); ?></p>
-						</div>
+						<?php do_action('newsman_general_options'); ?>
 						<div style="margin-top: 10px;">
 							<h3 style="margin-bottom: 5px;"><?php _e('Social profiles links', NEWSMAN); ?></h3>
 							<label>Twitter</label>
@@ -194,7 +190,7 @@
 				<div class="row-fluid">
 					<div class="span8">
 						<div class="alert alert-danger" style="padding: 12px 14px 14px 14px;">
-							<label for="newsman-uninstall-deleteSubscribers" class="checkbox" style="color: #B94A48;"><input name="newsman-uninstall-deleteSubscribers" type="checkbox" value="1"> <?php _e('Delete subscribers\' lists during uninstallation', NEWSMAN); ?></label>
+							<label for="newsman-uninstall-deleteSubscribers" class="checkbox" style="color: #B94A48;"><input id="cb-deleteSubscribers" name="newsman-uninstall-deleteSubscribers" type="checkbox" value="1"> <?php _e('Delete subscribers\' lists during uninstallation', NEWSMAN); ?></label>
 							<p><?php _e('Checking this option will remove all the subscribers\' data during the plugin uninstallation. Be careful, there is no undo.', NEWSMAN); ?></p>
 							<div style="text-align: right;">
 								<a id="btn-uninstall-now" class="btn btn-danger"><?php _e("Uninstall now", NEWSMAN); ?></a>

@@ -408,6 +408,73 @@ jQuery(function($){
 		}
 	});	
 
+	/******* Pagination widget ********/
+
+	$.widget('newsman.newsmanSmallPagination', {
+		options: {
+			pageCount: 10,
+			currentPage: 1
+		},
+		_create: function() {
+			var o = this.options,
+				$el = $(this.element).empty();
+
+				$el.addClass('newsman-small-table-nav');
+
+				$([
+					'<span>Page </span><span class="cur-page">1</span> of <span class="total-pages">10</span>',
+					'<button class="btn newsman-small-nav-left"><i class="newsman-icon newsman-icon-chevron-left"></i></button>',
+					'<button class="btn newsman-small-nav-right"><i class="newsman-icon newsman-icon-chevron-right"></i></button>'
+				].join('')).appendTo($el);
+
+				this.lblCurPage = $('.cur-page', $el);
+				this.lblTotalPages = $('.total-pages', $el);
+
+				this.btnLeft = $('.newsman-small-nav-left', $el);
+				this.btnRight = $('.newsman-small-nav-right', $el);
+
+				// <div class="newsman-small-table-nav">
+				// 	Page <span class="cur-page">1</span> of <span class="total-pages">10</span>
+				// 	<button class="btn"><i class="newsman-icon newsman-icon-chevron-left"></i></button>
+				// 	<button class="btn"><i class="newsman-icon newsman-icon-chevron-right"></i></button>
+				// </div>
+				this._bind();
+		},
+		_unbind: function(){
+			this.btnLeft.unbind('click');
+			this.btnRight.unbind('click');
+		},
+		_bind: function() {
+			var that = this;
+			this.btnLeft.click(function(e){
+				e.preventDefault();
+				that.prev();
+			});
+			this.btnRight.click(function(e){
+				e.preventDefault();
+				that.next();
+			});
+		},
+		_updateInterface: function() {
+			this.lblCurPage.html(this.options.currentPage);
+			this.lblTotalPages.html(this.options.pageCount);
+		},
+		next: function() {
+			this.options.currentPage += 1;
+			this._trigger('pageChanged', {}, { page: this.options.currentPage });	
+			this._updateInterface();
+		},
+		prev: function() {
+			this.options.currentPage -= 1;
+			this._trigger('pageChanged', {}, { page: this.options.currentPage });	
+			this._updateInterface();
+		},
+		setOptions: function(opts) {
+			$.extend(this.options, opts);			
+			this._updateInterface();
+		}
+	});
+
 	// php comaptible sprintf function for l10n capabilities
 	// taken from http://phpjs.org/functions/sprintf/
 	function sprintf () {
@@ -845,7 +912,10 @@ jQuery(function($){
 				str,
 			'</div>'
 		].join('')).appendTo(document.body);
-		msg.show();
+		var w = msg.width();		
+		msg.css({
+			marginLeft: Math.ceil(w/2)*-1
+		}).show();
 	};
 
 	var hideLoading = NEWSMAN.hideLoading = function() {
@@ -1073,7 +1143,6 @@ jQuery(function($){
 
 	$('#btn-uninstall-now').click(function(e){
 		e.preventDefault();
-		saveOptions();
 
 		showModal('#newsman-modal-uninstall', function(mr){
 			if ( mr === 'ok' ) {
@@ -1081,7 +1150,8 @@ jQuery(function($){
 					url: ajaxurl,
 					type: 'post',
 					data: {
-						action: 'newsmanAjRunUninstall'
+						action: 'newsmanAjRunUninstall',
+						deleteSubs: $('#cb-deleteSubscribers').prop('checked') ? 1 : 0
 					}
 				}).done(function(data){
 					showMessage(data.msg, 'success');
@@ -2423,7 +2493,7 @@ jQuery(function($){
 
 			$('.newsman-btn-reconfirm-group')[ type == 'unconfirmed' ? 'show' : 'hide' ]();
 
-			$('.subsubsub a.current').removeClass('current');
+			$('.radio-links a.current').removeClass('current');
 			$('#newsman-subs-'+type).addClass('current');
 		}
 
@@ -2498,6 +2568,11 @@ jQuery(function($){
 		$('button.newsman-update-options').click(function(){
 			saveOptions();
 		});
+
+		if ( $('#newsman_geolocation')[0] ) {
+			NEWSMANEXT.initGeoipSettingsPage();
+		}
+
 	});
 
 	/*******    Edit List & Form Options   **********/
@@ -2652,6 +2727,10 @@ jQuery(function($){
 			changed();
 		});
 
+		$('#newsman-email-analytics').change(function(){
+			saveEntity();
+		});
+
 		function sendEmail() {
 
 			if ( !sendValidation.validate() ) {
@@ -2719,6 +2798,7 @@ jQuery(function($){
 				data.to = $('#eml-to').multis('getItems')+'';
 				data.send = $('input[name="newsman-send"]:checked').val();
 				data.ts = Math.round( $('#newsman-send-datepicker').datetimepicker('getDate') / 1000 );
+				data.emailAnalytics = $('#newsman-email-analytics').prop('checked') ? '1' : '0';
 			}
 
 			$.ajax({
@@ -2759,7 +2839,7 @@ jQuery(function($){
 			var pageState = {
 				show: 'all',
 				pg: 1,
-				ipp: 15
+				ipp: 10
 			};
 
 			function search() {
@@ -2808,7 +2888,7 @@ jQuery(function($){
 				$('#newsman-mailbox tbody input').prop('checked', $(this).is(':checked'));
 			});
 
-			$(document, '#newsman-mailbox tbody input').click(function(e){
+			$(document).on('click', '#newsman-mailbox tbody input', function(e){
 				var n = $('#newsman-mailbox tbody input:checked').length;
 				$('#newsman-btn-compose-from-msg')[ ( n === 1 ) ? 'show' : 'hide' ]();				
 			});
@@ -2817,6 +2897,80 @@ jQuery(function($){
 				var id = $('#newsman-mailbox tbody input:checked')[0].value;
 				window.location = NEWSMAN_BLOG_ADMIN_URL+'/admin.php?page=newsman-mailbox&action=compose-from-email&id='+id;
 			});
+
+			$(document).on('click',  '.newsman-email-start-sending', function(e){
+				e.preventDefault();
+				e.stopPropagation();
+
+				var emlId = $(e.target).closest('.newsman-email').attr('emlid');
+				if ( emlId ) {
+					showLoading();
+					$.ajax({
+						type: 'POST',
+						url: ajaxurl,
+						data: {
+							action: 'newsmanAjResumeSending',
+							ids: emlId
+						}
+					}).done(function(data){
+						showMessage(data.msg, 'success');
+						getEmails();
+					}).fail(NEWSMAN.ajaxFailHandler)
+					  .always(function(){
+						hideLoading();
+					});
+				}
+			});
+
+			$(document).on('click', '.newsman-email-delete', function(e){
+				e.preventDefault();
+				e.stopPropagation();
+				var emlId = $(e.target).closest('.newsman-email').attr('emlid');
+				if ( emlId ) {
+					showModal('#newsman-modal-delete', function(mr, xmr){
+						if ( mr === 'ok' ) {							
+							$.ajax({
+								type: 'POST',
+								url: ajaxurl,
+								data: {
+									ids: emlId,
+									action: 'newsmanAjDeleteEmails'
+								}
+							}).done(function(data){
+
+								showMessage(newsmanL10n.youHaveSuccessfullyDeletedSelectedEmails, 'success');
+								getEmails();
+
+							}).fail(NEWSMAN.ajaxFailHandler);
+						}
+					});
+				}
+			});
+
+			function showBulkActionButtons() {
+				console.warn('showBulkActionButtons is not yet implented.');
+			}
+
+			function hideBulkActionButtons() {
+				console.warn('hideBulkActionButtons is not yet implented.');
+			}
+
+			function updateUI() {
+				if ( $('.newsman-email.checked').length > 1 ) {
+					showBulkActionButtons();
+				} else {
+					hideBulkActionButtons();
+				}
+			}
+
+			$(document).on('click', '.newsman-email', function(e) {				
+				var eml = $(e.target).closest('.newsman-email');
+				if ( eml ) {
+					eml.toggleClass('checked');
+					updateUI();
+				}
+			});
+
 
 			function showSendingLog(emailId) {
 				showLoading();
@@ -2910,10 +3064,32 @@ jQuery(function($){
 
 					$(data.rows).each(function(i, r){
 						var d = new Date( parseInt(r.schedule,10)*1000 ),
-							fd = d.toLocaleString().replace(/\s+GMT.*/, '');
+							fd = d.toLocaleString().replace(/\s+GMT.*/, '');	
+
+						var clicks = r.clicks || 0,
+							clicksPCT = !r.recipients ? 0 : ((clicks / r.recipients) * 100).toFixed(1),
+							opens = r.opens || 0,
+							opensPCT = !r.recipients ? 0 : ((opens / r.recipients) * 100).toFixed(1),
+							unsubscribes = r.unsubscribes || 0,
+							unsubscribesPCT = !r.recipients ? 0 : ((unsubscribes / r.recipients) * 100).toFixed(1);
+
+
+						var emlStats = $('#newsman-eml-'+r.id+' .newsman-email-stats');
+
+						emlStats.find('.newsman-email-sent .num').empty().append(formatSent(r));
+						emlStats.find('.newsman-email-sent .extra-lbl').html(r.sent+' / '+r.recipients);
+
+						emlStats.find('.newsman-email-opens .num').html(opens);
+						emlStats.find('.newsman-email-opens .extra-lbl').html(opensPCT+'%');
+
+						emlStats.find('.newsman-email-clicks .num').html(clicks);
+						emlStats.find('.newsman-email-clicks .extra-lbl').html(clicksPCT+'%');
+
+						emlStats.find('.newsman-email-unsubscribes .num').html(unsubscribes);
+						emlStats.find('.newsman-email-unsubscribes .extra-lbl').html(unsubscribesPCT+'%');
 
 						$('#newsman-eml-'+r.id+'-status').empty().append(formatStatus(r.status, fd));
-						$('#newsman-eml-'+r.id+'-msg').html(formatMsg(r));
+						enableInlineStartStopButtons(r.status, r.id);
 					});
 
 					runPolling();
@@ -2940,12 +3116,47 @@ jQuery(function($){
 				if ( st !== 'draft' ) {
 					$(el).click(function(e){
 						e.preventDefault();
-						var emailId = $(this).closest('tr').find('input').val();					
+						var emailId = $(this).closest('.newsman-email').attr('emlid');
 						showSendingLog(emailId);
 					});	
 				}
 
 				return el;
+			}
+
+			function enableInlineStartStopButtons(st, emlId) {
+
+				switch ( st ) {
+					case 'sent': 
+						$('#newsman-eml-'+emlId+' .newsman-email-start-sending').hide();
+						$('#newsman-eml-'+emlId+' .newsman-email-stop-sending').hide();
+						break;
+					case 'pending': 
+						$('#newsman-eml-'+emlId+' .newsman-email-start-sending').hide();
+						$('#newsman-eml-'+emlId+' .newsman-email-stop-sending').show();
+						break;
+					case 'draft':
+						$('#newsman-eml-'+emlId+' .newsman-email-start-sending').show();
+						$('#newsman-eml-'+emlId+' .newsman-email-stop-sending').hide();					
+						break;
+					case 'inprogress': 
+						$('#newsman-eml-'+emlId+' .newsman-email-start-sending').hide();
+						$('#newsman-eml-'+emlId+' .newsman-email-stop-sending').show();					
+						break;
+					case 'stopped': 
+						$('#newsman-eml-'+emlId+' .newsman-email-start-sending').show();
+						$('#newsman-eml-'+emlId+' .newsman-email-stop-sending').hide();					
+						break;
+					case 'error': 
+						$('#newsman-eml-'+emlId+' .newsman-email-start-sending').show();
+						$('#newsman-eml-'+emlId+' .newsman-email-stop-sending').hide();
+						break;
+					case 'scheduled': 
+						$('#newsman-eml-'+emlId+' .newsman-email-start-sending').hide();
+						$('#newsman-eml-'+emlId+' .newsman-email-stop-sending').hide();
+						break;
+				}
+
 			}
 
 			function formatMsg(data) {
@@ -2964,6 +3175,12 @@ jQuery(function($){
 						return '';
 					}
 				}				
+			}
+
+			function formatSent(data) {
+				if ( !data.recipients ) { return 0; }
+				var x = data.sent / data.recipients * 100;
+				return Math.round(x)+'%';
 			}
 
 			function fillCounters(cnt) {
@@ -3025,13 +3242,9 @@ jQuery(function($){
 
 				$('#newsman-checkall').prop('checked', false);
 
-				// showLoading
-				var tbody = $('#newsman-mgr-subscribers tbody').empty();
-				$('<tr><td colspan="7" class="blank-row"><img src="'+NEWSMAN_PLUGIN_URL+'/img/ajax-loader.gif"> '+newsmanL10n.loading+'</td></tr>').appendTo(tbody);
-
 				function noData() {
-					var tbody = $('#newsman-mailbox tbody').empty();
-					$('<tr><td colspan="7" class="blank-row">'+newsmanL10n.youHaveNoEmailsYet+'</td></tr>').appendTo(tbody);
+					var tbody = $('#newsman-mailbox').empty();
+					$('<div class="blank-row">'+newsmanL10n.youHaveNoEmailsYet+'</div>').appendTo(tbody);
 				}
 
 				function fieldsToHTML(obj) {
@@ -3044,7 +3257,6 @@ jQuery(function($){
 				}
 
 				function formatTo(to) {
-
 					var arr;
 
 					if ( $.isArray(to) ) {
@@ -3059,7 +3271,7 @@ jQuery(function($){
 
 					if ( $.isArray(arr) ) {
 						for (var i = 0; i < arr.length; i++) {
-							arr[i] = '<span class="label label-info">'+arr[i]+'</span>';
+							arr[i] = '<span class="label label-default">'+arr[i]+'</span>';
 						}										
 					} else {
 						arr = [];
@@ -3068,9 +3280,8 @@ jQuery(function($){
 					return arr.join('');
 				}
 
-
 				function fillRows(rows) {
-					var tbody = $('#newsman-mailbox tbody').empty();
+					var tbody = $('#newsman-mailbox').empty();
 					if (rows.length) {
 						$(rows).each(function(i, r){
 
@@ -3081,23 +3292,101 @@ jQuery(function($){
 							fdate = d.toLocaleString().replace(/\s+GMT.*/, '');
 
 							function formatTS(uts) {
-								return (new Date(uts*1000)).toLocaleString().replace(/\s+GMT.*/, '');
+								var d = new Date(uts*1000),
+									t = moment(d).format('LLL');
+								return '<span class="newsman-tbl-emails-created" title="'+t+'" style="border-bottom: 1px dashed #cacaca; cursor: default;">'+moment(d).fromNow()+'</span>';
 							}
 
-							$(['<tr>',
-									'<td><input value="'+r.id+'" type="checkbox"></td>',
-									'<td><a href="'+NEWSMAN_BLOG_ADMIN_URL+'/admin.php?page=newsman-mailbox&action=edit&type='+r.editor+'&id='+r.id+'">'+(r.subject || 'No subject')+'</a></td>',
-									'<td>'+formatTo(r.to)+'</td>',
-									'<td>'+formatTS(r.created)+'</td>',
-									'<td id="newsman-eml-'+r.id+'-status"></td>',
-									'<td><a href="'+r.publicURL+'">'+newsmanL10n.viewInBrowser+'</a></td>',
-									'<td id="newsman-eml-'+r.id+'-msg">'+formatMsg(r)+'</td>',
-								'</tr>'].join('')).appendTo(tbody);
+							var clicks = r.clicks || 0,
+								clicksPCT = !r.recipients ? 0 : ((clicks / r.recipients) * 100).toFixed(1),
+								opens = r.opens || 0,
+								opensPCT = !r.recipients ? 0 : ((opens / r.recipients) * 100).toFixed(1),
+								unsubscribes = r.unsubscribes || 0,
+								unsubscribesPCT = !r.recipients ? 0 : ((unsubscribes / r.recipients) * 100).toFixed(1),
+								viewStatsHRef = '';
+
+							// if lite version	
+							if ( newsmanL10n.newsmanVersionClass === 'newsman-pro-version' ) {
+								viewStatsHRef = 'href="'+NEWSMAN_BLOG_ADMIN_URL+'/admin.php?page=newsman-mailbox&action=stats&id='+r.id+'"';
+							}
+
+							$([
+								'<div emlid="'+r.id+'" id="newsman-eml-'+r.id+'" class="newsman-email">',
+									'<div class="newsman-email-general">',
+										'<div class="newsman-email-subject">',
+											'<a href="'+NEWSMAN_BLOG_ADMIN_URL+'/admin.php?page=newsman-mailbox&action=edit&id='+r.id+'">'+(r.subject || 'No subject')+'</a>',
+										'</div>',
+										'<div class="newsman-email-to">',
+											formatTo(r.to),
+										'</div>',
+										'<ul class="newsman-email-bottom-btns">',
+											'<li style="display:none;" class="newsman-email-start-sending"><a href="#"><i class="newsman-icon newsman-icon-play"></i> Start</a></li>',
+											'<li style="display:none;" class="newsman-email-stop-sending"><a href="#"><i class="newsman-icon newsman-icon-stop"></i> Stop</a></li>',
+											'<li><a href="'+NEWSMAN_BLOG_ADMIN_URL+'/admin.php?page=newsman-mailbox&action=edit&id='+r.id+'"><i class="newsman-icon newsman-icon-edit"></i> Edit</a></li>',
+											'<li><a href="'+NEWSMAN_BLOG_ADMIN_URL+'/admin.php?page=newsman-mailbox&action=compose-from-email&id='+r.id+'"><i class="newsman-icon newsman-icon-envelope"></i> Duplicate</a></li>',
+											'<li>',
+												'<a href="'+r.publicURL+'"><i class="newsman-icon newsman-icon-external-link"></i> '+newsmanL10n.viewInBrowser+'</a>',
+											'</li>',
+											'<li class="newsman-email-delete">',
+												'<a href="#"><i class="newsman-icon newsman-icon-trash"></i> Delete</a>',
+											'</li>',
+										'</ul>',
+										'<ul class="newsman-email-meta">',
+											'<li class="newsman-email-created">',
+												'<i class="newsman-icon newsman-icon-time"></i> '+formatTS(r.created),
+											'</li>',
+											'<li class="newsman-email-status">',
+												'<span class="newsman-tbl-emails-status" id="newsman-eml-'+r.id+'-status"></span>',
+											//'</li>',
+											'<li>&nbsp;</li>',											
+											'<li class="newsman-email-view-stats '+newsmanL10n.newsmanVersionClass+'">',
+												'<a '+viewStatsHRef+'><i class="newsman-icon newsman-icon-bar-chart"></i> '+newsmanL10n.viewStats+'</a>',
+											'</li>',
+										'</ul>',
+									'</div>',
+									'<div class="newsman-email-stats">',
+										'<div class="newsman-email-sent newsman-email-stats-card">',
+											'<span class="num">'+formatSent(r)+'</span>',
+											'<span class="lbl">sent</span>',
+											'<span class="extra-lbl">'+r.sent+' / '+r.recipients+'</span>',											
+										'</div>',									
+										'<div class="newsman-email-opens newsman-email-stats-card">',
+											'<span class="num">'+opens+'</span>',
+											'<span class="lbl">opens</span>',
+											'<span class="extra-lbl">'+opensPCT+'%</span>',
+										'</div>',
+										'<div class="newsman-email-clicks newsman-email-stats-card">',
+											'<span class="num">'+clicks+'</span>',
+											'<span class="lbl">clicks</span>',
+											'<span class="extra-lbl">'+clicksPCT+'%</span>',											
+										'</div>',
+										'<div class="newsman-email-unsubscribes newsman-email-stats-card">',
+											'<span class="num">'+unsubscribes+'</span>',
+											'<span class="lbl">unsubscribes</span>',
+											'<span class="extra-lbl">'+unsubscribesPCT+'%</span>',											
+										'</div>',
+									'</div>',
+								'</div>'
+							].join('')).appendTo(tbody);
+
+							enableInlineStartStopButtons(st, r.id);
 
 							$('#newsman-eml-'+r.id+'-status').append(formatStatus(st, fdate));
 						});
 					} else {
 						noData();
+					}
+
+					//debugger;
+					// if lite version	
+					if ( newsmanL10n.newsmanVersionClass === 'newsman-lite-version' ) {
+						$('.newsman-email-view-stats a').tipsy({
+							html: true,
+							title: function() { return newsmanL10n.viewStatsHint; },
+							delayIn: 500,
+							delayOut: 3000,
+							gravity: 's'
+						});
 					}
 				}
 
@@ -3144,11 +3433,14 @@ jQuery(function($){
 
 			// --- ui elements
 
+			//TODO: rewrite for new UI
+
 			$('#newsman-btn-stop').click(function(e){
 				showLoading('Stopping...');
 				var ids = [];
-				$('#newsman-mailbox tbody input:checked').each(function(i, el){
-					ids.push( parseInt($(el).val(), 10) );
+				$('.newsman-email.checked').each(function(i, el){
+					var emlId = $(el).closest('.newsman-email').attr('emlid');
+					ids.push( parseInt(emlId, 10) );
 				});
 				if ( ids.length === 0 ) {
 					showMessage(newsmanL10n.pleaseSelectEmailsToStop);
@@ -3168,11 +3460,13 @@ jQuery(function($){
 				});
 			});
 
-			$('#newsman-btn-resume').click(function(e){
+			//TODO: rewrite for new UI
+			$('#newsman-btn-start').click(function(e){
 				showLoading('Resuming...');
 				var ids = [];
-				$('#newsman-mailbox tbody input:checked').each(function(i, el){
-					ids.push( parseInt($(el).val(), 10) );
+				$('.newsman-email.checked').each(function(i, el){
+					var emlId = $(el).closest('.newsman-email').attr('emlid');
+					ids.push( parseInt(emlId, 10) );
 				});
 				if ( ids.length === 0 ) {
 					showMessage(newsmanL10n.pleaseSelectEmailsFist);
@@ -3228,8 +3522,10 @@ jQuery(function($){
 
 			$('#newsman-btn-delete').click(function(e){
 				var ids = [];
-				$('#newsman-mailbox tbody input:checked').each(function(i, el){
-					ids.push( parseInt($(el).val(), 10) );
+
+				$('.newsman-email.checked').each(function(i, el){
+					var emlId = $(el).closest('.newsman-email').attr('emlid');
+					ids.push( parseInt(emlId, 10) );
 				});
 
 				if ( !ids.length ) {
@@ -3271,7 +3567,7 @@ jQuery(function($){
 					}
 				}).done(function(data){
 					if ( data.id ) {
-						window.location = NEWSMAN_BLOG_ADMIN_URL+'/admin.php?page=newsman-mailbox&action=edit&type=wp&id='+data.id;
+						window.location = NEWSMAN_BLOG_ADMIN_URL+'/admin.php?page=newsman-mailbox&action=edit&id='+data.id;
 					} else {
 						getEmails();
 					}
@@ -3283,6 +3579,16 @@ jQuery(function($){
 			});
 
 		})();
+	});
+
+	/*******    Email Stats   **********/
+
+	newsmanPage('#newsman-email-stats', function(){
+
+		if ( typeof NEWSMANEXT !== 'undefined' && NEWSMANEXT.initEmailStatsPage) {
+			NEWSMANEXT.initEmailStatsPage();
+		}
+
 	});
 
 	/*******    Manage Templates   **********/
@@ -3640,7 +3946,7 @@ jQuery(function($){
 				}
 
 				function noData() {
-					var tbody = $('#newsman-mailbox tbody').empty();
+					var tbody = $('#newsman-mailbox').empty();
 					$('<tr><td colspan="5" class="blank-row">'+newsmanL10n.youHaveNoTemplatesYet+'</td></tr>').appendTo(tbody);
 				}
 
@@ -4328,7 +4634,7 @@ jQuery(function($){
 							'<tr>',
 								'<td><input value="'+data.id+'" type="checkbox"></td>',
 								//'<td><a href="'+NEWSMAN_BLOG_ADMIN_URL+'admin.php?page=newsman-forms&sub=subscribers&action=editlist&id='+data.id+'">'+data.name+'</a></td>',
-								'<td><a href="'+NEWSMAN_BLOG_ADMIN_URL+'admin.php?page=newsman-forms&sub=subscribers#/'+data.id+'/all"><strong>'+data.name+'</strong></a><div class="newsman-inline-controls"><a href="'+NEWSMAN_BLOG_ADMIN_URL+'admin.php?page=newsman-forms&sub=subscribers&action=editlist&id='+data.id+'">'+newsmanL10n.editForm+'</a> | <a href="'+NEWSMAN_BLOG_ADMIN_URL+'admin.php?page=newsman-forms&sub=subscribers#/'+data.id+'/all">'+newsmanL10n.viewSubscribers+'</a></div></td>',
+								'<td><a href="'+NEWSMAN_BLOG_ADMIN_URL+'admin.php?page=newsman-forms&sub=subscribers#/'+data.id+'/all"><strong>'+data.name+'</strong></a><div class="newsman-inline-controls"><a href="'+NEWSMAN_BLOG_ADMIN_URL+'admin.php?page=newsman-forms&sub=subscribers&action=editlist&id='+data.id+'"><i class="newsman-icon newsman-icon-edit"></i> '+newsmanL10n.editForm+'</a> | <a href="'+NEWSMAN_BLOG_ADMIN_URL+'admin.php?page=newsman-forms&sub=subscribers#/'+data.id+'/all"><i class="newsman-icon newsman-icon-group"></i> '+newsmanL10n.viewSubscribers+'</a></div></td>',
 								'<td>0</td>',
 								'<td>0</td>',
 								'<td>0</td>',
@@ -4439,7 +4745,7 @@ jQuery(function($){
 						$(lists).each(function(i, l){
 							$(['<tr>',
 									'<td><input value="'+l.id+'" type="checkbox"></td>',
-									'<td><a href="'+NEWSMAN_BLOG_ADMIN_URL+'admin.php?page=newsman-forms&sub=subscribers#/'+l.id+'/all"><strong>'+l.name+'</strong></a><div class="newsman-inline-controls"><a href="'+NEWSMAN_BLOG_ADMIN_URL+'admin.php?page=newsman-forms&sub=subscribers&action=editlist&id='+l.id+'">'+newsmanL10n.editForm+'</a> | <a href="'+NEWSMAN_BLOG_ADMIN_URL+'admin.php?page=newsman-forms&sub=subscribers#/'+l.id+'/all">'+newsmanL10n.viewSubscribers+'</a></div></td>',
+									'<td><a href="'+NEWSMAN_BLOG_ADMIN_URL+'admin.php?page=newsman-forms&sub=subscribers#/'+l.id+'/all"><strong>'+l.name+'</strong></a><div class="newsman-inline-controls"><a href="'+NEWSMAN_BLOG_ADMIN_URL+'admin.php?page=newsman-forms&sub=subscribers&action=editlist&id='+l.id+'"><i class="newsman-icon newsman-icon-edit"></i> '+newsmanL10n.editForm+'</a> | <a href="'+NEWSMAN_BLOG_ADMIN_URL+'admin.php?page=newsman-forms&sub=subscribers#/'+l.id+'/all"><i class="newsman-icon newsman-icon-group"></i> '+newsmanL10n.viewSubscribers+'</a></div></td>',
 									'<td>'+(l.stats.confirmed || 0)+'</td>',
 									'<td>'+(l.stats.unconfirmed || 0)+'</td>',
 									'<td>'+(l.stats.unsubscribed || 0)+'</td>',
@@ -4728,5 +5034,7 @@ jQuery(function($){
 			getLog();
 		});
 	});
+
+	$('.newsman-show-tipsy').tipsy();
 
 });

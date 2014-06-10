@@ -102,7 +102,13 @@
 			</div>
 
 			<div class="span3">
-				<?php if( NEWSMAN_EDIT_ENTITY == 'email' ): ?>
+				<?php if ( defined('NEWSMAN_EDIT_ENTITY') && NEWSMAN_EDIT_ENTITY == 'email' ): ?>
+				<h3><?php _e('Email Analytics', NEWSMAN); ?></h3>
+				<!-- <span class="newsman-help-label">Track opens &amp; clicks</span> -->
+				<div>
+					<label class="checkbox"><input <?php echo $ent->emailAnalytics ? 'checked="checked"' : ''; ?> id="newsman-email-analytics" type="checkbox"> Track opens &amp; clicks</label>
+				</div>				
+				<hr>					
 				<?php do_action('newsman_put_tracking_settings', $ent); ?>
 				<h3><?php _e('Sending', NEWSMAN); ?></h3>
 				<label for="newsman-send-now" class="radio"><input type="radio" name="newsman-send" value="now" checked="checked" id="newsman-send-now"> <?php echo ( isset($email) && $email->status == 'stopped' ) ? __('Resume', NEWSMAN) : __('Send immediately', NEWSMAN); ?></label>

@@ -3,6 +3,7 @@
 	<?php include("_header.php"); ?>
 	<div class="page-header">
 		<h2><?php _e('Email Templates', NEWSMAN); ?></h2>
+		<?php do_action('newsman_admin_notices'); ?>
 	</div>
 
 	<div style="overflow:hidden;">

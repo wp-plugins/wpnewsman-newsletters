@@ -101,33 +101,6 @@ class newsmanForm {
 		return $this->adminMode ? '<button class="close">&times;</button>' : '';
 	}
 
-	private function getCypherField() {
-		$o = newsmanOptions::getInstance();
-		if ( $o->get('disableCypherField') ) {
-			return '';
-		}
-		$u = newsmanUtils::getInstance();
-
-		$lblSt = $this->useInlineLabels ? 'style="display: none;"' : '';
-
-		$peer_ip = $u->peerip();
-		$ts = time();
-		$value = $u->encrypt_pwd($peer_ip.'-'.$ts);
-
-		$label = $this->randStr();
-
-		$lbl = '<label class="newsman-form-item-label" '.$lblSt.' >'.$this->ent($label).'</label>';
-		$ph = $this->useInlineLabels ? 'placeholder="'.$this->specChr($label).'"' : '';
-
-		$elId = $this->getElId();
-
-		return	"<div style=\"display: none;\" class=\"newsman-form-item ".$this->hpCSSClassName." newsman-form-item-text $elId\">".
-					$lbl.
-					'<input type="text" name="newsman-special-c" value="'.$this->specChr($value).'" '.$ph.'>'.
-					'<span class="newsman-required-msg" style="display:none;">'.__('Required', NEWSMAN).'</span>'.
-				'</div>';	
-	}
-
 	private function getHPField() {
 		$lblSt = $this->useInlineLabels ? 'style="display: none;"' : '';
 
@@ -170,30 +143,6 @@ class newsmanForm {
 
 		$hpFieldValue = $_REQUEST[$hpFieldName];
 		if ( $hpFieldValue !== '' ) { return false; }
-
-		if ( !$o->get('disableCypherField') ) {
-			
-			if ( !isset($_REQUEST['newsman-special-c']) ) { return false; }
-
-			$cfFieldValueEnc = $_REQUEST['newsman-special-c'];
-			$cfFieldValueDec = $u->decrypt_pwd($cfFieldValueEnc);
-
-			if ( !$cfFieldValueDec ) { return false; }
-
-			$cfFieldValueDecArr = explode('-', $cfFieldValueDec);
-
-			$ip = $cfFieldValueDecArr[0];
-			$ts = $cfFieldValueDecArr[1];
-
-			$validInterval = $ts + ( 5*60*60 ); // ts + 5 hours
-
-			if ( $ip !== $u->peerip() ) { return false; }
-
-			$now = time();
-
-			// if post "from future" or form data older than 5 hours
-			if ( $ts > $now || $validInterval < $now ) { return false; }			
-		}
 
 		return true;
 	}
@@ -295,7 +244,7 @@ class newsmanForm {
 			$id = "rad-".$i;			
 
 			$val = isset($radio['value']) ? $radio['value'] : $this->valueFromLabel($radio['label']);
-			$chkd = $radio['checked'] ? 'checked="checked"' : '';
+			$chkd = (isset($radio['checked']) && $radio['checked']) ? 'checked="checked"' : '';
 			$radios .= 	'<label id="'.$this->specChr($id).'" class="radio">'.
 							'<input type="radio" name="'.$this->specChr($item['name']).'" '.$chkd.' value="'.$this->specChr($val).'">'.
 							'<span>'.$this->ent($radio['label']).'</span>'.
@@ -384,7 +333,7 @@ class newsmanForm {
 
 	public function parse() {
 		if ( !$this->validateHPFields() ) {
-			wp_die( __('Something went wrong. Please contact the site administrator and describe the problem.', NEWSMAN), __('Error', NEWSMAN) );
+			wp_die( __('Spam submission detected. Please contact the site administrator and describe the problem.', NEWSMAN), __('Error', NEWSMAN) );
 		}
 		$parsed = array();
 		foreach ($this->decodedForm as $item) {
@@ -426,7 +375,7 @@ class newsmanForm {
 			$formHtml .= $renderedItem;			
 		}
 
-		$formHtml .= $this->getCypherField().$this->getHPField();
+		$formHtml .= $this->getHPField();
 
 		if ( !$hasEmailField ) {
 			$formHtml .= $this->getEmail(array(

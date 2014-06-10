@@ -269,8 +269,6 @@ class newsmanUtils {
 			if ( isset($opts['uns_link']) ) {
 				$mail->addCustomHeader('List-Unsubscribe: <'.$opts['uns_link'].'>,<mailto:'.$s['email'].'?subject=unsubscribe;'.$opts['uns_code'].'>');
 			}
-
-			
 			
 			$mail->AddAddress($to);
 			
@@ -301,7 +299,13 @@ class newsmanUtils {
 		return $x;
 	}	
 
-	public function log($msg) {		
+	public function log($msg) {
+		$args = func_get_args();
+
+		if ( count($args) > 1 ) {
+			$msg = call_user_func_array('sprintf', func_get_args() );	
+		}		
+
 		if ( defined('NEWSMAN_DEBUG') && NEWSMAN_DEBUG === true ) {
 			$msg = '['.date('Y-m-d H:i:s').'] '.$msg."\n";
 			file_put_contents($this->debugLogPath, $msg, FILE_APPEND);
@@ -362,6 +366,64 @@ class newsmanUtils {
 	}	
 
 	function peerip() {
+
+		if ( defined('NEWSMAN_DEBUG_USE_FAKE_IPS') && NEWSMAN_DEBUG_USE_FAKE_IPS === true ) {
+			$fakeIPS = array(
+				'110.179.184.4',
+				'218.3.166.134',
+				'183.87.39.118',
+				'199.193.153.72',
+				'218.108.168.69',
+				'193.182.156.91',
+				'221.10.102.199',
+				'89.190.195.170',
+				'109.196.34.8',
+				'213.141.146.146',
+				'86.21.218.143',
+				'118.97.95.174',
+				'200.16.125.92',
+				'110.74.195.127',
+				'180.150.157.209',
+				'77.50.220.92',
+				'62.68.95.14',
+				'212.41.46.17',
+				'120.203.154.17',
+				'95.0.22.1',
+				'186.235.237.140',
+				'115.236.59.194',
+				'222.255.27.211',
+				'61.163.231.212',
+				'110.77.199.225',
+				'109.71.179.98',
+				'115.124.89.154',
+				'76.188.21.208',
+				'202.159.20.147',
+				'78.39.39.40',
+				'212.117.56.248',
+				'58.20.127.178',
+				'139.0.2.162',
+				'27.44.76.230',
+				'61.19.51.133',
+				'218.108.170.172',
+				'200.179.96.132',
+				'37.114.221.20',
+				'115.227.192.127',
+				'202.159.15.226',
+				'187.112.1.80',
+				'119.31.123.207',
+				'222.73.165.25',
+				'202.148.27.122',
+				'200.50.175.177',
+				'220.178.100.181',
+				'101.255.73.42',
+				'46.99.145.33',
+				'122.226.73.248',
+				'189.17.66.162'
+			);			
+	
+			return $fakeIPS[rand(9, count($fakeIPS)-1)];
+		}
+
 		if ( isset($_SERVER) ) {
 			if ( isset($_SERVER["HTTP_X_FORWARDED_FOR"]) ) {
 				$ip = $_SERVER["HTTP_X_FORWARDED_FOR"];
@@ -476,10 +538,9 @@ class newsmanUtils {
 		//$text = preg_replace("/^(\W*(\w[\w'-]*\b\W*){1,$number_of_words}).*/ms", '\\1', $text);
 		preg_match('/^([\S]+\s+){50}/m', $text, $matches);
 
-		return str_replace("\n", "", $matches[0]);
 
-		// strip out newline characters from our excerpt
-		//return str_replace("\n", "", $text);
+
+		return ( $matches && isset($matches[0]) ) ? str_replace("\n", "", $matches[0]) : $text;
 	}
 
 	function fancyExcerpt($content, $maxLength = 350) {
@@ -1291,7 +1352,6 @@ class newsmanUtils {
 				newsman_do_migration();
 			}		
 			do_action('wpnewsman_update');
-			update_option('newsman_old_version', get_option('newsman_version'));	
 			update_option('newsman_version', NEWSMAN_VERSION);
 		}
 		return $updated;

@@ -25,9 +25,15 @@ function newsman_do_migration() {
 		$completed = array();
 	}
 
-	foreach ($newsman_changes as $change) {
-		if ( $oldVersion <= $change['introduced_in'] && ( !in_array($change['func'], $completed) || $change['repeat'] ) ) {
+	// after this version migrations are checked only using completed array.
+	$migration2version = $u->versionToNum('1.6.0');
 
+	$u->log('[migration] completed: %s', print_r($completed, true));
+
+	foreach ($newsman_changes as $change) {
+		$u->log('[migration] CHANGE: %s. introduced_in: %s', $change['func'], $change['introduced_in']);
+		if ( $change['introduced_in'] >= $migration2version && ( !in_array($change['func'], $completed) || ( isset($change['repeat']) && $change['repeat'] ) ) ) {
+			$u->log('[migration] executing...');
 			call_user_func($change['func']);
 			$completed[] = $change['func'];
 			update_option('newsman_completed_migrations', $completed);
@@ -437,6 +443,46 @@ function newsman_migration_alter_emails_table_apply_longtext_type() {
 		$wpdb->query("ALTER TABLE $tbl MODIFY COLUMN $col LONGTEXT NOT NULL DEFAULT ''");
 	}
 }
+
+$newsman_changes[] = array(
+	'introduced_in' => $u->versionToNum('1.7.0-alpha-1'),
+	'func' => 'newsman_migration_add_analytics_columns_and_tables'
+);
+
+function newsman_migration_add_analytics_columns_and_tables() {
+	global $wpdb;
+
+	$newEmailColumns = array('opens', 'clicks', 'unsubscribes');
+
+	$tbl = newsmanEmail::getTableName();	
+	foreach ($newEmailColumns as $col) {
+		$sql = "ALTER TABLE $tbl ADD COLUMN $col int(10) unsigned NOT NULL DEFAULT 0";
+		$res = $wpdb->query($sql);
+	}	
+}
+
+
+function newsman_migration_add_emailAnalytics_column() {
+	global $wpdb;
+
+	newsmanEmail::addColumn('emailAnalytics', array( 'type' => 'bool', 'default' => true ));
+}
+
+$newsman_changes[] = array(
+	'introduced_in' => $u->versionToNum('1.7.0-alpha-2'),
+	'func' => 'newsman_migration_add_emailAnalytics_column'
+);
+
+function newsman_migration_recheck_table_definitions() {
+	$g = newsman::getInstance()->ensureEnvironment();
+}
+
+$newsman_changes[] = array(
+	'introduced_in' => $u->versionToNum('1.7.0-alpha-5'),
+	'func' => 'newsman_migration_recheck_table_definitions',
+	'repeat' => true
+);
+
 
 
 

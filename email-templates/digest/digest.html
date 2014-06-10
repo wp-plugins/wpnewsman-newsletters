@@ -7,142 +7,101 @@
 <!-- NEWSMAN: to make html editor show digest controls make sure this meta tag is included -->
 <meta name="glock-newsletter-digest" content="yes" />
 <style type="text/css">
-/*
-		@tab Page
-		@section Background
-		*/
+	/* Force Hotmail to display emails at full width */
+	.ExternalClass {width: 100%;}
+	.ExternalClass, .ExternalClass p, .ExternalClass span, .ExternalClass font, .ExternalClass td, .ExternalClass div {line-height: 100%;}
 
-
-
+  a, a img { border:none; }
 body {
 	margin: 0;
 	padding: 0;
-	/*@editable*/background-color: #dddddd;
+	background-color: #dddddd;
 }
-/*
-		@tab Page
-		@section Frame
-		*/
 .outer.frame {
 	border: 0px;
-	/*@editable*/border-left: 1px solid #cccccc;
-	/*@editable*/border-right: 1px solid #cccccc;
+	border-left: 1px solid #cccccc;
+	border-right: 1px solid #cccccc;
 	background-color: #dddddd;
 	position: relative;
 }
-/*
-		@tab Body
-		@section body style
-		@tip Set the background color for your email's body area.
-		*/
+
 #templateContainer, .bodyContent {
-	/*@editable*/background-color: #FFFFFF;
+	background-color: #FFFFFF;
 }
-/*
-		@tab Body
-		@section body text
-		@tip Set the styling for your email's main content text. Choose a size and color that is easy to read.
-		@theme main
-		*/
+
 .bodyContent div {
-	/*@editable*/color: #505050;
-	/*@editable*/font-family: Arial;
-	/*@editable*/font-size: 14px;
-	/*@editable*/line-height: 150%;
-	/*@editable*/text-align: left;
+	color: #505050;
+	font-family: Arial;
+	font-size: 14px;
+	line-height: 150%;
+	text-align: left;
 }
-/*
-		@tab Body
-		@section body link
-		@tip Set the styling for your email's main content links. Choose a color that helps them stand out from your text.
-		*/
+
 .bodyContent div a:link, .bodyContent div a:visited, .bodyContent div a .yshortcuts {
-	/*@editable*/color: #336699;
-	/*@editable*/font-weight: normal;
-	/*@editable*/text-decoration: underline;
+	color: #336699;
+	border: none;
+	font-weight: normal;
+	text-decoration: underline;
 }
 .bodyContent img {
 	display: inline;
 	height: auto;
+	border: none;
 }
-/*
-		@tab Header
-		@section General
-		*/
+
 .header.frame {
-	/*@editable*/background-color: #f2f2f2;
+	background-color: #f2f2f2;
 }
-/*
-		@tab Header
-		@section Text
-		*/
+
 .main_header {
-	/*@editable*/padding-left: 10px;
-	/*@editable*/padding-right: 10px;
-	/*@editable*/font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-	/*@editable*/color: #333333;
+	padding-left: 10px;
+	padding-right: 10px;
+	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	color: #333333;
 }
-/*
-		@tab Header
-		@section Title		
-		*/
+
 .title {
-	/*@editable*/font-size: 18px;
-	/*@editable*/line-height: 20px;
-	/*@editable*/font-weight: bold;
-	/*@editable*/color: #333333;
+	font-size: 18px;
+	line-height: 20px;
+	font-weight: bold;
+	color: #333333;
 }
-/*
-		@tab Header
-		@section Sub Title		
-		*/
+
 .subtitle {
-	/*@editable*/font-size: 14px;
-	/*@editable*/color: #666666;
-	/*@editable*/line-height: 16px;
+	font-size: 14px;
+	color: #666666;
+	line-height: 16px;
 }
-/*
-		@tab Footer
-		@section Main
-		*/
+
 .footer {
-	/*@editable*/background-color: #eeeeee;
+	background-color: #eeeeee;
 	background-image: url(shadow_bottom.jpg);
 	background-position: top;
 	background-repeat: repeat-x;
-	/*@editable*/border-top: 1px solid #dddddd;
+	border-top: 1px solid #dddddd;
 }
-/*
-		@tab Footer
-		@section Text
-		*/
+
 .footer_body {
-	/*@editable*/font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-	/*@editable*/font-size: 12px;
-	/*@editable*/line-height: 17px;
-	/*@editable*/color: #777;
+	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 17px;
+	color: #777;
 	text-shadow: 0 1px 0 #ffffff;
 }
-/*
-		@tab Footer
-		@section Text Link
-		*/
+
 .footer_body a {
 	border: none;
-	/*@editable*/color: #0084b4;
-	/*@editable*/text-decoration: none;
+	color: #0084b4;
+	text-decoration: none;
 }
-/*
-		@tab Footer
-		@section Address
-		*/
+
 .footer_body .address {
 	border: none;
-	/*@editable*/text-decoration: none;
-	/*@editable*/font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-	/*@editable*/font-size: 11px;
-	/*@editable*/line-height: 17px;
-	/*@editable*/color: #999999;
+	text-decoration: none;
+	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-size: 11px;
+	line-height: 17px;
+	color: #999999;
 	text-shadow: 0 1px 0 #ffffff;
 }
 .story-title {
@@ -155,40 +114,31 @@ body {
 	table-layout: fixed;
 	overflow: hidden;
 }
-/*
-	@tab Story
-	@section Text
-	*/
+
 .story-snippet {
-	/*@editable*/font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-	/*@editable*/background-color: #fff;
-	/*@editable*/color: #555;
-	/*@editable*/font-size: 14px;
-	/*@editable*/line-height: 18px;
-	/*@editable*/margin-top: 10px;
-	/*@editable*/margin-bottom: 10px;
+	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	background-color: #fff;
+	color: #555;
+	font-size: 14px;
+	line-height: 18px;
+	margin-top: 10px;
+	margin-bottom: 10px;
 }
-/*
-		@tab Story
-		@section Title
-		*/
+
 .story-title span {
-	/*@editable*/color: #333;
-	/*@editable*/text-decoration: none;
-	/*@editable*/font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-	/*@editable*/font-size: 18px;
-	/*@editable*/line-height: 20px;
-	/*@editable*/font-weight: bold;
+	color: #333;
+	text-decoration: none;
+	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-size: 18px;
+	line-height: 20px;
+	font-weight: bold;
 }
-/*
-@tab Story
-@section Text Link
-*/
+
 .story-snippet a {
-	/*@editable*/color: #0084b4;
-	/*@editable*/text-decoration: none;
+	border: none;
+	color: #0084b4;
+	text-decoration: none;
 }
-/*  template styling  */
 
 .padding {
 	background-color: white;
@@ -237,8 +187,8 @@ body {
                       <td style="width: 85px;"></td>
                     </tr>
                     <tr>
-                      <td style="border-top: 1px solid #dddddd;background-color: #ffffff;">&nbsp;</td>
-                      <td style="border-top: 1px solid #dddddd;background-color: #ffffff;">&nbsp;</td>
+                      <td style="border-top: 1px solid #dddddd;background-color: #ffffff;">&ensp;</td>
+                      <td style="border-top: 1px solid #dddddd;background-color: #ffffff;">&ensp;</td>
                       <td height="17" style="border-top: 1px solid #dddddd;background-color: #ffffff;"><table width="100%" border="0" cellspacing="0" cellpadding="0">
                           <tbody>
                             <tr>
@@ -249,7 +199,7 @@ body {
                         <table width="100%" border="0" cellspacing="0" cellpadding="0">
                           <tbody>
                             <tr>
-                              <td width="10" style="font-size: 1px;">&nbsp;</td>
+                              <td width="10" style="font-size: 1px;">&ensp;</td>
                               <td style="padding: 0px 0 0 0px !important;" valign="top" class="bodyContent"><table width="100%" border="0" cellspacing="0" cellpadding="0">
                                   <tbody>
                                     <tr>
@@ -259,16 +209,16 @@ body {
                                     </tr>
                                   </tbody>
                                 </table></td>
-                              <td width="10" style="font-size: 1px;">&nbsp;</td>
+                              <td width="10" style="font-size: 1px;">&ensp;</td>
                             </tr>
                             <tr class="hide">
-                              <td width="10" style="font-size: 1px;">&nbsp;</td>
-                              <td height="20" style="font-size: 1px;">&nbsp;</td>
-                              <td width="10" style="font-size: 1px;">&nbsp;</td>
+                              <td width="10" style="font-size: 1px;">&ensp;</td>
+                              <td height="20" style="font-size: 1px;">&ensp;</td>
+                              <td width="10" style="font-size: 1px;">&ensp;</td>
                             </tr>
                           </tbody>
                         </table></td>
-                      <td style="border-top: 1px solid #dddddd;background-color: #ffffff;">&nbsp;</td>
+                      <td style="border-top: 1px solid #dddddd;background-color: #ffffff;">&ensp;</td>
                     </tr>
                   </tbody>
                 </table></td>
@@ -294,25 +244,16 @@ body {
                         <!-- /heading --></td>
                     </tr>
                     <tr>
-                      <td gsspecial="posts"><!-- story padding --> 
+                      <td gsspecial="posts">
+                      <!-- story padding --> 
                         
-                        <!--                        
-												<table width="500" border="0" align="center" cellpadding="0" cellspacing="0" class="story-padding padding">
-													<tbody>
-														<tr>
-															<td width="500" height="20"></td>
-														</tr>
-													</tbody>
-												</table>--> 
-                        
-                        <!-- /story padding --> 
                         
                         <!-- story -->
                         
                         <table style="position: relative;" class="frame" bgcolor="#ffffff" width="670" border="0" cellspacing="0" cellpadding="0">
                           <tbody>
                             <tr>
-                              <td style="width: 75px;">&nbsp;</td>
+                              <td style="width: 75px;">&ensp;</td>
                               <td valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="0">
                                   <tbody>
                                     <tr>
@@ -323,11 +264,15 @@ body {
                                 <table gsedit="info_pane" width="100%" border="0" cellspacing="0" cellpadding="0">
                                   <tbody>
                                     <tr>
-                                      <td width="10" style="font-size: 1px;">&nbsp;</td>
-                                      <td style="padding: 0px 0 0 0px !important; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #333333; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #333333;"><table width="100%" border="0" cellspacing="0" cellpadding="0" id="posts_container">
+                                      <td width="10" style="font-size: 1px;">&ensp;</td>
+                                      <td style="padding: 0px 0 0 0px !important; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #333333; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #333333;">
+                                      <div align="left" id="posts_container">
+									  <div gsedit="deletable_block_2">
+                                      <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                           <tbody>
                                             <tr>
-                                              <td valign="top"><a href="[newsman post='permalink']" title="[newsman post='post_title']" class="story-title"> <span style="margin: 4px 0 8px 0;" gsblock="html">How to Create and Edit Digest Templates</span> </a>
+                                              <td valign="top">
+                                               <p class="story-title"> <span style="margin: 4px 0 8px 0;" gsblock="html">How to Create and Edit Digest Templates</span> </p>
                                                 <div class="story-snippet">
                                                 <p><strong>To add blog posts to the template:</strong></p>
                                                 <p>1. Use the options in the editor to modify the template as you need.<br>
@@ -347,22 +292,19 @@ body {
                                               </td>
                                             </tr>
                                           </tbody>
-                                        </table></td>
-                                      <td width="10" style="font-size: 1px;">&nbsp;</td>
-                                    </tr>
-                                    <tr class="hide">
-                                      <td width="10" style="font-size: 1px;">&nbsp;</td>
-                                      <td height="20" style="font-size: 1px;">&nbsp;</td>
-                                      <td width="10" style="font-size: 1px;">&nbsp;</td>
+                                        </table>
+                                        </div></div>
+                                        </td>
+                                      <td width="10" style="font-size: 1px;">&ensp;</td>
                                     </tr>
                                   </tbody>
                                 </table></td>
-                              <td style="width: 85px;">&nbsp;</td>
+                              <td style="width: 85px;">&ensp;</td>
                             </tr>
                             <tr>
-                              <td style="width: 85px; width: 75px;">&nbsp;</td>
+                              <td style="width: 85px; width: 75px;">&ensp;</td>
                               <td style="padding: 0px 0 0 0px !important;" valign="top" class="bodyContent">
-                              <td style="width: 85px;">&nbsp;</td>
+                              <td style="width: 85px;">&ensp;</td>
                             </tr>
                           </tbody>
                         </table>
@@ -374,40 +316,40 @@ body {
                 <table cellpadding="0" cellspacing="0" border="0" width="670">
                   <tbody>
                     <tr>
-                      <td width="75" style="background-color: #ffffff;">&nbsp;</td>
-                      <td width="490" height="17" style="border-top: 0px solid #dddddd;background-color: #ffffff;"><table width="100%" border="0" cellspacing="0" cellpadding="0">
-                          <tbody>
-                            <tr>
-                              <td height="18" style="font-size: 1px;">&nbsp;</td>
-                            </tr>
-                          </tbody>
-                        </table>
+                      <td width="75" style="background-color: #ffffff;">&ensp;</td>
+                      <td width="490" height="17" style="border-top: 0px solid #dddddd;background-color: #ffffff;">
+                      
                         <div gsedit="post_divider">
 	<hr width="100%" height="1" class="story-separator" style="border: 0; margin: 0 auto; color: #e8e8e8; background-color: #e8e8e8; height: 1px;" />	
 </div>
                         <table width="100%" border="0" cellspacing="0" cellpadding="0">
                           <tbody>
                             <tr>
-                              <td width="10" style="font-size: 1px;">&nbsp;</td>
+                              <td width="10" style="font-size: 1px;">&ensp;</td>
                               <td style="padding: 0px 0 0 0px !important;" valign="top" class="bodyContent"><table width="100%" border="0" cellspacing="0" cellpadding="0">
                                   <tbody>
                                     <tr>
-                                      <td valign="top"><div gsedit="std_content01">
-                                          <p>Some closing words here. You can write your signature here or clear this section.</p>
+                                      <td valign="top">
+                                      <div gsedit="std_content01">
+                                           <br> 
+                
+				<div style="font-family: Tahoma,Helvetica,Arial,Verdana,sans-serif;margin-top: 0;margin-bottom: 15px;padding-top: 0;padding-bottom: 0;padding-left: 0;padding-right: 0;font-size: 14px;line-height: 21px;color: #777777;letter-spacing: 0;">Sincerely,
+				<br>
+				Your name</div>
                                         </div></td>
                                     </tr>
                                   </tbody>
                                 </table></td>
-                              <td width="10" style="font-size: 1px;">&nbsp;</td>
+                              <td width="10" style="font-size: 1px;">&ensp;</td>
                             </tr>
                             <tr class="hide">
-                              <td width="10" style="font-size: 1px;">&nbsp;</td>
-                              <td height="20" style="font-size: 1px;">&nbsp;</td>
-                              <td width="10" style="font-size: 1px;">&nbsp;</td>
+                              <td width="10" style="font-size: 1px;">&ensp;</td>
+                              <td height="20" style="font-size: 1px;">&ensp;</td>
+                              <td width="10" style="font-size: 1px;">&ensp;</td>
                             </tr>
                           </tbody>
                         </table></td>
-                      <td width="85" style="background-color: #ffffff;">&nbsp;</td>
+                      <td width="85" style="background-color: #ffffff;">&ensp;</td>
                     </tr>
                   </tbody>
                 </table>
@@ -420,20 +362,23 @@ body {
                       <td><table border="0" cellpadding="0" cellspacing="0" width="670" class="frame footer">
                           <tbody>
                             <tr>
-                              <td colspan="5" height="28">&nbsp;</td>
+                              <td colspan="5" height="28">&ensp;</td>
                             </tr>
                             <tr>
-                              <td style="width: 75px;">&nbsp;</td>
-                              <td width="10">&nbsp;</td>
-                              <td class="footer_body"><div gsedit="std_social"> <a href="[newsman profileurl='twitter']">Follow on Twitter</a> | <a href="[newsman profileurl='facebook']">Friend on Facebook</a> </div>
-                                <div gsedit="std_footer"> <em>Copyright &copy; [newsman date="Y"] [newsman wp="blogname"], All rights reserved.</em> </div>
-                                <div> You can also <a href="[newsman link='unsubscribe']">unsubscribe to these emails</a>. </div>
-                                <div> <a href="#" class="address" gsedit="address">ACME, Inc. 123 Business St., Suite 42 <span class="nobreak" style="white-space: nowrap;">Los Angeles, CA 90001</span></a> </div></td>
-                              <td width="10" class="footer_body">&nbsp;</td>
-                              <td style="width: 85px;">&nbsp;</td>
+                              <td style="width: 75px;">&ensp;</td>
+                              <td width="10">&ensp;</td>
+                              <td class="footer_body">
+                              <div gsedit="std_social"> <a href="[newsman profileurl='twitter']">Follow on Twitter</a> | <a href="[newsman profileurl='facebook']">Friend on Facebook</a> </div>
+                                You're receiving this newsletter because you signed up at 
+				<a href="[newsman wp='url']" style="text-decoration: none">[newsman wp="blogname"]</a>
+                                
+                                <p> You can also <a href="[newsman link='unsubscribe']">unsubscribe to these emails</a>. </p>
+                                <p class="address" gsedit="address"><em>Copyright &copy; [newsman date="Y"] [newsman wp="blogname"], All rights reserved.</em><br> ACME, Inc. 123 Business St., Suite 42 <span class="nobreak" style="white-space: nowrap;">Los Angeles, CA 90001</span></p></td>
+                              <td width="10" class="footer_body">&ensp;</td>
+                              <td style="width: 85px;">&ensp;</td>
                             </tr>
                             <tr>
-                              <td colspan="5" height="25">&nbsp;</td>
+                              <td colspan="5" height="25">&ensp;</td>
                             </tr>
                             <tr>
                               <td align="center" colspan="4"></td>
@@ -451,8 +396,6 @@ body {
     </tr>
   </tbody>
 </table>
-<div gsedit="newsman_badge_wrap">
-  <p style="margin-top: 40px;" align="center">[newsman badge]</p>
-</div>
+  <p style="margin-top: 40px;" align="center">[newsman badge]</p>  
 </body>
 </html>

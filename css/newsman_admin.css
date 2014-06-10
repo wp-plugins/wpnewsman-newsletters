@@ -223,6 +223,16 @@ tr:hover .newsman-inline-controls {
 	background: transparent !important;
 }
 
+div.blank-row {
+	background: #fff !important;
+	height: 100px !important;
+	border: solid #DDD;
+	border-width: 0 1px 1px 0;
+	line-height: 100px;
+	font-size: 22px;
+	color: #AAA;	
+}
+
 .blank-row img {
 	vertical-align: middle;
 	margin-right: 5px;
@@ -1032,7 +1042,7 @@ select.map-select {
 
 	background: rgba(0, 0, 0, 0.78);
 	overflow: hidden;
-	width: 150px;
+	min-width: 150px;
 	padding: 10px;
 	height: 32px;	
 
@@ -1068,8 +1078,13 @@ select.map-select {
 }
 
 .newsman-tbl-emails-status {
-	border-bottom: 1px dashed;
+	border-bottom: 1px solid;
 	cursor: pointer;
+}
+
+.newsman-tbl-emails-created {
+	border-bottom: 1px dashed #cacaca;
+	cursor: default;	
 }
 
 #newsman-ap-shortcodes li {
@@ -1581,3 +1596,411 @@ input.newsman-field-options-radio-opt-input {
 	font-style: italic;
 	color: #999;
 }
+
+
+
+/**
+* NEW MAILBOX STYLE
+*/
+
+.newsman-mailbox {
+
+}
+
+.newsman-email {
+	position: relative;
+	border: solid #DDD;
+	border-width: 1px 1px 0 1px;
+	background: #fff;
+	height: 100px;
+}
+
+.newsman-email:last-child {
+	border-width: 1px;
+}
+
+.newsman-email::after {
+	clear: both;
+}
+
+.newsman-email-created {
+/*	top: 8px;
+	right: 8px;
+	position: absolute;*/
+}
+
+/*.newsman-email-checkmark {
+	position: absolute;
+	top: 50%;
+	margin-top: -9px;
+	left: -27px;
+	opacity: 0;
+}
+*/
+/*** animation ***/
+.newsman-email {
+	-webkit-transition: all 0.2s ease-in-out;
+	-moz-transition: all 0.2s ease-in-out;
+	transition: all 0.2s ease-in-out;
+}
+/*** /// ***/
+
+.newsman-email.checked {
+	background: #FFFBCF;
+}
+
+.newsman-email.checked .newsman-email-checkmark {
+	opacity: .5;
+}
+
+.newsman-email-general,
+.newsman-email-stats {
+	position: relative;
+	float: left;
+	width: 50%;
+	height: 100%;
+	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+}
+
+.newsman-email-general {
+	border-right: 1px solid #DDD;
+	padding: 8px;
+}
+
+#newsman-email-stats {
+	margin-bottom: 1em;
+	padding-top: 30px
+}
+
+.newsman-email .newsman-email-general .newsman-email-meta {
+	position: absolute;
+	top: 8px;
+	right: 8px;	
+	padding: 0;
+	text-align: right;
+}
+
+.newsman-email .newsman-email-general .newsman-email-meta li {
+	line-height: 16px;
+}
+
+.newsman-email-stats-card {
+	border-right: 1px solid #DDD;
+	height: 100%;
+	width: 25%;
+	float: left;
+	position: relative;
+	box-sizing: border-box;
+}
+
+.newsman-email-stats-card:last-child {
+	border-right: none;
+}
+
+/*.newsman-email-sent,
+.newsman-email-opens,
+.newsman-email-clicks, 
+.newsman-email-unsubscribes {
+ 	
+}*/
+
+.newsman-email-stats-card .num {
+	font-size: 30px;
+	font-weight: bold;
+	color: #707070;
+	position: absolute;
+	top: 50%;
+	margin-top: -0.5em;	
+	width: 100%;
+	line-height: 1;
+	text-align: center;
+}
+
+.newsman-email-stats-card .lbl {
+	display: block;
+	text-align: right;
+	position: absolute;
+	right: 8px;
+	top: 8px;	
+}
+
+.newsman-email-stats-card .extra-lbl {
+	position: absolute;
+	bottom: 12px;
+	width: 100%;
+	line-height: 1;
+	text-align: center;
+	color: #BBB;
+}
+
+.newsman-email-to {
+	margin-bottom: 6px;
+	line-height: 2em;
+}
+
+.newsman-email-subject {
+	font-size: 22px;
+	line-height: 1.5em;
+	margin-right: 128px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	color: #08C;
+}
+
+.newsman-email-subject a {
+	white-space: nowrap;
+}
+
+.newsman-email:hover .newsman-email-delete,
+.newsman-email:hover .newsman-email-view-stats,
+.newsman-email:hover .newsman-email-public-url {
+	display: block;
+}
+
+.newsman-email-view-stats,
+.newsman-email-public-url {
+	display: none;
+}
+
+.newsman-email-delete {
+	display: none;
+	color: #B94A48;
+}
+
+.newsman-email-delete a,
+.newsman-email-delete a:hover {
+	color: inherit;
+}
+
+.newsman-email-general ul.newsman-email-bottom-btns {
+	display: none;
+	padding: 0;
+	margin: 0;
+	overflow: hidden;
+}
+
+.newsman-email:hover .newsman-email-general ul.newsman-email-bottom-btns {
+	display: block;
+}
+
+.newsman-email-general ul.newsman-email-bottom-btns::after {
+	clear: both;
+}
+
+.newsman-email-general ul.newsman-email-bottom-btns li {
+	list-style: none;
+	float: left;
+}
+
+.newsman-email-general ul.newsman-email-bottom-btns li::after {
+	content: "|";
+	padding: 0 0.5em;
+}
+
+.newsman-email-general ul.newsman-email-bottom-btns li:last-child::after {
+	content: "";
+	padding-bottom: 0;
+}
+
+.newsman-help-label {
+	display: block;
+	margin-top: -15px;
+	color: #7C7C7C;
+	font-style: italic;
+	margin-bottom: .5em;
+}
+
+
+
+.newsman-chart-wrap {
+	display: inline-block;
+	margin: 10px;
+}
+
+.newsman-chart-wrap h4 {
+	padding: 0;
+	margin: 0;
+}
+
+.newsman-chart-lbl {
+	display: block;
+	text-align: center;
+	font-weight: bold;
+}
+
+.newsman-chart {
+	position: relative;
+	display: inline-block;
+	width: 110px;
+	height: 110px;
+	margin: 10px 0;
+	text-align: center;
+	line-height: 110px;
+}
+
+.newsman-chart canvas {
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.newsman-main-chart-wrap {
+	margin-top: 10px;
+}
+
+.newsman-main-chart-wrap > span {	
+	font-weight: bold;
+	display: block;
+	margin-bottom: 10px;
+	padding-left: 1px;
+}
+
+
+.newsman-main-chart-wrap .swatches {
+	display: none;
+}
+
+.newsman-main-chart-wrap span.swatch {
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	-webkit-border-radius: 3px;	
+	margin: 0 0.5em 0 0;
+	padding: 0;
+	vertical-align: text-bottom;
+}
+
+.newsman-main-chart-wrap span.swatch.swatch-opens { background: #3D7585; }
+.newsman-main-chart-wrap span.swatch.swatch-clicks { background: #36B898; }
+.newsman-main-chart-wrap span.swatch.swatch-unsubscribes { background: #F24C32; }
+
+.newsman-stats-lbl-recipients {
+	padding-left: 13px;
+}
+
+/* small table nav general styles */
+
+.newsman-small-table-nav {
+	visibility: hidden;
+}
+
+.newsman-small-table-nav button {
+	margin-left: 0.3em;
+}
+
+.newsman-small-table-nav button .newsman-icon {	
+	vertical-align: middle;
+}
+
+
+/* reclipient activity and links clicks details tables */
+
+#newsman-recipient-activity-wrap,
+#newsman-links-clicks-details-wrap {
+	position: relative;
+	padding-top: 5px;
+}
+
+#newsman-recipient-activity-wrap .newsman-small-table-nav,
+#newsman-links-clicks-details-wrap .newsman-small-table-nav {
+	position: absolute;
+	top: 5px;
+	right: 0;
+}
+
+#newsman-recipient-activity-wrap .newsman-small-table-nav {
+	right: 16px;
+}
+
+#newsman-links-clicks-details {
+	/*width: 200px;*/
+	table-layout: fixed;
+}
+
+#newsman-links-clicks-details th {
+
+}
+
+#newsman-links-clicks-details  th+th {
+	width: 100px;
+}
+
+#newsman-links-clicks-details td+td {
+	/*text-align: center;*/
+}
+
+#newsman-links-clicks-details .url {
+	width: 100%;
+	display: block;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.newsman-single-date-stats-pane {
+	height: 250px;
+	background: white;
+	border-style: solid;
+	border-color: #dadada;
+	border-width: 0 1px 1px 0;	
+}
+
+.newsman-line-chart {
+	height: 250px;
+	width: 100%;
+}
+
+.newsman-single-date-stats-pane .newsman-stats-nochart,
+.newsman-single-date-stats-pane .newsman-line-chart {
+	display: none;
+}
+
+.newsman-stats-nochart,
+.newsman-stats-nochart * {
+	box-sizing: border-box;
+}
+
+.newsman-stats-nochart {
+	height: 100%;
+	width: 100%;
+}
+
+.newsman-stats-nochart-period {
+	text-align: center;
+}
+
+.newsman-stats-nochart-opens,
+.newsman-stats-nochart-clicks,
+.newsman-stats-nochart-unsubscribes {
+	text-align: right;
+	border-bottom: 1px solid #DADADA;
+}
+
+
+.newsman-stats-nochart-opens .newsman-stats-nochart-num {
+	color: #3D7585; /* blue 4 */
+}
+.newsman-stats-nochart-clicks .newsman-stats-nochart-num {
+	color: #36B898; /* green 4 */
+}
+.newsman-stats-nochart-unsubscribes .newsman-stats-nochart-num {	
+	color: #F24C32; /* red 4 */
+}
+
+.newsman-stats-nochart-lbl {
+/*	line-height: 75px;*/
+
+	font-size: 24px;
+	color: #868686;
+}
+
+.newsman-stats-nochart-num {
+	padding: 0 15px;
+	font-size: 32px;	
+}
+
+#newsman-page-upgrade-to-pro {
+	line-height: 1.5em;
+}
+

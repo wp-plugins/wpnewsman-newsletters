@@ -3,7 +3,7 @@
 Plugin Name: G-Lock WPNewsman Lite
 Plugin URI: http://wpnewsman.com
 Description: You get simple yet powerful newsletter solution for WordPress. Now you can easily add double optin subscription forms in widgets, articles and pages, import and manage your lists, create and send beautiful newsletters directly from your WordPress site. You get complete freedom and a lower cost compared to Email Service Providers. Free yourself from paying for expensive email campaigns. WPNewsman plugin updated regularly with new features.
-Version: 1.6.9
+Version: 1.7.0
 Author: Alex Ladyga - G-Lock Software
 Author URI: http://www.glocksoft.com
 */
@@ -31,7 +31,7 @@ function newsman_ensure_correct_path($path) {
 }
 
 define('NEWSMAN', 'wpnewsman');
-define('NEWSMAN_VERSION', '1.6.9');
+define('NEWSMAN_VERSION', '1.7.0');
 
 if ( preg_match('/.*?\.dev$/i', $_SERVER['HTTP_HOST']) ) {
 	define('NEWSMAN_DEV_HOST', true);
@@ -168,10 +168,16 @@ function newsmanCheckCompatibility() {
 		$dirs = wp_upload_dir();
 		$ud = $dirs['basedir'];
 
+		$cur_user = '';
+
+		if ( function_exists('get_current_user') ) {
+			$cur_user = '( <strong>'.@get_current_user().'</strong> user )';
+		}
+
 		$newsman_checklist[] = array(
 			'passed' => is_writable($ud),
 			'name' => __('Direct filesystem access', NEWSMAN),
-			'help' => sprintf(__('Since version 1.5.7 direct access to the filesystem is required. Make sure that the uploads directory is writable by the <strong>%s</strong> user.', NEWSMAN), get_current_user())
+			'help' => sprintf(__('Since version 1.5.7 direct access to the filesystem is required. Make sure that the uploads directory is writable by the web server%s.', NEWSMAN), $cur_user)
 		);	
 	}
 
