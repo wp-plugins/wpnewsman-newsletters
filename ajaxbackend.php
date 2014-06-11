@@ -1534,8 +1534,9 @@
 			global $newsman_loop_post;
 			global $newsman_loop_post_nr;
 			global $newsman_show_thumbnail_placeholders;
+			global $newsman_current_email;
 
-			
+			//TODO: make posts shortcode resolving during sending			
 
 			$pids = $this->param('pids');
 			$pids = preg_split('/[\s*,]+/', $pids);
@@ -1550,6 +1551,8 @@
 			}
 
 			$ent = $this->getEntityById($entityId, $entType);
+
+			$newsman_current_email = $ent;
 
 			$postBlockTpl = $this->u->getSectionContent($ent->particles, 'gsedit', 'post_block');
 			$postDividerTpl = $this->u->getSectionContent($ent->particles, 'gsedit', 'post_divider');

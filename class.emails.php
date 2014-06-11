@@ -129,7 +129,7 @@ class newsmanEmail extends newsmanStorable {
 	public function addAnalytics() {
 
 		if ( isset($this->analytics) && $this->analytics ) {			
-			$this->p_html = preg_replace_callback('/(<\w+[^>]+href=(\\\'|"))(\w+\:[^>]*?)(\2[^>]*>)/i', array($this, 'addWebAnalytics'), $this->p_html);
+			$this->p_html = preg_replace_callback('/(<\w+[^>]+href=(\\\'|"))(\S+\:[^>]*?)(\2[^>]*>)/i', array($this, 'addWebAnalytics'), $this->p_html);
 			$this->plain = preg_replace_callback('/http(?:s|):\/\/\S+/i', array($this, 'addWebAnalyticsPlainText'), $this->plain);
 		}
 
@@ -280,6 +280,8 @@ class newsmanEmail extends newsmanStorable {
 		global $newsman_current_email;
 
 		$newsman_current_email = $this;
+
+		$newsman_current_subscriber = $data;
 
 		$sortcode_vars = $data;
 

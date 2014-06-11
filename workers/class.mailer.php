@@ -50,6 +50,10 @@ class newsmanMailer extends newsmanWorker {
 
 	private function launchSender($email) {
 		global $newsman_current_list;
+		global $newsman_current_subscriber;
+		global $newsman_current_email;
+
+		$newsman_current_email = $email;
 
 		$u = newsmanUtils::getInstance();
 
@@ -109,15 +113,9 @@ class newsmanMailer extends newsmanWorker {
 		$email->p_html = $u->processAssetsURLs($email->p_html, $email->assetsURL);
 		$email->p_html = $u->compileThumbnails($email->p_html);	
 
-		$u->log('[launchSender] processMessages()...');
-
 		$this->processMessages();
 
-		$u->log('[launchSender] getTransmission() ...');
-
 		while ( $t = $tStreamer->getTransmission() ) {
-
-			$u->log('[launchSender] getTransmission = %s', print_r($t, true));
 
 			$this->processMessages();
 

@@ -3,8 +3,8 @@ Contributors: Neocoder, G-Lock Software
 Donate Link: http://wpnewsman.com/premium-newsletter-plugin-wordpress/
 Tags: wpnewsman, newsletter, newsletters, newsletter signup, newsletter widget, subscribers, post notification, email subscription, email marketing, email, emailing, subscription
 Requires at least: 3.5
-Tested up to: 3.9
-Stable tag: 1.7.0
+Tested up to: 4.0
+Stable tag: 1.7.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -20,7 +20,7 @@ Check it out! Download Right Now and Send EMails for FREE...
 
 = WPNewsman Pro =
 
-*WPNewsman Pro* is a **significant upgrade** to *WPNewsman Lite* that allows you to embed forms on external sites, send newsletters to an unlimited number of subscribers, track the recipient's actions with Google Analytics or Piwik, and keep your mailing lists verified and clean. Unlike other autoresponder systems, you can just import your contacts and leads and get started. No messing around with re-confirmation of leads or facing an inquisition about how you built your list… You have FULL control of your email campaigns and are not relying on third party services that ultimately control your profit at their whim. You can learn more about *WPNewsman Pro* here:
+*WPNewsman Pro* is a **significant upgrade** to *WPNewsman Lite* that allows you to send newsletters to an unlimited number of subscribers, get full email tracking statistics for each campaign, track the recipient's actions on your website with Google Analytics or Piwik, and keep your mailing lists verified and clean by using the Bounce handler. Unlike other autoresponder systems, you can just import your contacts and leads and get started. No messing around with re-confirmation of leads or facing an inquisition about how you built your list… You have FULL control of your email campaigns and are not relying on third party services that ultimately control your profit at their whim. You can learn more about *WPNewsman Pro* here:
 
 [Home](http://wpnewsman.com/ "Home") | [Review](http://wpnewsman.com/review-newsletter-plugin-wordpress/ "Review") | [Upgrade to WPNewsman Pro](http://wpnewsman.com/premium-newsletter-plugin-wordpress/ "Upgrade to WPNewsman Pro")
 
@@ -38,6 +38,7 @@ http://www.youtube.com/watch?v=NhmAfJQH4EU
 * Ability to quickly re-send a confirmation request
 * Full control and freedom over email newsletter design. [See this quick video tutorial](http://wpnewsman.com/how-to-create-and-edit-email-templates-and-messages-in-wpnewsman/ "See Video tutorial")
 * Multiple sending options
+* Full email statistics for ultimate campaign tracking
 * Automated bounced emails handling -- you keep your mailing lists verified and clean
 * Confirmation when the user unsubscribes
 * Integration with Amazon SES -- enjoy high deliverability rate like big Email Service Providers
@@ -56,7 +57,7 @@ Translations are included in the plugin:
 
 * French (completed)
 * Russian (completed)
-* German (Germany) (completed)
+* German (Germany) (99%)
 * Polish (99%)
 * Italian (Italy) (50%)
 * Spanish (99%)
@@ -122,6 +123,11 @@ We got a User Feedback page where you can [add or vote for new features](http://
 3. Subscriber management.
 
 == Changelog ==
+
+= 1.7.1 =
+
+* Fixed "Subscriber with id 0 is not found" bug when clicking on wrapped links.
+* Fixed wrapping links with non-latin characters.
 
 = 1.7.0 =
 

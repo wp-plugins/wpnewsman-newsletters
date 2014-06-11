@@ -7,15 +7,6 @@
 			<div class="about-text">Thank you for installing WPNewsman. We hope you'll like it!</div>
 		<?php else: ?>
 			<div class="about-text">You updated and have better newsletter gadget!</div>
-
-			<div class="changelog">
-		  		<div class="feature-section row" style="margin-bottom: .5em">
-					<div class="span8">
-						<h3>Spread the word and keep this plugin essentially free</h3>
-						<p><a href="http://wordpress.org/support/view/plugin-reviews/wpnewsman-newsletters"><img src="http://s-plugins.wordpress.org/wpnewsman-newsletters/assets/hello-puppies.png" align="left" style="margin: 0 15px 0 0;" /></a><p style="font-size: 18px; font-weight: bold;">Love puppies?</p>We love reviews and ★★★★★ because they encourage and inspire us.  <a href="http://wordpress.org/support/view/plugin-reviews/wpnewsman-newsletters" target="_blank" title="Rate WPNewsman!">Add your own review</a> on <a target="_blank" href="http://wordpress.org/support/view/plugin-reviews/wpnewsman-newsletters">wordpress.org</a> and make it even more awesome.</p>
-					</div>
-				</div>
-			</div>
 		<?php endif; ?>
 		
 		<div class="changelog">

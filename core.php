@@ -405,7 +405,14 @@ class newsman {
 			} else if ( $post == "number" ) {
 				return $newsman_loop_post_nr;
 			} else if ( $post == "permalink" ) {
-				return get_permalink( $newsman_loop_post->ID );
+				$this->utils->log('[newsmanShortCode] post = permalink');
+				$this->utils->log('[newsmanShortCode] newsman_current_email->emailAnalytics: %d', $newsman_current_email->emailAnalytics);
+
+				if ( $newsman_current_email->emailAnalytics ) {
+					return home_url('?p=' . $newsman_loop_post->ID);
+				} else {
+					return get_permalink( $newsman_loop_post->ID );		
+				}				
 			} else if ( $post == "fancy_excerpt" ) {
 				if ( !isset($words) ) {
 					$words = 350;
