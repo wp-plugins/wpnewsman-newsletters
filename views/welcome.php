@@ -8,7 +8,7 @@
 		<?php else: ?>
 			<div class="about-text">You updated and have better newsletter gadget!</div>
 
-			
+
 		<?php endif; ?>
 		
 		<div class="changelog">

@@ -231,6 +231,8 @@ class newsmanAPI {
 		$offset = $this->param('offset', false);
 		$map = $this->param('map', '');
 
+		$format = $this->param('format', 'csv');
+
 		$nofile = $this->param('nofile', false);
 
 		if ( is_string($nofile)  ) {
@@ -246,6 +248,10 @@ class newsmanAPI {
 				$p = explode(':', $pair);
 				$newsman_export_fields_map[ $p[0] ] = $p[1];
 			}
+		}
+
+		if ( $format ) {
+			define('newsman_export_format', $format);
 		}
 
 		if ( $limit ) {
