@@ -167,6 +167,15 @@ class newsmanList extends newsmanStorable {
 		return $stats;
 	}
 
+
+	public function countSubs($stat) {
+		global $wpdb;
+
+		$u = newsmanUtils::getInstance();
+		$sql = "SELECT COUNT(id) as cnt FROM $this->tblSubscribers WHERE status = %d";
+		return intval($wpdb->get_var($wpdb->prepare($sql, $stat)));;
+	}
+
 	public function setStatus($ids, $status) {
 		global $wpdb;
 
@@ -342,7 +351,7 @@ class newsmanList extends newsmanStorable {
 		return $this->getSubscribers($offset, $limit, $type, $q);
 	}	
 
-	public function getSubscribers($offset = 0, $limit = 100, $type = 'all', $q = false) {
+	public function getSubscribers($offset = 0, $limit = 100, $type = 'all', $q = false, $rawQuery = false) {
 		global $wpdb;
 
 		$u = newsmanUtils::getInstance();
@@ -370,12 +379,18 @@ class newsmanList extends newsmanStorable {
 		}
 
 		if ( $q ) {
-			$word = empty($sel) ? ' WHERE' : ' AND';
-			$sel .= $word.' email regexp %s';
-			$sel = $wpdb->prepare($sel, $u->preg_quote($q));
-		}
+			if ( $rawQuery ) {
+				$word = empty($sel) ? ' WHERE' : ' AND';
+				$sel .= $word.' '.$q;
+			} else {
+				$word = empty($sel) ? ' WHERE' : ' AND';
+				$sel .= $word.' email regexp %s';
+				$sel = $wpdb->prepare($sel, $u->preg_quote($q));				
+			}
+		}		
 
 		$sql = "SELECT * FROM $this->tblSubscribers ".$sel." ORDER BY `ts` DESC LIMIT %d, %d";
+
 		$sql = $wpdb->prepare($sql, $offset, $limit);
 
 		$rows = $wpdb->get_results($sql, ARRAY_A);
@@ -600,11 +615,16 @@ class newsmanList extends newsmanStorable {
 	 */
 	private function subsToCSV($file, $fields, $type = 'all') {
 
-		if ( defined('newsman_csv_export_limit') || defined('newsman_csv_export_offset') ) {
+		if ( 
+			defined('newsman_csv_export_limit') || 
+			defined('newsman_csv_export_offset') ||
+			defined('newsman_csv_export_query') 
+		) {
 			$offset = defined('newsman_csv_export_offset') ? newsman_csv_export_offset : 0;
 			$limit  = defined('newsman_csv_export_limit') ? newsman_csv_export_limit : 100;
+			$query  = defined('newsman_csv_export_query') ? newsman_csv_export_query : false;
 
-			$res = $this->getSubscribers($offset, $limit, $type);
+			$res = $this->getSubscribers($offset, $limit, $type, $query, 'RAW_SQL_QUERY');
 			if ( is_array($res) && !empty($res)  ) {
 				foreach ($res as $sub) {
 					fputs($file, $this->subToCSVRow($sub, $fields)."\n");
@@ -630,19 +650,41 @@ class newsmanList extends newsmanStorable {
 		} while ( !$done );
 	}
 
-	public function exportToCSV($filename, $type = 'all', $linksFields = array()) {
-		header( 'Content-Type: text/csv' );
-		header( 'Content-Disposition: attachment;filename='.$filename);
+	public function exportToCSV($filename, $type = 'all', $linksFields = array(), $forceFileOutput = true) {
+		global $newsman_export_fields_map;
+		if ( $forceFileOutput ) {
+			header( 'Content-Type: text/csv' );
+			header( 'Content-Disposition: attachment;filename='.$filename);			
+		}
+
+		//var_dump($newsman_export_fields_map);
+
+		if ( isset($_REQUEST['debug']) ) {
+			echo '<pre>'; // FOR DEBUG ONLY	
+		}		
 
 		$out = fopen('php://output', 'w');
 		if ( $out ) {
 			$fields = $this->getAllFields();
 
 			$fields = array_merge($fields, $linksFields);
+			$mappedFields = array();
 
-			fputcsv($out, $fields, ',', '"');
+			if ( isset($newsman_export_fields_map) ) {
+				foreach ($fields as &$field) {
+					$mappedFields[] = isset($newsman_export_fields_map[$field]) ? $newsman_export_fields_map[$field] : $field;
+				}
+			} else {
+				$mappedFields = $fields;
+			}
+
+			fputcsv($out, $mappedFields, ',', '"');
 			$this->subsToCSV($out, $fields, $type);
 			@fclose($out);			
+		}
+
+		if ( isset($_REQUEST['debug']) ) {
+			echo '</pre>'; // FOR DEBUG ONLY
 		}
 	}
 

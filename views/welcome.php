@@ -7,6 +7,8 @@
 			<div class="about-text">Thank you for installing WPNewsman. We hope you'll like it!</div>
 		<?php else: ?>
 			<div class="about-text">You updated and have better newsletter gadget!</div>
+
+			
 		<?php endif; ?>
 		
 		<div class="changelog">

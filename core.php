@@ -405,14 +405,7 @@ class newsman {
 			} else if ( $post == "number" ) {
 				return $newsman_loop_post_nr;
 			} else if ( $post == "permalink" ) {
-				$this->utils->log('[newsmanShortCode] post = permalink');
-				$this->utils->log('[newsmanShortCode] newsman_current_email->emailAnalytics: %d', $newsman_current_email->emailAnalytics);
-
-				if ( $newsman_current_email->emailAnalytics ) {
-					return home_url('?p=' . $newsman_loop_post->ID);
-				} else {
-					return get_permalink( $newsman_loop_post->ID );		
-				}				
+				return get_permalink( $newsman_loop_post->ID );		
 			} else if ( $post == "fancy_excerpt" ) {
 				if ( !isset($words) ) {
 					$words = 350;
@@ -556,7 +549,7 @@ class newsman {
 
 	// links
 
-	public function getActionLink($type, $only_code = false, $externalForm = false) {
+	public function getActionLink($type, $only_code = false, $externalForm = false, $dropEmailPart = false) {
 		global $newsman_current_subscriber;
 		global $newsman_current_email;
 		global $newsman_current_list;
@@ -573,7 +566,7 @@ class newsman {
 
 			$link = "$blogurl/?newsman=$type&code=".$newsman_current_list->uid.':'.$ucode;
 
-			if ( in_array($type, array('email', 'unsubscribe')) ) {
+			if ( in_array($type, array('email', 'unsubscribe', 'unsubscribe-confirmation')) && !$dropEmailPart ) {
 				$link.='&email='.$newsman_current_email->ucode;
 			}
 
@@ -598,6 +591,8 @@ class newsman {
 		global $newsman_current_subscriber;		
 		global $newsman_current_email;
 		global $newsman_current_list;
+
+		if ( !isset($newsman_current_email) ) { return; }
 
 		$sd = new newsmanAnSubDetails();
 		$sd->emailId = $newsman_current_email->id;
@@ -2035,7 +2030,8 @@ class newsman {
 			'rewrite' => array("slug" => "subscription"), // Permalinks
 			'query_var' => "subscription", // This goes to the WP_Query schema
 			'supports' => array('title', 'excerpt', 'editor' /*,'custom-fields'*/), // Let's use custom fields for debugging purposes only
-			'register_meta_box_cb' => array($this, 'add_shortcode_metabox')
+			'register_meta_box_cb' => array($this, 'add_shortcode_metabox'),
+			'exclude_from_search' => true
 		));
 
 		register_taxonomy_for_object_type('category', 'newsman_ap');
@@ -2264,12 +2260,14 @@ class newsman {
 				$list = new newsmanList();
 				$sub = $list->findSubscriber("id = %s", 1);
 				$c = $eml->renderMessage($sub->toJSON());
-				$c = $c['html'];
+				echo $c['html'];
 
+			} elseif ( isset($_REQUEST['processed2']) ) {
+				echo $eml->p_html;
 			} else {
-				$c = $eml->html;
+				echo $eml->html;
 			}
-			echo $eml->html; //echo $this->utils->processAssetsURLs($c, $eml->assetsURL);
+			//echo $eml->html; //echo $this->utils->processAssetsURLs($c, $eml->assetsURL);
 		}
 		die();
 	}	

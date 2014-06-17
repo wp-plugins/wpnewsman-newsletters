@@ -749,7 +749,11 @@ class newsmanUtils {
 	}	
 
 	public function linkNormalizationCallback($matches) {
-		return $matches[1].urldecode(html_entity_decode($matches[4])).$matches[5];
+		$url = $matches[4];
+		if ( preg_match('/^(\[|%5B)/i', $url) ) {
+			$url = urldecode(html_entity_decode($url));
+		}
+		return $matches[1].$url.$matches[5];
 	}
 	
 	/**

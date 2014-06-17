@@ -12,15 +12,18 @@ class newsmanAPI {
 		mb_internal_encoding("UTF-8");
 		$loc = "UTF-8";
 		putenv("LANG=$loc");
+
 		$loc = setlocale(LC_ALL, $loc);	
 
-		if ( function_exists('ob_gzhandler') ) {
-			function ob_gz_handler_no_errors($buffer) 
-			{
-			    @ob_gzhandler($buffer);
-			}
-			ob_start('ob_gzhandler');
-		}
+		// UNCOMMENT IN PRODUCTION
+
+		// if ( function_exists('ob_gzhandler') ) {
+		// 	function ob_gz_handler_no_errors($buffer) 
+		// 	{
+		// 	    ob_gzhandler($buffer);
+		// 	}
+		// 	ob_start('ob_gzhandler');
+		// }
 
 		$o = newsmanOptions::getInstance();
 		$key = $o->get('apiKey');
@@ -42,7 +45,7 @@ class newsmanAPI {
 			}
 		}
 
-		call_user_method($method, $this);
+		call_user_func(array($this, $method));
 	}
 
 	public function respond($state, $msg, $params = array(), $httpStatusMsg = false) {
@@ -64,8 +67,12 @@ class newsmanAPI {
 		}
 
 		header("Content-type: application/json");
+
+		//ob_end_clean();
 		
 		echo json_encode( $u->utf8_encode_all($msg) );
+
+		//ob_flush();		
 		   
 		if ($db) $db->close();  
 		exit();
@@ -148,19 +155,73 @@ class newsmanAPI {
 	} 
 
 	public function ajGetLists() {
+		global $newsman_current_subscriber;
+		global $newsman_current_list;
+
+		$newsman_current_subscriber = array( 'ucode' => '' );
+
 		$r = array();
 
-		$lists = newsmanList::findALL();
+		$n = newsman::getInstance();
+
+		$lists = newsmanList::findALL();		
 
 		foreach ($lists as $list) {
+			$newsman_current_list = $list;
 			$r[] = array(
 				'id' => $list->id,
 				'uid' => $list->uid,
-				'name' => $list->name
+				'name' => $list->name,
+				'confirmed' => $list->countSubs(NEWSMAN_SS_CONFIRMED),
+				'unsubscribeURL' => $n->getActionLink('unsubscribe', false, false, 'DROP_EMAIL_IDENTIFIER')
 			);
 		}
 
 		$this->respond(true, $r);
+	}
+
+	private function buildExtraQuery() {
+		global $wpdb;
+
+		$validTimeUnits = array('MICROSECOND', 'SECOND', 'MINUTE', 'HOUR', 'DAY', 'WEEK', 'MONTH', 'QUARTER', 'YEAR');
+		
+		$extraQuery = array();
+
+		$timeInList = $this->param('timeInList', false);		
+		if ( $timeInList ) {
+			$til = explode(',', $timeInList);
+			$tilNum = intval($til[0]);
+			$tilUnit = isset($til[1]) ? strtoupper($til[1]) : 'DAY';
+			if ( in_array($tilUnit, $validTimeUnits) ) {
+				// no need to use wpdb->prepare here becuase all vars are checked
+				$extraQuery[] = "TIMESTAMPDIFF($tilUnit, NOW(), ts) >= $tilNum";
+			}			
+		}
+
+		//view-source:blog.dev/wp-content/plugins/wpnewsman/api.php?method=downloadList&key=575d037167f77f3b1c01c7fff7b9d31282009867&listId=18
+
+		$emailIn = $this->param('emailIn', false);		
+
+		if ( $emailIn ) {
+			$args = explode(',', $emailIn);
+			$placeholders = array();
+			foreach ($args as $email) {
+				$placeholders[] = '%s';
+			}
+
+			$set = 'email in ('.implode(',', $placeholders).')'; // (%s, %s, ...)
+
+			array_unshift($args, $set); // placeing set SQL part before the emails
+			
+			$set = call_user_func_array(array($wpdb, 'prepare'), $args);
+			$extraQuery[] = $set;
+		}
+
+		if ( !empty($extraQuery) ) {
+			define('newsman_csv_export_query', implode(' AND ', $extraQuery));
+		}
+		$u = newsmanUtils::getInstance();
+		$u->log('[buildExtraQuery] %s', newsman_csv_export_query);
 	}
 
 	public function ajDownloadList() {
@@ -168,6 +229,24 @@ class newsmanAPI {
 		$links = $this->param('links', '');
 		$limit = $this->param('limit', false);
 		$offset = $this->param('offset', false);
+		$map = $this->param('map', '');
+
+		$nofile = $this->param('nofile', false);
+
+		if ( is_string($nofile)  ) {
+			$nofile = ( $nofile === '1' || strtolower($nofile) == 'true' );
+		}
+
+		global $newsman_export_fields_map;
+
+		if ( $map ) {
+			$map = explode(',', $map);
+			$newsman_export_fields_map = array();
+			foreach ($map as $pair) {
+				$p = explode(':', $pair);
+				$newsman_export_fields_map[ $p[0] ] = $p[1];
+			}
+		}
 
 		if ( $limit ) {
 			define('newsman_csv_export_limit', $limit);
@@ -176,6 +255,8 @@ class newsmanAPI {
 		if ( $offset ) {
 			define('newsman_csv_export_offset', $offset);
 		}
+
+		$this->buildExtraQuery();
 
 		$list = newsmanList::findOne('id = %d', array($listId));
 
@@ -203,7 +284,23 @@ class newsmanAPI {
 
 		// 'confirmation-link', 'resend-confirmation-link', 'unsubscribe-link'
 
-		$list->exportToCSV($fileName, 'all', $linkTypes);
+		$list->exportToCSV($fileName, 'all', $linkTypes, !$nofile);
+	}
+
+	public function ajGetListFields() {
+		$listId = $this->param('listId');
+
+		$list = newsmanList::findOne('id = %d', array($listId));
+
+		if ( !$list ) {
+			$this->respond(false, sprintf( __( 'List with id "%s" is not found.', NEWSMAN), $listId), array(), '404 Not found');
+		}
+
+		$fields = $list->getAllFields();
+
+		$this->respond(true, array(
+			'fields' => $fields
+		));
 	}
 }
 

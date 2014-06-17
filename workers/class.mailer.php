@@ -65,6 +65,8 @@ class newsmanMailer extends newsmanWorker {
 
 		$sl = newsmanSentlog::getInstance();
 
+		$u->log("[launchSender] p_html 1 \n%s", $email->p_html);
+
 		$tStreamer = new newsmanTransmissionStreamer($email);
 
 		$u->log('[launchSender] created transmissionStreamer');
@@ -111,7 +113,7 @@ class newsmanMailer extends newsmanWorker {
 		$errorStop = false;
 
 		$email->p_html = $u->processAssetsURLs($email->p_html, $email->assetsURL);
-		$email->p_html = $u->compileThumbnails($email->p_html);	
+		$email->p_html = $u->compileThumbnails($email->p_html);
 
 		$this->processMessages();
 

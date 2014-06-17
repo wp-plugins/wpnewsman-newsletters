@@ -63,6 +63,7 @@ class newsmanEmail extends newsmanStorable {
 		$this->embedStyles();
 		$this->addAnalytics();
 
+
 		return parent::save();
 	}
 
@@ -168,6 +169,9 @@ class newsmanEmail extends newsmanStorable {
 
 		$url = $matches[3];
 
+		$u = newsmanUtils::getInstance();
+		$u->log('wrapping URL: %s', $url);
+
 		// if not unsubscribe or "view online" link
 		if ( strpos($url, 'newsman=unsubscribe') === false &&
 			 strpos($url, 'newsman=email') === false ) {
@@ -192,6 +196,7 @@ class newsmanEmail extends newsmanStorable {
 				base_convert($newsman_current_subscriber['id'], 10, 36),
 				base_convert($link->id, 10, 36)
 			);			
+			$u->log('wrapped: %s', $url);
 		}
 
 		return $matches[1].$url.$matches[4];

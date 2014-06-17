@@ -47,7 +47,7 @@ class newsmanAnalytics {
 		// http://blog.dev/o/3d-a-oo 
 		// /c/{emailId}/{listId}/{subId}/{linkId}
 		// http://blog.dev/c/3d-a-oo-go
-		if ( preg_match('#^\/(o|c)\/((?:[a-z0-9]+\-){2,3}(?:[a-z0-9]+))#', strtolower($_SERVER['REQUEST_URI']), $matches ) ) {
+		if ( preg_match('#\/(o|c)\/((?:[a-z0-9]+\-){2,3}(?:[a-z0-9]+))#', strtolower($_SERVER['REQUEST_URI']), $matches ) ) {
 			$op = $matches[1];
 			$args = $this->decodeIdsArray(explode('-', $matches[2]));
 			$func = ( $op === 'c' ) ? 'registerClick' : 'registerOpen';
