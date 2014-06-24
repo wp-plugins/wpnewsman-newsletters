@@ -80,18 +80,33 @@ class newsmanAPI {
 
 	public function param($param) {
 		$u = newsmanUtils::getInstance();
+		$type = null;
+		if ( func_num_args() === 3 ) {
+			$type = func_get_arg(2);
+		}
 
 		if ( !isset($_REQUEST[$param]) ) {
 
-			if ( func_num_args() == 2 ) {
+			if ( func_num_args() >= 2 ) {
 				$def = func_get_arg(1);
 				return $def;
 			} else {
 				$this->respond(false, sprintf( __('required parameter "%s" is missing in the request', NEWSMAN), $param) );
 			}
 
-		} else {				
-			return is_string( $_REQUEST[$param] ) ? $u->remslashes( $_REQUEST[$param] ) : $_REQUEST[$param];
+		} else {
+			$p = is_string( $_REQUEST[$param] ) ? $u->remslashes( $_REQUEST[$param] ) : $_REQUEST[$param];
+
+			switch ( $type ) {
+				case 'boolean':
+					$p = strtolower($p);
+					if ( $p === 'true' ) { return true; }
+					if ( $p === 'false' ) { return false; }
+					return (boolean)intval($p);
+					break;
+			}
+
+			return $p;
 		}
 	}	
 
@@ -105,6 +120,32 @@ class newsmanAPI {
 		));
 	}
 
+	private function getMessageFromSubStatus($s) {
+		$u = newsmanUtils::getInstance();
+		$u->log('[getMessageFromSubStatus] status %s', $s->meta('status'));
+		switch ( $s->meta('status') ) {
+			case -1:
+				return __('Subscriber added', NEWSMAN);
+				break;
+
+			case NEWSMAN_SS_UNCONFIRMED:
+				// subscribed but not confirmed
+				return sprintf( __( 'The email "%s" is already subscribed but not yet confirmed.', NEWSMAN), $s->email);
+				break;                
+
+			case NEWSMAN_SS_CONFIRMED:
+				// subscribed and confirmed
+				return sprintf( __( 'The email "%s" is already subscribed and confirmed.', NEWSMAN), $s->email);
+				break;
+
+			case NEWSMAN_SS_UNSUBSCRIBED:
+				// unsubscribed
+				return sprintf( __( 'The email "%s" is already already in the database but unsubscribed.', NEWSMAN), $s->email);
+				break;
+		}
+		return false;
+	}
+
 	public function ajAddEmail() {
 		$listId = $this->param('listId');
 
@@ -114,7 +155,8 @@ class newsmanAPI {
 			$this->respond(false, sprintf( __( 'List with id "%s" is not found.', NEWSMAN), $listId), array(), '404 Not found');
 		}
 
-		$email = strtolower($_REQUEST['email']);
+		$_REQUEST['email'] = strtolower($_REQUEST['email']);
+		$email = $_REQUEST['email'];
 
 		$u = newsmanUtils::getInstance();
 
@@ -122,36 +164,46 @@ class newsmanAPI {
 			$this->respond(false, sprintf( __( 'Bad email address format "%s".', NEWSMAN), $email), array(), '400 Bad request');
 		}
 
-		$s = $list->findSubscriber("email = %s", $email);
-		if ( $s ) {
-			$st = $s->meta('status');
-			switch ( $res ) {
-				case NEWSMAN_SS_UNCONFIRMED:
-					// subscribed but not confirmed
-					$this->respond(false, sprintf( __( 'The email "%s" is already subscribed but not yet confirmed.', NEWSMAN), $s->email), array('status' => $res));
-				break;                
-				case NEWSMAN_SS_CONFIRMED:
-					// subscribed and confirmed
-					$this->respond(false, sprintf( __( 'The email "%s" is already subscribed and confirmed.', NEWSMAN), $s->email), array('status' => $res));
-				break;
-				case NEWSMAN_SS_UNSUBSCRIBED:
-					// unsubscribed
-					$this->respond(false, sprintf( __( 'The email "%s" is already already in the database but unsubscribed.', NEWSMAN), $s->email), array('status' => $res));
-				break;
-			}			
-			wp_die('Please, check your link. It seems to be broken.');
-		}
-
 		unset($_REQUEST['listId']);
 		unset($_REQUEST['key']);
 		unset($_REQUEST['method']);
 
-		$s = $list->newSub();
-		$s->fill($_REQUEST);
-		$s->confirm();
-		$s->save();
+		$fullCycle = $this->param('full-cycle', false, 'boolean');
+		$use_excerpts = $this->param('use-excerpts', false, 'boolean');
 
-		$this->respond(true, 'Subscriber added', array('id' => $s->id));
+		unset($_REQUEST['full-cycle']);
+		unset($_REQUEST['use-excerpts']);
+
+		if ( $fullCycle ) {
+			$n = newsman::getInstance();
+			$s = null;
+			$res = $n->subscribe($list, $_REQUEST, $use_excerpts, true, $s);
+
+			$msg = $this->getMessageFromSubStatus($s);
+
+			$this->respond(true, $msg, array('result' => $res));
+		} else {
+
+			$s = $list->findSubscriber("email = %s", $email);
+			if ( $s ) {
+				$res = $s->meta('status');
+				$msg = $this->getMessageFromSubStatus($s);
+
+				if ( $msg ) {
+					$this->respond(false, $msg, array('status' => intVal($res)));
+				} else {
+					wp_die('Please, check your link. It seems to be broken.');
+				}				
+			}
+
+			$s = $list->newSub();
+			$s->fill($_REQUEST);
+			$s->confirm();
+			$s->save();
+
+			$this->respond(true, 'Subscriber added', array('id' => $s->id));
+		}
+		
 	} 
 
 	public function ajGetLists() {
@@ -180,7 +232,7 @@ class newsmanAPI {
 		$this->respond(true, $r);
 	}
 
-	private function buildExtraQuery() {
+	private function buildExtraQuery(&$exportArgs) {
 		global $wpdb;
 
 		$validTimeUnits = array('MICROSECOND', 'SECOND', 'MINUTE', 'HOUR', 'DAY', 'WEEK', 'MONTH', 'QUARTER', 'YEAR');
@@ -194,8 +246,13 @@ class newsmanAPI {
 			$tilUnit = isset($til[1]) ? strtoupper($til[1]) : 'DAY';
 			if ( in_array($tilUnit, $validTimeUnits) ) {
 				// no need to use wpdb->prepare here becuase all vars are checked
-				$extraQuery[] = "TIMESTAMPDIFF($tilUnit, NOW(), ts) >= $tilNum";
-			}			
+				$extraQuery[] = "TIMESTAMPDIFF($tilUnit, ts, NOW()) >= $tilNum";
+			}
+		}
+
+		$timeOffset = $this->param('timeOffset', false);		
+		if ( $timeOffset && preg_match('/^\d{4}\-\d{2}\-\d{2}(\s\d{2}:\d{2}:\d{2}|)$/', $timeOffset) ) {
+			$extraQuery[] = $wpdb->prepare("TIMESTAMPDIFF(SECOND, %s, ts) > 0", $timeOffset);
 		}
 
 		//view-source:blog.dev/wp-content/plugins/wpnewsman/api.php?method=downloadList&key=575d037167f77f3b1c01c7fff7b9d31282009867&listId=18
@@ -218,29 +275,33 @@ class newsmanAPI {
 		}
 
 		if ( !empty($extraQuery) ) {
-			define('newsman_csv_export_query', implode(' AND ', $extraQuery));
+			$exportArgs['extraQuery'] = implode(' AND ', $extraQuery);
 		}
-		$u = newsmanUtils::getInstance();
-		$u->log('[buildExtraQuery] %s', newsman_csv_export_query);
 	}
 
 	public function ajDownloadList() {
-		$listId = $this->param('listId');
-		$links = $this->param('links', '');
-		$limit = $this->param('limit', false);
-		$offset = $this->param('offset', false);
-		$map = $this->param('map', '');
 
-		$format = $this->param('format', 'csv');
+		$u = newsmanUtils::getInstance();
 
-		$nofile = $this->param('nofile', false);
+		$listId 	= $this->param('listId');
+		$limit 		= $this->param('limit', false);
+		$offset 	= $this->param('offset', false);
+		$map 		= $this->param('map', ''); // fields mapping &map=first-name:FIRST_NAME,last-name:LAST_NAME
+		$type 		= strtolower($this->param('type', 'all')); 
+		$noheader 	= $this->param('noheader', false); // removes header in CSV output
+		$fields 	= $this->param('fields', false); // select only listed fields plus you can specify extra links fields 'confirmation-link', 'resend-confirmation-link', 'unsubscribe-link'
+		$format 	= $this->param('format', 'csv'); // output format csv or json
+		$nofile 	= $this->param('nofile', false); // dont force content-disposition header for CSV output
 
 		if ( is_string($nofile)  ) {
 			$nofile = ( $nofile === '1' || strtolower($nofile) == 'true' );
 		}
 
-		global $newsman_export_fields_map;
-
+		$exportArgs = array(
+			'type' => $type,
+			'nofile' => $nofile
+		);
+		
 		if ( $map ) {
 			$map = explode(',', $map);
 			$newsman_export_fields_map = array();
@@ -248,49 +309,31 @@ class newsmanAPI {
 				$p = explode(':', $pair);
 				$newsman_export_fields_map[ $p[0] ] = $p[1];
 			}
+			$exportArgs['fieldsMap'] = $newsman_export_fields_map;
 		}
 
-		if ( $format ) {
-			define('newsman_export_format', $format);
-		}
+		if ( $fields ) 	 { $exportArgs['fieldsList'] = explode(',', $fields); }
+		if ( $noheader ) { $exportArgs['noheader'] = true; }
+		if ( $format )   { $exportArgs['format'] = $format; }
+		if ( $limit )    { $exportArgs['limit'] = $limit; }
+		if ( $offset )   { $exportArgs['offset'] = $offset; }
 
-		if ( $limit ) {
-			define('newsman_csv_export_limit', $limit);
-		}
+		$this->buildExtraQuery($exportArgs);
 
-		if ( $offset ) {
-			define('newsman_csv_export_offset', $offset);
-		}
-
-		$this->buildExtraQuery();
+		// one of these params triggers the page querying
+		$exportArgs['customized'] = ( $limit || $offset || ( isset($exportArgs['extraQuery']) && $exportArgs['extraQuery'] ) );
 
 		$list = newsmanList::findOne('id = %d', array($listId));
-
 		if ( !$list ) {
 			$this->respond(false, sprintf( __( 'List with id "%s" is not found.', NEWSMAN), $listId), array(), '404 Not found');
 		}
 
-		$u = newsmanUtils::getInstance();
-
 		$fileName = date("Y-m-d").'-'.$list->name;
-		$fileName = $u->sanitizeFileName($fileName).'.csv';
+		$fileName = $u->sanitizeFileName($fileName).'.'.strtolower($format);
 
-		$linkTypes = explode(',', $links); // we pass them as is because we have a check later in the code
-		if ( !$linkTypes ) {
-			$linkTypes = array();
-		} else {
-			for ($i=count($linkTypes); $i >= 0; $i--) { 
-				if ( !$linkTypes[$i] ) {
-					array_splice($linkTypes, $i, 1);
-				} else {
-					$linkTypes[$i] = trim($linkTypes[$i]);
-				}
-			}
-		}
+		$exportArgs['fileName'] = $fileName;
 
-		// 'confirmation-link', 'resend-confirmation-link', 'unsubscribe-link'
-
-		$list->exportToCSV($fileName, 'all', $linkTypes, !$nofile);
+		$list->export($exportArgs);
 	}
 
 	public function ajGetListFields() {
@@ -307,6 +350,28 @@ class newsmanAPI {
 		$this->respond(true, array(
 			'fields' => $fields
 		));
+	}
+
+	public function ajUnsubscribe() {
+		$u = newsmanUtils::getInstance();
+
+		$listId 	= $this->param('listId');
+		$emails 	= $this->param('emails');
+		$status 	= $this->param('status', 'Unsubscibed with API');
+
+		$list = newsmanList::findOne('id = %d', array($listId));
+		if ( !$list ) {
+			$this->respond(false, sprintf( __( 'List with id "%s" is not found.', NEWSMAN), $listId), array(), '404 Not found');
+		}
+
+		foreach (explode(',', $emails) as $email) {
+			$list->unsubscribe($email, $status);
+		}
+
+		// TODO: check double opt-out option and 
+		// send email
+
+		$this->respond(true, __('Successfully unsubscribed.', NEWSMAN));
 	}
 }
 

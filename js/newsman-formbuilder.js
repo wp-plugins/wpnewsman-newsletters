@@ -1,10 +1,8 @@
 jQuery(function($){
 
 	function fieldName(str) {
-		console.log('> '+str);		
 		var s = str.replace(/[\s!@#$%\^&*\(\)?.,]+$/ig, '').replace(/[\s!@#$%\^&*\(\)?.,]+/ig, '-').toLowerCase();
-		console.log('< '+s);
-		return s;
+		return foldToASCII(s);
 	}	
 
 	// Option elements
@@ -34,10 +32,27 @@ jQuery(function($){
 	    }
 	};	
 
+	var ZCclient = new ZeroClipboard();
+
+	ZCclient.on( "ready", function( readyEvent ) {
+
+	  ZCclient.on( "aftercopy", function( event ) {
+	    // `this` === `client`
+	    // `event.target` === the element that was clicked
+	    //event.target.style.display = "none";
+	    var msg = $(event.target).closest('.newsman-field-shortcode').find('.copy-shortcode-done-msg');
+	    msg.fadeIn();
+	    setTimeout(function() {
+	    	msg.fadeOut();
+	    }, 1500);
+	    //console.warn("Copied text to clipboard: " + event.data["text/plain"] );
+	  } );
+	} );	
+
 	function buildForm(formDef) {
 		var that = {},
 			formUl = $('ul.newsman-form').empty().get(0),
-			fbPanel = $('#fb-panel').get(0);
+			fbPanel = $('#fb-panel').get(0);			
 
 		$(formDef.elements).each(function(i, el){
 			normalizeDefinition(el);
@@ -48,17 +63,30 @@ jQuery(function($){
 		// adding event handlers to each form element
 		$(viewModel.elements()).each(function(i, el){
 			addHandlers(el);
-		});
+		});		
 
 		// Addes knockout handlers and observables to the form element definition
 		function addHandlers(el) {
 
 			el.name = ko.computed(function() {				
 				var v = this.value && this.value(),
-					lbl = this.label && this.label();
+					lbl = this.label && this.label(),
+					txt, shortcode;
 
-				return lbl ? fieldName( lbl ) : fieldName(v || 'unnamed') ;
+				txt = lbl ? fieldName( lbl ) : fieldName(v || 'unnamed');
+				shortcode = '[newsman sub="'+txt+'"]';
+
+				return txt;
 			}, el);
+
+			el.shortcode = ko.computed(function() {				
+				var txt, shortcode;
+
+				txt = this.name();
+				shortcode = '[newsman sub="'+txt+'"]';
+
+				return shortcode;
+			}, el);			
 
 			var elType = el.type();
 
@@ -321,6 +349,8 @@ jQuery(function($){
 		that.toJS = function() {
 			return ko.mapping.toJS(viewModel);
 		};		
+
+		ZCclient.clip($('.btn-copy-shortcode'));
 
 		return that;
 	}

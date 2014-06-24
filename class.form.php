@@ -12,6 +12,8 @@ class newsmanForm {
 
 	var $hpCSSClassName;
 
+	var $adminSubmissionMode = false;
+
 	var $elId;
 
 	public function __construct($id, $admin = false) {
@@ -35,7 +37,7 @@ class newsmanForm {
 
 		$this->raw = $list->form;
 
-		$this->useInlineLabels = $formObj['useInlineLabels'];	
+		$this->useInlineLabels = $this->adminSubmissionMode ? false : $formObj['useInlineLabels'];	
 		$this->decodedForm = $formObj['elements'];
 
 		$this->elId = 0;
@@ -102,6 +104,7 @@ class newsmanForm {
 	}
 
 	private function getHPField() {
+		if ( $this->adminSubmissionMode ) { return ''; } 
 		$lblSt = $this->useInlineLabels ? 'style="display: none;"' : '';
 
 		$formFiledNames = array();
@@ -135,6 +138,7 @@ class newsmanForm {
 	}
 
 	private function validateHPFields() {
+		if ( $this->adminSubmissionMode ) { return true; } 
 		$u = newsmanUtils::getInstance();
 		$o = newsmanOptions::getInstance();
 
@@ -167,7 +171,6 @@ class newsmanForm {
 					$this->getCloseButton().
 				'</div>';
 	}
-
 
 	private function getTextarea($item) {
 
@@ -295,6 +298,7 @@ class newsmanForm {
 	}	
 
 	private function getHTML($item) {
+		if ( $this->adminSubmissionMode ) { return ''; } 
 		$it = 'newsman-form-item-'.$item['type'];
 
 		$elId = $this->getElId();
@@ -303,6 +307,7 @@ class newsmanForm {
 	}
 
 	private function getSubmit($item) {
+		if ( $this->adminSubmissionMode ) { return ''; } 
 		$elType = $this->adminMode ? 'gstype="submit"' : '';
 
 		$style = isset($item['style']) ? $item['style'] : 'none';

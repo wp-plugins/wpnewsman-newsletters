@@ -353,6 +353,7 @@ class newsmanList extends newsmanStorable {
 
 	public function getSubscribers($offset = 0, $limit = 100, $type = 'all', $q = false, $rawQuery = false) {
 		global $wpdb;
+		global $newsman_export_fields_list;
 
 		$u = newsmanUtils::getInstance();
 
@@ -387,11 +388,27 @@ class newsmanList extends newsmanStorable {
 				$sel .= $word.' email regexp %s';
 				$sel = $wpdb->prepare($sel, $u->preg_quote($q));				
 			}
-		}		
+		}
 
-		$sql = "SELECT * FROM $this->tblSubscribers ".$sel." ORDER BY `ts` DESC LIMIT %d, %d";
+		$u = newsmanUtils::getInstance();
+
+		$u->log('newsman_export_fields_list %s', print_r('newsman_export_fields_list', true));
+
+		$fields = '*';
+		if ( isset($newsman_export_fields_list) ) {
+			$fields = '';
+			$delim = '';
+			foreach ($newsman_export_fields_list as $f) {
+				$fields .= $delim.'`'.$f.'`';
+				$delim = ', ';
+			}
+		}
+
+		$sql = "SELECT $fields FROM $this->tblSubscribers ".$sel." ORDER BY `ts` DESC LIMIT %d, %d";
 
 		$sql = $wpdb->prepare($sql, $offset, $limit);
+		
+		$u->log('getSubscribers: %s', $sql);
 
 		$rows = $wpdb->get_results($sql, ARRAY_A);
 
@@ -619,7 +636,7 @@ class newsmanList extends newsmanStorable {
 		return array_unique(call_user_func_array('array_merge', func_get_args())); 
 	} 
 
-	public function getAllFields() {
+	public function getAllFields($fieldsList = array()) {
 		$p = 1;
 		$done = false;
 		$fields = array('id', 'ts', 'ip', 'email', 'status', 'ucode'); // standart fields
@@ -633,159 +650,180 @@ class newsmanList extends newsmanStorable {
 			}
 		} while ( !$done );
 
+		$foundSpecial = false;
+
+		foreach ($fieldsList as $f) {
+			if ( $f[0] === '-' ) {
+				$foundSpecial = true;
+				$xField = substr($f, 1);
+		
+				$idx = array_search($xField, $fields);				
+		
+				if ( $idx !== false ) {
+					array_splice($fields, $idx, 1);
+				}
+			} elseif ( $f[0] === '+' || $f[0] === ' ' ) {
+				$foundSpecial = true;	
+				$xField = substr($f, 1);			
+				$idx = array_search($xField, $fields);				
+				// if not found
+				if ( $idx === false ) {
+					$fields[] = $xField;
+				}
+			}
+		}
+
+		// if no special fields are found 
+		// treat the list of field as the only once which need to be inlcuded
+
+		if ( !$foundSpecial && !empty($fieldsList) ) {
+			$fields = $fieldsList;
+		}
+
 		return $fields;		
 	}
 
 	/**
 	 * Fetches subscribers in batches and conver them to csv rows
 	 */
-	private function subsToCSV($file, $fields, $type = 'all') {
+	private function subsToCSV($exportArgs) {
 
-		if ( 
-			defined('newsman_csv_export_limit') || 
-			defined('newsman_csv_export_offset') ||
-			defined('newsman_csv_export_query') 
-		) {
-			$offset = defined('newsman_csv_export_offset') ? newsman_csv_export_offset : 0;
-			$limit  = defined('newsman_csv_export_limit') ? newsman_csv_export_limit : 100;
-			$query  = defined('newsman_csv_export_query') ? newsman_csv_export_query : false;
+		if ( $exportArgs['customized'] ) {
 
-			$res = $this->getSubscribers($offset, $limit, $type, $query, 'RAW_SQL_QUERY');
+			$res = $this->getSubscribers($exportArgs['offset'], $exportArgs['limit'], $exportArgs['type'], $exportArgs['extraQuery'], 'RAW_SQL_QUERY');
 			if ( is_array($res) && !empty($res)  ) {
 				// csv
 				foreach ($res as $sub) {
-					fputs($file, $this->subToCSVRow($sub, $fields)."\n");
+					fputs($exportArgs['out'], $this->subToCSVRow($sub, $exportArgs['fields'])."\n");
 				}					
 
 				$p += 1;
 			}
-
-			return;			
-		}
-
-		$p = 1;
-		$done = false;
-		do {
-			$res = $this->getPage($p, 1000, $type);
-			if ( is_array($res) && !empty($res)  ) {
-				foreach ($res as $sub) {
-					fputs($file, $this->subToCSVRow($sub, $fields)."\n");
+		} else {
+			// dump all data
+			$p = 1;
+			$done = false;
+			do {
+				$res = $this->getPage($p, 1000, $exportArgs['type']);
+				if ( is_array($res) && !empty($res)  ) {
+					foreach ($res as $sub) {
+						fputs($exportArgs['out'], $this->subToCSVRow($sub, $exportArgs['fields'])."\n");
+					}
+					$p += 1;
+				} else {
+					$done = true;
 				}
-				$p += 1;
-			} else {
-				$done = true;
-			}
-		} while ( !$done );
+			} while ( !$done );
+		}
 	}
 
 	/**
 	 * Fetches subscribers in batches and conver them to csv rows
 	 */
-	private function subsToJSON($file, $fields, $map, $type = 'all') {
+	private function subsToJSON($exportArgs) {
+		// $file, $fields, $map, $type = 'all'
 
-		if ( 
-			defined('newsman_csv_export_limit') || 
-			defined('newsman_csv_export_offset') ||
-			defined('newsman_csv_export_query') 
-		) {
-			$offset = defined('newsman_csv_export_offset') ? newsman_csv_export_offset : 0;
-			$limit  = defined('newsman_csv_export_limit') ? newsman_csv_export_limit : 100;
-			$query  = defined('newsman_csv_export_query') ? newsman_csv_export_query : false;
-
-			$res = $this->getSubscribers($offset, $limit, $type, $query, 'RAW_SQL_QUERY');
+		if ( $exportArgs['customized'] ) {			
+			$res = $this->getSubscribers($exportArgs['offset'], $exportArgs['limit'], $exportArgs['type'], $exportArgs['extraQuery'], 'RAW_SQL_QUERY');
 			if ( is_array($res) && !empty($res)  ) {
 
 					$delim = '';
 					foreach ($res as $sub) {
-						fputs($file, $delim.$this->subToJSON($sub, $fields, $map));
+						fputs($exportArgs['out'], $delim.$this->subToJSON($sub, $exportArgs['fields'], $exportArgs['fieldsMap']));
 						$delim = ', ';
 					}
 
 				$p += 1;
 			}
-
-			return;			
-		}
-
-		$p = 1;
-		$done = false;
-		do {
-			$res = $this->getPage($p, 1000, $type);
-			if ( is_array($res) && !empty($res)  ) {
-				$delim = '';
-				foreach ($res as $sub) {
-					fputs($file, $delim.$this->subToJSON($sub, $fields, $map));
-					$delim = ',';
+		} else {
+			// dump all data
+			$p = 1;
+			$done = false;
+			do {
+				$res = $this->getPage($p, 1000, $exportArgs['type']);
+				if ( is_array($res) && !empty($res)  ) {
+					$delim = '';
+					foreach ($res as $sub) {
+						fputs($exportArgs['out'], $delim.$this->subToJSON($sub, $exportArgs['fields'], $exportArgs['fieldsMap']));
+						$delim = ',';
+					}
+					$p += 1;
+				} else {
+					$done = true;
 				}
-				$p += 1;
-			} else {
-				$done = true;
-			}
-		} while ( !$done );
+			} while ( !$done );
+		}
 	}
 
-	public function exportToCSV($filename, $type = 'all', $linksFields = array(), $forceFileOutput = true) {
+	public function export($exportArgs) {
 		global $newsman_export_fields_map;
+		global $newsman_export_fields_list;
 
-		if ( defined('newsman_export_format') ) {			
-			switch (newsman_export_format) {
-				case 'json':
-					$ct = 'application/json';
-					break;
+		$exportArgs = array_merge(array(
+			// defaults
+			'type' => 'all',
+			'linksFields' => array(),
+			'fieldsMap' => array(),
+			'fieldsList' => array(),
+			'nofile' => false,
+			'noheader' => false,
+			'format' => 'csv',
+			'offset' => 0,
+			'limit' => 100,
+			'extraQuery' => false
+		), $exportArgs);
 
-				case 'csv':					
-				default:
-					$ct = 'text/json';
-					break;
-			}
-			header( 'Content-Type: '.$ct );
+		$u = newsmanUtils::getInstance();
+
+		//*
+		switch ($exportArgs['format']) {
+			case 'json':
+				$ct = 'application/json';
+				break;
+
+			case 'csv':					
+			default:
+				$ct = 'text/json';
+				break;
 		}
+		header( 'Content-Type: '.$ct );
+		//*/
 
-		if ( $forceFileOutput ) {
-			header( 'Content-Disposition: attachment;filename='.$filename);			
+		if ( !$exportArgs['nofile'] ) {
+			header( 'Content-Disposition: attachment;filename='.$exportArgs['fileName']);			
 		}
-
-		//var_dump($newsman_export_fields_map);
 
 		$out = fopen('php://output', 'w');
 
 		if ( $out ) {
-			if ( defined('newsman_export_format') && newsman_export_format === 'json' ) {
-				fwrite($out, '[');
-			}
+			$exportArgs['out'] = $out;
+			$exportArgs['fields'] = $this->getAllFields($exportArgs['fieldsList']);
 
-			$fields = $this->getAllFields();
-
-			$fields = array_merge($fields, $linksFields);
-			$mappedFields = array();
-
-
-
-			if ( isset($newsman_export_fields_map) ) {
-				$map = $newsman_export_fields_map;
-				foreach ($fields as &$field) {
-					$mappedFields[] = isset($newsman_export_fields_map[$field]) ? $newsman_export_fields_map[$field] : $field;
+			// mapping fileds for CSV header
+			$mappedCSVHeader = array();
+			if ( isset($exportArgs['fieldsMap']) ) {
+				$map = $exportArgs['fieldsMap'];
+				foreach ($exportArgs['fields'] as $field) {
+					$mappedCSVHeader[] = isset($map[$field]) ? $map[$field] : $field;
 				}
 			} else {
-				$map = array();
-				$mappedFields = $fields;
+				$mappedCSVHeader = $fields;
 			}
 
-			if ( defined('newsman_export_format') && newsman_export_format === 'json' ) {
-				$this->subsToJSON($out, $fields, $newsman_export_fields_map);
-			} else {
-				fputcsv($out, $mappedFields, ',', '"');
-				$this->subsToCSV($out, $fields, $type);				
-			}
-
-			if ( defined('newsman_export_format') && newsman_export_format === 'json' ) {
+			if ( $exportArgs['format'] === 'json' ) {
+				fwrite($out, '[');
+				//$this->subsToJSON($out, $fields, $exportArgs['fieldsMap'], $exportArgs['type']);
+				$this->subsToJSON($exportArgs);
 				fwrite($out, ']');
-			}		
-
+			} else {
+				if ( !$exportArgs['noheader'] ) {
+					fputcsv($out, $mappedCSVHeader, ',', '"'); // CSV header output
+				}
+				//$this->subsToCSV($out, $fields, $exportArgs['type']);				
+				$this->subsToCSV($exportArgs);
+			}
 			@fclose($out);			
 		}
-
-
 	}
 
 	public function remove() {

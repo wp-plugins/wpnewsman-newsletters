@@ -155,7 +155,7 @@
 					</div>
 					<div class="span4">
 						<h3><?php _e('Have an Amazon SES account?', NEWSMAN); ?></h3>
-						<p><?php _e('Take a look at our article on <a href="http://www.glocksoft.com/how-to-use-amazon-ses-smtp-interface-to-send-emails/">how to use Amazon SES SMTP interface</a>.', NEWSMAN); ?></p>
+						<p><?php _e('Take a look at our article on <a href="http://www.glocksoft.com/email-marketing-software/how-to-use-amazon-ses-smtp-interface-to-send-emails/">how to use Amazon SES SMTP interface</a>.', NEWSMAN); ?></p>
 					</div>
 					
 					<div class="span4" style="margin-top: 20px;">

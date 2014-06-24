@@ -71,7 +71,8 @@ class newsmanMailer extends newsmanWorker {
 
 		$u->log('[launchSender] created transmissionStreamer');
 
-		$email->recipients = $tStreamer->getTotal();
+		$tStreamer->getTotal();
+
 		$email->msg = '';
 		$email->save();
 

@@ -114,7 +114,7 @@
 				<label for="newsman-send-now" class="radio"><input type="radio" name="newsman-send" value="now" checked="checked" id="newsman-send-now"> <?php echo ( isset($email) && $email->status == 'stopped' ) ? __('Resume', NEWSMAN) : __('Send immediately', NEWSMAN); ?></label>
 				<label for="newsman-schedule" class="radio"><input <?php if ( isset($email) && $email->status === 'scheduled' ) { echo 'checked="checked"'; } ?> type="radio" name="newsman-send" value="schedule" id="newsman-schedule"> <?php _e('Schedule sending on', NEWSMAN); ?></label>
 				<div style="margin: 1em 0;">
-					<input ype="text" id="newsman-send-datepicker" class="span3" value="<?php echo isset($email) ? $email->schedule*1000 : ''; ?>">
+					<input type="text" id="newsman-send-datepicker" class="span3" value="<?php echo isset($email) ? $email->schedule*1000 : ''; ?>">
 				</div>				
 				<button type="button" id="newsman-send" class="btn btn-large btn-success"><?php echo ( isset($email) && ( $email->status === 'stopped' || $email->status === 'error' ) ) ? __('Resume', NEWSMAN) : __('Send', NEWSMAN); ?></button>
 				<br><br>				
@@ -130,10 +130,12 @@
 					<p><button id="btn-edit-divider-tpl" class="btn"><?php _e('Edit Post Divider Template', NEWSMAN); ?></button></p>
 				</div>
 
+				<?php if ( defined('NEWSMAN_EDIT_ENTITY') && NEWSMAN_EDIT_ENTITY == 'email' ): ?>
 				<h4 style="margin: 1.5em 0 1em;"><?php _e('Publish this email', NEWSMAN); ?></h4>				
 				<p><?php printf(__('You can make the email to be accessible by other people on the web with <a href="%s">this link</a>. Shortcodes for the subscriber\'s data do not work in the published email. It\'s a good idea to hide unsubscribe links with <a target="_blank" href="http://wpnewsman.com/documentation/short-codes-for-email-messages/#conditional-pair-shortcodes">conditional shortcodes</a>', NEWSMAN), (NEWSMAN_EDIT_ENTITY === 'email') ? $ent->getPublishURL() : '#error' ); ?>.</p>
+				<?php endif; ?>
 
-				<h4 style="margin: 1.5em 0 1em;">wpNewsman Shortcodes <a href="http://codex.wordpress.org/Shortcode_API"><i class="icon-question-sign"></i></a></h4>
+				<h4 style="margin: 1.5em 0 1em;"><?php _e('WPNewsman Shortcodes', NEWSMAN); ?> <a href="http://codex.wordpress.org/Shortcode_API"><i class="icon-question-sign"></i></a></h4>
 				<?php $g = newsman::getInstance(); $g->putApShortcodesMetabox(); ?>
 			</div>
 		</div>

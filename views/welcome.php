@@ -4,11 +4,32 @@
 		<h1>Welcome to WPNewsman <?php echo NEWSMAN_VERSION; ?></h1>
 		
 		<?php if ( !get_option('newsman_version') ): ?>
-			<div class="about-text">Thank you for installing WPNewsman. We hope you'll like it!</div>
+			<div class="about-text">We're so glad you installed WPNewsman. We hope you'll like it!</div>
 		<?php else: ?>
-			<div class="about-text">You updated and have better newsletter gadget!</div>
+			<div class="about-text">You are updated and ready to get started with new cool features!</div>
 
+			<div class="changelog">
+		  		<div class="feature-section row" style="margin-bottom: .5em">
+					<div class="span8">
+						<h3>29,317 downloads and ONLY 26 reviews on wordpress.org</h3>
+						<p><a href="http://wordpress.org/support/view/plugin-reviews/wpnewsman-newsletters">
+						<img src="http://s-plugins.wordpress.org/wpnewsman-newsletters/assets/hello-puppies.png" align="left" style="margin: 0 15px 0 0;" /></a>
+						<p style="font-size: 18px; font-weight: bold;">We need your HELP to reach 100 reviews!</p>
+						Before you continue with your WPNewsman plugin, please <a href="http://wordpress.org/support/view/plugin-reviews/wpnewsman-newsletters" target="_blank" title="Rate WPNewsman!">add your own review</a>
+						 on wordpress.org to help us spread the word about WPNewsman!
 
+						<p>We believe that with your word of mouth it can be known by others who are at pain with collecting subscribers and sending them newsletters. 
+						<a target="_blank" href="http://wpnewsman.com/follow-us-and-spread-the-word-about-wpnewsman/?pk_campaign=wpnewsman-update">It’s pretty easy to spread the word about WPNewsman ►</a></p>
+
+						<p>By doing it, you’re helping yourself. The more users, the better experience, the more bugs discovered and fixed. 
+						We’re doing our best to make WPNewsman flawless, powerful, and simply the best newsletter plugin and we’re saying “Thank You!” for your support. 
+						Your likes, shares and comments make us happy, they encourage and inspire us to create 
+						a powerful alternative to expensive, restrictive email services and help you stay in touch with your clients, prospects and subscribers without third-party monthly plans.</p>
+						<a class="btn btn-success btn-large" href="http://wordpress.org/support/view/plugin-reviews/wpnewsman-newsletters" target="_blank" title="Rate WPNewsman!">Yes, I want to add my OWN 5★ Review!</a>
+
+					</div>
+				</div>
+			</div>
 		<?php endif; ?>
 		
 		<div class="changelog">
@@ -22,7 +43,7 @@
 			</div>
 			<?php endif; ?>
 		</div>
-	   
+<!--	   
 		<h3 style="margin-top: 40px;">How to quickly create and send email newsletter</h3>
 		
 		<div class="feature-section normal">
@@ -31,7 +52,7 @@
 			  <iframe width="640" height="360" src="http://www.youtube.com/embed/8OOHboUXiPM?rel=0" frameborder="0" allowfullscreen></iframe>
 			</p>
 		</div>
-
+-->
 		<div class="feature-section row" style="margin: 35px 0 .5em 0;">
 			<div class="span12">
 				<h3>Changes in this version:</h3>

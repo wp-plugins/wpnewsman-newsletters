@@ -53,6 +53,7 @@
 				<li><a id="newsman-btn-chToConfirmed"><?php _e('Change to Confirmed', NEWSMAN); ?></a></li>
 			</ul>
 		</div>
+		<button id="newsman-btn-add-subscriber" style="margin: 0 3px;" type="button" class="btn btn-success"><i class="newsman-icon newsman-icon-plus-sign"></i> <?php _e('Add Subscriber', NEWSMAN); ?></button>
 		<button class="btn newsman-btn-reconfirm-group" id="btn-resend-confirmation-req">Resend Confirmation request</button>			
 		<button id="newsman-btn-delete" style="margin: 0 3px;" type="button" class="btn btn-danger"><?php _e('Delete', NEWSMAN); ?></button>
 	
@@ -85,6 +86,28 @@
 	</table>
 
 	<!--		 MODALS 		-->
+
+	<div class="modal dlg" id="newsman-modal-add-sub" style="display: none;">
+		<div class="modal-header">
+			<button class="close" data-dismiss="modal">×</button>
+			<h3><?php _e('Add Subscriber', NEWSMAN); ?></h3>
+		</div>
+		<div class="modal-body">
+			
+		</div>
+		<div class="modal-footer">
+			<div class="pull-left">
+				<select name="type" class="form-control" id="newsman-sub-type">
+					<option value="confirmed">Confirmed</option>
+					<option value="unconfirmed">Unconfirmed</option>
+					<option value="unsubscribed">Unsubscribed</option>
+				</select>
+				<input type="text" class="form-control" id="newsman-sub-datepicker">
+			</div>
+			<a class="btn" mr="cancel"><?php _e('Cancel', NEWSMAN); ?></a>
+			<a class="btn btn-primary" mr="ok"><?php _e('Save', NEWSMAN); ?></a>
+		</div>
+	</div>	
 
 	<div class="modal dlg" id="newsman-modal-unsubscribe" style="display: none;">
 		<div class="modal-header">

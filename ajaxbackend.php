@@ -692,7 +692,9 @@
 
 			$selector .= ' ORDER BY id DESC';			
 
-			$tpls = newsmanEmailTemplate::findAllPaged($pg, $ipp, $selector, $args);
+			$tpls = newsmanEmailTemplate::findAllPaged($pg, $ipp, $selector, $args, array(
+				'fields' => array('id', 'name', 'assigned_list', 'system', 'system_type')
+			));
 			
 			$res['count'] = newsmanEmailTemplate::count($selector, $args);
 			$res['rows'] = array();
@@ -728,7 +730,10 @@
 
 			// getting default templates
 
-			$tpls = newsmanEmailTemplate::findAll('`system` = 1 AND `assigned_list` = 0');
+			$tpls = newsmanEmailTemplate::findAll('`system` = 1 AND `assigned_list` = 0', array(), array(
+				'fields' => array('id', 'name', 'assigned_list', 'system', 'system_type')
+			));
+
 			$lst = array(
 				'default' => true,
 				'templates' => array()
@@ -796,13 +801,10 @@
 				return;
 			}
 
-			// if ( !isset($eml->$key) ) {
-			// 	$this->respond(false, "Email doesn't have \"$key\".");
-			// } else {
-				$eml->$key = $value;
-				$eml->save();
-				$this->respond(true, 'success');
-			//}
+			$eml->remeberToField();
+			$eml->$key = $value;
+			$eml->save();
+			$this->respond(true, 'success');
 		}
 
 
@@ -1333,6 +1335,8 @@
 					if ( $c === 1 && $skipFirst ) {
 						continue;
 					}
+
+					//$this->u->log('[importingCSV] CSV row count %s, %s', count($data), print_r($data, true));
 					
 					if ( $this->importSubscriber($list, $fields, $st, $data) !== false ) {
 						$imported += 1;
@@ -1861,6 +1865,9 @@
 			}			
 		}
 
+		/**
+		 * Deprecated since 1.7.3
+		 */
 		public function ajSetSubscriberEmail() {
 			$email = $this->param('value');
 			$id = $this->param('pk');
@@ -2338,7 +2345,89 @@
 			$this->respond(true, 'success', $res);
 		}
 
+		public function ajGetAdminForm() {
+			$listId = $this->param('listId');
+			$subId = $this->param('subId', false);
+
+
+			$sub = array();
+			$list = newsmanList::findOne('id = %s', array($listId));
+			if ( $list && $subId ) {
+				$sub = $list->findSubscriber('id = %s', $subId);
+				if ( $sub ) {
+					$sub = $sub->toJSON();
+				}
+			}
+
+			$html = newsman::getInstance()->putForm(false, $listId, false, 'ADMIN_MODE');
+			$this->respond(true, 'success', array(
+				'html' => $html,
+				'sub' => $sub
+			));
+		}
+
+		public function ajSaveSubscriber() {
+			$json = $this->param('json');
+			$listId = $this->param('listId');
+			$subId = $this->param('subId', false);
+
+			$list = newsmanList::findOne('id = %d', array($listId));
+
+			$sub = json_decode($json, true);
+
+			if ( !$list ) {
+				return $this->errListNotFound($listId);
+			}
+
+			$offsetSec = get_option('gmt_offset') * 3600;
+			$op = $offsetSec > 0 ? 'add' : 'sub';
+			$offsetSec = abs($offsetSec);
+						
+			$offsetModifier = 'PT'.$offsetSec.'S';
+
+			$d = new DateTime($sub['date']);
+			$d->$op(new DateInterval($offsetModifier));
+
+			$u = newsmanUtils::getInstance();
+			$u->log('[ajSaveSubscriber] offsetPart %s', $offsetModifier);
+			$u->log('[ajSaveSubscriber] full datetime  %s', $sub['date']);			
+
+			if ( $subId ) {
+				$s = $list->findSubscriber('id = %s', $subId);
+			} else {
+				$s = $list->newSub();	
+			}
+
+			$s->fill($sub['form']);
+			$s->setDate($d->format('Y-m-d H:i:s'));
+			switch ( $sub['type'] ) {
+				case 'confirmed':
+					$s->confirm();
+					break;
+				case 'unconfirmed':
+					$s->unconfirm();
+					break;
+				case 'unsubscribed':
+				default:
+					$s->unsubscribe();
+					break;
+			}
+			$r = $s->save();
+
+			if ( $r ) {
+				$this->respond(true, __('Saved', NEWSMAN), array(
+					'id' => $r
+				));
+			} else {
+				if ( stripos($s->lastError, 'Duplicate entry') !== false  ) {
+					$this->respond(false, sprintf(__('Subscriber with email %s already exists.', NEWSMAN), $s->email));
+				} else {
+					$this->respond(false, $s->lastError);	
+				}				
+			}
+		}
 
 
 
-	}
+
+	}	

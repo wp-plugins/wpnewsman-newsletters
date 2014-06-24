@@ -3,6 +3,7 @@
 require_once(__DIR__.DIRECTORY_SEPARATOR."class.utils.php");
 require_once(__DIR__.DIRECTORY_SEPARATOR."class.storable.php");
 require_once(__DIR__.DIRECTORY_SEPARATOR."class.an-links.php");
+require_once(__DIR__.DIRECTORY_SEPARATOR."class.sentlog.php");
 require_once(__DIR__.DIRECTORY_SEPARATOR."lib/emogrifier.php");
 
 class newsmanEmail extends newsmanStorable {
@@ -44,6 +45,8 @@ class newsmanEmail extends newsmanStorable {
 
 	static $json_serialized = array('to');
 
+	var $_oldToField = null;
+
 	function __construct() {
 		parent::__construct();
 
@@ -53,18 +56,37 @@ class newsmanEmail extends newsmanStorable {
 		$this->created = date('Y-m-d H:i:s');		
 	}
 
-	function save() {		
+	function remeberToField() {
+		$this->_oldToField = json_encode($this->to);
+	}
+
+	function save() {
 		$u = newsmanUtils::getInstance();
 		
 		if ( !isset($this->ucode) || !$this->ucode ) {
 			$this->ucode = $u->base64EncodeU( sha1($this->created.$this->subject.microtime(), true) );
 		}
 
+		if ( $this->_oldToField !== null && $this->_oldToField != $this->to ) {
+			$u = newsmanUtils::getInstance();
+			$u->log('[email::save] To: field changed from %s to %s', $this->_oldToField, $this->to);
+
+			$tStreamer = new newsmanTransmissionStreamer($this);
+			$this->recipients = $tStreamer->getTotal();			
+			$u->log('[email::save] New number of recipients %s ', $this->recipients);
+		}
+
+		$this->html = $this->cleanupTechnicalStyle($this->html);
+		$this->p_html = $this->cleanupTechnicalStyle($this->p_html);
+
 		$this->embedStyles();
 		$this->addAnalytics();
 
-
 		return parent::save();
+	}
+
+	private function cleanupTechnicalStyle($html) {
+		return preg_replace('/<link[^>]*?tpleditor.css[^>]*?>/i', '', $html);
 	}
 
 	public function getStatus() {
@@ -130,7 +152,7 @@ class newsmanEmail extends newsmanStorable {
 	public function addAnalytics() {
 
 		if ( isset($this->analytics) && $this->analytics ) {			
-			$this->p_html = preg_replace_callback('/(<\w+[^>]+href=(\\\'|"))(\S+\:[^>]*?)(\2[^>]*>)/i', array($this, 'addWebAnalytics'), $this->p_html);
+			$this->p_html = preg_replace_callback('/(<a\s+[^>]+href=(\\\'|"))(\S+\:[^>]*?)(\2[^>]*>)/i', array($this, 'addWebAnalytics'), $this->p_html);
 			$this->plain = preg_replace_callback('/http(?:s|):\/\/\S+/i', array($this, 'addWebAnalyticsPlainText'), $this->plain);
 		}
 
@@ -242,7 +264,7 @@ class newsmanEmail extends newsmanStorable {
 	private function wrapLinks($html) {
 
 		if ( isset($this->emailAnalytics) && $this->emailAnalytics ) {			
-			$html = preg_replace_callback('/(<\w+[^>]+href=(\\\'|"))(\w+\:[^>]*?)(\2[^>]*>)/i', array($this, 'addEmailAnalytics'), $html);
+			$html = preg_replace_callback('/(<a[^>]*?href=(\\\'|"))(\w+\:[^>]*?)(\2[^>]*>)/i', array($this, 'addEmailAnalytics'), $html);
 		}
 		return $html;
 	}
@@ -293,7 +315,7 @@ class newsmanEmail extends newsmanStorable {
 		// apply shortcodes here
 		$rendered = array(
 			'subject' => do_shortcode( $this->subject ),
-			'html' => $this->addTrackingCode( $this->wrapLinks( do_shortcode( $this->p_html ) ) ),
+			'html' => $this->wrapLinks( $this->addTrackingCode( do_shortcode( $this->p_html ) ) ),
 			'plain' => $this->wrapLinksInPlainText( do_shortcode( $this->plain ) )
 		);
 

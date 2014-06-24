@@ -30,6 +30,8 @@ class newsmanSub {
 
 	*/
 
+	var $lastError = '';
+
 	public function __get($name) {
 		if ( $name == 'email' ) {
 			return $this->rawRec['email'];
@@ -160,7 +162,7 @@ class newsmanSub {
 						bounceStatus='%s'
 					WHERE id=%d";
 		} else {
-			$sql = "INSERT HIGH_PRIORITY IGNORE into 
+			$sql = "INSERT into 
 					$this->tableName (ts, ip, email, status, ucode, fields, bounceStatus)
 					VALUES('%s','%s','%s','%s','%s','%s','%s');"; //" ON DUPLICATE KEY UPDATE `status`=`status`;";
 		}
@@ -180,7 +182,8 @@ class newsmanSub {
 		$r = $wpdb->query($sql);
 
 		if ( $r === false ) {
-			return $wpdb->last_error;
+			$this->lastError = $wpdb->last_error;
+			return false; 
 		} else {
 			if ( !isset($this->rawRec['id']) ) {
 				$this->rawRec['id'] = $wpdb->insert_id;				

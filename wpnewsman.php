@@ -3,7 +3,7 @@
 Plugin Name: G-Lock WPNewsman Lite
 Plugin URI: http://wpnewsman.com
 Description: You get simple yet powerful newsletter solution for WordPress. Now you can easily add double optin subscription forms in widgets, articles and pages, import and manage your lists, create and send beautiful newsletters directly from your WordPress site. You get complete freedom and a lower cost compared to Email Service Providers. Free yourself from paying for expensive email campaigns. WPNewsman plugin updated regularly with new features.
-Version: 1.7.2
+Version: 1.7.3
 Author: Alex Ladyga - G-Lock Software
 Author URI: http://www.glocksoft.com
 */
@@ -31,7 +31,7 @@ function newsman_ensure_correct_path($path) {
 }
 
 define('NEWSMAN', 'wpnewsman');
-define('NEWSMAN_VERSION', '1.7.2');
+define('NEWSMAN_VERSION', '1.7.3');
 
 if ( preg_match('/.*?\.dev$/i', $_SERVER['HTTP_HOST']) ) {
 	define('NEWSMAN_DEV_HOST', true);
@@ -189,6 +189,17 @@ function newsmanCheckCompatibility() {
 	);
 
 	/// ----
+
+	// 6. libbcmatch module check
+	$newsman_checklist[] = array(
+		'passed' => extension_loaded('bcmath') || extension_loaded('gmp'),
+		'name' => __('bcmath or gmp extension is loaded', NEWSMAN),
+		'help' => __('Since version 1.7.0 either <b>bcmath</b> or <b>gmp</b> PHP module is required for the plugin to work. According to PHP documentation <b>bcmath</b> should pre installed since PHP 4.0.4.', NEWSMAN)
+	);
+
+	/// ----	
+
+
 
 	foreach ($newsman_checklist as $check) {
 		if ( $check['passed'] === false ) {

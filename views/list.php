@@ -254,7 +254,7 @@
 	<?php include("_header.php"); ?>
 	<div class="row-fluid" style="border-bottom: 1px solid #DADADA;">
 		<div class="span12">
-			<h2><?php _e('Edit subscribers list', NEWSMAN); ?><span style="margin-left: 10px;"><?php do_action('newsman_put_list_select', false); ?></span></h2>
+			<h2><?php _e('Edit subscribers list', NEWSMAN); ?><span style="margin-left: 10px;"><?php do_action('newsman_put_list_select', false); ?></span> <a href="#" id="btn-view-subscribers" class="btn"><?php newsmanEEnt(__('View Subscribers', NEWSMAN)); ?></a></h2>
 		</div>		
 	</div>
 
@@ -310,6 +310,8 @@
 								<div class="newsman-field-shortcode" data-bind="visible: shortcodeAvailable()">
 									<strong><?php _e('Field shortcode', NEWSMAN); ?></strong><br>
 									<p>[newsman sub=&apos;<span data-bind="text: name()"></span>&apos;]</p>
+									<button class="btn btn-copy-shortcode" data-bind="attr: { 'data-clipboard-text': shortcode() }" title="Click me to copy shortcode."><i class="newsman-icon newsman-icon-paste"></i> Copy</button>
+									<span class="copy-shortcode-done-msg" style="display: none;">Copied!</span>
 								</div>								
 							</div>
 						</div>

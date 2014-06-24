@@ -332,7 +332,11 @@ class newsmanTransmissionStreamer {
 		$to = $email->to;
 
 		if ( is_string($to) ) {
-			$to = explode(',', $to);	
+			if ( preg_match('/^\[.*\]$/', $to) ) {
+				$to = json_decode($to, true);
+			} else {
+				$to = explode(',', $to);
+			}
 		}
 
 		$this->plainAddresses = array();

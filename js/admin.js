@@ -768,6 +768,29 @@ jQuery(function($){
 		}
 	};
 
+	var ajax = NEWSMAN.ajax = function(action, data, done, fail, always) {
+
+		always = always || function(){};
+
+		if ( !fail ) {
+			fail = NEWSMAN.ajaxFailHandler;
+		} else {
+			var failBack = fail;
+			fail = function() {
+				failBack.apply(this, arguments);
+				NEWSMAN.ajaxFailHandler(this, arguments);
+			};
+		}
+
+		data.action = 'newsman'+action.replace(/^./, function(str){ return str.toUpperCase(); });
+
+		$.ajax({
+			type: 'POST',
+			url: ajaxurl,
+			data: data
+		}).success(done).fail(fail).always(always);
+	};
+
 	// ------------------- ajax-fork
 	function forkWorkers(forks) {
 		if ( $.isArray(forks) ) {
@@ -787,6 +810,8 @@ jQuery(function($){
 	}
 
 	// global ajax senders
+
+	/*
 
 	$(document).on('click','a', function(e){
 		var href = $(this).prop('href') || '';
@@ -847,6 +872,8 @@ jQuery(function($){
 			}
 		}
 	});
+
+	//*/
 
 	// -------------------
 
@@ -1178,12 +1205,12 @@ jQuery(function($){
 			opts = { result: resultCallback };
 		}
 
-		mrCallback = function(modalResult, xmr) {			
+		mrCallback = function(modalResult, xmr) {
 			var res = opts.result.call($(id), modalResult, xmr);
 			if ( res ) {
 				mrCallback = null;
 			}
-			return res;
+			return res;			
 		};
 
 		if ( opts.show ) {
@@ -2013,18 +2040,6 @@ jQuery(function($){
 								'<td>'+statusToText(r.status, r.status == 2 ? r.bounceStatus : '')+'</td>',
 								'<td>'+fieldsToHTML(r.fields)+'</td>',
 							'</tr>'].join('')).appendTo(tbody);
-							
-						$('.email', row).editable({
-							type:  'text',
-							pk:    r.id,
-							name:  'email',
-							url:   ajaxurl,
-							params: {
-								action: 'newsmanAjSetSubscriberEmail',
-								list: pageState.listId
-							},
-							title: 'Enter email address'
-						});
 					});
 				} else {
 					noData();
@@ -2259,6 +2274,7 @@ jQuery(function($){
 				});
 			} else {
 				window.location.hash = '#/'+v+'/all';
+				enableFormEditButton();
 			}			
 		});
 
@@ -2474,6 +2490,119 @@ jQuery(function($){
 			}			
 		});
 
+		// TODO add "add email" button here
+
+		$('#newsman-sub-datepicker').datetimepicker({
+			dateFormat: 'd MM, yy',
+			controlType: 'select',
+			timeFormat: 'hh:mm tt'
+			// altFormat: "yy-mm-dd",
+			// altField: '#newsman-bcst-start-date-sql'
+		});
+
+
+		// Adding & Editing of subscribers
+
+		function showSubAddEditForm(listId, subId) {
+			var modalBody = $('#newsman-modal-add-sub .modal-body');
+			$('#newsman-sub-datepicker').datetimepicker('setDate', new Date());
+
+			showLoading();
+
+			ajax('ajGetAdminForm', {
+				listId: listId,
+				subId: subId
+			}, function(data){
+				modalBody.html(data.html);
+
+				var d = data.sub;
+				if ( d && !$.isArray(d) ) {
+					if ( d['ts'] ) {
+						$('#newsman-sub-datepicker').datetimepicker('setDate', moment(d['ts']).toDate());
+					}
+					if ( d.status ) {
+						var statusMap = [
+							'unconfirmed',
+							'confirmed',
+							'unsubscribed'
+						];
+						$('#newsman-sub-type').val(statusMap[parseInt(d.status, 10)]);
+					}
+					$( "input, textarea, select" ).each(function(i, el){
+						var $el = $(el),
+							value = d[el.name];
+
+						if ( el.name === 'newsman-email' ) {
+							$(el).val(d.email);
+						} else if ( $el.attr('type') === 'checkbox' ) {
+							$el.prop('checked', value == '1');
+						} else if ( $el.attr('type') === 'radio' ) {							
+							if ( $el.val() == value ) {
+								$el.prop('checked', true);	
+							}							
+						} else {
+							if ( value ) {
+								$el.val(value);
+							}
+						}
+					});							
+				}
+
+				// data.sub				
+
+				showModal('#newsman-modal-add-sub', function(mr){
+					var modal = this;
+					if ( mr == 'ok' ) {
+
+						var formArr = $('form', modalBody).serializeArray(),
+							formObj = {}
+
+						$(formArr).each(function(i, p){
+							formObj[p.name] = p.value;
+						});
+
+						formObj['email'] = formObj['newsman-email'];
+						delete formObj['newsman-email'];
+						delete formObj['uid'];
+						delete formObj['newsman-form-url'];
+
+						var submission = {
+							form: formObj,
+							date: $('#newsman-sub-datepicker').datetimepicker('getDate'),
+							type: $('#newsman-sub-type').val()
+						};
+
+						ajax('ajSaveSubscriber', {
+							json: JSON.stringify(submission),
+							listId: listId,
+							subId: subId
+						}, function(data){
+							getSubscribers();
+							modal.modal('hide');
+						});
+					}
+				});				
+			}, null, function(){
+				// always
+				hideLoading();
+			});
+		}
+
+		$('#newsman-btn-add-subscriber').click(function(e){
+			var listId = $('#newsman-lists').val();		
+
+			showSubAddEditForm(listId);
+		});
+
+		$(document).on('click', '#newsman-mgr-subscribers .email', function(e){
+			var listId = $('#newsman-lists').val(),
+				subId = $(e.srcElement).closest('tr').find('input').val();
+
+			showSubAddEditForm(listId, subId);			
+		});
+
+		// ---
+
 		var email = $('#newsman-email-search').val();
 
 		var defaultListId = $('#newsman-lists').val();
@@ -2584,7 +2713,18 @@ jQuery(function($){
 			window.location = NEWSMAN_BLOG_ADMIN_URL+'admin.php?page=newsman-forms&sub=subscribers&action=editlist&id='+listId;
 		});
 
-		// 
+
+		//btn-view-subscribers
+
+		function updateViewSubscribersBtn() {
+			var listId = $('#newsman-lists').val();
+			$('#btn-view-subscribers').attr('href', NEWSMAN_BLOG_ADMIN_URL+'admin.php?page=newsman-forms&sub=subscribers#/'+listId+'/all');			
+		}
+
+		$('#newsman-lists').change(updateViewSubscribersBtn);
+
+		updateViewSubscribersBtn();
+
 
 		//$('.newsman-form-builder').newsmanFormBuilder();
 
@@ -2921,6 +3061,26 @@ jQuery(function($){
 					});
 				}
 			});
+
+			$(document).on('click',  '.newsman-email-stop-sending', function(e){
+				e.preventDefault();
+				e.stopPropagation();
+
+				var emlId = $(e.target).closest('.newsman-email').attr('emlid');
+				if ( emlId ) {
+					showLoading();
+
+					ajax('ajStopSending', {
+						ids: emlId
+					}, function(data){
+						showMessage(data.msg, 'success');
+						getEmails();
+					}, null, function(){
+						hideLoading();
+					});
+				}
+			});
+
 
 			$(document).on('click', '.newsman-email-delete', function(e){
 				e.preventDefault();
@@ -3325,7 +3485,7 @@ jQuery(function($){
 											'<li><a href="'+NEWSMAN_BLOG_ADMIN_URL+'/admin.php?page=newsman-mailbox&action=edit&id='+r.id+'"><i class="newsman-icon newsman-icon-edit"></i> Edit</a></li>',
 											'<li><a href="'+NEWSMAN_BLOG_ADMIN_URL+'/admin.php?page=newsman-mailbox&action=compose-from-email&id='+r.id+'"><i class="newsman-icon newsman-icon-envelope"></i> Duplicate</a></li>',
 											'<li>',
-												'<a href="'+r.publicURL+'"><i class="newsman-icon newsman-icon-external-link"></i> '+newsmanL10n.viewInBrowser+'</a>',
+												'<a target="_blank" href="'+r.publicURL+'"><i class="newsman-icon newsman-icon-external-link"></i> '+newsmanL10n.viewInBrowser+'</a>',
 											'</li>',
 											'<li class="newsman-email-delete">',
 												'<a href="#"><i class="newsman-icon newsman-icon-trash"></i> Delete</a>',
@@ -3417,7 +3577,7 @@ jQuery(function($){
 
 				getEmails();
 
-				$('.subsubsub a.current').removeClass('current');
+				$('.radio-links a.current').removeClass('current');
 				$('#newsman-mailbox-'+type).addClass('current');	
 			}
 
@@ -4249,7 +4409,7 @@ jQuery(function($){
 
 				pageState.pg = parseInt(p, 10);		
 				getTemplates();
-				$('.subsubsub a.current').removeClass('current');
+				$('.radio-links a.current').removeClass('current');
 			}
 
 			NEWSMAN.on('reloadTemplates', function(){
@@ -4776,7 +4936,7 @@ jQuery(function($){
 				pageState.show = type.toLowerCase();
 				getForms();
 
-				$('.subsubsub a.current').removeClass('current');
+				$('.radio-links a.current').removeClass('current');
 				$('#newsman-mailbox-'+type).addClass('current');
 			}
 
