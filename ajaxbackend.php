@@ -1707,9 +1707,7 @@
 		public function ajResendConfirmation() {
 			global $newsman_current_subscriber;		
 			global $newsman_current_email;
-			global $newsman_current_list;
-
-			
+			global $newsman_current_list;			
 
 			$ids = $this->param('ids'); // js array or comma sep. enumeration
 			

@@ -4,7 +4,7 @@ Donate Link: http://wpnewsman.com/premium-newsletter-plugin-wordpress/
 Tags: wpnewsman, newsletter, newsletters, newsletter signup, newsletter widget, subscribers, post notification, email subscription, email marketing, email, emailing, subscription
 Requires at least: 3.5
 Tested up to: 4.0
-Stable tag: 1.7.3
+Stable tag: 1.7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -49,7 +49,7 @@ WPNewsman plugin updated regularly with new features. Please see the <a href="ht
 
 = Email Newsletter Software related features =
 
-Compatible with G-Lock EasyMail7 [Unique Email Marketing solution for Windows](http://easymail7.com/ "Unique Email Marketing solution for Windows") :
+Compatible with G-Lock EasyMail7 [Unique Newsletter & Autoresponder Solution for Windows](http://easymail7.com/?pk_campaign=wordpress.prg "Newsletter & Autoresponder solution for Windows") :
 
 = Translations in your language =
 
@@ -123,6 +123,11 @@ We got a User Feedback page where you can [add or vote for new features](http://
 3. Subscriber management.
 
 == Changelog ==
+
+= 1.7.4 =
+
+* Fixed bug which caused conversion of Non-unicode characters in field names to underscores("_").
+* Fixed links in re-subscribe emails.
 
 = 1.7.3 =
 

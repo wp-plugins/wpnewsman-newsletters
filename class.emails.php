@@ -66,8 +66,8 @@ class newsmanEmail extends newsmanStorable {
 		if ( !isset($this->ucode) || !$this->ucode ) {
 			$this->ucode = $u->base64EncodeU( sha1($this->created.$this->subject.microtime(), true) );
 		}
-
-		if ( $this->_oldToField !== null && $this->_oldToField != $this->to ) {
+		// $this->_oldToField !== null &&
+		if ( $this->_oldToField != $this->to ) {
 			$u = newsmanUtils::getInstance();
 			$u->log('[email::save] To: field changed from %s to %s', $this->_oldToField, $this->to);
 

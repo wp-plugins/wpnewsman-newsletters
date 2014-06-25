@@ -54,7 +54,6 @@
 			</ul>
 		</div>
 		<button id="newsman-btn-add-subscriber" style="margin: 0 3px;" type="button" class="btn btn-success"><i class="newsman-icon newsman-icon-plus-sign"></i> <?php _e('Add Subscriber', NEWSMAN); ?></button>
-		<button class="btn newsman-btn-reconfirm-group" id="btn-resend-confirmation-req">Resend Confirmation request</button>			
 		<button id="newsman-btn-delete" style="margin: 0 3px;" type="button" class="btn btn-danger"><?php _e('Delete', NEWSMAN); ?></button>
 	
 		<button id="newsman-btn-export" type="button" class="btn pull-right"><i class="icon-download"></i> <?php _e('Export to CSV', NEWSMAN); ?></button>
@@ -63,7 +62,17 @@
 		
 		<div class="newsman-btn-reconfirm-group pull-right">
 			<span class="pull-right button-row-divider">|</span>
-			<button id="newsman-btn-resubscribe" style="margin: 0 3px 0 2em;" type="button" class="btn pull-right"><?php _e('Send Re-Subscribe Request', NEWSMAN); ?></button>
+			<div class="btn-group pull-right" style="margin: 0 3px 0 2em;">
+				<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+					<i class="newsman-icon newsman-icon-envelope"></i> <?php _e('Send request', NEWSMAN); ?>
+				<span class="caret"></span>
+				</a>
+				<ul class="dropdown-menu">
+					<!-- dropdown menu links -->
+					<li><a id="newsman-btn-resubscribe" href="#"><?php _e('Send Re-Subscribe Request', NEWSMAN); ?></a></li>
+					<li><a id="btn-resend-confirmation-req" href="#"><?php _e('Resend Confirmation request', NEWSMAN); ?></a></li>
+				</ul>
+			</div>
 		</div>
 	</div>
 

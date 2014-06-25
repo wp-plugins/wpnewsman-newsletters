@@ -953,13 +953,13 @@ class newsman {
 	}
 
 	public function createReConfirmEmail($listId) {
-
 		$list = newsmanList::findOne('id = %d', array($listId));
 
 		$tpl = newsmanEmailTemplate::findOne('`assigned_list` = %d AND `system_type` = %d', array($listId, NEWSMAN_ET_RECONFIRM));
 
 		if ( $tpl ) {
 			$email = new newsmanEmail();
+			$email->emailAnalytics = false;
 
 			$email->type = 'email';	
 
