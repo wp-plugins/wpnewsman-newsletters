@@ -17,7 +17,7 @@ if ( ! WP_NETWORK_ADMIN && ! WP_USER_ADMIN ) {
 
 $_SERVER['PHP_SELF'] = '/wp-admin/wpnewsman-worker.php';
 
-require_once('../../../wp-load.php');
+require_once(ABSPATH.'wp-load.php');
 
 ignore_user_abort(true);
 set_time_limit(0);

@@ -146,6 +146,8 @@ class newsman {
 
 		add_action('plugins_loaded', array($this, 'setLocale'));
 
+		add_action('newsman_pro_workers_ready', array($this, 'onProWorkersReady'));
+
 		// -----
 
 		add_action('newsman_put_list_select', array($this, 'putListSelect'));
@@ -849,7 +851,7 @@ class newsman {
 
 			'debug' => true,
 
-			'cleanUnconfirmed' => true,
+			'cleanUnconfirmed' => false,
 
 			'uninstall' => array(
 				'deleteSubscribers' => false
@@ -1339,6 +1341,7 @@ class newsman {
 
 		$lists = newsmanList::findAll();
 		foreach ($lists as $list) {
+			if ( $list->name == '_Test' ) { continue; }
 			$sql = "DELETE FROM $list->tblSubscribers WHERE status = ".NEWSMAN_SS_UNCONFIRMED." and DATE_ADD(`ts`, INTERVAL 7 DAY) <= CURDATE()";	
 			$result = $wpdb->query($sql);
 		}	
@@ -1826,6 +1829,9 @@ class newsman {
 			$this->setLocale();
 		}
 
+		$locks = newsmanLocks::getInstance();
+		$locks->clearLocks();
+
 		$this->ensureEnvironment();
 		$this->install();
 
@@ -1942,8 +1948,39 @@ class newsman {
 		return $link;
 	}
 
+	public function onProWorkersReady() {
+
+		if ( isset( $_REQUEST['newsman_worker_fork'] ) && !empty($_REQUEST['newsman_worker_fork']) ) {
+			$workerClass = $_REQUEST['newsman_worker_fork'];
+
+			if ( !class_exists($workerClass) ) {
+				die("requested worker class ".htmlentities($workerClass)." does not exist");
+			}
+
+			if ( !isset($_REQUEST['workerId']) ) {
+				die('workerId parameter is not defiend in the query');
+			}
+
+			$worker = new $workerClass($_REQUEST['workerId']);
+			$worker_lock = isset($_REQUEST['worker_lock']) ? $_REQUEST['worker_lock'] : null;
+			$worker->run($worker_lock);
+			exit();
+		}		
+
+	}
+
 	public function onInit($activation = false) {
 		new newsmanAJAX();
+
+		// checking for external form request
+
+		if ( isset($_REQUEST['uid']) && preg_match('/wpnewsman(\-newsletters|)\/form/', $_SERVER['REQUEST_URI']) ) {
+			require_once(__DIR__.DIRECTORY_SEPARATOR."class.form.php");
+			require_once(__DIR__.DIRECTORY_SEPARATOR."class.list.php");
+
+			include('views/ext-form.php');
+			exit();
+		}
 
 		if ( isset( $_REQUEST['page'] ) && strpos($_REQUEST['page'], 'newsman') !== false && !defined('NEWSMAN_PAGE') ) {
 			define('NEWSMAN_PAGE', true);
@@ -2281,6 +2318,10 @@ class newsman {
 	}
 
 	public function echoEmail() {
+		global $newsman_current_subscriber;
+		global $newsman_current_email;
+		global $newsman_current_list;
+
 		header("Content-Type: text/html; charset=utf-8");
 		header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
 		header("Pragma: no-cache"); 
@@ -2293,8 +2334,20 @@ class newsman {
 		} else {			
 			if ( isset($_REQUEST['processed']) ) {
 
-				$list = new newsmanList();
-				$sub = $list->findSubscriber("id = %s", 1);
+				if ( !isset($_REQUEST['list']) || $_REQUEST['list'] === '' ) {
+					wp_die('Required parameter "list" is missing or empty');
+				}
+
+				if ( !isset($_REQUEST['sub']) || $_REQUEST['sub'] === '' ) {
+					wp_die('Required parameter "sub" is missing or empty');
+				}				
+
+				$list = newsmanList::findOne('id = %s', array($_REQUEST['list']));
+				$newsman_current_list = $list;
+
+				$sub = $list->findSubscriber("id = %s", array($_REQUEST['sub']));
+				$newsman_current_subscriber = $sub->toJSON();
+
 				$c = $eml->renderMessage($sub->toJSON());
 				echo $c['html'];
 

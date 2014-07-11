@@ -128,12 +128,17 @@ class newsmanWorker extends newsmanWorkerBase {
 
 	public function run($worker_lock = null) {
 
+		$u = newsmanUtils::getInstance();
+		$u->log('[newsmanWorker run] worker_lock %s', $worker_lock);
+
 		$this->processMessages();
 
 		if ( $worker_lock === null ) {
 			$this->worker();
 		} else {
+			//$u->log('locking %s', $worker_lock);
 			if ( $this->lock($worker_lock) ) { // returns true if lock was successfully enabled
+				//$u->log('running worker method...');
 				$this->worker();
 				$this->unlock();
 			}
@@ -158,6 +163,9 @@ class newsmanWorker extends newsmanWorkerBase {
 	}
 
 	public function processMessages() {
+
+		$u = newsmanUtils::getInstance();
+		//$u->log('[newsmanWorker processMessages]');
 
 		if ( $this->pm_iv !== null ) {
 			$now = microtime(true);	
@@ -202,7 +210,8 @@ class newsmanWorker extends newsmanWorkerBase {
 
 		$u = newsmanUtils::getInstance();
 
-		$workerURL = NEWSMAN_PLUGIN_URL.'/worker.php';
+		//$workerURL = NEWSMAN_PLUGIN_URL.'/worker.php';
+		$workerURL = NEWSMAN_BLOG_ADMIN_URL.'admin.php?page=newsman-settings';
 		
 		$params['newsman_worker_fork'] = get_called_class();
 		$params['ts'] = sprintf( '%.22F', microtime( true ) );
@@ -274,7 +283,7 @@ class newsmanWorkerAvatar extends newsmanWorkerBase {
 	}
 
 	function __call($name, $arguments) {
-		$this->u->log("calling $name");
+		//$this->u->log("calling $name");
 		$opId = $this->_writeCall($name, $arguments);
 		$res = $this->_waitForResult($opId);
 		return $res;
@@ -313,21 +322,16 @@ class newsmanWorkerAvatar extends newsmanWorkerBase {
 		$sql = "SELECT `result` from $this->_table WHERE `id` = %d AND `processed` = 1";
 		$sql = $this->_db->prepare($sql, $opId);
 
-		$res = $this->_db->get_results($sql, ARRAY_N);
+		$res = $this->_db->get_var($sql);
 
-		$v = NULL;
-		if ( isset($res[0]) && isset($res[0][0]) ) {
-			$v = $res[0][0];
-		}
-
-		if ( $v === NULL ) {
-			$this->u->log('_getOpResult(opId = '.$opId.') - NULL');
+		if ( $res === NULL ) {
+			//$this->u->log('_getOpResult(opId = '.$opId.') - NULL');
 			return NULL;
 		}
 
-		$data = @unserialize($v);
-		$this->u->log('_getOpResult(opId = '.$opId.') - '.$v.', data - '.$data);
-		if ($v === 'b:0;' || $data !== false) {
+		$data = @unserialize($res);
+		//$this->u->log('_getOpResult(opId = '.$opId.') - '.$res.', data - '.$data);
+		if ($res === 'b:0;' || $data !== false) {
 			return $data;
 		} else {
 			return NULL;

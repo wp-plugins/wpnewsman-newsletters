@@ -68,6 +68,10 @@ class newsmanLocks {
 		$sql = $this->db->prepare("DELETE FROM $this->table WHERE `name` = %s", $name);
 		return $this->db->query($sql) === 1;
 	}
+
+	public function clearLocks() {
+		return $this->db->query("truncate table $this->table") === 1;
+	}
 }
 
 ?>

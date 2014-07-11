@@ -66,6 +66,42 @@
 	border: 1px solid #E49BA6 !important;
 }
 
+
+input[type=checkbox], input[type=radio], select {
+cursor: pointer;
+}
+
+.newsman-form-item input[type="checkbox"], .newsman-form-item input[type=radio] {
+color: #808080;
+display: inline-block;
+height: 15px;
+width: 15px;
+border: 1px solid #aaa;
+overflow: hidden;
+margin-top: -4px;
+vertical-align: middle;
+/* -webkit-appearance: none;*/
+outline: 0;
+margin-right: 2px;
+}
+
+.newsman-form-item input[type=radio] {
+border-radius: 50%;
+}
+
+.newsman-form-item input[type="email"], .newsman-form-item input[type="text"], .newsman-form-item select, .newsman-form-item textarea {
+	max-width: 100%;
+	border: 1px solid #ccc !important;
+	color: #808080;
+	-webkit-transition: all linear 0.2s;
+	transition: all linear 0.2s;
+	padding: 5px 10px;
+	border-radius: 3px;
+	box-shadow: inset 0 0 0 #ccc !important;
+	-webkit-box-shadow: inset 0 0 0 #ccc;
+	-moz-box-shadow: inset 0 0 0 #ccc;
+}
+
 .newsman-options-panel {
 	padding: 8px 14px !important;
 }

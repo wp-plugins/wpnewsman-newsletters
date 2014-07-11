@@ -1342,7 +1342,7 @@ input.newsman-field-options-radio-opt-input {
 	position: relative;
 	color: black !important;
 	margin-top: 20px;
-	padding: 15px 20px !important;
+	padding: 15px 20px;
 }
 
 .newsman-admin-notification p {
@@ -2015,4 +2015,14 @@ input.newsman-field-options-radio-opt-input {
 
 #newsman-sub-datepicker {
 	width: 160px;
+}
+
+#download-geo-ip-notif {
+	position: relative;
+}
+
+#download-geo-ip-notif form {
+	position: absolute;
+	top: 5px;
+	right: 5px;
 }

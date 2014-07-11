@@ -18,6 +18,19 @@ class newsmanUtils {
 	function __construct() {
 		$this->l = newsmanLocks::getInstance();
 		$this->debugLogPath = NEWSMAN_PLUGIN_PATH.DIRECTORY_SEPARATOR.'newsmanlog.txt';
+		if ( defined('NEWSMAN_STORE_UNKNOWN_BOUNCES') && NEWSMAN_STORE_UNKNOWN_BOUNCES === true ) {
+			$this->bhDebugPath = NEWSMAN_PLUGIN_PATH.DIRECTORY_SEPARATOR.'unknown-emails';
+			if ( !file_exists($this->bhDebugPath) ) {
+				mkdir($this->bhDebugPath);		
+			}			
+		}
+	}
+
+	public function saveUnknownEmail($name, $content) {
+		if ( defined('NEWSMAN_STORE_UNKNOWN_BOUNCES') && NEWSMAN_STORE_UNKNOWN_BOUNCES === true ) {
+			$emlName = $this->bhDebugPath.DIRECTORY_SEPARATOR.$name;
+			file_put_contents($emlName, $content);
+		}
 	}
 
 	function getPagesData() {
@@ -310,6 +323,12 @@ class newsmanUtils {
 			$msg = '['.date('Y-m-d H:i:s').'] '.$msg."\n";
 			file_put_contents($this->debugLogPath, $msg, FILE_APPEND);
 		}
+	}
+
+	public function logMemUsage($comment = '') {
+		$mu_unreal = memory_get_peak_usage(false)/1024/1024;
+		$mu_real = memory_get_peak_usage(true)/1024/1024;
+		$this->log("Mem usage(unreal/real): ".$mu_unreal." / ".$mu_real." MiB,  ".$comment);
 	}
 
 	public function readLog() {

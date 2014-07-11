@@ -10,10 +10,6 @@
 	<link rel='stylesheet' id='newsman-ie9-css'  href='<?php echo NEWSMAN_PLUGIN_URL; ?>/css/newsman-ie9.css?ver=1.3.1' type='text/css' media='all' />
 
 	<?php wp_print_scripts(); ?>
-	<?php
-		global $wp_scripts;
-		$wp_scripts->print_extra_script('newsmanform', true );
-	?>
   </head>
   <body class="wp_bootstrap">
 	<div class="form-container">
