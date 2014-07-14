@@ -146,7 +146,11 @@ class newsman {
 
 		add_action('plugins_loaded', array($this, 'setLocale'));
 
-		add_action('newsman_pro_workers_ready', array($this, 'onProWorkersReady'));
+		if ( defined('NEWSMANP') ) {
+			add_action('newsman_pro_workers_ready', array($this, 'onProWorkersReady'));	
+		} else {
+			add_action('init', array($this, 'onProWorkersReady'));	
+		}		
 
 		// -----
 
