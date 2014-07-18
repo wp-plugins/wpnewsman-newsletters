@@ -8,7 +8,6 @@ require_once(__DIR__.DIRECTORY_SEPARATOR.'class.options.php');
 require_once(__DIR__.DIRECTORY_SEPARATOR.'class.utils.php');
 require_once(__DIR__.DIRECTORY_SEPARATOR.'class.emails.php');
 require_once(__DIR__.DIRECTORY_SEPARATOR.'class.emailtemplates.php');
-require_once(__DIR__.DIRECTORY_SEPARATOR.'class.ajax-fork.php');
 require_once(__DIR__.DIRECTORY_SEPARATOR.'class.mailman.php');
 require_once(__DIR__.DIRECTORY_SEPARATOR.'class.sentlog.php');
 require_once(__DIR__.DIRECTORY_SEPARATOR.'class.timestamps.php');
@@ -764,7 +763,7 @@ class newsman {
 							header("Content-type: text/html; charset=UTF-8");
 							
 							// if dummy subscriber
-							if ( !$newsman_current_subscriber->email ) {
+							if ( !$newsman_current_subscriber['email'] ) {
 								$eml->emailAnalytics = false;	
 							}
 
@@ -825,6 +824,7 @@ class newsman {
 			'useDoubleOptout' => false,
 
 			'secret' => md5(get_option('blogname').get_option('admin_email').time()),
+			'pokebackKey' => md5(get_bloginfo('wpurl').get_option('admin_email').time()),
 			'apiKey' => sha1(sha1(microtime()).'newsman_api_key_salt'.get_option('admin_email')),
 
 			'activePages' => array(
@@ -895,7 +895,6 @@ class newsman {
 
 		newsmanEmail::dropTable();
 		newsmanEmailTemplate::dropTable();
-		newsmanAjaxFork::dropTable();
 
 		newsmanAnClicks::dropTable();
 		newsmanAnLink::dropTable();
@@ -1782,6 +1781,8 @@ class newsman {
 			array($this, 'pagePro')
 		);
 
+		do_action('newsman_admin_menu');
+
 		// placing it first in the menu
 		for ($i=0, $c = count($submenu['newsman-mailbox']); $i < $c; $i++) { 
 			if ( $submenu['newsman-mailbox'][$i][2] === 'newsman-settings' ) {
@@ -1872,9 +1873,6 @@ class newsman {
 		newsmanAnTimeline::ensureTable();
 		newsmanAnTimeline::ensureDefinition();	
 
-		newsmanAjaxFork::ensureTable();
-		newsmanAjaxFork::ensureDefinition();
-
 		newsmanList::ensureTable();
 		newsmanList::ensureDefinition();	
 
@@ -1955,6 +1953,7 @@ class newsman {
 	public function onProWorkersReady() {
 
 		if ( isset( $_REQUEST['newsman_worker_fork'] ) && !empty($_REQUEST['newsman_worker_fork']) ) {
+			define('NEWSMAN_WORKER', true);
 			$workerClass = $_REQUEST['newsman_worker_fork'];
 
 			if ( !class_exists($workerClass) ) {
@@ -1975,6 +1974,30 @@ class newsman {
 
 	public function onInit($activation = false) {
 		new newsmanAJAX();
+
+		
+
+		if ( preg_match('/wpnewsman-pokeback\/([^\/]+)/i', $_SERVER['REQUEST_URI'], $matches) ) {
+			$this->utils->log('wpnewsman-pokeback %s', $matches[1]);	
+			switch ( $matches[1] ) {
+				case 'run-scheduled':
+					if ( !isset($_REQUEST['emlucode']) || !$_REQUEST['emlucode'] ) {
+						wp_die('Required parameter "emlucode" is not defined.');
+					} else {
+						$eml = newsmanEmail::findOne('ucode = %s', array( $_REQUEST['emlucode'] ));
+						$eml->status = 'pending';
+						$eml->save();
+
+						$this->mailman();
+					}
+					break;
+
+				case 'run-bounced-handler':
+					do_action('wpnewsman-pro-run-bh');
+					break;
+			}
+			exit();
+		}		
 
 		// checking for external form request
 
@@ -2673,13 +2696,6 @@ class newsman {
 
 		$this->showWPCronStatus();
 
-		$forks = newsmanAjaxFork::findAll();
-		if ( is_array($forks) ) {
-			echo '<script>';
-			echo "var newsman_ajax_fork = ".json_encode($forks).";";
-			echo '</script>';
-		}
-
 		if ( defined('FS_METHOD') && FS_METHOD !== '' && FS_METHOD !== 'direct' ) {
 			include('views/_an_fs_method.php');
 		}
@@ -2707,7 +2723,7 @@ class newsman {
 
 	private function getWPCronStatus() {
 
-		if ( defined('ALTERNATE_WP_CRON') && ALTERNATE_WP_CRON ) {
+		if ( $this->options->get('pokebackMode') ) {
 			return 'alternative';
 		}
 
@@ -2733,10 +2749,6 @@ class newsman {
 			}			
 		} else if ( is_wp_error($st) && !$this->options->get('hideCronFailWarning') ) {
 			$error = esc_html($st->get_error_message());
-			$code = 
-			'<pre><code>'.
-			'define("ALTERNATE_WP_CRON", true);'.
-			'</code></pre>';			
 			include('views/_an_wp_cron_error.php');
 			// show error message
 		}

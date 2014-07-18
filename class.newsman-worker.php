@@ -2,10 +2,7 @@
 
 require_once(__DIR__.DIRECTORY_SEPARATOR."class.utils.php");
 require_once(__DIR__.DIRECTORY_SEPARATOR."class.options.php");
-require_once(__DIR__.DIRECTORY_SEPARATOR."class.ajax-fork.php");
 require_once(__DIR__.DIRECTORY_SEPARATOR."class.timestamps.php");
-
-//require_once(__DIR__.DIRECTORY_SEPARATOR."lib/php-growl/class.growl.php");
 
 // http://cubicspot.blogspot.com/2010/10/forget-flock-and-system-v-semaphores.html
 
@@ -69,27 +66,45 @@ class newsmanWorker extends newsmanWorkerBase {
 	public function __construct($workerId) {
 		parent::__construct();
 
-		$this->workerId = $workerId;
+		$this->u = newsmanUtils::getInstance();
 
-		if ( class_exists('Growl') ) {
-			$this->growl_connection = array('address' => '127.0.0.1', 'password' => 'glocksoft');
-			$this->oGrowl = new Growl();			
-		}
+		$this->workerId = $workerId;
 
 		$newsmanAdmin = function_exists('current_user_can') && current_user_can( 'newsman_wpNewsman' );
 
 		$o = newsmanOptions::getInstance();
 		$this->secret = $o->get('secret');
 
-		if ( defined('NEWSMAN_WORKER') && ( !defined('NEWSMAN_DEBUG') || NEWSMAN_DEBUG === false ) ) {
-			if ( !$newsmanAdmin && $_REQUEST['secret'] !== $this->secret ) {
-				die('0');
-			}
+		//if ( defined('NEWSMAN_WORKER') && ( !defined('NEWSMAN_DEBUG') || NEWSMAN_DEBUG === false ) ) {
+		if ( defined('NEWSMAN_WORKER') ) {
+			if ( isset($_REQUEST['newsman_nonce']) ) {
+
+				$this->u->log('[newsmanWorker] checking newsman_nonce...');
+
+				$master_nonce = sha1($this->secret.$_REQUEST['ts']);
+
+				if ( $master_nonce != $_REQUEST['newsman_nonce'] ) {
+					$this->u->log('[newsmanWorker] Error: bad newsman_nonce %s', $_REQUEST['newsman_nonce']);
+					$this->u->log('[newsmanWorker] newsman_nonce = %s', $_REQUEST['newsman_nonce']);
+					$this->u->log('[newsmanWorker] master_nonce = %s', $master_nonce);
+					die('0');
+				}
+
+				$tsInt = hexdec($_REQUEST['ts']);
+
+				if ( time() > $tsInt + 10 ) { // if request out of allowed 10 sec timeframe
+					$this->u->log('[newsmanWorker] Error: request out of timeframe');
+					die('1');
+				}
+
+			} else {
+				$this->u->log('[newsmanWorker] checking secret...');
+				if ( !$newsmanAdmin && $_REQUEST['secret'] !== $this->secret ) {
+					$this->u->log('[newsmanWorker] secret check failed!');
+					die('0');
+				}
+			}			
 		}	
-
-		$this->tryRemoveAjaxFork();	
-
-		$this->u = newsmanUtils::getInstance();
 	}
 
 	public function stop() {
@@ -100,24 +115,6 @@ class newsmanWorker extends newsmanWorkerBase {
 	public function isRunning() {
 		return !$this->stopped;
 	}
-
-	private function tryRemoveAjaxFork() {
-		if ( defined('NEWSMAN_WORKER') && isset($_REQUEST['ts']) ) {
-			$fork = newsmanAjaxFork::findOne('ts = %s', array($_REQUEST['ts']));
-			if ( $fork ) {
-				$fork->remove();
-			}
-		}
-	}
-
-	public function growl($str) {
-		if ( isset($this->oGrowl) && $this->oGrowl ) {
-			$this->oGrowl->addNotification('newsman_worker');
-			$this->oGrowl->register($this->growl_connection);
-
-			$this->oGrowl->notify($this->growl_connection, 'newsman_worker', get_called_class(), $str);			
-		}
-	}	
 
 	/**
 	 * This function should be implemented in the ancestor
@@ -141,6 +138,8 @@ class newsmanWorker extends newsmanWorkerBase {
 				//$u->log('running worker method...');
 				$this->worker();
 				$this->unlock();
+			} else {
+				$u->log('[newsmanWorker run] cannot set lock %s to run worker', $worker_lock);
 			}
 		}
 
@@ -201,7 +200,7 @@ class newsmanWorker extends newsmanWorkerBase {
 	}
 
 	/*******************************************************
-	 * STATIC functions
+	 * STATIC functions                                    *
 	 *******************************************************/
 
 	static function fork($params = array()) {
@@ -214,23 +213,33 @@ class newsmanWorker extends newsmanWorkerBase {
 		$workerURL = NEWSMAN_BLOG_ADMIN_URL.'admin.php?page=newsman-settings';
 		
 		$params['newsman_worker_fork'] = get_called_class();
-		$params['ts'] = sprintf( '%.22F', microtime( true ) );
+		$params['ts'] = sprintf( '%x', time() );
 		$params['workerId'] = $params['ts'].rand(1,100);
 
-		if ( defined('ALTERNATE_WP_CRON') && ALTERNATE_WP_CRON ) {
-			$u->log('[newsmanWorker::fork] ALTERNATE_WP_CRON MODE');
-			// passing url to the ajax forker
-			$fork = new newsmanAjaxFork();
-			$fork->ts = $params['ts'];
-			$fork->method = 'post';
-			$fork->url = $workerURL;
-			$fork->body = http_build_query($params);
-			$fork->save();
+		if ( $o->get('pokebackMode') ) {
+			$u->log('[newsmanWorker::fork] PokeBack mode enabled');
+
+			// adding nonce
+			$params['newsman_nonce'] = sha1($secret.$params['ts']);
+			$workerURL = get_bloginfo('wpurl').'?'.http_build_query($params);
+
+			$pokebackSrvUrl = WPNEWSMAN_POKEBACK_URL.'/poke/?'.http_build_query(array(
+				'url' => $workerURL,
+				'key' => $o->get('pokebackKey')
+			));
+
+			$r = wp_remote_get(
+				$pokebackSrvUrl,
+				array(
+					'timeout' => 0.01,
+					'blocking' => false
+				)
+			);
 			
 		} else {
 			$u->log('[newsmanWorker::fork] NORMAL MODE');
 			$u->log('[newsmanWorker::fork] worker url %s', $workerURL);
-			$u->log('[newsmanWorker::fork] worker url params %s', print_r($params, true));
+			$u->log('[newsmanWorker::fork] worker url params %s', http_build_query($params));
 			// exposing secret only in loopback requests
 
 			$params['secret'] = $secret;

@@ -57,15 +57,6 @@
 				header("HTTP/1.0 400 Bad Request");
 			}
 
-			// getting ajax forks
-			if ( defined('ALTERNATE_WP_CRON') && ALTERNATE_WP_CRON ) {
-				$forks = newsmanAjaxFork::findAll();
-				if ( is_array($forks) ) {
-					$msg['newsman_ajax_fork'] = $forks;
-				}
-			}
-			//
-
 			$content = json_encode( $this->u->utf8_encode_all($msg) );
 
 			while(@ob_end_clean());
@@ -1132,6 +1123,9 @@
 
 
 		public function ajScheduleEmail() {
+			$o = newsmanOptions::getInstance();
+			$u = newsmanUtils::getInstance();
+
 			$id = $this->param('id');
 			$send = $this->param('send');
 			$ts = $this->param('ts', 0);
@@ -1147,6 +1141,29 @@
 					if ( $send == 'schedule' ) {
 						$eml->schedule = intval($ts);
 						$eml->status = 'scheduled';
+						//*
+						if ( $o->get('pokebackMode') ) {
+							$u->log('[newsmanWorker::fork] scheduling email with PokeBack mode ts = %s', $eml->schedule);
+
+							$workerURL = get_bloginfo('wpurl').'/wpnewsman-pokeback/run-scheduled/?'.http_build_query(array(
+								'emlucode' => $eml->ucode
+							));
+
+							$pokebackSrvUrl = WPNEWSMAN_POKEBACK_URL.'/schedule/?'.http_build_query(array(
+								'key' => $o->get('pokebackKey'),
+								'url' => $workerURL,
+								'time' => $eml->schedule
+							));
+
+							$r = wp_remote_get(
+								$pokebackSrvUrl,
+								array(
+									'timeout' => 0.01,
+									'blocking' => false
+								)
+							);	
+						}		
+						//*/			
 					} else {
 						$eml->status = 'pending';
 					}
@@ -2133,8 +2150,16 @@
 			$this->respond(true, 'Success');
 		}
 
-		public function ajHideCronFilaWarning() {
+		public function ajHideCronFailWarning() {
 			$o = newsmanOptions::getInstance();
+			$enablePokeback = $this->param('enablePokeback', false);
+
+			$this->u->log('[ajHideCronFailWarning] enablePokeback %s', $enablePokeback ? 'true' : 'false');
+
+			if ( $enablePokeback ) {
+				$o->set('pokebackMode', true);
+			}
+			
 			$o->set('hideCronFailWarning', true);
 			$this->respond(true, 'Success');
 		}

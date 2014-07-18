@@ -141,7 +141,7 @@ class newsmanSentlog {
 
 		$subs = $list->getPendingBatch($emailId, $limit, $ln->selectionType);	
 
-		$this->u->log('[getPendingFromList] pending batch %s', print_r($subs, true));
+		$this->u->log('[getPendingFromList] pending batch length %s', count($subs));
 
 		$result = array();
 
@@ -414,7 +414,6 @@ class newsmanTransmissionStreamer {
 		);
 
 		$u = newsmanUtils::getInstance();
-		$u->log('[fillBuffer] buffer %s', print_r($this->buffer, true));
 
 		if ( !count($this->buffer) ) { // buffer is empty, no data left in this list, switching to another
 			$this->currentList = null;

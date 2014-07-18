@@ -4,7 +4,7 @@ Donate Link: http://wpnewsman.com/premium-newsletter-plugin-wordpress/
 Tags: wpnewsman, newsletter, newsletters, newsletter signup, newsletter widget, subscribers, post notification, email subscription, email marketing, email, emailing, subscription
 Requires at least: 3.5
 Tested up to: 4.0
-Stable tag: 1.7.6
+Stable tag: 1.7.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -20,7 +20,7 @@ Check it out! Download Right Now and Send EMails for FREE...
 
 = WPNewsman Pro =
 
-*WPNewsman Pro* is a **significant upgrade** to *WPNewsman Lite* that allows you to send newsletters to an unlimited number of subscribers, get full email tracking statistics for each campaign, track the recipient's actions on your website with Google Analytics or Piwik, and keep your mailing lists verified and clean by using the Bounce handler. Unlike other autoresponder systems, you can just import your contacts and leads and get started. No messing around with re-confirmation of leads or facing an inquisition about how you built your list… You have FULL control of your email campaigns and are not relying on third party services that ultimately control your profit at their whim. You can learn more about *WPNewsman Pro* here:
+*WPNewsman Pro* is a **significant upgrade** to *WPNewsman Lite* that allows you to send newsletters to an unlimited number of subscribers, get full email tracking statistics for each campaign, track the recipient's actions on your website with Google Analytics or Piwik, and keep your mailing lists verified and clean by using the Bounce handler. Unlike other autoresponder systems, you can just import your contacts and leads and get started. You have FULL control of your email campaigns and are not relying on third party services that ultimately control your profit at their whim. You can learn more about *WPNewsman Pro* here:
 
 [Home](http://wpnewsman.com/ "Home") | [Review](http://wpnewsman.com/review-newsletter-plugin-wordpress/ "Review") | [Upgrade to WPNewsman Pro](http://wpnewsman.com/premium-newsletter-plugin-wordpress/ "Upgrade to WPNewsman Pro")
 
@@ -123,6 +123,10 @@ We got a User Feedback page where you can [add or vote for new features](http://
 3. Subscriber management.
 
 == Changelog ==
+
+= 1.7.7 =
+
+* Added Pokeback mode for environments with blocked loopback requests (like GoDadday and HostGator)
 
 = 1.7.6 =
 

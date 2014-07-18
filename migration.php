@@ -5,7 +5,6 @@ require_once(__DIR__.DIRECTORY_SEPARATOR.'class.emailtemplates.php');
 require_once(__DIR__.DIRECTORY_SEPARATOR.'class.utils.php');
 require_once(__DIR__.DIRECTORY_SEPARATOR.'class.options.php');
 require_once(__DIR__.DIRECTORY_SEPARATOR.'class.list.php');
-require_once(__DIR__.DIRECTORY_SEPARATOR.'class.ajax-fork.php');
 
 /*******************************/
 /*      Registration code      */
@@ -122,7 +121,7 @@ function newsman_add_api_key() {
 	$o = newsmanOptions::getInstance();
 	$key = $o->get('apiKey');
 	if ( !$key ) {
-		$o->set('apiKey', sha1(sha1(microtime()).'newsman_api_key_salt'));
+		$o->set('apiKey', sha1(sha1(microtime()).'newsman_api_key_salt'.get_option('admin_email')));
 	}
 }
 
@@ -353,16 +352,6 @@ function newsman_migration_remove_address_changed_tpl() {
 
 
 $newsman_changes[] = array(
-	'introduced_in' => $u->versionToNum('1.5.7-alpha-1'),
-	'func' => 'newsman_migration_init_ajax_fork_table'
-);
-
-function newsman_migration_init_ajax_fork_table() {
-	newsmanAjaxFork::ensureTable();	
-	newsmanAjaxFork::ensureDefinition();
-}
-
-$newsman_changes[] = array(
 	'introduced_in' => $u->versionToNum('1.5.8'),
 	'func' => 'newsman_migration_ensure_system_templates'
 );
@@ -484,7 +473,34 @@ $newsman_changes[] = array(
 );
 
 
+function newsman_migration_add_pokeback_key() {
+	$o = newsmanOptions::getInstance();
+	$pokebackKey = md5(get_bloginfo('wpurl').get_option('admin_email').time());
+	$o->set('pokebackKey', $pokebackKey);
+}
 
+$newsman_changes[] = array(
+	'introduced_in' => $u->versionToNum('1.7.7-alpha-1'),
+	'func' => 'newsman_migration_add_pokeback_key'
+);
 
+function newsman_migration_drop_ajax_fork_table() {
+	global $wpdb;
+	$wpdb->query('DROP TABLE `'.$wpdb->prefix.'newsman_ajax_forks`');
+}
 
+$newsman_changes[] = array(
+	'introduced_in' => $u->versionToNum('1.7.7-alpha-1'),
+	'func' => 'newsman_migration_drop_ajax_fork_table'
+);
 
+function newsman_migration_check_api_key() {
+	$o = newsmanOptions::getInstance();
+	if ( !$o->get('apiKey') ) {
+		$o->set('apiKey', sha1(sha1(microtime()).'newsman_api_key_salt'.get_option('admin_email')));
+	}
+}
+$newsman_changes[] = array(
+	'introduced_in' => $u->versionToNum('1.7.7-alpha-1'),
+	'func' => 'newsman_migration_check_api_key'
+);

@@ -41,6 +41,10 @@
 						</div>
 						<?php do_action('newsman_general_options'); ?>
 						<div style="margin-top: 10px;">
+							<h3 style="margin-bottom: 5px;"><?php _e('PokeBack mode', NEWSMAN); ?></h3>
+							<label class="checkbox"><input type="checkbox" name="newsman-pokebackMode"> <?php _e('Use PokeBack mode ( will make secure calls to our web server and back. No sensitive data is shared with our server).', NEWSMAN); ?></label>
+						</div>						
+						<div style="margin-top: 10px;">
 							<h3 style="margin-bottom: 5px;"><?php _e('Social profiles links', NEWSMAN); ?></h3>
 							<label>Twitter</label>
 							<input type="text" name="newsman-social-twitter">

@@ -791,92 +791,6 @@ jQuery(function($){
 		}).success(done).fail(fail).always(always);
 	};
 
-	// ------------------- ajax-fork
-	function forkWorkers(forks) {
-		if ( $.isArray(forks) ) {
-			$(forks).each(function(i, fork){
-				$.ajax({
-					type: fork.method,
-					url: fork.url,
-					data: fork.body,
-					timeout: 100
-				});
-			});
-		}
-	}
-
-	if ( typeof newsman_ajax_fork !== 'undefined' ) {
-		forkWorkers(newsman_ajax_fork);
-	}
-
-	// global ajax senders
-
-	/*
-
-	$(document).on('click','a', function(e){
-		var href = $(this).prop('href') || '';
-
-		if ( href.indexOf('#') == 0 ) {
-			e.preventDefault();
-			return;
-		}
-
-		if ( !href.match(/^http/)) {
-			return;
-		}
-
-		var handlers = jQuery._data( this, "events" );
-		if ( handlers && handlers.click && handlers.click.length ) {
-			// has click handler, we shouldn't interfere
-			return;
-		}
-
-		if ( NEWSMAN.ajaxCnt > 0 ) {
-			e.preventDefault();
-			NEWSMAN.navigate = this.href;
-			showLoading();
-		}
-	});
-
-	NEWSMAN.ajaxCnt = 0;
-	NEWSMAN.navigate = '';
-
-	function requestsDone() {
-		hideLoading();
-		if ( NEWSMAN.navigate && window.location.href !== NEWSMAN.navigate ) {
-			window.location.href = NEWSMAN.navigate;	
-		}		
-	}
-
-	$(document).ajaxSend(function(e, aj, options) {
-		aj.newsmanCall = true;
-		NEWSMAN.ajaxCnt += 1;
-	});
-
-	$(document).ajaxComplete(function(e, aj, options) {
-		if ( aj.newsmanCall ) {
-			NEWSMAN.ajaxCnt -= 1;
-			if ( NEWSMAN.ajaxCnt <= 0 ) {
-				requestsDone();
-			}			
-		}
-
-		if ( aj.responseText ) {
-			var data, forks = [];
-			try {
-				data = JSON.parse(aj.responseText);				
-			} catch(e) {				
-			}
-			if ( data && data.newsman_ajax_fork ) {
-				forkWorkers(data.newsman_ajax_fork);
-			}
-		}
-	});
-
-	//*/
-
-	// -------------------
-
 	$(document).on('change', '.newsman-cb-selectall', function(e){
 		var tbody = $(this).closest('table').find('tbody');
 		$('input[type="checkbox"]', tbody).prop('checked', $(this).prop('checked'));
@@ -2963,6 +2877,10 @@ jQuery(function($){
 			startDate = dtVal ? new Date(dtVal) : new Date();
 
 		$('#newsman-send-datepicker').datetimepicker('setDate', startDate);		
+
+		$('#newsman-send-datepicker').change(function(){
+			$('#newsman-schedule').prop('checked', true);
+		});
 
 		$('#newsman-send').click(function(){
 			NEWSMAN.editor.setMode('wysiwyg');
@@ -5107,6 +5025,14 @@ jQuery(function($){
 	});	
 
 	/***   ajax forms   ***/ 
+
+	$('.newsman-ajax-from-set-value').click(function(e){
+		var form = $(this).closest('form');
+		var elName = $(this).attr('el-name'),
+			elValue = $(this).attr('el-value');
+
+		$('<input type="hidden" name="'+elName+'" value="'+elValue+'">').appendTo(form);
+	});
 
 	$('.newsman-ajax-from').each(function(i, form){
 		$(form).submit(function(e){

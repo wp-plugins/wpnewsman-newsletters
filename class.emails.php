@@ -66,10 +66,10 @@ class newsmanEmail extends newsmanStorable {
 		if ( !isset($this->ucode) || !$this->ucode ) {
 			$this->ucode = $u->base64EncodeU( sha1($this->created.$this->subject.microtime(), true) );
 		}
-		// $this->_oldToField !== null &&
+
 		if ( $this->_oldToField != $this->to ) {
 			$u = newsmanUtils::getInstance();
-			$u->log('[email::save] To: field changed from %s to %s', $this->_oldToField, $this->to);
+			$u->log('[email::save] To: field changed from %s to %s', $this->_oldToField, json_encode($this->to));
 
 			$tStreamer = new newsmanTransmissionStreamer($this);
 			$this->recipients = $tStreamer->getTotal();			
@@ -192,7 +192,7 @@ class newsmanEmail extends newsmanStorable {
 		$url = $matches[3];
 
 		$u = newsmanUtils::getInstance();
-		$u->log('wrapping URL: %s', $url);
+		//$u->log('wrapping URL: %s', $url);
 
 		// if not unsubscribe or "view online" link
 		if ( strpos($url, 'newsman=unsubscribe') === false &&
@@ -218,7 +218,7 @@ class newsmanEmail extends newsmanStorable {
 				base_convert($newsman_current_subscriber['id'], 10, 36),
 				base_convert($link->id, 10, 36)
 			);			
-			$u->log('wrapped: %s', $url);
+			//$u->log('wrapped: %s', $url);
 		}
 
 		return $matches[1].$url.$matches[4];
