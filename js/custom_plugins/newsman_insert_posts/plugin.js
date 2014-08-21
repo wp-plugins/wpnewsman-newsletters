@@ -534,8 +534,10 @@
 				}
 			});
 
+			var idx = this.path.indexOf("plugin.js");
+			var iconPath = ( idx > 0 ) ? this.path.substr(0, this.path.indexOf("plugin.js")) : this.path;
 
-        	var iconPath = this.path.substr(0, this.path.indexOf("plugin.js"));
+        	
 
 	        var height = 480, 
 	        	width = 750;

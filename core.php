@@ -571,7 +571,7 @@ class newsman {
 
 			$link = "$blogurl/?newsman=$type&code=".$newsman_current_list->uid.':'.$ucode;
 
-			if ( in_array($type, array('email', 'unsubscribe', 'unsubscribe-confirmation')) && !$dropEmailPart ) {
+			if ( isset($newsman_current_email) && in_array($type, array('email', 'unsubscribe', 'unsubscribe-confirmation')) && !$dropEmailPart ) {
 				$link.='&email='.$newsman_current_email->ucode;
 			}
 
@@ -597,7 +597,7 @@ class newsman {
 		global $newsman_current_email;
 		global $newsman_current_list;
 
-		if ( !isset($newsman_current_email) ) { return; }
+		if ( !isset($newsman_current_email) || !is_object($newsman_current_email) ) { return; }
 
 		$sd = new newsmanAnSubDetails();
 		$sd->emailId = $newsman_current_email->id;

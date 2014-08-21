@@ -22,14 +22,16 @@ CKEDITOR.editorConfig = function( config ) {
 	// http://docs.ckeditor.com/#!/api/CKEDITOR.config
 
 	// %REMOVE_START%
-	// The configuration options below are needed when running CKEditor from source files.
+	//The configuration options below are needed when running CKEditor from source files.
 	// config.plugins = 'dialogui,dialog,about,a11yhelp,basicstyles,blockquote,clipboard,panel,floatpanel,menu,contextmenu,resize,button,toolbar,elementspath,list,indent,enterkey,entities,popup,filebrowser,floatingspace,listblock,richcombo,format,htmlwriter,horizontalrule,wysiwygarea,image,fakeobjects,link,magicline,maximize,pastetext,pastefromword,removeformat,sourcearea,specialchar,menubutton,scayt,stylescombo,tab,table,tabletools,undo,wsc,panelbutton,colorbutton,font,justify,liststyle';
+	// config.plugins = 'a11yhelp,about,basicstyles,blockquote,button,clipboard,colorbutton,contextmenu,dialog,dialogui,elementspath,enterkey,entities,fakeobjects,filebrowser,floatingspace,floatpanel,font,format,horizontalrule,htmlwriter,image,indent,indentlist,justify,link,list,listblock,liststyle,magicline,maximize,menu,menubutton,panel,panelbutton,pastefromword,pastetext,popup,removeformat,resize,richcombo,scayt,sourcearea,specialchar,stylescombo,tab,table,tabletools,toolbar,undo,wsc,wysiwygarea';
 	// config.skin = 'moono';
 	// %REMOVE_END%
 
 	config.extraPlugins = 'ui_newsman_label,newsman_autosave,iframedialog,newsman_insert_posts,newsman_add_wp_media,newsman_save,newsmanshortcodes';	
 
 	config.fullPage = true;
+	config.allowedContent = true;
 
 	config.entities = true; // true - use encoded entities in HTML output
 	config.basicEntities = false; // encode basic entities like ", ', etc.
