@@ -2,7 +2,7 @@
 Contributors: Neocoder, G-Lock Software
 Donate Link: http://wpnewsman.com/premium-newsletter-plugin-wordpress/
 Tags: wpnewsman, newsletter, newsletters, newsletter signup, newsletter widget, subscribers, post notification, email subscription, email marketing, email, emailing, subscription
-Requires at least: 3.5
+Requires at least: 3.8
 Tested up to: 4.0
 Stable tag: 1.7.8
 License: GPLv2 or later
@@ -26,7 +26,7 @@ Check it out! Download Right Now and Send EMails for FREE...
 
 = Watch this 7 min video to see it in action for yourself =
 
-http://www.youtube.com/watch?v=NhmAfJQH4EU
+http://www.youtube.com/embed/EvssRjYDoJQ
 
 = Here’s what you get with WPNewsman for WordPress: =
 
