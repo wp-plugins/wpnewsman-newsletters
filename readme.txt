@@ -26,7 +26,7 @@ Check it out! Download Right Now and Send EMails for FREE...
 
 = Watch this 7 min video to see it in action for yourself =
 
-http://www.youtube.com/embed/EvssRjYDoJQ
+http://www.youtube.com/watch?v=EvssRjYDoJQ
 
 = Here’s what you get with WPNewsman for WordPress: =
 
