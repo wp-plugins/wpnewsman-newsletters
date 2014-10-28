@@ -257,6 +257,15 @@ jQuery(function($){
 		$(this).closest('.newsman-admin-notification').animate({ height: 'toggle', opacity: 'toggle' }, 'slow');
 	});
 
+	function supplant(str, o) {
+		return str.replace(/{([^{}]*)}/g,
+			function (a, b) {
+				var r = o[b];
+				return typeof r === 'string' || typeof r === 'number' ? r : a;
+				}
+		);
+	};	
+
 	/******* Pagination widget ********/
 
 	$.widget('newsman.newsmanPagination', {
@@ -1124,6 +1133,9 @@ jQuery(function($){
 			if ( res ) {
 				mrCallback = null;
 			}
+			if ( opts.close ) {
+				opts.close.call($(id));
+			}
 			return res;			
 		};
 
@@ -1136,6 +1148,73 @@ jQuery(function($){
 		});
 
 		$(id).modal({ show: true, keyboard: true });
+	}
+
+	function showDeleteDialog(id, opts) {
+		opts = opts || {};
+
+		if ( typeof opts == 'function' ) {
+			var resultCallback = opts;
+			opts = { result: resultCallback };
+		}
+
+		var messages = jQuery.extend({
+			areYouSureYouWantToDeleteXSelectedItems: 'Are you sure you want to delete {x} selected items?',
+			areYouSureYouWantToDeleteXItemsMatchedSearchQSearchQuery: 'Are you sure you want to delete {x} items matched {q} search query?',
+			areYouSureYouWantToDeleteXItems: 'Are you sure you want to delete {x} items?'
+		}, opts.messages);
+
+		// opts.vars.selected = 123123
+
+		function renderMsg(name, varsOverride) {
+			var v = $.extend({}, opts.vars, varsOverride || {})
+			$('.modal-body > p', $(id)).html( supplant(messages[name], v) );
+		}
+
+		function disableButtons() {
+			//$('.modal-body > p', $(id)).html( 'Please wait...' );
+			$('.modal-body > p', $(id)).html('<center><img src="'+NEWSMAN_PLUGIN_URL+'/img/ajax-loader.gif"> Loading...</center>');
+			$('.modal-footer .btn', $(id)).attr('disabled', 'disabled');
+		}
+
+		function enableButtons() {
+			$('.modal-footer .btn', $(id)).removeAttr('disabled');
+		}
+
+		var origianlOpts = opts,
+			cbAllChecked = function(){
+				var checked = $(this).prop('checked');
+				if ( checked ) {
+					if ( origianlOpts.getCount ) {
+						disableButtons();
+						origianlOpts.getCount(function(err, c){
+							enableButtons();
+							if ( err ) { return console.error(err); }
+							if ( opts.vars.q ) {
+								renderMsg('areYouSureYouWantToDeleteXItemsMatchedSearchQSearchQuery', { x: c });
+							} else {
+								renderMsg('areYouSureYouWantToDeleteXItems', { x: c });
+							}							
+						});
+					}
+				} else {
+					renderMsg('areYouSureYouWantToDeleteXSelectedItems');
+				}
+			};
+
+		showModal(id, {
+			show: function() {
+				renderMsg('areYouSureYouWantToDeleteXSelectedItems');
+				$('.modal-footer input[type="checkbox"]', this).on('change', cbAllChecked);
+				if ( origianlOpts.show ) {
+					origianlOpts.show.call(this);	
+				}				
+			},
+			result: origianlOpts.result,
+			close: function() {
+				$('.modal-footer input[type="checkbox"]', this).off('change', cbAllChecked);
+			}
+		});	
 	}
 
 	$('.modal.dlg .btn, .modal.dlg .tpl-btn').click(function(e){
@@ -1979,7 +2058,7 @@ jQuery(function($){
 
 		var uploader = $('<div></div>').neoFileUploader({
 			debug: true,
-			action: NEWSMAN_PLUGIN_URL+'/upload.php',
+			action: NEWSMAN_PLUGIN_URL+'/wpnewsman-upload',
 			params: {
 				type: 'csv'
 			},
@@ -2149,7 +2228,7 @@ jQuery(function($){
 
 		/**
 		 * We have "Add new..." list button as an item in the dropdown,
-		 * so we remember the current position in the list tot get back to it
+		 * so we remember the current position in the list to get back to it
 		 * if we click cancel in the dialog 
 		 */
 
@@ -2242,6 +2321,7 @@ jQuery(function($){
 
 		$('#newsman-btn-delete').click(function(e){
 			var ids = [];
+
 			$('#newsman-mgr-subscribers tbody input:checked').each(function(i, el){
 				ids.push( parseInt($(el).val(), 10) );
 			});
@@ -2249,30 +2329,58 @@ jQuery(function($){
 			if ( !ids.length ) {
 				showMessage(newsmanL10n.pleaseMarkSubsWhichYouWantToDelete);
 			} else {
-				showModal('#newsman-modal-delete', function(mr, xmr){
-					if ( mr === 'ok' ) {
+				showDeleteDialog('#newsman-modal-delete', {
+					messages: {
+						areYouSureYouWantToDeleteXSelectedItems: 'Are you sure you want to delete <b>{x}</b> selected subscribers?',
+						areYouSureYouWantToDeleteXItemsMatchedSearchQSearchQuery: 'Are you sure you want to delete <b>{x}</b> subscribers matched <b>"{q}"</b> search query?',
+						areYouSureYouWantToDeleteXItems: 'Are you sure you want to delete <b>{x}</b> subscribers?'
+					},
+					vars: {
+						x: ids.length,
+						q: $('#newsman-subs-search').val()
+					},
+					getCount: function(done){						
 
 						var type = pageState.show;
-
 						$.ajax({
 							type: 'POST',
 							url: ajaxurl,
 							data: {
-								ids: ids+'',
-								all: xmr.all ? '1' : '0',
-								listId: $('#newsman-lists').val() || '1', 
+								listId: $('#newsman-lists').val(),
+								q: $('#newsman-subs-search').val(),
 								type: type,
-								action: 'newsmanAjDeleteSubscribers'
+								action: 'newsmanAjCountSubscribers'
 							}
 						}).done(function(data){
-
-							showMessage(newsmanL10n.youHaveSucessfullyDeletedSelSubs, 'success');
-
-							getSubscribers();
-
+							done(null, data.count);
 						}).fail(NEWSMAN.ajaxFailHandler);
+					},
+					result: function(mr, xmr){
+						if ( mr === 'ok' ) {
+
+							var type = pageState.show;
+
+							$.ajax({
+								type: 'POST',
+								url: ajaxurl,
+								data: {
+									ids: ids+'',
+									all: xmr.all ? '1' : '0',
+									listId: $('#newsman-lists').val() || '1', 
+									type: type,
+									q: $('#newsman-subs-search').val(),
+									action: 'newsmanAjDeleteSubscribers'
+								}
+							}).done(function(data){
+
+								showMessage(newsmanL10n.youHaveSucessfullyDeletedSelSubs, 'success');
+
+								getSubscribers();
+
+							}).fail(NEWSMAN.ajaxFailHandler);
+						}
+						return true;
 					}
-					return true;
 				});				
 			}
 		});
@@ -2580,12 +2688,16 @@ jQuery(function($){
 				txt = btn.text(),
 				email = $(this).closest('.control-group').find('input').val();
 
+			function safeTrim(str){
+				return $.trim(str+'').replace(/\u0000/g, '');
+			}
+
 			var q = {
-				'host': $('#newsman_smtp_hostname').val(),
-				'user': $('#newsman_smtp_username').val(),
-				'pass': $('#newsman_smtp_password').val(),
-				'port': $('#newsman_smtp_port').val(),
-				'email': email,
+				'host': safeTrim($('#newsman_smtp_hostname').val()),
+				'user': safeTrim($('#newsman_smtp_username').val()),
+				'pass': safeTrim($('#newsman_smtp_password').val()),
+				'port': safeTrim($('#newsman_smtp_port').val()),
+				'email': safeTrim(email),
 				'secure': $('#newsman_smtp_secure_conn .radio input:checked').val(),
 				'mdo': $('.newsman-mdo:checked').val()
 			};
@@ -3828,7 +3940,7 @@ jQuery(function($){
 			var uploader = $('<div></div>').neoFileUploader({
 				debug: true,
 				acceptFiles: '.zip',
-				action: NEWSMAN_PLUGIN_URL+'/upload.php',
+				action: NEWSMAN_PLUGIN_URL+'/wpnewsman-upload',
 				params: {
 					type: 'template'
 				},

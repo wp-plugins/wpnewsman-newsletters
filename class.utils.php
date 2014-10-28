@@ -14,6 +14,7 @@ class newsmanUtils {
 	var $base64Map = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 	var $l;
 	var $debugLogPath = '';
+	var $listsCache;
 
 	function __construct() {
 		$this->l = newsmanLocks::getInstance();
@@ -480,7 +481,8 @@ class newsmanUtils {
 	}
 
 	function emailValid($email, $die = false) {
-		$valid = preg_match('/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i', $email);
+
+		$valid = preg_match('/^[a-zA-Z0-9.!#$%&\'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/i', $email);
 		
 		if ( $die ) {
 			if ( !$valid ) {
@@ -1027,6 +1029,8 @@ class newsmanUtils {
 		if ( $res === true ) {
 			unlink($uploadedZip);
 
+			newsman::getInstance()->securityCleanup();
+
 			if ( is_string($tplDef) || is_bool($tplDef) ) {
 				$this->registerTemplate($tplDir, $tplUrl, $tplDef);				
 			} else {
@@ -1299,13 +1303,17 @@ class newsmanUtils {
 		return $isNormalBase64 ? base64_decode($baseString) : $this->base64DecodeU($baseString);
 	}	
 
-	function unsubscribeFromLists($email, $statusStr, $raw = false) {
+	public function unsubscribeFromLists($email, $statusStr, $raw = false) {
 		if ( !$raw ) {
 			$email = $this->extractEmail($email);	
-		}		
-		$lists = newsmanList::findAll();
+		}
+
+		if ( !isset( $this->listsCache ) ) {
+			$this->listsCache = newsmanList::findAll();
+		}
+
 		$opts = '';
-		foreach ($lists as $lst) {
+		foreach ($this->listsCache as $lst) {
 			$lst->unsubscribe($email, $statusStr);
 		}		
 	}

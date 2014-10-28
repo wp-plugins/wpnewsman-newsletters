@@ -801,6 +801,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f6f8f9', end
 
 #upload-list-wrap {
 	max-height: 285px;
+	min-height: 200px;
 	overflow-y: auto;
 	padding-bottom: 10px;
 }
@@ -815,7 +816,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f6f8f9', end
 }
 
 .neo-upload-list li a {
-	overflow: hidden;
 	-webkit-text-overflow: ellipsis;
 	-moz-text-overflow: ellipsis;
 	text-overflow: ellipsis;
@@ -1347,6 +1347,10 @@ input.newsman-field-options-radio-opt-input {
 
 .newsman-admin-notification p {
 	margin: 10px 0;
+}
+
+.newsman-admin-notification form p {
+	margin: 0;
 }
 
 .newsman-admin-notification h3 {
@@ -2025,4 +2029,55 @@ input.newsman-field-options-radio-opt-input {
 	position: absolute;
 	top: 5px;
 	right: 5px;
+}
+
+#newsman-page-bounce-handler #bounce-status {
+	vertical-align: middle;
+}
+
+
+.blocked-domains input.search-blocked-domain {
+	width: 100%;
+
+	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+
+	line-height: 2em;
+	height: 2em;
+	margin-bottom: .5em;	
+}
+
+.notification-cards-container {
+	height: 306px;
+	overflow-y: auto;
+}
+
+.blocked-domains .notification-card {
+	background: #FFF;
+	padding: 10px;
+	border: 1px solid;
+	border-top-color: #E0E0E0;
+	border-right-color: #CCC;
+	border-bottom-color: #CCC;
+	border-left-color: #E0E0E0;	
+	margin-bottom: 5px;
+}
+
+.blocked-domains .notification-card h4 {
+	margin-top: 0;
+}
+
+.notification-cards-container-label {
+	text-align: center;
+	padding-top: 2em;
+	color: #555;
+}
+
+#bounce-stats {
+	font-size: 14px;
+	line-height: 1.5em;
+}
+#bounce-stats td:first-child {
+	padding-right: 10px;	
 }

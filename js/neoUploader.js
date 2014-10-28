@@ -58,7 +58,7 @@ jQuery(function($){
 		var that = {
 			options: {
 				debug: false,
-				action: '/upload.php',
+				action: '/wpnewsman-upload',
 				// maximum number of concurrent uploads
 				maxConnections: 999,
 				onProgress: function(id, fileName, loaded, total){},

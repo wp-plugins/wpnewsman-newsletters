@@ -20,8 +20,7 @@
 			<?php do_action('newsman_exta_code_form'); ?>
 			<?php else : ?>
 			<div>
-				<div style="float: left;"><a target="_blank" href="https://www.iportis.com/buynow.php?pid=wpnewsmanpro&amp;noshop=1&amp;cust_site_address=<?php echo $domain; ?>" class="btn btn-warning btn-large"><?php echo sprintf( __('Upgrade to Pro for $%d/year', NEWSMAN), 29); ?></a></div>
-				
+				<div style="float: left;"><a target="_blank" href="https://secure.avangate.com/order/checkout.php?PRODS=4630229&amp;QTY=1&amp;CART=1&amp;CARD=2&amp;ORDERSTYLE=nLWo4paphLs=&amp;ADDITIONAL_site_address[4630229]=<?php echo $domain; ?>" class="btn btn-warning btn-large"><?php echo sprintf( __('Upgrade to Pro for $%d/year', NEWSMAN), 29); ?></a></div>
 			</div><br>
 			<div style="margin-top: 25px;"><?php echo sprintf( __('or get special <a href="https://www.iportis.com/buynow.php?pid=wpnewsmanpro&noshop=1&qty=3">3-site discounted license for $%s</a> <br> To activate the PRO version, you\'ll need to download an extra plugin WPNewsman Pro Extension.', NEWSMAN), 69 );?></div>
 			<?php endif; ?>

@@ -1,19 +1,10 @@
 <?php
 
-if ( ! defined('WP_ADMIN') )
-	define('WP_ADMIN', true);
-
-if ( ! defined('WP_NETWORK_ADMIN') )
-	define('WP_NETWORK_ADMIN', false);
-
-if ( ! defined('WP_USER_ADMIN') )
-	define('WP_USER_ADMIN', false);
-
-if ( ! WP_NETWORK_ADMIN && ! WP_USER_ADMIN ) {
-	define('WP_BLOG_ADMIN', true);
+if ( !defined('NEWSMAN') ) {
+	echo htmlspecialchars(json_encode(
+		array("error" => "Forbidden.")
+	), ENT_NOQUOTES);		
 }
-
-require_once('../../../wp-load.php');
 
 /**
  * Handles file uploaded with XMLHttpRequest
@@ -165,27 +156,30 @@ class nuUploadProcessor {
 	}    
 }
 
-// list of valid extensions, ex. array("jpeg", "xml", "bmp")
-$allowedExtensions = array();
-// max file size in bytes
-$sizeLimit = 10 * 1024 * 1024;
+function nuHandleUpload() {
+	// list of valid extensions, ex. array("jpeg", "xml", "bmp")
+	$allowedExtensions = array('csv', 'txt', 'zip');
+	// max file size in bytes
+	$sizeLimit = 10 * 1024 * 1024;
 
-$uploader = new nuUploadProcessor($allowedExtensions, $sizeLimit);
+	$uploader = new nuUploadProcessor($allowedExtensions, $sizeLimit);
 
-$n = newsman::getInstance();
+	$n = newsman::getInstance();
 
-$type = isset($_REQUEST['type']) ? strtolower($_REQUEST['type']) : false;
+	$type = isset($_REQUEST['type']) ? strtolower($_REQUEST['type']) : false;
 
-$subdir = false;
+	$subdir = false;
 
-if ( in_array($type, array('csv', 'template')) ) {
-	$subdir = $type;
+	if ( in_array($type, array('csv', 'template')) ) {
+		$subdir = $type;
+	}
+
+	$upath = $n->ensureUploadDir($subdir);
+	$upath .= DIRECTORY_SEPARATOR;
+
+	$result = $uploader->handleUpload($upath);
+
+	// to pass data through iframe you will need to encode all html tags
+	echo htmlspecialchars(json_encode($result), ENT_NOQUOTES);	
 }
 
-$upath = $n->ensureUploadDir($subdir);
-$upath .= DIRECTORY_SEPARATOR;
-
-$result = $uploader->handleUpload($upath);
-
-// to pass data through iframe you will need to encode all html tags
-echo htmlspecialchars(json_encode($result), ENT_NOQUOTES);

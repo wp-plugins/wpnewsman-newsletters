@@ -14,6 +14,7 @@ require_once(__DIR__.DIRECTORY_SEPARATOR.'class.timestamps.php');
 require_once(__DIR__.DIRECTORY_SEPARATOR.'class.analytics.php');
 require_once(__DIR__.DIRECTORY_SEPARATOR.'ajaxbackend.php');
 require_once(__DIR__.DIRECTORY_SEPARATOR.'class.locks.php');
+require_once(__DIR__.DIRECTORY_SEPARATOR.'class.blockeddomains.php');
 
 require_once(__DIR__.DIRECTORY_SEPARATOR.'workers/class.mailer.php');
 require_once(__DIR__.DIRECTORY_SEPARATOR.'class.zip.php');
@@ -1416,7 +1417,7 @@ class newsman {
 				if ( $use_excerpts ) {
 					$this->showActionExcerpt('badEmail');
 				} else {
-					$this->redirect( $this->getLink('badEmail', array('u' => $_REQUEST['u']) ) );
+					$this->redirect( $this->getLink('badEmail') );
 				}
 			}
 
@@ -1626,7 +1627,11 @@ class newsman {
 			
 			delete_option('NEWSMAN_DOING_UPDATE');
 			if ( $doRedirect ) {
-				wp_redirect(NEWSMAN_BLOG_ADMIN_URL.'admin.php?page=newsman-mailbox&welcome=1&return='.$_SERVER['REQUEST_URI']);	
+				$url = NEWSMAN_BLOG_ADMIN_URL.'admin.php?page=newsman-mailbox&welcome=1';
+				if ( strpos($_SERVER['REQUEST_URI'], 'wpnewsman') !== false ) {
+					$url .= '&return='.$_SERVER['REQUEST_URI'];
+				}
+				wp_redirect($url);	
 			} else {
 				$this->options->set('showWelcomeScreen', true);
 			}			
@@ -1641,7 +1646,11 @@ class newsman {
 			 !defined('DOING_CRON') 
 		   ) {
 			$this->options->set('showWelcomeScreen', false);
-			wp_redirect(NEWSMAN_BLOG_ADMIN_URL.'admin.php?page=newsman-mailbox&welcome=1&return='.$_SERVER['REQUEST_URI']);	
+			$url = NEWSMAN_BLOG_ADMIN_URL.'admin.php?page=newsman-mailbox&welcome=1';
+			if ( strpos($_SERVER['REQUEST_URI'], 'wpnewsman') !== false ) {
+				$url .= '&return='.$_SERVER['REQUEST_URI'];
+			}		
+			wp_redirect($url);	
 		}
 
 		$this->tryUpdate();
@@ -1721,15 +1730,6 @@ class newsman {
 			'newsman-mailbox',
 			array($this, 'pageMailbox')
 		);
-
-		// add_submenu_page(
-		// 	'newsman-mailbox',
-		// 	__('Subscribers', NEWSMAN),
-		// 	__('Subscribers', NEWSMAN), 
-		// 	'publish_pages', 
-		// 	'newsman-subs', 
-		// 	array($this, 'pageSubscribers')
-		// );
 
 		add_submenu_page(
 			'newsman-mailbox',
@@ -1815,6 +1815,7 @@ class newsman {
 
 		$dirs = wp_upload_dir();
 		$ud = $dirs['basedir'].DIRECTORY_SEPARATOR.'wpnewsman';
+		$rootUD = $ud;
 
 		if ( $subdir ) {
 			$ud .= DIRECTORY_SEPARATOR.$subdir;
@@ -1824,11 +1825,17 @@ class newsman {
 			mkdir($ud, 0777, true);
 		}
 
+		if ( !file_exists($rootUD.DIRECTORY_SEPARATOR.'index.html') ) {
+			file_put_contents($rootUD.DIRECTORY_SEPARATOR.'index.html', '');
+		}		
+
 		return $ud;
 	}
 
 	public function onActivate() {
 		$this->activation = true;
+
+		$this->securityCleanup();
 
 		if ( !isset($this->wplang) ) {
 			$this->setLocale();
@@ -1875,6 +1882,9 @@ class newsman {
 
 		newsmanList::ensureTable();
 		newsmanList::ensureDefinition();	
+
+		newsmanBlockedDomain::ensureTable();
+		newsmanBlockedDomain::ensureDefinition();	
 
 		// modify lists tables
 		$nsTable = newsmanStorable::$table;
@@ -1968,14 +1978,39 @@ class newsman {
 			$worker_lock = isset($_REQUEST['worker_lock']) ? $_REQUEST['worker_lock'] : null;
 			$worker->run($worker_lock);
 			exit();
-		}		
+		}
+	}
 
+	public function securityCleanup() {
+		$uploadDir = $this->ensureUploadDir();
+
+		$Directory = new RecursiveDirectoryIterator($uploadDir);
+		$Iterator = new RecursiveIteratorIterator($Directory);
+		$Regex = new RegexIterator($Iterator, '/^.+\.php$/i', RecursiveRegexIterator::GET_MATCH);		
+
+		foreach($Regex as $filename => $object){
+			unlink($filename);
+		}
 	}
 
 	public function onInit($activation = false) {
 		new newsmanAJAX();
 
-		
+		if ( preg_match('/'.NEWSMAN_PLUGIN_DIRNAME.'\/api.php/i', $_SERVER['REQUEST_URI'] ) ) {
+			include_once(__DIR__.DIRECTORY_SEPARATOR.'class.api.php');
+			exit();
+		}
+
+		if ( preg_match('/wpnewsman-upload/i', $_SERVER['REQUEST_URI'] ) ) {
+			if ( current_user_can('manage_options') && current_user_can('newsman_wpNewsman') ) {
+				include_once(__DIR__.DIRECTORY_SEPARATOR.'upload.php');
+				nuHandleUpload();
+				$this->securityCleanup();
+				exit();
+			} else {
+				wp_die( __('You are not authorized to access this resource.', NEWSMAN) , 'Not authorized', array( 'response' => 401 ));
+			}
+		}
 
 		if ( preg_match('/wpnewsman-pokeback\/([^\/]+)/i', $_SERVER['REQUEST_URI'], $matches) ) {
 			$this->utils->log('wpnewsman-pokeback %s', $matches[1]);	
@@ -2895,7 +2930,6 @@ class newsman {
 	public function echoDebugLog() {		
 		echo htmlentities($this->utils->readLog());
 	}
-
 }
 
 if ( !function_exists('nwsmn_echo_option') ) {

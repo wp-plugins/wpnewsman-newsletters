@@ -1,0 +1,12 @@
+Een contact is toegevoegd aan de maillijst op[newsman wp="blogname"]
+--- plain ---
+Een contact is toegevoegd aan de maillijst. De details van het contact staan hieronder:
+
+[newsman sub="*"]
+--
+[newsman wp="url"]/wp-admin/ -> WPNewsman -> Settings
+--- html ---
+<p>Een contact is toegevoegd aan de maillijst. De details van het contact staan hieronder:</p>
+<ul>[newsman sub="*" tag="li"]</ul>
+<p>--</p>
+<p><a href="[newsman wp='url']/wp-admin/">[newsman wp="url"]/wp-admin/</a> -> WPNewsman -> Instellingen</p>

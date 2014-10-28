@@ -275,9 +275,9 @@ class newsmanStorable {
 		}		
 
 		$u = newsmanUtils::getInstance();		
-		if ( defined('NEWSMAN_DEBUG_EXPOSE_QUERIES') && NEWSMAN_DEBUG_EXPOSE_QUERIES === true ) {
-			$u->log('[save] SQL: '.$sql);
-		}		
+		// if ( defined('NEWSMAN_DEBUG_EXPOSE_QUERIES') && NEWSMAN_DEBUG_EXPOSE_QUERIES === true ) {
+		// 	$u->log('[save] SQL: '.$sql);
+		// }		
 
 		$res = $wpdb->query($sql);
 		if ( $res !== false ) {
@@ -502,6 +502,19 @@ class newsmanStorable {
 
 		return $storables;
 	}
+
+	static function findRange($start, $limit, $selector  = null, $args = array(), $opts = array()) {
+
+		if ( !$selector ) { $selector = '1=1'; }
+
+		if ( !preg_match('/\bLIMIT\b\d+/i', $selector) ) {
+			$selector .= " LIMIT %d,%d";
+		}
+		$args[] = $start;
+		$args[] = $limit;
+
+		return static::findAll($selector, $args, $opts);
+	}	
 
 	static function findAllPaged($pg, $ipp, $selector  = null, $args = array(), $opts = array()) {
 		$start = ($pg-1)*$ipp;

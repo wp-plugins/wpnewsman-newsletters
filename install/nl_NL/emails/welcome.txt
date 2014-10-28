@@ -1,0 +1,58 @@
+Welcome from [newsman me="name"]
+--- plain ---
+Hallo,
+
+Dank je voor je inschrijving. je bent nu ingeschreven voor mijn nieuwsbrief. Hopelijk krijg je waar voor je interesse!
+
+We zullen je emailadres niet delen met derden en houden je persoonlijke informatie voor ons eigen gebruik en slaan deze beveiligd op.
+
+Om zeker te zijn dat je in het vervolg al onze nieuwsbrieven blijft ontvangen is het handig om [newsman me="email"] toe te voegen aan je adresboek of de lijst van veilige verzenders.
+ 
+
+Vriendelijke groet,
+[newsman me="name"]
+[newsman me="email"]
+[newsman wp="url"]
+
+--
+Je ontvangt deze mail omdat op [newsman sub="ts"] op [newsman wp="url"] je bent ingeschreven om onze nieuwsbrieven te ontvangen.
+						 
+Je kan kan uitschrijven via onderstaande link:
+[newsman link="unsubscribe"]
+--- html ---
+<p>Hallo,</p>
+<p>Dank je voor je inschrijving. je bent nu ingeschreven voor mijn nieuwsbrief. Hopelijk krijg je waar voor je interesse!</p>
+<p>We zullen je emailadres niet delen met derden en houden je persoonlijke informatie voor ons eigen gebruik en slaan deze beveiligd op.</p>
+<p>Om zeker te zijn dat je in het vervolg al onze nieuwsbrieven blijft ontvangen is het handig om [newsman me="email"] toe te voegen aan je adresboek of de lijst van veilige verzenders.</p>
+<p>&nbsp;</p>
+
+<p>Vriendelijke groet,<br>
+[newsman me="name"]<br>
+[newsman me="email"]<br>
+<a href="[newsman wp='url']">[newsman wp="url"]</a></p>
+<p>&nbsp;<p>
+<table bgcolor="#eeeeee" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #eeeeee; background-position: top; background-repeat: repeat-x; border-top-color: #dddddd; border-top-style: solid; border-top-width: 2px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px;"> 
+ <tbody> 
+	<tr> 
+	 <td colspan="4" style="height: 28px; white-space : nowrap;">&nbsp;</td> 
+	</tr> 
+	<tr> 
+	 <td style="width: 25px;"></td> 
+	 <td width="10"></td> 
+	 <td style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 11px; line-height: 17px; color: #777; text-shadow: 0 1px 0 #ffffff;"> 
+		<div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 11px; line-height: 17px; color: #666; text-shadow: 0 1px 0 #ffffff;">
+			Je schreef in op [newsman sub="ts"] op <a href="[newsman wp='url']" style="border: none; color: #0084b4; text-decoration: none;">[newsman wp="blogname"]</a> van IP: [newsman sub="ip"]
+		</div> 
+		<div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 11px; line-height: 17px; color: #666; text-shadow: 0 1px 0 #ffffff;">
+		 Je kan ook 
+		 <a href="[newsman link='unsubscribe']" style="border: none; color: #0084b4; text-decoration: none;">hier uitschrijven</a>.</div> 
+		<div>
+		 <a href="#" style="border: none; color: #0084b4; text-decoration: none; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; text-decoration: none; font-size: 11px; line-height: 17px; color: #999999; text-shadow: 0 1px 0 #ffffff;">Copyright (C) [newsman wp="blogname"]. <span style="white-space: nowrap;">All rights reserved.</span></a>
+		</div> </td> 
+	 <td style="width: 75px;"></td> 
+	</tr> 
+	<tr> 
+	 <td colspan="3" height="25"></td> 
+	</tr> 
+ </tbody> 
+</table>

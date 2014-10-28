@@ -4,7 +4,7 @@ Donate Link: http://wpnewsman.com/premium-newsletter-plugin-wordpress/
 Tags: wpnewsman, newsletter, newsletters, newsletter signup, newsletter widget, subscribers, post notification, email subscription, email marketing, email, emailing, subscription
 Requires at least: 3.8
 Tested up to: 4.0
-Stable tag: 1.7.8
+Stable tag: 1.8.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -58,6 +58,7 @@ Translations are included in the plugin:
 * French (completed)
 * Russian (completed)
 * German (Germany) (completed)
+* Dutch (Nederlands) (completed)
 * Polish (99%)
 * Italian (Italy) (50%)
 * Spanish (99%)
@@ -123,6 +124,17 @@ We got a User Feedback page where you can [add or vote for new features](http://
 3. Subscriber management.
 
 == Changelog ==
+
+= 1.8.0 =
+
+* Fixed security vulnerability.
+* API changed. Method addEmail now responds with "409 Conflict" HTTP code if subscriber already exists.
+* Added request parameter "bepositive" to force "200 Ok" HTTP codes on all API responses.
+* Added Dutch translation
+
+= 1.7.9 =
+
+* Fixed bug wich caused rejection of complex email address( with characters like ' in it )
 
 = 1.7.8 =
 
@@ -413,6 +425,9 @@ We got a User Feedback page where you can [add or vote for new features](http://
 * First public release. Hello World! 
 
 == Upgrade Notice ==
+
+= 1.8.0 =
+Highly recommended update. Fixed security vulnerability.
 
 = 1.7.6 =
 Highly recommended update. Fixed critical bug.

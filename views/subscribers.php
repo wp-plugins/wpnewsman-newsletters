@@ -139,11 +139,10 @@
 			<h3><?php _e('Please, confirm...', NEWSMAN); ?></h3>
 		</div>
 		<div class="modal-body">
-			<p><?php _e('Are you sure you want to delete selected subscribers?', NEWSMAN); ?></p>
+			<p><?php _e('Are you sure you want to delete %s selected subscribers?', NEWSMAN); ?></p>
 		</div>
 		<div class="modal-footer">
 			<label class="checkbox pull-left" title="Apply to all subscribers in the list"><input type="checkbox" xmr="all"> <?php _e('Delete all', NEWSMAN); ?></label>
-<!-- 			<a class="btn pull-left" mr="all" title="Apply to all subscribers in the list"><?php _e('Delete all', NEWSMAN); ?></a> -->
 			<a class="btn" mr="cancel"><?php _e('Close', NEWSMAN); ?></a>
 			<a class="btn btn-danger" mr="ok"><?php _e('Delete', NEWSMAN); ?></a>
 		</div>

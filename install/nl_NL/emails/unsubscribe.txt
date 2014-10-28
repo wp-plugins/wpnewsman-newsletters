@@ -1,0 +1,27 @@
+Removal Request Confirmation
+--- plain ---
+Hallo,
+
+Deze mail is verzonden om u te laten weten dat we een verzoek hebben gehad om het volgende mailadres van onze lijst te verwijderen:
+
+Email: [newsman sub="email"]
+
+Dit adres is verwijderd van onze online database en zal ook snel uit de back-ups verwijderd worden.
+
+Als u nog steeds ongewenst mail van ons blijft ontvangen, neem dan contact met ons op op onderstaande contactinformatie zodat we direct actie kunnen ondernemen.
+
+Vriendelijke groet,
+[newsman me="name"]
+[newsman me="email"]
+[newsman wp="url"]
+--- html ---
+<p>Hallo,</p>
+<p>Deze mail is verzonden om u te laten weten dat we een verzoek hebben gehad om het volgende mailadres van onze lijst te verwijderen:</p>
+<p>Email: [newsman sub="email"]</p>
+<p>Dit adres is verwijderd van onze online database en zal ook snel uit de back-ups verwijderd worden.</p>
+<p>Als u nog steeds ongewenst mail van ons blijft ontvangen, neem dan contact met ons op op onderstaande contactinformatie zodat we direct actie kunnen ondernemen.</p>
+<p>&nbsp;</p>
+<p>Vriendelijke groet,<br>
+[newsman me="name"]<br>
+[newsman me="email"]<br>
+<a href="[newsman wp='url']">[newsman wp="url"]</a></p>

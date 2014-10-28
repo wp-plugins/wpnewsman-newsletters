@@ -223,9 +223,9 @@ textarea {
 
 .wp_bootstrap {
   margin: 0;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 13px;
-  line-height: 18px;
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 20px;
   color: #333333;
   background-color: #ffffff;
 }
@@ -1098,7 +1098,7 @@ textarea {
 .wp_bootstrap pre {
   padding: 0 3px 2px;
   font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
-  font-size: 12px;
+  font-size: 13px;
   color: #333333;
   -webkit-border-radius: 3px;
      -moz-border-radius: 3px;
@@ -1117,7 +1117,7 @@ textarea {
   display: block;
   padding: 8.5px;
   margin: 0 0 9px;
-  font-size: 12px;
+  font-size: 13px;
   line-height: 18px;
   word-break: break-all;
   word-wrap: break-word;
@@ -1195,7 +1195,7 @@ textarea {
 .wp_bootstrap button,
 .wp_bootstrap select,
 .wp_bootstrap textarea {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .wp_bootstrap label {
@@ -1224,8 +1224,8 @@ textarea {
   height: 18px;
   padding: 4px 6px;
   margin-bottom: 9px;
-  font-size: 13px;
-  line-height: 18px;
+  font-size: 14px;
+  line-height: 20px;
   color: #555555;
   vertical-align: baseline;
   -webkit-border-radius: 4px;
@@ -1826,7 +1826,7 @@ textarea {
 .wp_bootstrap .input-prepend .dropdown-menu,
 .wp_bootstrap .input-append .popover,
 .wp_bootstrap .input-prepend .popover {
-  font-size: 13px;
+  font-size: 14px;
 }
 
 .wp_bootstrap .input-append input,
@@ -1860,9 +1860,9 @@ textarea {
   height: 18px;
   min-width: 16px;
   padding: 4px 5px;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: normal;
-  line-height: 18px;
+  line-height: 20px;
   text-align: center;
   text-shadow: 0 1px 0 #ffffff;
   background-color: #eeeeee;
@@ -3306,7 +3306,7 @@ textarea {
   float: right;
   font-size: 20px;
   font-weight: bold;
-  line-height: 18px;
+  line-height: 20px;
   color: #000000;
   text-shadow: 0 1px 0 #ffffff;
   opacity: 0.2;
@@ -3336,8 +3336,8 @@ textarea {
   padding: 4px 12px;
   margin-bottom: 0;
   *margin-left: .3em;
-  font-size: 13px;
-  line-height: 18px;
+  font-size: 14px;
+  line-height: 20px;
   color: #333333;
   text-align: center;
   text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
@@ -3797,7 +3797,7 @@ textarea {
 .wp_bootstrap .btn-group > .btn,
 .wp_bootstrap .btn-group > .dropdown-menu,
 .wp_bootstrap .btn-group > .popover {
-  font-size: 13px;
+  font-size: 14px;
 }
 
 .wp_bootstrap .btn-group > .btn-mini {
@@ -4657,8 +4657,8 @@ textarea {
 .wp_bootstrap .navbar-search .search-query {
   padding: 4px 14px;
   margin-bottom: 0;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 13px;
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
   font-weight: normal;
   line-height: 1;
   -webkit-border-radius: 15px;

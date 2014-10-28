@@ -1,7 +1,5 @@
 <?php
 
-define('WP_ADMIN', true);
-require_once(__DIR__.DIRECTORY_SEPARATOR.'wp_env.php');
 require_once(__DIR__.DIRECTORY_SEPARATOR.'class.utils.php');
 require_once(__DIR__.DIRECTORY_SEPARATOR.'class.options.php');
 require_once(__DIR__.DIRECTORY_SEPARATOR.'class.list.php');
@@ -14,6 +12,9 @@ class newsmanAPI {
 		putenv("LANG=$loc");
 
 		$loc = setlocale(LC_ALL, $loc);	
+
+		$this->bePositive = isset($_REQUEST['bepositive']);
+		unset($_REQUEST['bepositive']);
 
 		// UNCOMMENT IN PRODUCTION
 
@@ -60,19 +61,17 @@ class newsmanAPI {
 
 		$msg = array_merge($msg, $params);
 
-		if ( !$state && !$httpStatusMsg ) {
-			header("HTTP/1.0 400 Bad Request");
-		} else if ( $httpStatusMsg ) {
-			header("HTTP/1.0 ".$httpStatusMsg);
+		if ( !$this->bePositive ) {
+			if ( !$state && !$httpStatusMsg ) {
+				header("HTTP/1.0 400 Bad Request");
+			} else if ( $httpStatusMsg ) {
+				header("HTTP/1.0 ".$httpStatusMsg);
+			}			
 		}
 
 		header("Content-type: application/json");
-
-		//ob_end_clean();
 		
 		echo json_encode( $u->utf8_encode_all($msg) );
-
-		//ob_flush();		
 		   
 		if ($db) $db->close();  
 		exit();
@@ -190,7 +189,7 @@ class newsmanAPI {
 				$msg = $this->getMessageFromSubStatus($s);
 
 				if ( $msg ) {
-					$this->respond(false, $msg, array('status' => intVal($res)));
+					$this->respond(false, $msg, array('status' => intVal($res)), '409 Conflict');
 				} else {
 					wp_die('Please, check your link. It seems to be broken.');
 				}				

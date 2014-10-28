@@ -345,12 +345,12 @@ class newsmanForm {
 			if ( isset($item['name']) ) {
 				$n = $item['name'];
 				if ( isset($_POST[$n]) ) {
-					$parsed[$n] = $_POST[$n];
+					$parsed[$n] = stripslashes($_POST[$n]);
 				}				
 			}
 		}
 
-		$parsed['email'] = trim($_POST['newsman-email']);
+		$parsed['email'] = trim(stripslashes($_POST['newsman-email']));
 		return $parsed;
 	}
 

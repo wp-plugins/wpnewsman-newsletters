@@ -168,12 +168,52 @@ class newsmanList extends newsmanStorable {
 	}
 
 
-	public function countSubs($stat) {
+	public function countSubs($stat, $q = null, $args = array()) {
 		global $wpdb;
 
+		$sel = '';
+
+		$criteria = array();
+
+		if ( $stat !== 'all' ) {
+			if ( is_string($stat) ) {
+				switch ($stat) {
+					case 'confirmed':
+						$stat = NEWSMAN_SS_CONFIRMED;						
+						break;
+					case 'unconfirmed': 
+						$stat = NEWSMAN_SS_UNCONFIRMED;
+						break;
+					case 'unsubscribed':
+						$stat = NEWSMAN_SS_UNSUBSCRIBED;
+						break;
+					default:
+						return null;
+						break;
+				}
+			}
+			$criteria[] = 'status = '.$stat;
+		}		
+
 		$u = newsmanUtils::getInstance();
-		$sql = "SELECT COUNT(id) as cnt FROM $this->tblSubscribers WHERE status = %d";
-		return intval($wpdb->get_var($wpdb->prepare($sql, $stat)));;
+
+		if ( $q ) {
+			$criteria[] = $q;
+		}
+
+		$sql = "SELECT COUNT(id) as cnt FROM $this->tblSubscribers";
+
+		if ( count($criteria) > 0 ) {
+			$sql .= " WHERE ".implode(' AND ', $criteria);
+		}
+
+		array_unshift($args, $sql);
+
+		if ( count($args) > 1 ) {
+			$sql = call_user_func_array(array($wpdb, 'prepare'), $args);	
+		}
+
+		return intval($wpdb->get_var($sql));
 	}
 
 	public function setStatus($ids, $status) {
@@ -242,27 +282,35 @@ class newsmanList extends newsmanStorable {
 		return true;
 	}
 
-	public function deleteAll($type = null) {
+	public function deleteAll($type = null, $q = null) {
 		global $wpdb;
 
 		$sql = "DELETE FROM $this->tblSubscribers";
 
-		if ( $type ) {
+		$criteria = array();
 
+		if ( $type ) {
 			switch ($type) {
 				case 'confirmed':
-					$sql .= " WHERE status = ".NEWSMAN_SS_CONFIRMED;
+					$criteria[] = "status = ".NEWSMAN_SS_CONFIRMED;
 					break;
 
 				case 'unconfirmed':
-					$sql .= " WHERE status = ".NEWSMAN_SS_UNCONFIRMED;
+					$criteria[] = "status = ".NEWSMAN_SS_UNCONFIRMED;
 					break;
 
 				case 'unsubscribed':
-					$sql .= " WHERE status = ".NEWSMAN_SS_UNSUBSCRIBED;
+					$criteria[] = "status = ".NEWSMAN_SS_UNSUBSCRIBED;
 					break;
 			}
+		}
 
+		if ( $q ) {
+			$criteria[] = $q;
+		}
+
+		if ( count($criteria) > 0 ) {
+			$sql .= " WHERE ".implode(' AND ', $criteria);
 		}
 
 		$r = $wpdb->query($sql);
@@ -291,12 +339,20 @@ class newsmanList extends newsmanStorable {
 		$sl = newsmanSentlog::getInstance();
 		$slTbl = $sl->tableName;
 
+		$blockedDomains = apply_filters('newsman_blocked_domains', array());
+
+		if ( is_array($blockedDomains) && !empty($blockedDomains) ) {
+			$excludeBlocked = ' AND `email` NOT REGEXP "@('.implode('|', $blockedDomains).')$"';
+		} else {
+			$excludeBlocked = '';
+		}
+
 		$sql = "SELECT * FROM $this->tblSubscribers WHERE status = ".$this->selectionType." AND NOT EXISTS (
 					SELECT 1 from $slTbl WHERE
 						 $slTbl.`emailId` = %d AND 
 						 $slTbl.`listId` = %d AND
 						 $slTbl.`recipientId` = $this->tblSubscribers.`id`
-					) LIMIT %d";
+					)$excludeBlocked LIMIT %d";
 
 		$sql = $wpdb->prepare($sql, $emailId, $this->id, $limit);
 

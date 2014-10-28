@@ -1,0 +1,17 @@
+Een contact is uitgeschreven van de mailinglijst op [newsman wp="url"]
+--- plain ---
+Een contact is uitgeschreven van de mailinglijst. De details van het contact staan hieronder:
+
+[newsman sub="*"]
+
+Reason: 
+$u_reason
+
+--
+[newsman wp="url"]/wp-admin/ -> WPNewsman -> Settings
+--- html ---
+<p>Een contact is uitgeschreven van de mailinglijst. De details van het contact staan hieronder:</p>
+<ul>[newsman sub="*" tag="li"]</ul>
+&nbsp;
+<p>--</p>
+<p><a href="[newsman wp='url']/wp-admin/">[newsman wp="url"]/wp-admin/</a> -> WPNewsman -> Instellingen</p>

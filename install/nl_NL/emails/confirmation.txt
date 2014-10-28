@@ -1,0 +1,36 @@
+[newsman wp="blogname"]: Bevestig uw email alstublieft
+--- plain ---
+Hallo,
+
+Je gaat [newsman wp="blogname"] geweldig vinden! Voordat we je de gevraagde informatie gaan sturen, willen we zeker zijn dat we je toestemming daarvoor hebben. 
+
+Klik op onderstaande link om ons toestemming te geven uw informatie te sturen. Het is snel en makkelijk! Als je de link niet aan kan klikken, kopieer en plak deze dan in je webbrowser.
+
+BEVESTIG DOOR HET KLIKKEN OP DEZE URL:
+
+[newsman link="confirmation"]
+
+Als je niet wilt inschrijven, negeer dit bericht dan gewoon.
+
+Vriendelijke groet,
+[newsman wp="blogname"]
+
+--
+Verzoek gegenereerd door:
+IP: [newsman sub="ip"]
+Datum: [newsman sub="ts"]
+URL: [newsman wp="url"]
+--- html ---
+<p>Hallo,</p>
+<p>Je gaat [newsman wp="blogname"] geweldig vinden! Voordat we je de gevraagde informatie gaan sturen, willen we zeker zijn dat we je toestemming daarvoor hebben</p>
+<p>Klik op onderstaande link om ons toestemming te geven uw informatie te sturen. Het is snel en makkelijk! Als je de link niet aan kan klikken, kopieer en plak deze dan in je webbrowser.</p>
+<p>BEVESTIG DOOR HET KLIKKEN OP DEZE URL:</p>
+<p><a href="[newsman link='confirmation']">[newsman link="confirmation"]</a></p>
+<p>Als je niet wilt inschrijven, negeer dit bericht dan gewoon.</p>
+<p>&nbsp;</p>
+<p>Vriendelijke groet,<br>
+	[newsman wp="blogname"]<br>
+	<a href="[newsman wp='url']">[newsman wp="url"]</a></p>
+<p style="font-size: x-small">
+	Verzoek gegenereerd door:<br>
+	IP:&nbsp;[newsman sub="ip"], datum:&nbsp;[newsman sub="ts"]</p>

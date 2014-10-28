@@ -304,16 +304,24 @@
 		}		
 
 		public function ajDeleteSubscribers() {
+			global $wpdb;
+			$u = newsmanUtils::getInstance();
 
 			$ids = $this->param('ids');
 			$all = ( $this->param('all', '0') === '1' );
 			$listId = $this->param('listId', '1');
 			$type = $this->param('type');
+			$q = $this->param('q');
 
 			$list = newsmanList::findOne('id = %d', array($listId));
 
 			if ( $all ) {
-				$r = $list->deleteAll($type);
+				if ( $q ) {
+					$q = $wpdb->prepare('email regexp %s', array($u->preg_quote($q)));
+					$r = $list->deleteAll($type, $q);
+				} else {
+					$r = $list->deleteAll($type);	
+				}				
 			} else {
 				$ids = preg_split('/[\s*,]+/', $ids);
 
@@ -323,13 +331,34 @@
 				$r = $list->delete($ids);				
 			}
 
-
 			if ( $r !== true ) {
 				$this->respond(false, $r);				
 			} else {
 				$this->respond(true, __('Successfully deleted selected subscribers.', NEWSMAN) );
 			}
-		}		
+		}	
+
+		public function ajCountSubscribers() {
+			$u = newsmanUtils::getInstance();
+
+			$listId = $this->param('listId', '1');
+			$type = $this->param('type');
+			$q = $this->param('q');
+
+			$list = newsmanList::findOne('id = %d', array($listId));
+
+			if ( $q ) {
+				$c = $list->countSubs($type, 'email regexp %s', array($u->preg_quote($q)));	
+			} else {
+				$c = $list->countSubs($type);
+			}			
+
+			if ( !is_numeric($c) ) {
+				$this->respond(false, 'Some error occured');
+			} else {
+				$this->respond(true, 'success', array( 'count' => $c ));
+			}
+		}	
 
 		public function ajGetOptions() {
 			$o = newsmanOptions::getInstance();
