@@ -1478,9 +1478,6 @@
 			
 			$installed = 0;
 
-			$url = 'http://blog.dev/wp-admin/admin.php?page=newsman-templates'; //temporary
-			$method = 'GET';
-
 			$files = $this->getUploadedFiles('template', true);
 			if ( $files ) {
 				foreach ($files as $file) {

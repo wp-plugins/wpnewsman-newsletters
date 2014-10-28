@@ -1070,9 +1070,11 @@ class newsmanUtils {
 		$tpl->system = false;
 		$tpl->name = $templateName;
 		$tpl->subject = __('Enter Subject Here', NEWSMAN);
-		$tpl->html = $this->processAssetsURLs($this->file_get_contents_utf8($fileName), $templateURL);
+		if ( @file_exists($fileName) ) {
+			$tpl->html = $this->processAssetsURLs($this->file_get_contents_utf8($fileName), $templateURL);	
+		}		
 
-		if ( file_exists($particlesFileName) ) {
+		if ( @file_exists($particlesFileName) ) {
 			$tpl->particles = $this->processAssetsURLs($this->file_get_contents_utf8($particlesFileName), $templateURL);
 		} else {
 			$defParticles = $this->getDefaultTemplateParticles();
