@@ -292,7 +292,6 @@ class newsmanWorkerAvatar extends newsmanWorkerBase {
 	}
 
 	function __call($name, $arguments) {
-		//$this->u->log("calling $name");
 		$opId = $this->_writeCall($name, $arguments);
 		$res = $this->_waitForResult($opId);
 		return $res;
@@ -310,24 +309,26 @@ class newsmanWorkerAvatar extends newsmanWorkerBase {
 	}
 
 	function _waitForResult($opId) {
-		$totalWait = 10000000; // mks
+		$totalWait = 10000000; // mks // 10s
 		$count = 0; // 50 * 100 ms = 5s 
 		$res = NULL;
+
 		while ( $res === NULL ) {
 			$count += 1;
 			$res = $this->_getOpResult($opId);
-			$s = 100000*$count;
+			$s = 200000*$count;
 			usleep($s); // 100 ms
 			$totalWait -= $s;
 			if ( $totalWait <= 0 ) { break; }
 		}
+
 		if ( $res !== NULL ) {
 			$this->_clearOpResult($opId);
 		}
 		return $res;
 	}
 
-	function _getOpResult($opId) {
+	function _getOpResult($opId) {		
 		$sql = "SELECT `result` from $this->_table WHERE `id` = %d AND `processed` = 1";
 		$sql = $this->_db->prepare($sql, $opId);
 

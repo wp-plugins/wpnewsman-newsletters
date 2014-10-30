@@ -3177,9 +3177,13 @@ jQuery(function($){
 					}
 				}).done(function(data){
 
-					$('#newsman-modal-errorlog .modal-body').empty();
+					b.empty();
 
 					$('<h3 style="margin-bottom: 1em;">'+sprintf(newsmanL10n.sentXofXemails, data.sent, data.recipients)+'</h3>').appendTo(b);
+
+					if ( typeof NEWSMAN_BLOCKED_DOMAINS !== 'undefined' && NEWSMAN_BLOCKED_DOMAINS ) {
+						$('<p>'+sprintf(newsmanL10n.someRecipientsMightBeFiltered, NEWSMAN_BLOCKED_DOMAINS)+'</p>').appendTo(b);	
+					}				
 
 					if ( data.msg ) {
 						$('<h3 style="margin-bottom: 1em;">'+newsmanL10n.status+' '+data.msg+'</h3>').appendTo(b);	

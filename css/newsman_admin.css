@@ -1784,6 +1784,7 @@ input.newsman-field-options-radio-opt-input {
 	padding: 0;
 	margin: 0;
 	overflow: hidden;
+	font-size: 13px;
 }
 
 .newsman-email:hover .newsman-email-general ul.newsman-email-bottom-btns {
@@ -2046,32 +2047,6 @@ input.newsman-field-options-radio-opt-input {
 	line-height: 2em;
 	height: 2em;
 	margin-bottom: .5em;	
-}
-
-.notification-cards-container {
-	height: 306px;
-	overflow-y: auto;
-}
-
-.blocked-domains .notification-card {
-	background: #FFF;
-	padding: 10px;
-	border: 1px solid;
-	border-top-color: #E0E0E0;
-	border-right-color: #CCC;
-	border-bottom-color: #CCC;
-	border-left-color: #E0E0E0;	
-	margin-bottom: 5px;
-}
-
-.blocked-domains .notification-card h4 {
-	margin-top: 0;
-}
-
-.notification-cards-container-label {
-	text-align: center;
-	padding-top: 2em;
-	color: #555;
 }
 
 #bounce-stats {

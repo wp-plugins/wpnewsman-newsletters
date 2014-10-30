@@ -1264,6 +1264,8 @@ class newsman {
 						'save' => __('Save', NEWSMAN),
 						'savedAt' => __('Saved at', NEWSMAN),
 
+						'someRecipientsMightBeFiltered' => __('Bounce Handler has %d blocked domains. Some of recipients might be skipped during sending.', NEWSMAN),
+
 						'viewInBrowser' => __('View in browser', NEWSMAN),
 
 						'viewStats' => __('View Stats', NEWSMAN),
@@ -1599,7 +1601,17 @@ class newsman {
 
 	public function onAdminHead() {
 		//wp_tiny_mce( false ); // true gives you a stripped down version of the editor
+
+		$blockedDomainsCount = 'null';
+
+		if ( class_exists('newsmanBlockedDomain') ) {
+			$blockedDomainsCount = newsmanBlockedDomain::count();
+		}
+
+		//newsmanBlockedDomain::count();
+
 		echo '<script>
+			NEWSMAN_BLOCKED_DOMAINS = '.$blockedDomainsCount.';
 			NEWSMAN_PLUGIN_URL = "'.NEWSMAN_PLUGIN_URL.'";
 			NEWSMAN_BLOG_ADMIN_URL = "'.NEWSMAN_BLOG_ADMIN_URL.'";
 			NEWSMAN_WPML_MODE = '.( (defined('NEWSMAN_WPML_MODE') && NEWSMAN_WPML_MODE) ? 'true' : 'false' ).';
@@ -1783,16 +1795,43 @@ class newsman {
 
 		do_action('newsman_admin_menu');
 
-		// placing it first in the menu
-		for ($i=0, $c = count($submenu['newsman-mailbox']); $i < $c; $i++) { 
-			if ( $submenu['newsman-mailbox'][$i][2] === 'newsman-settings' ) {
-				$prevPos = $i-1;
+		//var_dump($submenu['newsman-mailbox']);
 
-				$actionPagesSubmenu = array_splice($submenu['newsman-mailbox'], 0, 1);
-				array_splice($submenu['newsman-mailbox'], $prevPos, 0, $actionPagesSubmenu);
-				break;
+		$posSettings = null;
+		$posActionPages = null;
+
+		$this->moveMenuItem('newsman_ap', 'newsman-settings');
+		$this->moveMenuItem('newsman-bh', 'newsman-settings');
+	}
+
+	/**
+	 * $menuId is a menu id or custom page id
+	 */
+	private function moveMenuItem($menuId, $above) {		
+		global $submenu;
+
+		// getting menu item position
+		$menuItemPos = $this->getMenuPos($menuId);
+
+		if ( $menuItemPos !== null ) {
+			// cutting out menu item
+			$menuItem = array_splice($submenu['newsman-mailbox'], $menuItemPos, 1);
+
+			$aboveMenuItemPos = $this->getMenuPos($above);
+
+			// inserting above
+			array_splice($submenu['newsman-mailbox'], $aboveMenuItemPos, 0, $menuItem);			
+		}
+	}
+
+	private function getMenuPos($menuId) {
+		global $submenu;
+		for ($i=0, $c = count($submenu['newsman-mailbox']); $i < $c; $i++) { 
+			if ( strpos($submenu['newsman-mailbox'][$i][2], $menuId) !== false ) {
+				return $i;
 			}
-		}	
+		}
+		return null;
 	}
 
 	public function reAddExcerptMetabox($post_type, $position, $post) {
