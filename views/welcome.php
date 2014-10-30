@@ -11,7 +11,7 @@
 			<div class="changelog">
 		  		<div class="feature-section row" style="margin-bottom: .5em">
 					<div class="span8">
-						<h3>35,699 downloads and 35 excellent reviews on wordpress.org!</h3>
+						<h3>36,093 downloads and 36 excellent reviews on wordpress.org!</h3>
 						<p><a href="http://wordpress.org/support/view/plugin-reviews/wpnewsman-newsletters">
 						<img src="http://s-plugins.wordpress.org/wpnewsman-newsletters/assets/hello-puppies.png" align="left" style="margin: 0 15px 0 0;" /></a>
 						<p style="font-size: 18px; font-weight: bold;">We need your HELP to reach 100 reviews!</p>
@@ -19,7 +19,6 @@
 						 on wordpress.org to help us spread the word about WPNewsman!
 
 						<p>We believe that with your word of mouth it can be known by others who are at pain with collecting subscribers and sending them newsletters. 
-						<a target="_blank" href="http://wpnewsman.com/follow-us-and-spread-the-word-about-wpnewsman/?pk_campaign=wpnewsman-update">It’s pretty easy to spread the word about WPNewsman ►</a></p>
 
 						<p>By doing it, you’re helping yourself. The more users, the better experience, the more bugs discovered and fixed. 
 						We’re doing our best to make WPNewsman flawless, powerful, and simply the best newsletter plugin and we’re saying “Thank You!” for your support. 
