@@ -1758,6 +1758,10 @@ input.newsman-field-options-radio-opt-input {
 	white-space: nowrap;
 }
 
+.newsman-email-view-stats {
+	font-size: 13px;
+}
+
 .newsman-email:hover .newsman-email-delete,
 .newsman-email:hover .newsman-email-view-stats,
 .newsman-email:hover .newsman-email-public-url {
