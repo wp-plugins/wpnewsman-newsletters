@@ -638,6 +638,14 @@ class newsman {
 
 			if ( isset($_REQUEST['code']) && strpos($_REQUEST['code'], ':') !== false ) {
 
+				// MSHTML lib bad behaviour workaround
+				$c = $_REQUEST['code'];
+				$cLastChar = strlen($c)-1;
+				if ( $c[$cLastChar] === '/' ) {
+					$_REQUEST['code'] = substr($c, 0, $cLastChar);
+				}
+				// ----
+
 				$uArr = explode(':', $_REQUEST['code']);
 				if ( $uArr[0] == '' || $uArr[1] == '' ) {
 					wp_die( __('Your link seems to be broken.', NEWSMAN) );
@@ -917,6 +925,7 @@ class newsman {
 		}
 
 		$this->removeUploadDir();
+		$this->utils->uninstallNewsmanMuPlugin();
 
 		delete_option('newsman_options');
 		delete_option('newsman_version');

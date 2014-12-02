@@ -1383,11 +1383,54 @@ class newsmanUtils {
 			require_once(__DIR__.DIRECTORY_SEPARATOR."migration.php");
 			if ( function_exists('newsman_do_migration') ) {
 				newsman_do_migration();
-			}		
+			}			
 			do_action('wpnewsman_update');
 			update_option('newsman_version', NEWSMAN_VERSION);
 		}
+
+		$this->installNewsmanMuPlugin();
+
 		return $updated;
+	}
+
+	public function installNewsmanMuPlugin() {
+		// $muBundledVersion = $this->versionToNum(NEWSMAN_MU_BUNDLED_VERSION);
+		// $muInstalledVersion = $this->versionToNum( defined('WPNEWSMAN_MU_VERSION') ? WPNEWSMAN_MU_VERSION : '0.0.0' );
+
+		$pluginHeader = <<<NEWSMAN_PLUGIN_HEAD_TEMPLATE
+/*
+Plugin Name: WPNewsman Pro - Worker Stability Enhancement
+Plugin URI: http://wpnewsman.com
+Description: Disables 3rd party plugins during the calls to internal worker URLs. Enhances stability of the worker.
+Version: {{WPNEWSMAN_MU_VERSION}}
+Author: Alex Ladyga - G-Lock Software
+Author URI: http://www.glocksoft.com
+*/
+NEWSMAN_PLUGIN_HEAD_TEMPLATE;
+
+		$muPluginsDir = WP_CONTENT_DIR.DIRECTORY_SEPARATOR.'mu-plugins';
+		if ( !is_dir($muPluginsDir) ) {
+			@mkdir($muPluginsDir, 0755, true);
+		}
+		$wpmuPluginFilename = $muPluginsDir.DIRECTORY_SEPARATOR.'wpnewsman-mu.php';
+		$wpmuPluginTpl = file_get_contents(NEWSMAN_PLUGIN_PATH.'/wpnewsman-mu-tpl');
+
+		// injecting plugin header
+		$wpmuPluginTpl = str_replace('{{PLUGIN_HEADER}}', $pluginHeader, $wpmuPluginTpl);
+
+		// injecting version
+		$wpmuPluginTpl = str_replace('{{WPNEWSMAN_MU_VERSION}}', NEWSMAN_MU_BUNDLED_VERSION, $wpmuPluginTpl);		
+
+		@file_put_contents($wpmuPluginFilename, $wpmuPluginTpl);
+		return @file_exists($wpmuPluginFilename);
+	}
+
+	public function uninstallNewsmanMuPlugin() {
+		$muPluginFilename = WP_CONTENT_DIR.DIRECTORY_SEPARATOR.'mu-plugins'.DIRECTORY_SEPARATOR.'wpnewsman-mu.php';
+
+		if ( file_exists($muPluginFilename) ) {
+			@unlink($muPluginFilename);
+		}
 	}
 
 
@@ -1821,6 +1864,29 @@ class newsmanUtils {
 	public function isResponsive($html) {
 		return preg_match('/<!--\s*NEWSMAN_RESPONSIVE\s*-->/i', $html);
 	}
+
+	public function getGeoLocalName($arrNames) {
+		$locale = get_locale();
+		$locale = strtr($locale, '_', '-');
+		$shortLocale = substr($locale, 0, 2);
+
+		$shortLocaleName = '';
+
+		if ( !$arrNames ) {
+			return '';
+		}
+
+		foreach ($arrNames as $name_loc => $name) {
+			if ( $name_loc === $locale ) {
+				// exact locate match
+				return $name;
+			} elseif ( $shortLocale == $name_loc ) { // short locale match, eg. just "en" instead of "en_GB"
+				$shortLocaleName = $name;
+			}
+		}
+
+		return ( $shortLocaleName ) ? $shortLocaleName : $arrNames['en'];
+	}	
 
 
 	/* --------------------------------------------------------------------------------------------------------- */

@@ -211,7 +211,8 @@
 					<ul id="import-files-list" class="neo-upload-list nav nav-tabs nav-stacked"></ul>
 				</div>
 				<div class="span9" style="overflow-x: auto;" id="file-import-settings">
-					<center class="import-form-info"><?php _e('Please select a file to import.', NEWSMAN); ?></center>
+					<center><p class="import-form-info"><?php _e('Please select a file to import.', NEWSMAN); ?></p></center>
+					<center><p class="import-form-notice"><?php _e('Remember - a fully confirmed opted-in list is important.<br> It is a general prerequisite for sustainable e-mail deliverability and conversion rates.', NEWSMAN); ?></p></center>
 					<form style="display: none;">
 						<div class="import-controls" style="margin: 10px 0;">
 							<div class="row-fluid">

@@ -26,15 +26,19 @@ class newsmanAPI {
 		// 	ob_start('ob_gzhandler');
 		// }
 
+		$this->u = newsmanUtils::getInstance();
+
 		$o = newsmanOptions::getInstance();
 		$key = $o->get('apiKey');
 
-		if ( !$key ) {
-			$this->respond(false, 'API key is not defined in the options.', array(), '500 Internal Server Error');
-		}
+		if ( !current_user_can( 'newsman_wpNewsman' ) ) {
+			if ( !$key ) {
+				$this->respond(false, 'API key is not defined in the options.', array(), '500 Internal Server Error');
+			}
 
-		if ( !isset($_REQUEST['key']) || !$_REQUEST['key'] || $_REQUEST['key'] !== $key ) {
-			$this->respond(false, 'API key is missing or wrong');
+			if ( !isset($_REQUEST['key']) || !$_REQUEST['key'] || $_REQUEST['key'] !== $key ) {
+				$this->respond(false, 'API key is missing or wrong');
+			}			
 		}
 
 		if ( !isset($_REQUEST['method']) ) {
@@ -333,6 +337,274 @@ class newsmanAPI {
 		$exportArgs['fileName'] = $fileName;
 
 		$list->export($exportArgs);
+	}
+
+	/**
+	 * method: getRecipientsActivity
+	 * query parmas:
+	 * nofile   - 1 or 0 (default). Output contenst to the browser rather then as a file download
+	 * noheader - 1 or 0 (default). Does not include CSV header into ouput
+	 * emailId  - id of the email
+	 * format   - Output format. json or csv (default)
+	 * fields   - Outputs only the cpecified fields. Available fields: email,opens,clicks,unsubscribed,listId,listName,location-city,location-sub,location-country
+	 * map      - Assigns new names to the fields. Comma separated list of name pairs(originalFieldName:newFieldName). Example: map=emails:e,opens:o,clicks:c. Overrides the list of fields defined in the "fields" param
+	 * limit    - limits number of items in the output
+	 * offset   - selects data from specific item
+	 */
+	public function ajGetRecipientsActivity() {
+		global $newsman_export_fields_map;
+		global $newsman_export_fields_list;
+
+		// processing query params
+
+		$emailId 	= $this->param('emailId');
+		$limit 		= $this->param('limit', false);
+		$offset 	= $this->param('offset', false);
+		$map 		= $this->param('map', ''); // fields mapping &map=first-name:FIRST_NAME,last-name:LAST_NAME
+		$noheader 	= $this->param('noheader', false); // removes header in CSV output
+		$fields 	= $this->param('fields', false); // select only listed fields plus you can specify extra links fields 'confirmation-link', 'resend-confirmation-link', 'unsubscribe-link'
+		$format 	= $this->param('format', 'csv'); // output format csv or json
+		$nofile 	= $this->param('nofile', false); // dont force content-disposition header for CSV output
+		$nobom 		= $this->param('nobom', false); // dont force content-disposition header for CSV output
+
+		if ( is_string($nofile)  ) {
+			$nofile = ( $nofile === '1' || strtolower($nofile) == 'true' );
+		}
+
+		if ( is_string($nobom)  ) { $nobom = ( $nobom === '1' || strtolower($nobom) == 'true' ); } 
+
+		$exportArgs = array(
+			'emailId' => $emailId,
+			'nofile' => $nofile,
+			'noheader' => $noheader
+		);
+		
+		if ( $map ) {
+			$map = explode(',', $map);
+			$newsman_export_fields_map = array();
+			foreach ($map as $pair) {
+				$p = explode(':', $pair);
+				$newsman_export_fields_map[ $p[0] ] = $p[1];
+			}
+			$exportArgs['fieldsMap'] = $newsman_export_fields_map;
+		}
+
+		if ( $fields !== false ) { $exportArgs['fieldsList'] = strlen($fields) > 0 ? explode(',', $fields) : array(); }
+		if ( $noheader )         { $exportArgs['noheader'] = true; }
+		if ( $format )           { $exportArgs['format'] = $format; }
+		if ( $limit )            { $exportArgs['limit'] = $limit; }
+		if ( $offset )           { $exportArgs['offset'] = $offset; }
+
+
+		// -- params
+
+		$exportArgs = array_merge(array(
+			// defaults
+			'emailId' => null,
+			'linksFields' => array(),
+			'fieldsMap' => array(
+				// will be in format 
+				// 'fieldName' => 'mappedFieldName'
+			),
+			'fieldsList' => array(
+				'email', 'opens', 'clicks', 'unsubscribed', 'listId', 
+				'listName', 'location-city', 'location-sub', 'location-country'
+			),
+			'nofile' => false,
+			'noheader' => false,
+			'format' => 'csv',
+			'offset' => false,
+			'limit' => false,
+			'extraQuery' => false,
+			'fileName' => ''
+		), $exportArgs);
+
+		$exportArgs['fileName'] = 'recipients-activity-export-'.$emailId.'.'.$exportArgs['format'];
+
+		$u = newsmanUtils::getInstance();
+
+		//*
+		switch ($exportArgs['format']) {
+			case 'json':
+				$ct = 'application/json';
+				break;
+
+			case 'csv':					
+			default:
+				$ct = 'text/json';
+				break;
+		}
+		header( 'Content-Type: '.$ct );
+		//*/
+
+		if ( !$exportArgs['nofile'] ) {
+			header( 'Content-Disposition: attachment;filename='.$exportArgs['fileName']);			
+		}
+
+		$out = fopen('php://output', 'w');
+
+		if ( $exportArgs['format'] === 'csv' && !$nobom ) {
+			// Adding UTF-8 BOM
+			fputs( $out, "\xEF\xBB\xBF" );
+		}
+
+		if ( $out ) {
+			$exportArgs['out'] = $out;
+			// $exportArgs['fields'] = $this->getAllFields($exportArgs['fieldsList']);
+
+			// the list of feildName -> mappedFieldName generated from 
+			// passed fields list. will be augumented by passed fieldsMap
+			$generatedMappedFieldsList = array();
+
+			foreach ($exportArgs['fieldsList'] as $fieldName) {
+				$generatedMappedFieldsList[$fieldName] = $fieldName;
+			}
+
+			// mergining generated mapped fields list with passed one.
+			// this way we can have both fieldsList and fieldsMap params in the query
+
+			$exportArgs['fieldsMap'] = array_merge($generatedMappedFieldsList, $exportArgs['fieldsMap']);
+
+			// CSV header
+			$mappedCSVHeader = array();
+
+			$map = $exportArgs['fieldsMap'];
+			foreach ($map as $fieldName => $mappedFieldName) {
+				$mappedCSVHeader[] = $mappedFieldName;
+			}
+
+			$exportArgs['mappedCSVHeader'] = $mappedCSVHeader;
+
+			if ( $exportArgs['format'] === 'json' ) {
+				fwrite($out, '[');
+				$this->getRecipientsActivity($exportArgs);
+				fwrite($out, ']');
+			} else {
+				if ( !$exportArgs['noheader'] ) {
+					fputcsv($out, $mappedCSVHeader, ',', '"'); // CSV header output
+				}
+				$this->getRecipientsActivity($exportArgs);
+			}
+			@fclose($out);			
+		} else {
+			echo "Error: cannot open php://output stream";
+		}	
+	}
+
+	private function getRecipientsActivity($exportArgs) {
+		$emlId 	= intval($exportArgs['emailId']);
+		$out = $exportArgs['out'];
+
+		$selector = 'emailId = %d';
+		$args = array($emlId);
+
+		$listNames = array();
+
+		$map = $exportArgs['fieldsMap'];
+
+		try {
+			$reader = new newsmanGeoLiteDbReader();			
+			$geoDBexists = true;
+		} catch (Exception $e) {
+			$geoDBexists = false;
+		}			
+
+		$getLocation = isset($map['location-city']) || isset($map['location-sub']) || isset($map['location-country']);
+
+		$map = $exportArgs['fieldsMap'];
+		$mappedCSVHeader = $exportArgs['mappedCSVHeader'];
+
+		//$res = array();
+
+		$start = ( $exportArgs['offset'] !== false ) ? $exportArgs['offset'] : 0;   // ;
+		$limit = ( $exportArgs['limit'] !== false ) ? $exportArgs['limit'] : 100; // $exportArgs['limit'];
+
+		if ( $exportArgs['limit'] !== false ) {
+			$count = $exportArgs['limit'];
+		} else {
+			$count = intval(newsmanAnSubDetails::count($selector, $args));			
+		}
+
+		$unknownLocation = array(
+			'city' => __('Unknown', NEWSMAN),
+			'sub' => __('Unknown', NEWSMAN),
+			'country' => __('Unknown', NEWSMAN)
+		);				
+
+		$delim = '';		
+
+
+		while ( $start <= $count ) {
+			$subs = newsmanAnSubDetails::findRange($start, $limit, $selector, $args);	
+
+			foreach ($subs as $s) {
+				$x = array();
+
+				// 'location-city', 'location-sub', 'location-country'
+
+				if ( isset($map['email']) )        { $x[$map['email']]        = $s->emailAddr; }
+				if ( isset($map['opens']) )        { $x[$map['opens']]        = $s->opens; }
+				if ( isset($map['clicks']) )       { $x[$map['clicks']]       = $s->clicks; }
+				if ( isset($map['unsubscribed']) ) { $x[$map['unsubscribed']] = $s->unsubscribed ? 1 : 0; }
+				if ( isset($map['listId']) )       { $x[$map['listId']]       = $s->listId; }
+
+				if ( isset($map['listName']) ) {
+					$mappedFieldName = $map['listName'];					
+					if ( isset($listNames[$s->listId]) ) {
+						$x[$mappedFieldName] = $listNames[$s->listId];
+					} else {
+						$list = newsmanList::findOne('id = %d', array($s->listId));
+						$x[$mappedFieldName] = $list ? $list->name : 'DELETED';
+						$listNames[$s->listId] = $x[$mappedFieldName];
+					}
+				}
+
+				if ( $getLocation ) {
+					$l = $unknownLocation;
+					if ( $geoDBexists ) {
+						try {
+							$record = @$reader->city($s->ip);
+							$l = array(
+								'city' =>  $this->u->getGeoLocalName( $record->city->names ),
+								'sub' => $this->u->getGeoLocalName( $record->mostSpecificSubdivision->names ),
+								'country' => $this->u->getGeoLocalName( $record->country->names )
+							);
+						} catch (Exception $e) {
+						}											
+					}
+					//// /////
+					if ( $exportArgs['format'] === 'csv' ) {
+						if ( isset($map['location-country']) ) { $x[$map['location-country']] = $l['country']; }
+						if ( isset($map['location-sub']) )     {     $x[$map['location-sub']] = $l['sub']; }
+						if ( isset($map['location-city']) )    {    $x[$map['location-city']] = $l['city']; }
+
+					} elseif ( $exportArgs['format'] === 'json' ) {
+						$x['location'] = array();
+
+						if ( isset($map['location-country']) ) { $x['location'][$map['location-country']] = $l['country']; }
+						if ( isset($map['location-sub']) )     {     $x['location'][$map['location-sub']] = $l['sub']; }
+						if ( isset($map['location-city']) )    {    $x['location'][$map['location-city']] = $l['city']; }						
+					}
+				}
+
+
+				if ( $exportArgs['format'] === 'csv' ) {
+					$row = array();
+
+					foreach ($mappedCSVHeader as $mappedFieldName) {
+						$row[] = isset($x[$mappedFieldName]) ? $x[$mappedFieldName] : '';
+					}
+					fputcsv($out, $row, ',', '"'); 
+
+				} elseif ( $exportArgs['format'] === 'json' ) {
+					fputs($out, $delim.json_encode($x));
+					$delim = ',';
+				}
+			}
+
+
+			$start += $limit;
+		}
 	}
 
 	public function ajGetListFields() {

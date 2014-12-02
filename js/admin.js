@@ -1590,11 +1590,13 @@ jQuery(function($){
 			this.form = $(this.options.formPanel+' form');
 			this.mappingTable = $('table', this.form);
 			this.info = $(this.options.formPanel+' .import-form-info');
+			this.notice = $(this.options.formPanel+' .import-form-notice');
 
 			this.showInfo('selectFile');
 		},
 		showInfo: function(type) {
 			this.info.html(this.options.messages[type] || 'Error');
+			this.notice[(type === 'selectFile') ? 'show' : 'hide']();
 		},
 		_fileSelected: function(fileName) {
 			this.selectedFile = fileName;

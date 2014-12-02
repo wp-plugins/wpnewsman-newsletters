@@ -3,8 +3,8 @@ Contributors: Neocoder, G-Lock Software
 Donate Link: http://wpnewsman.com/premium-newsletter-plugin-wordpress/
 Tags: wpnewsman, newsletter, newsletters, newsletter signup, newsletter widget, subscribers, post notification, email subscription, email marketing, email, emailing, subscription
 Requires at least: 3.8
-Tested up to: 4.0
-Stable tag: 1.8.1
+Tested up to: 4.1
+Stable tag: 1.8.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -20,7 +20,7 @@ Check it out! Download Right Now and Send EMails for FREE...
 
 = WPNewsman Pro =
 
-*WPNewsman Pro* is a **significant upgrade** to *WPNewsman Lite* that allows you to send newsletters to an unlimited number of subscribers, get full email tracking statistics for each campaign, track the recipient's actions on your website with Google Analytics or Piwik, and keep your mailing lists verified and clean by using the Bounce handler. Unlike other autoresponder systems, you can just import your contacts and leads and get started. You have FULL control of your email campaigns and are not relying on third party services that ultimately control your profit at their whim. You can learn more about *WPNewsman Pro* here:
+*WPNewsman Pro* is a **significant upgrade** to *WPNewsman Lite* that allows you to send newsletters to an unlimited number of subscribers, get full email tracking statistics for each campaign, track the recipient's actions on your website with Google Analytics or Piwik, and keep your mailing lists verified and clean by using the automated Bounce Handler. Unlike other autoresponder systems, you can just import your contacts and leads and get started. You have FULL control over your email messages, contact lists, email delivery, sender reputation and are not relying on third party services that ultimately control your profit at their whim. You can learn more about *WPNewsman Pro* here:
 
 [Home](http://wpnewsman.com/ "Home") | [Review](http://wpnewsman.com/review-newsletter-plugin-wordpress/ "Review") | [Upgrade to WPNewsman Pro](http://wpnewsman.com/premium-newsletter-plugin-wordpress/ "Upgrade to WPNewsman Pro")
 
@@ -124,6 +124,15 @@ We got a User Feedback page where you can [add or vote for new features](http://
 3. Subscriber management.
 
 == Changelog ==
+
+= 1.8.3 =
+
+* Added WPnewsman Enhancement plugin which improves stability of WPnewsman workers. 
+
+= 1.8.2 =
+
+* Added workaround for MSHTML library bug which adds "/" to the end of any URL in editing mode.
+* Updated German translation.
 
 = 1.8.1 =
 
@@ -429,6 +438,10 @@ We got a User Feedback page where you can [add or vote for new features](http://
 * First public release. Hello World! 
 
 == Upgrade Notice ==
+
+= 1.8.3 =
+
+* Recommended upgarde. Improves stability of WPNewsman workers( sender and bounce-handler of the Pro version ). Installs additional lightweight plugin into wp-contents folder which unloads unnecessary plugins during request to WPNewsman pages.
 
 = 1.8.0 =
 Highly recommended update. Fixed security vulnerability.

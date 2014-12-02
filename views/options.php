@@ -55,6 +55,10 @@
 							<label>LinkedIn</label>
 							<input type="text" name="newsman-social-linkedin">
 						</div>
+						<hr>
+						<div>
+							<?php _e('WPNewsman Enhancement Plugin version: '.( defined('WPNEWSMAN_MU_VERSION') ? WPNEWSMAN_MU_VERSION : 'NOT INSTALLED' ), NEWSMAN) ?>
+						</div>
 					</div>
 					<div class="span4">
 						<!--   			 Info column  			 -->

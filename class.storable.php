@@ -507,11 +507,11 @@ class newsmanStorable {
 
 		if ( !$selector ) { $selector = '1=1'; }
 
-		if ( !preg_match('/\bLIMIT\b\d+/i', $selector) ) {
+		if ( $limit !== 0 && !preg_match('/\bLIMIT\b\d+/i', $selector) ) {
 			$selector .= " LIMIT %d,%d";
+			$args[] = $start;
+			$args[] = $limit;
 		}
-		$args[] = $start;
-		$args[] = $limit;
 
 		return static::findAll($selector, $args, $opts);
 	}	

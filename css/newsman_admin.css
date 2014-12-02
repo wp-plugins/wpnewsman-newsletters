@@ -813,6 +813,12 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f6f8f9', end
 
 #file-import-settings .import-form-info {
 	margin-top: 137px;
+	text-align: center;
+}
+
+#file-import-settings .import-form-notice {
+	color: #999;
+	font-style: italic;
 }
 
 .neo-upload-list li a {
@@ -1093,7 +1099,7 @@ select.map-select {
 }
 
 .common-footer {
-	margin-top: 2em;
+	margin-top: 1em;
 	border-top: 1px dotted #DADADA;
 	height: 40px;
 	line-height: 40px;
@@ -2059,4 +2065,8 @@ input.newsman-field-options-radio-opt-input {
 }
 #bounce-stats td:first-child {
 	padding-right: 10px;	
+}
+
+#wpbody .wp_bootstrap p {
+	font-size: inherit;
 }

@@ -2269,29 +2269,6 @@
 
 		// analytics
 
-		private function getLocalName($arrNames) {
-			$locale = get_locale();
-			$locale = strtr($locale, '_', '-');
-			$shortLocale = substr($locale, 0, 2);
-
-			$shortLocaleName = '';
-
-			if ( !$arrNames ) {
-				return '';
-			}
-
-			foreach ($arrNames as $name_loc => $name) {
-				if ( $name_loc === $locale ) {
-					// exact locate match
-					return $name;
-				} elseif ( $shortLocale == $name_loc ) { // short locale match, eg. just "en" instead of "en_GB"
-					$shortLocaleName = $name;
-				}
-			}
-
-			return ( $shortLocaleName ) ? $shortLocaleName : $arrNames['en'];
-		}
-
 		public function ajGetRecipinetsActivity() {
 			$emlId 	= intval($this->param('emlId'));
 
@@ -2328,9 +2305,9 @@
 					try {
 						$record = @$reader->city($s->ip);
 						$x['location'] = array(
-							'city' =>  $this->getLocalName( $record->city->names ),
-							'sub' => $this->getLocalName( $record->mostSpecificSubdivision->names ),
-							'country' => $this->getLocalName( $record->country->names )
+							'city' =>  $this->u->getGeoLocalName( $record->city->names ),
+							'sub' => $this->u->getGeoLocalName( $record->mostSpecificSubdivision->names ),
+							'country' => $this->u->getGeoLocalName( $record->country->names )
 						);
 					} catch (Exception $e) {
 						$x['location'] = array(
