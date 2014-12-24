@@ -90,11 +90,16 @@ class newsman {
 			
 		} 
 		return self::$instance; 
-	} 
+	}
 
 	public function __construct() {
 
 		$this->analytics = newsmanAnalytics::getInstance();
+		$this->options = newsmanOptions::getInstance();
+		$this->utils = newsmanUtils::getInstance();
+		$this->mailman = newsmanMailMan::getInstance();
+
+		$u = newsmanUtils::getInstance();
 
 		$newsman_error_message = '';
 		$newsman_success_message = '';
@@ -107,12 +112,6 @@ class newsman {
 
 		//add_filter('cron_schedules', array($this, 'addRecurrences'));
 
-		$this->options = newsmanOptions::getInstance();
-		$this->utils = newsmanUtils::getInstance();
-
-		$u = newsmanUtils::getInstance();
-
-		$this->mailman = newsmanMailMan::getInstance();
 
 		switch ( strtolower($this->options->get('dashboardStats')) ) {
 			case 'abox':
@@ -139,11 +138,8 @@ class newsman {
 
 		// schedule event
 		add_action('newsman_mailman_event', array($this, 'mailman'));
-
 		add_action("wp_insert_post", array($this, "onInsertPost"), 10, 2);
-
 		add_action('wp_head', array($this, 'onWPHead'));
-
 		add_action('plugins_loaded', array($this, 'setLocale'));
 
 		if ( defined('NEWSMANP') ) {
@@ -228,6 +224,7 @@ class newsman {
 		}
 
 		if ( !defined('NEWSMAN_DISABLE_WORKERS_CHECK') || !NEWSMAN_DISABLE_WORKERS_CHECK ) {
+			$this->utils->log('poking workers...');
 			$this->mailman->pokeWorkers();
 		}		
 		$this->mailman->checkEmailsQueue();
@@ -1373,24 +1370,21 @@ class newsman {
 
 		$use_excerpts = isset($_REQUEST['newsman_use_excerpts']);
 
-		if ( strpos($_SERVER['REQUEST_URI'], 'press-this.php') === false && isset($_REQUEST['u']) && !empty($_REQUEST['u']) ) {
-			if ( strpos($_REQUEST['u'], ':') === false ) {
-				wp_die('Wrong "u" parameter format');
-			}
-
-			$newsman_current_ucode = $_REQUEST['u'];
-
+		if ( isset($_REQUEST['u']) && strpos($_REQUEST['u'], ':') !== false ) {
 			$uArr = explode(':', $_REQUEST['u']);
-			$list = newsmanList::findOne('uid = %s', array($uArr[0]));
 
-			if ( $list ) {
-				$newsman_current_list = $list;
+			if ( count($uArr) === 2 ) {
+				$newsman_current_ucode = $_REQUEST['u'];				
+				$list = newsmanList::findOne('uid = %s', array($uArr[0]));
 
-				$s = $list->findSubscriber("ucode = %s", $uArr[1]);
-				if ( !$s ) {
-					wp_die('Please, check your link. It seems to be broken.');
-				}
-				$newsman_current_subscriber = $s->toJSON();
+				if ( $list ) {
+					$newsman_current_list = $list;
+
+					$s = $list->findSubscriber("ucode = %s", $uArr[1]);
+					if ( $s ) {
+						$newsman_current_subscriber = $s->toJSON();
+					}
+				}					
 			}
 		}
 				
@@ -1960,7 +1954,7 @@ class newsman {
 	}
 
 	public function onDeactivate() {
-	
+
 		wp_clear_scheduled_hook('newsman_mailman_event');
 
 		// removing capability
@@ -2009,9 +2003,11 @@ class newsman {
 	}
 
 	public function onProWorkersReady() {
-
 		if ( isset( $_REQUEST['newsman_worker_fork'] ) && !empty($_REQUEST['newsman_worker_fork']) ) {
+			$this->utils->log('[onProWorkersReady] $_REQUEST["newsman_worker_fork"] %s', isset($_REQUEST['newsman_worker_fork']) ? $_REQUEST['newsman_worker_fork'] : '');			
+
 			define('NEWSMAN_WORKER', true);
+			
 			$workerClass = $_REQUEST['newsman_worker_fork'];
 
 			if ( !class_exists($workerClass) ) {
@@ -2024,7 +2020,7 @@ class newsman {
 
 			$worker = new $workerClass($_REQUEST['workerId']);
 			$worker_lock = isset($_REQUEST['worker_lock']) ? $_REQUEST['worker_lock'] : null;
-			$worker->run($worker_lock);
+			$worker->run($worker_lock);			
 			exit();
 		}
 	}
@@ -2078,6 +2074,11 @@ class newsman {
 				case 'run-bounced-handler':
 					do_action('wpnewsman-pro-run-bh');
 					break;
+				case 'check-workers':
+					$this->utils->log('poking workers from pokeback.wpnewsman.com...');
+					$this->mailman->pokeWorkers();			
+					$this->mailman->checkEmailsQueue();
+					break;
 			}
 			exit();
 		}		
@@ -2098,7 +2099,6 @@ class newsman {
 		}
 
 		// Schedule events
-		
 		if ( !wp_next_scheduled('newsman_mailman_event') ) {
 			wp_schedule_event( time(), '1min', 'newsman_mailman_event');
 		}

@@ -327,20 +327,23 @@ class newsmanEmail extends newsmanStorable {
 	}	
 
 	public function isWorkerAlive() {
-		$maxWorkerTimout = 360; // 3 minutes
+		//$maxWorkerTimout = 360; // 3 minutes
+
+		$w = new newsmanWorkerAvatar($this->workerPid);
+		$x = $w->isRunning();
 
 		$u = newsmanUtils::getInstance();
-		$t = newsmanTimestamps::getInstance();
+		// $t = newsmanTimestamps::getInstance();
 
-		$ts = $t->getTS($this->workerPid);
+		// $ts = $t->getTS($this->workerPid);
 
-		$elapsed = time() - $ts;
+		// $elapsed = time() - $ts;
 
-		$a = $elapsed <= $maxWorkerTimout;
+		// $a = $elapsed <= $maxWorkerTimout;
 
-		$u->log('[isWorkerAlive] workerPid('.$this->workerPid.') -> isAlive: '.$a);
+		$u->log('[isWorkerAlive] workerPid('.$this->workerPid.') -> isAlive: '.var_export($x, true));
 		
-		return $a;
+		return $x;
 	}
 
 	public function releaseLocks() {

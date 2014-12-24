@@ -9,7 +9,7 @@ require_once(__DIR__.DIRECTORY_SEPARATOR."class.utils.php");
  * that has ability to store it's state in the database
  *
  * Transmisson reflect the state of sending particular email to
- * particuler subscriber.
+ * particular subscriber.
  */
 
 class newsmanEmailTransmission {

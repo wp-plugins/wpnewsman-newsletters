@@ -6,6 +6,8 @@ require_once(__DIR__.DIRECTORY_SEPARATOR."class.timestamps.php");
 
 // http://cubicspot.blogspot.com/2010/10/forget-flock-and-system-v-semaphores.html
 
+define('NEWSMAN_WORKER_ERR_CANNOT_SET_LOCK', '1');
+
 class newsmanWorkerBase {
 
 	var $_db;
@@ -75,7 +77,6 @@ class newsmanWorker extends newsmanWorkerBase {
 		$o = newsmanOptions::getInstance();
 		$this->secret = $o->get('secret');
 
-		//if ( defined('NEWSMAN_WORKER') && ( !defined('NEWSMAN_DEBUG') || NEWSMAN_DEBUG === false ) ) {
 		if ( defined('NEWSMAN_WORKER') ) {
 			if ( isset($_REQUEST['newsman_nonce']) ) {
 
@@ -131,15 +132,19 @@ class newsmanWorker extends newsmanWorkerBase {
 		$this->processMessages();
 
 		if ( $worker_lock === null ) {
+			$u->log('running worker as $worker_lock is null');
 			$this->worker();
 		} else {
-			//$u->log('locking %s', $worker_lock);
+			$u->log('locking %s', $worker_lock);
 			if ( $this->lock($worker_lock) ) { // returns true if lock was successfully enabled
-				//$u->log('running worker method...');
+				$u->log('running worker method...');
 				$this->worker();
 				$this->unlock();
 			} else {
 				$u->log('[newsmanWorker run] cannot set lock %s to run worker', $worker_lock);
+				if ( method_exists($this, 'onError') ) {
+					$this->onError(NEWSMAN_WORKER_ERR_CANNOT_SET_LOCK);
+				}
 			}
 		}
 
@@ -209,12 +214,21 @@ class newsmanWorker extends newsmanWorkerBase {
 
 		$u = newsmanUtils::getInstance();
 
-		//$workerURL = NEWSMAN_PLUGIN_URL.'/worker.php';
+		//$workerURL = NEWSMAN_PLUGIN_URL.'/wpnewsman-worker-fork';
 		$workerURL = NEWSMAN_BLOG_ADMIN_URL.'admin.php?page=newsman-settings';
 		
 		$params['newsman_worker_fork'] = get_called_class();
 		$params['ts'] = sprintf( '%x', time() );
 		$params['workerId'] = $params['ts'].rand(1,100);
+
+		if ( newsmanIsOnWindows() ) {
+			$reqOptions = array();	
+		} else {
+			$reqOptions = array(
+				'timeout' => 0.01,
+				'blocking' => false				
+			);
+		}		
 
 		if ( $o->get('pokebackMode') ) {
 			$u->log('[newsmanWorker::fork] PokeBack mode enabled');
@@ -228,13 +242,14 @@ class newsmanWorker extends newsmanWorkerBase {
 				'key' => $o->get('pokebackKey')
 			));
 
+			$u->log('CALLING '.$pokebackSrvUrl);
+
 			$r = wp_remote_get(
 				$pokebackSrvUrl,
-				array(
-					'timeout' => 0.01,
-					'blocking' => false
-				)
+				$reqOptions
 			);
+
+			$u->log('FORK RES: %s', print_r($r, true));
 			
 		} else {
 			$u->log('[newsmanWorker::fork] NORMAL MODE');
@@ -243,13 +258,12 @@ class newsmanWorker extends newsmanWorkerBase {
 			// exposing secret only in loopback requests
 
 			$params['secret'] = $secret;
+
+			$reqOptions['body'] = $params;
+
 			$r = wp_remote_post(
 				$workerURL,
-				array(
-					'timeout' => 0.01,
-					'blocking' => false,
-					'body' => $params
-				)
+				$reqOptions
 			);
 
 			$u->log('[newsmanWorker::fork] '.print_r($r , true));

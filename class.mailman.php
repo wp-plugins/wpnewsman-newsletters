@@ -36,12 +36,18 @@ class newsmanMailMan {
 		$emails = newsmanEmail::findAll('status = %s', array('inprogress'));
 
 		foreach ($emails as $email) {
-
+			$workerAlive = $email->isWorkerAlive();
 			// double checke the status here to solve possible race condition
-			if ( $email->workerPid && !$email->isWorkerAlive() && $email->getStatus() === 'inprogress' ) {
+			$this->u->log('[pokeWorkers] email->workerPid '.var_export($email->workerPid, true));
+			$this->u->log('[pokeWorkers] email->isWorkerAlive '.var_export($workerAlive, true));
+			$this->u->log('[pokeWorkers] email->status '.var_export($email->getStatus(), true));
+
+			if ( $email->workerPid && !$workerAlive && $email->getStatus() === 'inprogress' ) {
 				$this->u->log('Found email '.$email->id.' with dead worker('.$email->workerPid.'). Setting email to pending state.');
 				$email->releaseLocks();
 				$email->status = 'pending';
+
+				$this->u->log('[pokeWorkers] clearing worker PID for worker '.var_export($email->workerPid, true));
 				$email->workerPid = '';
 
 				$email->save();
