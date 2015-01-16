@@ -1,9 +1,5 @@
 <?php
 
-require_once(__DIR__.DIRECTORY_SEPARATOR."class.utils.php");
-require_once(__DIR__.DIRECTORY_SEPARATOR."class.storable.php");
-require_once(__DIR__.DIRECTORY_SEPARATOR."lib/emogrifier.php");
-
 class newsmanAnSubDetails extends newsmanStorable {
 	static $table = 'newsman_an_sub_details';
 	static $props = array(

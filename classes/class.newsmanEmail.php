@@ -1,10 +1,6 @@
 <?php
 
-require_once(__DIR__.DIRECTORY_SEPARATOR."class.utils.php");
-require_once(__DIR__.DIRECTORY_SEPARATOR."class.storable.php");
-require_once(__DIR__.DIRECTORY_SEPARATOR."class.an-links.php");
-require_once(__DIR__.DIRECTORY_SEPARATOR."class.sentlog.php");
-require_once(__DIR__.DIRECTORY_SEPARATOR."lib/emogrifier.php");
+require_once(__DIR__.DIRECTORY_SEPARATOR."../lib/emogrifier.php");
 
 class newsmanEmail extends newsmanStorable {
 	static $table = 'newsman_emails';
@@ -325,31 +321,6 @@ class newsmanEmail extends newsmanStorable {
 
 		return $rendered;
 	}	
-
-	public function isWorkerAlive() {
-		//$maxWorkerTimout = 360; // 3 minutes
-
-		$w = new newsmanWorkerAvatar($this->workerPid);
-		$x = $w->isRunning();
-
-		$u = newsmanUtils::getInstance();
-		// $t = newsmanTimestamps::getInstance();
-
-		// $ts = $t->getTS($this->workerPid);
-
-		// $elapsed = time() - $ts;
-
-		// $a = $elapsed <= $maxWorkerTimout;
-
-		$u->log('[isWorkerAlive] workerPid('.$this->workerPid.') -> isAlive: '.var_export($x, true));
-		
-		return $x;
-	}
-
-	public function releaseLocks() {
-		$u = newsmanUtils::getInstance();
-		$u->releaseLock('newsman-worker-'.$this->id);
-	}
 
 	public function getPublishURL() {
 		$blogurl = get_bloginfo('wpurl');

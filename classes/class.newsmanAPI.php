@@ -1,9 +1,5 @@
 <?php
 
-require_once(__DIR__.DIRECTORY_SEPARATOR.'class.utils.php');
-require_once(__DIR__.DIRECTORY_SEPARATOR.'class.options.php');
-require_once(__DIR__.DIRECTORY_SEPARATOR.'class.list.php');
-
 class newsmanAPI {
 
 	function __construct() {

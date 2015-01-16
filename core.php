@@ -1,23 +1,8 @@
 <?php
 
-require_once(__DIR__.DIRECTORY_SEPARATOR.'class.newsman-worker.php');
-require_once(__DIR__.DIRECTORY_SEPARATOR.'class.form.php');
-require_once(__DIR__.DIRECTORY_SEPARATOR.'class.subscriber.php');
-require_once(__DIR__.DIRECTORY_SEPARATOR.'class.list.php');
-require_once(__DIR__.DIRECTORY_SEPARATOR.'class.options.php');
-require_once(__DIR__.DIRECTORY_SEPARATOR.'class.utils.php');
-require_once(__DIR__.DIRECTORY_SEPARATOR.'class.emails.php');
-require_once(__DIR__.DIRECTORY_SEPARATOR.'class.emailtemplates.php');
-require_once(__DIR__.DIRECTORY_SEPARATOR.'class.mailman.php');
-require_once(__DIR__.DIRECTORY_SEPARATOR.'class.sentlog.php');
-require_once(__DIR__.DIRECTORY_SEPARATOR.'class.timestamps.php');
-require_once(__DIR__.DIRECTORY_SEPARATOR.'class.analytics.php');
-require_once(__DIR__.DIRECTORY_SEPARATOR.'ajaxbackend.php');
-require_once(__DIR__.DIRECTORY_SEPARATOR.'class.locks.php');
-require_once(__DIR__.DIRECTORY_SEPARATOR.'class.blockeddomains.php');
+require_once(__DIR__.DIRECTORY_SEPARATOR.'autoloader.php');
 
-require_once(__DIR__.DIRECTORY_SEPARATOR.'workers/class.mailer.php');
-require_once(__DIR__.DIRECTORY_SEPARATOR.'class.zip.php');
+require_once(__DIR__.DIRECTORY_SEPARATOR.'ajaxbackend.php');
 require_once(__DIR__.DIRECTORY_SEPARATOR.'lib/emogrifier.php');
 
 global $newsman_checklist;
@@ -96,8 +81,14 @@ class newsman {
 
 		$this->analytics = newsmanAnalytics::getInstance();
 		$this->options = newsmanOptions::getInstance();
+
+		if ( !defined('NEWSMAN_DEBUG') ) {
+			define('NEWSMAN_DEBUG', $this->options->get('debug'));
+		}			
+
 		$this->utils = newsmanUtils::getInstance();
 		$this->mailman = newsmanMailMan::getInstance();
+		$this->wm = newsmanWorkerManager::getInstance();
 
 		$u = newsmanUtils::getInstance();
 
@@ -105,10 +96,12 @@ class newsman {
 		$newsman_success_message = '';
 
 		add_action('init', array($this, 'onInit'));
+		add_action('newsman_poke_workers', array($this, 'onPokeWorkers'));
 
 		add_action('admin_enqueue_scripts', array($this, 'onAdminEnqueueScripts'), 99);
 
 		add_action('newsman_admin_page_header', array($this, 'showAdminNotifications'));
+		add_action('newsman_events_mode_changed', array($this, 'eventsModeChanged'));
 
 		//add_filter('cron_schedules', array($this, 'addRecurrences'));
 
@@ -141,12 +134,6 @@ class newsman {
 		add_action("wp_insert_post", array($this, "onInsertPost"), 10, 2);
 		add_action('wp_head', array($this, 'onWPHead'));
 		add_action('plugins_loaded', array($this, 'setLocale'));
-
-		if ( defined('NEWSMANP') ) {
-			add_action('newsman_pro_workers_ready', array($this, 'onProWorkersReady'));	
-		} else {
-			add_action('init', array($this, 'onProWorkersReady'));	
-		}		
 
 		// -----
 
@@ -223,10 +210,6 @@ class newsman {
 			$this->cleanOldUnconfirmed();
 		}
 
-		if ( !defined('NEWSMAN_DISABLE_WORKERS_CHECK') || !NEWSMAN_DISABLE_WORKERS_CHECK ) {
-			$this->utils->log('poking workers...');
-			$this->mailman->pokeWorkers();
-		}		
 		$this->mailman->checkEmailsQueue();
 	}
 
@@ -859,7 +842,7 @@ class newsman {
 
 			'base64TrMap' => $this->utils->genTranslationMap(),
 
-			'debug' => true,
+			'debug' => false,
 
 			'cleanUnconfirmed' => false,
 
@@ -1304,7 +1287,11 @@ class newsman {
 				}
 
 				if  ( (strpos($page, 'newsman') !== false) || defined('INSERT_POSTS_FRAME') ) {
-					wp_enqueue_script(array('jquery', 'editor', 'thickbox', 'media-upload'));
+					wp_enqueue_script('jquery');
+					wp_enqueue_script('editor');
+					wp_enqueue_script('thickbox');
+					wp_enqueue_script('media-upload');
+					
 					wp_enqueue_style('thickbox');
 
 					$url = NEWSMAN_PLUGIN_URL."/css/smoothness/jquery-ui-1.8.20.custom.css";
@@ -1928,6 +1915,9 @@ class newsman {
 		newsmanBlockedDomain::ensureTable();
 		newsmanBlockedDomain::ensureDefinition();	
 
+		newsmanWorkerRecord::ensureTable();
+		newsmanWorkerRecord::ensureDefinition();
+
 		// modify lists tables
 		$nsTable = newsmanStorable::$table;
 		$nsProps = newsmanStorable::$props;
@@ -1955,7 +1945,7 @@ class newsman {
 
 	public function onDeactivate() {
 
-		wp_clear_scheduled_hook('newsman_mailman_event');
+		$this->unscheduleEvents();
 
 		// removing capability
 		$role = get_role('administrator');
@@ -2002,28 +1992,7 @@ class newsman {
 		return $link;
 	}
 
-	public function onProWorkersReady() {
-		if ( isset( $_REQUEST['newsman_worker_fork'] ) && !empty($_REQUEST['newsman_worker_fork']) ) {
-			$this->utils->log('[onProWorkersReady] $_REQUEST["newsman_worker_fork"] %s', isset($_REQUEST['newsman_worker_fork']) ? $_REQUEST['newsman_worker_fork'] : '');			
 
-			define('NEWSMAN_WORKER', true);
-			
-			$workerClass = $_REQUEST['newsman_worker_fork'];
-
-			if ( !class_exists($workerClass) ) {
-				die("requested worker class ".htmlentities($workerClass)." does not exist");
-			}
-
-			if ( !isset($_REQUEST['workerId']) ) {
-				die('workerId parameter is not defiend in the query');
-			}
-
-			$worker = new $workerClass($_REQUEST['workerId']);
-			$worker_lock = isset($_REQUEST['worker_lock']) ? $_REQUEST['worker_lock'] : null;
-			$worker->run($worker_lock);			
-			exit();
-		}
-	}
 
 	public function securityCleanup() {
 		$uploadDir = $this->ensureUploadDir();
@@ -2056,7 +2025,7 @@ class newsman {
 			}
 		}
 
-		if ( preg_match('/wpnewsman-pokeback\/([^\/]+)/i', $_SERVER['REQUEST_URI'], $matches) ) {
+		if ( preg_match('/wpnewsman-pokeback\/(run-scheduled|run-bounced-handler|mailman)/i', $_SERVER['REQUEST_URI'], $matches) ) {
 			$this->utils->log('wpnewsman-pokeback %s', $matches[1]);	
 			switch ( $matches[1] ) {
 				case 'run-scheduled':
@@ -2074,10 +2043,8 @@ class newsman {
 				case 'run-bounced-handler':
 					do_action('wpnewsman-pro-run-bh');
 					break;
-				case 'check-workers':
-					$this->utils->log('poking workers from pokeback.wpnewsman.com...');
-					$this->mailman->pokeWorkers();			
-					$this->mailman->checkEmailsQueue();
+				case 'mailman':
+					$this->mailman();
 					break;
 			}
 			exit();
@@ -2086,8 +2053,8 @@ class newsman {
 		// checking for external form request
 
 		if ( isset($_REQUEST['uid']) && preg_match('/wpnewsman(\-newsletters|)\/form/', $_SERVER['REQUEST_URI']) ) {
-			require_once(__DIR__.DIRECTORY_SEPARATOR."class.form.php");
-			require_once(__DIR__.DIRECTORY_SEPARATOR."class.list.php");
+			require_once(NEWSMAN_CLASSES_PATH.DIRECTORY_SEPARATOR."class.form.php");
+			require_once(NEWSMAN_CLASSES_PATH.DIRECTORY_SEPARATOR."class.list.php");
 
 			include('views/ext-form.php');
 			exit();
@@ -2096,11 +2063,6 @@ class newsman {
 		if ( isset( $_REQUEST['page'] ) && strpos($_REQUEST['page'], 'newsman') !== false && !defined('NEWSMAN_PAGE') ) {
 			define('NEWSMAN_PAGE', true);
 			header('Cache-Control: no-cache'); // workaround for Chrome redirect caching bug
-		}
-
-		// Schedule events
-		if ( !wp_next_scheduled('newsman_mailman_event') ) {
-			wp_schedule_event( time(), '1min', 'newsman_mailman_event');
 		}
 
 		$page   = isset($_REQUEST['page']) ? $_REQUEST['page'] : false;
@@ -2226,6 +2188,57 @@ class newsman {
 
 		do_action('newsman_core_loaded');
 
+		if ( $activation ) {
+			$this->scheduleEvents();
+		}
+	}
+
+	/**
+	 * This function is called when events mode is changed from pokeback to wpcron and vice versa
+	 */	
+	public function eventsModeChanged() {
+		$this->unscheduleEvents();
+		$this->scheduleEvents();
+	}
+
+	public function scheduleEvents() {
+		// Schedule events		
+		if ( $this->options->get('pokebackMode') ) {
+			$pokebackSrvUrl = WPNEWSMAN_POKEBACK_URL.'/schedule/?'.http_build_query(array(
+				'key' => $this->options->get('pokebackKey'),
+				'url' => get_bloginfo('wpurl').'/wpnewsman-pokeback/mailman/',
+				'time' => 'every 1 minute'
+			));
+
+			$r = wp_remote_get(
+				$pokebackSrvUrl,
+				array(
+					'timeout' => 0.01,
+					'blocking' => false
+				)
+			);
+		} else {
+			if ( !wp_next_scheduled('newsman_mailman_event') ) {
+				wp_schedule_event( time(), '1min', 'newsman_mailman_event');
+			}
+		}
+	}
+
+	public function unscheduleEvents() {
+		$pokebackSrvUrl = WPNEWSMAN_POKEBACK_URL.'/unschedule/?'.http_build_query(array(
+			'key' => $this->options->get('pokebackKey'),
+			'url' => get_bloginfo('wpurl').'/wpnewsman-pokeback/mailman/',
+			'time' => 'every 1 minute'
+		));
+
+		$r = wp_remote_get(
+			$pokebackSrvUrl,
+			array(
+				'timeout' => 0.01,
+				'blocking' => false
+			)
+		);
+		wp_clear_scheduled_hook('newsman_mailman_event');
 	}
 
 	public function onInsertPost($post_id, $post = null) {		
@@ -2244,6 +2257,10 @@ class newsman {
 				}			
 			}
 		}
+	}
+
+	public function onPokeWorkers() {
+		$this->mailman->checkEmailsQueue();
 	}
 
 	// filters
@@ -2501,7 +2518,7 @@ class newsman {
 			header("Content-disposition: attachment; filename=$fileName.zip");
 			header('Content-type: application/zip');
 
-			$zip = new zipfile();
+			$zip = new newsmanZipFile();
 			//*
 			if ( $tpl->assetsPath ) {
 				$dir = $tpl->assetsPath;
@@ -2971,7 +2988,6 @@ class newsman {
 			'type' => $type
 		));
 	}
-
 
 	/*		DEBUG 		*/
 

@@ -5,12 +5,6 @@ define('NEWSMAN_UNIQUE_OPEN', 2);
 define('NEWSMAN_CLICK', 3);
 define('NEWSMAN_UNIQUE_CLICK', 4);
 
-require_once(__DIR__.DIRECTORY_SEPARATOR."class.utils.php");
-require_once(__DIR__.DIRECTORY_SEPARATOR."class.an-clicks.php");
-require_once(__DIR__.DIRECTORY_SEPARATOR."class.an-links.php");
-require_once(__DIR__.DIRECTORY_SEPARATOR."class.an-sub-details.php");
-require_once(__DIR__.DIRECTORY_SEPARATOR."class.an-timeline.php");
-
 // TODO: make clicks, opens, and unsubscribes in email object read only fields
 
 class newsmanAnalytics {

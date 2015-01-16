@@ -3,7 +3,7 @@
 define('NEWSMAN_WORKER_WAIT_TIMEOUT', 1);
 define('NEWSMAN_WORKER_WAIT_STOPPED', 2);
 
-class newsmanMailer extends newsmanWorker {
+class newsmanMailerWorker extends newsmanWorker {
 
 	var $ts = null;
 
@@ -11,6 +11,11 @@ class newsmanMailer extends newsmanWorker {
 		parent::__construct($workerId);
 
 		$this->options = newsmanOptions::getInstance();
+		$this->lockName = self::getLockName(isset($_REQUEST['email_id']) ? $_REQUEST['email_id'] : null);
+	}
+
+	static function getLockName($emailId = null) {
+		return $emailId ? 'mailer-lock-'.$emailId : null;
 	}
 	
 	function worker() {
@@ -20,27 +25,18 @@ class newsmanMailer extends newsmanWorker {
 		if ( isset($_REQUEST['email_id']) ) {
 			$eml = newsmanEmail::findOne('id = %d', array( $_REQUEST['email_id'] ));
 
-			$u->log('!!!!!');
-
 			$runStopped = isset($_REQUEST['run_stopped']) && $_REQUEST['run_stopped'] === '1';
 
 			if ( $eml ) {
 
-				if ( $eml->status == 'inprogress' && ( !isset($_REQUEST['force']) || $_REQUEST['force'] !== '1' ) ) {
-					$u->log('Email with id %s is already in progress. Sender wont start', $eml->id);
-					die('Email is already processed by other worker. Use "force=1" in the query to run another worker anyway.');
-				} else if ( $eml->status !== 'stopped' || $runStopped ) {
-					$eml->status = 'inprogress';
+				$eml->status = 'inprogress';
 
-					$eml->workerPid = $this->workerId;
-					$eml->save();
+				$eml->workerPid = $this->workerId;
+				$eml->save();
 
-					$u->log('[worker] Updating eml workerPid to %s', $this->workerId);
+				$u->log('[worker] Updating eml workerPid to %s', $this->workerId);
 
-					$this->launchSender($eml);
-				} else {
-					$u->log('Error: Email with id '.$_REQUEST['email_id'].' is stopped mark it as pending or add run_stopped=1 to the query');
-				}
+				$this->launchSender($eml);
 			} else {
 				$u->log('Error: Email with id '.$_REQUEST['email_id'].' is not found');	
 			}
@@ -48,12 +44,6 @@ class newsmanMailer extends newsmanWorker {
 			$u->log('Error: $_REQUEST["email_id"] is not defined');
 		}
 	}
-
-	// public function onError($err) {
-	// 	if ( $err === NEWSMAN_WORKER_ERR_CANNOT_SET_LOCK ) {
-
-	// 	}
-	// }
 
 	private function wait($ms) {
 		$start = round(microtime(true)*1000);
@@ -71,45 +61,6 @@ class newsmanMailer extends newsmanWorker {
 		}
 	}
 
-	private function enablePokeSenderWorkers($emailId=0) {
-		if ( $this->options->get('pokebackMode') && !$this->options->get('pokebackSenderWorkers') ) {
-
-			$pokebackSrvUrl = WPNEWSMAN_POKEBACK_URL.'/schedule/?'.http_build_query(array(
-				'key' => $this->options->get('pokebackKey'),
-				'url' => get_bloginfo('wpurl').'/wpnewsman-pokeback/check-workers/'.$emailId,
-				'time' => 'every 1 minute'
-			));
-
-			$r = wp_remote_get(
-				$pokebackSrvUrl,
-				array(
-					'timeout' => 0.01,
-					'blocking' => false
-				)
-			);
-
-			$this->options->set('pokebackSenderWorkers', true);
-		}
-	}
-
-	private function disablePokeServerWorkers($emailId=0) {
-		if ( $this->options->get('pokebackMode') ) {
-			$pokebackSrvUrl = WPNEWSMAN_POKEBACK_URL.'/unschedule/?'.http_build_query(array(
-				'key' => $this->options->get('pokebackKey'),
-				'url' => get_bloginfo('wpurl').'/wpnewsman-pokeback/check-workers/'.$emailId
-			));
-
-			$r = wp_remote_get(
-				$pokebackSrvUrl,
-				array(
-					'timeout' => 0.01,
-					'blocking' => false
-				)
-			);		
-			$this->options->set('pokebackSenderWorkers', false);
-		}
-	}
-
 	private function launchSender($email) {
 		global $newsman_current_list;
 		global $newsman_current_subscriber;
@@ -118,9 +69,6 @@ class newsmanMailer extends newsmanWorker {
 		$newsman_current_email = $email;
 
 		$u = newsmanUtils::getInstance();
-
-		$this->disablePokeServerWorkers($email->id);
-		$this->enablePokeSenderWorkers($email->id);
 
 		$u->log('[launchSender]: processMessages');
 
@@ -274,8 +222,6 @@ class newsmanMailer extends newsmanWorker {
 				}
 			}
 		}
-
-		$this->disablePokeServerWorkers($email->id);
 
 		$this->u->log('[launchSender] end of loop. clearing worker PID for worker '.var_export($email->workerPid, true));
 

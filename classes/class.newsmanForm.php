@@ -1,8 +1,5 @@
 <?php
 
-require_once(__DIR__.DIRECTORY_SEPARATOR."class.options.php");
-require_once(__DIR__.DIRECTORY_SEPARATOR."class.list.php");
-
 class newsmanForm {
 
 	var $decodedForm;

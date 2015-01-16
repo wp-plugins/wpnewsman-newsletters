@@ -1,11 +1,5 @@
 <?php
 
-require_once(__DIR__.DIRECTORY_SEPARATOR."class.utils.php");
-require_once(__DIR__.DIRECTORY_SEPARATOR."class.storable.php");
-require_once(__DIR__.DIRECTORY_SEPARATOR."class.subscriber.php");
-require_once(__DIR__.DIRECTORY_SEPARATOR."class.options.php");
-require_once(__DIR__.DIRECTORY_SEPARATOR."class.sentlog.php");
-
 class newsmanListException extends Exception { }
 
 class newsmanList extends newsmanStorable {

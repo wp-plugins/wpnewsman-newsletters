@@ -1,13 +1,5 @@
 <?php
 
-	require_once(__DIR__.DIRECTORY_SEPARATOR.'class.utils.php');
-	require_once(__DIR__.DIRECTORY_SEPARATOR.'class.options.php');
-	require_once(__DIR__.DIRECTORY_SEPARATOR.'class.emails.php');
-	require_once(__DIR__.DIRECTORY_SEPARATOR.'class.list.php');
-	require_once(__DIR__.DIRECTORY_SEPARATOR.'class.emailtemplates.php');
-	require_once(__DIR__.DIRECTORY_SEPARATOR.'class.sentlog.php');
-	require_once(__DIR__.DIRECTORY_SEPARATOR.'class.geo-db-reader.php');
-
 	if ( !defined('NEWSMAN_SS_UNCONFIRMED') )  { define('NEWSMAN_SS_UNCONFIRMED', 0);  }
 	if ( !defined('NEWSMAN_SS_CONFIRMED') )    { define('NEWSMAN_SS_CONFIRMED', 1);    }
 	if ( !defined('NEWSMAN_SS_UNSUBSCRIBED') ) { define('NEWSMAN_SS_UNSUBSCRIBED', 2); }
@@ -380,7 +372,13 @@
 				$this->respond(false, __('Error: "options" request parameter was empty or not defined.', NEWSMAN));
 			} else {
 				$opts = json_decode($opts, true);
+				$oldPBM = $o->get('pokebackMode');
 				$o->load($opts, 'PRESERVE_OLD_VALUES');
+
+				if ( $oldPBM !== $o->get('pokebackMode') ) {
+					do_action('newsman_events_mode_changed');
+				}
+
 				do_action('newsman_options_updated');
 				$this->respond(true, __('Options were successfully saved.', NEWSMAN) );
 			}
@@ -1533,6 +1531,12 @@
 			$emails = newsmanEmail::findAll('(status = "stopped" OR status = "error") AND id in '.$set);
 
 			foreach ($emails as $email) {
+				//??? this is hacky. need a better way to tell worker how to release lock					
+				if ( $email->status === 'stopped' ) {
+					$lockName = newsmanMailerWorker::getLockName($email->id);
+					$this->u->releaseLock($lockName);
+				}
+
 				$email->status = 'pending';
 				$email->save();
 			}

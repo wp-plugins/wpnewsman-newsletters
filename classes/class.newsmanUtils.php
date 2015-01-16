@@ -1,10 +1,5 @@
 <?php
 
-require_once(__DIR__.DIRECTORY_SEPARATOR."class.options.php");
-require_once(__DIR__.DIRECTORY_SEPARATOR."class.list.php");
-require_once(__DIR__.DIRECTORY_SEPARATOR."class.shortcode.php");
-require_once(__DIR__.DIRECTORY_SEPARATOR.'class.locks.php');
-
 require_once(ABSPATH.DIRECTORY_SEPARATOR.'wp-includes'.DIRECTORY_SEPARATOR.'class-phpmailer.php');
 
 define('KEY', "\xa3\xb4\xef\xda\x24\xd5\xcc\x3b");
@@ -771,7 +766,8 @@ class newsmanUtils {
 
 	public function linkNormalizationCallback($matches) {
 		$url = $matches[4];
-		if ( preg_match('/^(\[|%5B)/i', $url) ) {
+
+		if ( preg_match('/%5D|%5B/i', $url) ) {
 			$url = urldecode(html_entity_decode($url));
 		}
 		return $matches[1].$url.$matches[5];
@@ -1380,7 +1376,7 @@ class newsmanUtils {
 		$storedVersion = $this->versionToNum(get_option('newsman_version'));
 		if ( $codeVersion > $storedVersion ) {
 			$updated = true;
-			require_once(__DIR__.DIRECTORY_SEPARATOR."migration.php");
+			require_once(NEWSMAN_PLUGIN_PATH.DIRECTORY_SEPARATOR."migration.php");
 			if ( function_exists('newsman_do_migration') ) {
 				newsman_do_migration();
 			}			
@@ -1888,12 +1884,39 @@ NEWSMAN_PLUGIN_HEAD_TEMPLATE;
 		return ( $shortLocaleName ) ? $shortLocaleName : $arrNames['en'];
 	}	
 
+	/* --------------------------------------------------------------------------------------------------------- */
+	/* Nonce */
+	/* --------------------------------------------------------------------------------------------------------- */
+
+	public function createNonce() {
+		$o = newsmanOptions::getInstance();
+		$rawNonce = $o->get('secret').dechex(time());
+		return strtr($rawNonce, $this->base64Map, $o->get('base64TrMap'));
+	}
+
+	public function verifyNonce($nonce) {
+		$o = newsmanOptions::getInstance();
+		$rawNonce = strtr($nonce, $o->get('base64TrMap'), $this->base64Map);
+		$secret = substr($rawNonce, 0, 32);
+		$ts = hexdec(substr($rawNonce, 32));
+		if ( $o->get('secret') !== $secret ) {
+			$this->log('nonce %s is invalid. wrong secret');
+			return false;
+		}
+
+		if ( time() > $ts + 60 ) {
+			$this->log('nonce %s expired.');
+			return false;			
+		}
+		return true;
+	}
 
 	/* --------------------------------------------------------------------------------------------------------- */
 	/* Locks */
 	/* --------------------------------------------------------------------------------------------------------- */
 
 	public function lock($name) {
+		$this->log('[newsmanUtils lock] locking %s', $name);
 		return $this->l->lock($name);
 	}
 
@@ -1902,6 +1925,7 @@ NEWSMAN_PLUGIN_HEAD_TEMPLATE;
 	}
 
 	public function releaseLock($name) {
+		$this->log('[newsmanUtils releaseLock] releasing %s', $name);
 		return $this->l->releaseLock($name);
 	}		
 }

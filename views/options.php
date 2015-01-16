@@ -55,6 +55,10 @@
 							<label>LinkedIn</label>
 							<input type="text" name="newsman-social-linkedin">
 						</div>
+						<div style="margin-top: 10px;">
+							<h3 style="margin-bottom: 5px;"><?php _e('Advanced', NEWSMAN); ?></h3>
+							<label class="checkbox"><input type="checkbox" name="newsman-debug"> <?php _e('Enable debug mode. ( Warning! This may slowdown your website. )', NEWSMAN); ?></label>
+						</div>
 						<hr>
 						<div>
 							<?php _e('WPNewsman Enhancement Plugin version: '.( defined('WPNEWSMAN_MU_VERSION') ? WPNEWSMAN_MU_VERSION : 'NOT INSTALLED' ), NEWSMAN) ?>
@@ -188,6 +192,8 @@
 						<!--   			 Info column  			 -->
 						<h3><?php _e('API description', NEWSMAN); ?></h3>
 						<a href="http://wpnewsman.com/documentation/use-wpnewsman-api/">WPNewsman API</a>
+						<h3><?php _e('API integration', NEWSMAN); ?></h3>
+						<?php sprintf(__('<a href="%s" target="_blank">Check out our guide</a> on how to send emails to WPNewsman subscribers lists from G-Lock EasyMail7.'), 'http://easymail7.com/tutorials/send-emails-to-wpnewsman-subscribers-lists/?pk_campaign=wpnewsman'); ?>						
 					</div>
 				</div>
 				<!--												/General	 	 							-->		

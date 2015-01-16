@@ -2,10 +2,6 @@
 
 	define('IFRAME_REQUEST', true);
 
-	//require_once("../../../wp-admin/admin.php");
-	require_once(__DIR__.DIRECTORY_SEPARATOR."class.utils.php");
-	require_once(__DIR__.DIRECTORY_SEPARATOR."class.options.php");
-
 	$o = newsmanOptions::getInstance();
 	$u = newsmanUtils::getInstance();
 

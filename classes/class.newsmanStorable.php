@@ -1,7 +1,5 @@
 <?php
 
-require_once(__DIR__.DIRECTORY_SEPARATOR."class.utils.php");
-
 global $wpdb;
 
 if ( !defined('NEWSMAN_COLUMN_POS_FIRST') ) { define('NEWSMAN_COLUMN_POS_FIRST', 1); }
