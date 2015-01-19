@@ -1,0 +1,62 @@
+﻿[newsman me="name"] ברוך הבא מאת
+--- plain ---
+
+,היי
+
+.תודה לך על הרשמתך, כעת אתה מנוי להודעות שלי ובקרוב תקבל טיפים נפלאים טריקים ואסטרטגיות מספר פעמים בחודש, ברור לי שתשיג ערך מוסף מהם
+
+.אנחנו לא נשתף את כתובת הדואר האלקטרוני שלך עם שום גורם נוסף ונשמור בקנאות ובבטחה את המידע האישי שלך
+
+.לספר הכתובות שלך או לרשימת השולחים הבטוחים[newsman me="email"] כדי להבטיח קבלת הודעות דואר אלקטרוני מאיתנו ובהם טיפים וטריקים והצעות מפתיעות, נא בבקשה הוסף את 
+
+,בברכה
+[newsman me="name"]
+[newsman me="email"]
+[newsman wp="url"]
+
+--
+נרשמת לקבל את הודעות הדואר האלקטרוני שלנו [newsman wp="url"] ב[newsman sub="ts"] אתה מקבל הודעה זו מפני שבתאריך 
+
+						 
+
+:אתה יכול להסיר את המנוי שלך על ידי לחיצה על הקישור הבא
+[newsman link="unsubscribe"]
+--- html ---
+<p>,היי</p>
+
+<p>.תודה לך על הרשמתך, כעת אתה מנוי להודעות שלי ובקרוב תקבל טיפים נפלאים טריקים ואסטרטגיות מספר פעמים בחודש, ברור לי שתשיג ערך מוסף מהם</p>
+<p>.אנחנו לא נשתף את כתובת הדואר האלקטרוני שלך עם שום גורם נוסף ונשמור בקנאות ובבטחה את המידע האישי שלך</p>
+<p>.לספר הכתובות שלך או לרשימת השולחים הבטוחים[newsman me="email"] כדי להבטיח קבלת הודעות דואר אלקטרוני מאיתנו ובהם טיפים וטריקים והצעות מפתיעות, נא בבקשה הוסף את </p>
+
+<p>&nbsp;</p>
+
+<p>,בברכה<br>
+[newsman me="name"]<br>
+[newsman me="email"]<br>
+<a href="[newsman wp='url']">[newsman wp="url"]</a></p>
+<p>&nbsp;<p>
+<table bgcolor="#eeeeee" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #eeeeee; background-position: top; background-repeat: repeat-x; border-top-color: #dddddd; border-top-style: solid; border-top-width: 2px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px;"> 
+ <tbody> 
+	<tr> 
+	 <td colspan="4" style="height: 28px; white-space : nowrap;">&nbsp;</td> 
+	</tr> 
+	<tr> 
+	 <td style="width: 25px;"></td> 
+	 <td width="10"></td> 
+	 <td style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 11px; line-height: 17px; color: #777; text-shadow: 0 1px 0 #ffffff;"> 
+		<div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 11px; line-height: 17px; color: #666; text-shadow: 0 1px 0 #ffffff;">
+			מתוך [newsman sub="ts"] נרשמת בתאריך <a href="[newsman wp='url']" style="border: none; color: #0084b4; text-decoration: none;">[newsman wp="blogname"]</a>  [newsman sub="ip"] מכתובת אי פי
+		</div> 
+		<div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 11px; line-height: 17px; color: #666; text-shadow: 0 1px 0 #ffffff;">
+		 You can also 
+		 <a href="[newsman link='unsubscribe']" style="border: none; color: #0084b4; text-decoration: none;">הסר מנוי כאן</a>.</div> 
+		<div>
+		 <a href="#" style="border: none; color: #0084b4; text-decoration: none; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; text-decoration: none; font-size: 11px; line-height: 17px; color: #999999; text-shadow: 0 1px 0 #ffffff;">Copyright (C) [newsman wp="blogname"]. <span style="white-space: nowrap;">All rights reserved.</span></a>
+		</div> </td> 
+	 <td style="width: 75px;"></td> 
+	</tr> 
+	<tr> 
+	 <td colspan="3" height="25"></td> 
+	</tr> 
+ </tbody> 
+</table>

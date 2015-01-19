@@ -1,0 +1,38 @@
+[newsman wp="blogname"] :נא אשר את כתובת הדואר אלקטרוני שלך
+--- plain ---
+היי,
+
+אך לפני שנוכל לשלוח אלייך את המידע שבקשת, אנחנו רוצים להיות בטוחים שיש לנו את רשותך ![newsman wp="blogname"] אתה בטח תאהב את
+
+פתח את הקישור למטה כדי לתת לנו הרשאות לשלוח אלייך מידע, זה קל ומהיר!אם לא ניתן להקיש על הקישור המלא הרשום מטה, נא בבקשה העתק את הקישור והדבק אותך בדפדפן שברשותך
+
+נא אשר על ידי לחיצה על הקישור הזה:
+
+[newsman link="confirmation"]
+
+אם אין ברצונך להרשם, פשוט תתעלם מהודעה זו.
+
+בתודה,
+
+[newsman wp="blogname"]
+
+--
+הבקשה נוצרה על ידי:
+IP: [newsman sub="ip"]
+תאריך: [newsman sub="ts"]
+URL: [newsman wp="url"]
+--- html ---
+<p>היי</p>
+<p>אך לפני שנוכל לשלוח אלייך את המידע שבקשת, אנחנו רוצים להיות בטוחים שיש לנו את רשותך ![newsman wp="blogname"] אתה בטח תאהב את</p> 
+<p>פתח את הקישור למטה כדי לתת לנו הרשאות לשלוח אלייך מידע, זה קל ומהיר!אם לא ניתן להקיש על הקישור המלא הרשום מטה, נא בבקשה העתק את הקישור והדבק אותך בדפדפן שברשותך</p>
+<p>אשר על ידי פתיחת הקישור הזה:</p>
+
+<p><a href="[newsman link='confirmation']">[newsman link="confirmation"]</a></p>
+<p>If you do not want to subscribe, simply ignore this message.</p>
+<p>&nbsp;</p>
+<p>בתודה<br>
+	[newsman wp="blogname"]<br>
+	<a href="[newsman wp='url']">[newsman wp="url"]</a></p>
+<p style="font-size: x-small">
+	הבקשה נוצרה על ידי:<br>
+	IP:&nbsp;[newsman sub="ip"], תאריך:&nbsp;[newsman sub="ts"]</p>

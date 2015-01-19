@@ -307,8 +307,7 @@ class newsman {
     		$newsman_loop_post = $q->next_post();
     		$out .= do_shortcode($newsman_post_tpl);
     	}
-    	return $out;
-    	
+    	return $out;    	
     }
 
     public function newsmanShortCodeOnWeb($attr, $content = null) {
@@ -2010,7 +2009,7 @@ class newsman {
 		new newsmanAJAX();
 
 		if ( preg_match('/'.NEWSMAN_PLUGIN_DIRNAME.'\/api.php/i', $_SERVER['REQUEST_URI'] ) ) {
-			include_once(__DIR__.DIRECTORY_SEPARATOR.'class.api.php');
+			new newsmanAPI();
 			exit();
 		}
 

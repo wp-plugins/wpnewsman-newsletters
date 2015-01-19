@@ -642,9 +642,6 @@ class newsmanAPI {
 	}
 }
 
-new newsmanAPI();
-
-
 // add_email
 // 	listId - 
 // 	email - 

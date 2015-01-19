@@ -11,7 +11,7 @@
 			<div class="changelog">
 		  		<div class="feature-section row" style="margin-bottom: .5em">
 					<div class="span8">
-						<h3>40,801+ downloads and 42 excellent reviews on wordpress.org!</h3>
+						<h3>41,247+ downloads and 43 excellent reviews on wordpress.org!</h3>
 						<p><a href="http://wordpress.org/support/view/plugin-reviews/wpnewsman-newsletters">
 						<img src="http://s-plugins.wordpress.org/wpnewsman-newsletters/assets/hello-puppies.png" align="left" style="margin: 0 15px 0 0;" /></a>
 						<p style="font-size: 18px; font-weight: bold;">We need your HELP to reach 100 reviews!</p>

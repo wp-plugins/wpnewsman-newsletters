@@ -1,0 +1,17 @@
+[newsman wp="url"] אחד המכותבים שלך הסיר את המנוי שלו מרשימת התפוצה שלך
+--- plain ---
+
+אחד המכותבים שלך הסיר את המנוי שלו מרשימת התפוצה שלך. פרטי המכותב רשומים פה: 
+[newsman sub="*"]
+
+הסיבה: 
+$u_reason
+
+--
+[newsman wp="url"]/wp-admin/ -> WPNewsman -> Settings
+--- html ---
+<p>אחד המכותבים שלך הסיר את המנוי שלו מרשימת התפוצה שלך. פרטי המכותב רשומים פה:</p>
+<ul>[newsman sub="*" tag="li"]</ul>
+&nbsp;
+<p>--</p>
+<p><a href="[newsman wp='url']/wp-admin/">[newsman wp="url"]/wp-admin/</a> -> WPNewsman -> Settings</p>

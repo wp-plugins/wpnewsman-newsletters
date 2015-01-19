@@ -193,7 +193,7 @@
 						<h3><?php _e('API description', NEWSMAN); ?></h3>
 						<a href="http://wpnewsman.com/documentation/use-wpnewsman-api/">WPNewsman API</a>
 						<h3><?php _e('API integration', NEWSMAN); ?></h3>
-						<?php sprintf(__('<a href="%s" target="_blank">Check out our guide</a> on how to send emails to WPNewsman subscribers lists from G-Lock EasyMail7.'), 'http://easymail7.com/tutorials/send-emails-to-wpnewsman-subscribers-lists/?pk_campaign=wpnewsman'); ?>						
+						<?php printf(__('<a href="%s" target="_blank">Check out our guide</a> on how to send emails to WPNewsman subscribers lists from G-Lock EasyMail7.'), 'http://easymail7.com/tutorials/send-emails-to-wpnewsman-subscribers-lists/?pk_campaign=wpnewsman'); ?>						
 					</div>
 				</div>
 				<!--												/General	 	 							-->		

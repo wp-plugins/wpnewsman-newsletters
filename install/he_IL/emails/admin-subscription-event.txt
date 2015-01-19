@@ -1,0 +1,12 @@
+[newsman wp="blogname"] איש קשר הצטרף זה עתה לרשימת הדואר שלך
+--- plain ---
+איש קשר הצטרף זה עתה לרשימת הדואר שלך. פרטי איש הקשר רשומים מטה: 
+
+[newsman sub="*"]
+--
+[newsman wp="url"]/wp-admin/ -> WPNewsman -> Settings
+--- html ---
+<p>איש קשר הצטרף זה עתה לרשימת הדואר שלך. פרטי איש הקשר רשומים מטה:</p>
+<ul>[newsman sub="*" tag="li"]</ul>
+<p>--</p>
+<p><a href="[newsman wp='url']/wp-admin/">[newsman wp="url"]/wp-admin/</a> -> WPNewsman -> Settings</p>
