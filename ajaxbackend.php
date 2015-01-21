@@ -1,10 +1,5 @@
 <?php
 
-	if ( !defined('NEWSMAN_SS_UNCONFIRMED') )  { define('NEWSMAN_SS_UNCONFIRMED', 0);  }
-	if ( !defined('NEWSMAN_SS_CONFIRMED') )    { define('NEWSMAN_SS_CONFIRMED', 1);    }
-	if ( !defined('NEWSMAN_SS_UNSUBSCRIBED') ) { define('NEWSMAN_SS_UNSUBSCRIBED', 2); }
-
-
 	ignore_user_abort(true);
 	set_time_limit(0);
 

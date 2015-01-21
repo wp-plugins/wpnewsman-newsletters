@@ -106,7 +106,9 @@ class newsmanForm {
 
 		$formFiledNames = array();
 		foreach ($this->decodedForm as $item) {
-			$formFiledNames[] = $item['name'];
+			if ( isset($item['name']) ) {
+				$formFiledNames[] = $item['name'];
+			}			
 		}		
 
 		$fieldNames = array('url', 'title', 'description', 'country');

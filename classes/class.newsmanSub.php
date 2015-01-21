@@ -1,9 +1,5 @@
 <?php
 
-define('NEWSMAN_SS_UNCONFIRMED',0);
-define('NEWSMAN_SS_CONFIRMED',1);
-define('NEWSMAN_SS_UNSUBSCRIBED',2);
-
 class newsmanSub {
 	private $rawRec;
 	private $tableName;
