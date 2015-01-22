@@ -2,9 +2,9 @@
 Contributors: Neocoder, G-Lock Software
 Donate Link: http://wpnewsman.com/premium-newsletter-plugin-wordpress/
 Tags: wpnewsman, newsletter, newsletters, newsletter signup, newsletter widget, subscribers, post notification, email subscription, email marketing, email, emailing, subscription
-Requires at least: 3.8
-Tested up to: 4.1
-Stable tag: 1.8.6
+Requires at least: 4.0
+Tested up to: 4.2
+Stable tag: 1.8.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -59,9 +59,10 @@ Translations are included in the plugin:
 * Russian (completed)
 * German (Germany) (completed)
 * Dutch (Nederlands) (completed)
-* Polish (99%)
-* Italian (Italy) (50%)
-* Spanish (99%)
+* Hebrew (Izrael) (completed)
+* Spanish (93%)
+* Polish (86%)
+* Italian (Italy) (44%)
 * Portuguese (Brazil) (6%)
 * Hungarian (Hungary) (26%)
 
@@ -124,6 +125,12 @@ We got a User Feedback page where you can [add or vote for new features](http://
 3. Subscriber management.
 
 == Changelog ==
+
+= 1.8.8 =
+
+* Fixed a bug in external form.
+* Updated French, Russian, German, Dutch and Hebrew translation
+* Minor improvements
 
 = 1.8.7 =
 

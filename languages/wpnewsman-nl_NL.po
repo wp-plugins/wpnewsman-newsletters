@@ -1,13 +1,13 @@
-# Copyright (C) 2014 G-Lock WPNewsman Lite
+# Copyright (C) 2015 G-Lock WPNewsman Lite
 # This file is distributed under the same license as the G-Lock WPNewsman Lite package.
 # Translators:
-# jordy vondermans <jvondermans@hotmail.com>, 2014
+# jordy vondermans <jvondermans@hotmail.com>, 2014-2015
 msgid ""
 msgstr ""
 "Project-Id-Version: G-Lock WPNewsman Plugin for WordPress\n"
-"Report-Msgid-Bugs-To: http://wordpress.org/tag/wpnewsman\n"
-"POT-Creation-Date: 2014-07-18 13:44:50+00:00\n"
-"PO-Revision-Date: 2014-10-21 13:07+0000\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/wpnewsman\n"
+"POT-Creation-Date: 2015-01-22 07:26:46+00:00\n"
+"PO-Revision-Date: 2015-01-22 09:54+0000\n"
 "Last-Translator: jordy vondermans <jvondermans@hotmail.com>\n"
 "Language-Team: Dutch (http://www.transifex.com/projects/p/g-lock-wpnewsman/language/nl/)\n"
 "MIME-Version: 1.0\n"
@@ -16,693 +16,700 @@ msgstr ""
 "Language: nl\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ajaxbackend.php:93 api.php:94
+#: ajaxbackend.php:80 classes/class.newsmanAPI.php:93
 msgid "required parameter \"%s\" is missing in the request"
 msgstr "vereiste parameter \"%s\" ontbreekt in het verzoek"
 
 #. translators: subscriber type
 #. translators: lists and forms table header
-#: ajaxbackend.php:103 core.php:1174 views/forms.php:24
+#: ajaxbackend.php:90 core.php:1163 views/forms.php:24
 #: views/subscribers.php:31
 msgid "Confirmed"
 msgstr "Bevestigd"
 
 #. translators: subscriber type
 #. translators: lists and forms table header
-#: ajaxbackend.php:104 core.php:1172 views/forms.php:25
+#: ajaxbackend.php:91 core.php:1161 views/forms.php:25
 #: views/subscribers.php:32
 msgid "Unconfirmed"
 msgstr "Onbevestigd"
 
 #. translators: subscriber type
 #. translators: lists and forms table header
-#: ajaxbackend.php:105 core.php:1176 views/forms.php:26
+#: ajaxbackend.php:92 core.php:1165 views/forms.php:26
 #: views/subscribers.php:33
 msgid "Unsubscribed"
 msgstr "Uitgeschreven"
 
-#: ajaxbackend.php:112
+#: ajaxbackend.php:99
 msgid "Cannot edit email. Email with id \"%s\" is not found."
 msgstr "Kan email niet bewerken. Email met id \"%s\" is niet gevonden."
 
-#: ajaxbackend.php:116
+#: ajaxbackend.php:103
 msgid "Cannot edit email. Email with id \"%s\" cannot be written."
 msgstr "Kan email niet bewerken. Email met id \"%s\" kan niet beschreven worden."
 
-#: ajaxbackend.php:120
+#: ajaxbackend.php:107
 msgid "Email does not have a \"%s\" property."
 msgstr "Email heeft geen \"%s\" eigenschap."
 
-#: ajaxbackend.php:125
+#: ajaxbackend.php:112
 msgid "Cannot edit template. Template with id \"%s\" is not found."
 msgstr "Kan sjabloon niet bewerken. Sjabloon met id \"%s\" is niet gevonden."
 
-#: ajaxbackend.php:130
+#: ajaxbackend.php:117
 msgid "Cannot edit template. Template with id \"%s\" cannot be written."
 msgstr "Kan sjabloon niet bewerken. Sjabloon met id \"%s\" kan niet beschreven worden."
 
-#: ajaxbackend.php:134 ajaxbackend.php:1331 api.php:155 api.php:328
-#: api.php:345 api.php:364 class.analytics.php:75 class.analytics.php:134
-#: core.php:2877
+#: ajaxbackend.php:121 ajaxbackend.php:1353 classes/class.newsmanAPI.php:154
+#: classes/class.newsmanAPI.php:327 classes/class.newsmanAPI.php:612
+#: classes/class.newsmanAPI.php:631 classes/class.newsmanAnalytics.php:69
+#: classes/class.newsmanAnalytics.php:128 core.php:2989
 msgid "List with id \"%s\" is not found."
 msgstr "Lijst met id \"%s\" is niet gevonden."
 
-#: ajaxbackend.php:191
+#: ajaxbackend.php:178
 msgid "WPNEWSMAN Bug Report from %s"
 msgstr "WPNEWSMAN Bug Rapport van %s"
 
-#: ajaxbackend.php:202
+#: ajaxbackend.php:189
 msgid "Bug report was sent to %s."
 msgstr "Bug rapport is verzonden aan %s"
 
-#: ajaxbackend.php:237
+#: ajaxbackend.php:224
 msgid "Your SMTP settings are correct"
 msgstr "Je SMTP-instellingen zijn correct"
 
-#: ajaxbackend.php:238
+#: ajaxbackend.php:225
 msgid ""
 " If you read this message, your SMTP settings in the G-Lock WPNewsman plugin"
 " are correct"
 msgstr "Als je dit bericht leest, dan zijn je SMTP instellingen in de G-Lock WPNewsman plugin goed"
 
-#: ajaxbackend.php:246 ajaxbackend.php:1876
+#: ajaxbackend.php:233 ajaxbackend.php:1901
 msgid "Test email was sent to %s."
 msgstr "Test email is verzonden aan %s."
 
-#: ajaxbackend.php:272 ajaxbackend.php:302 ajaxbackend.php:435
-#: ajaxbackend.php:779 ajaxbackend.php:820 ajaxbackend.php:1062
-#: ajaxbackend.php:1373 ajaxbackend.php:1423 ajaxbackend.php:1442
-#: ajaxbackend.php:1685 ajaxbackend.php:1750 ajaxbackend.php:1760
-#: ajaxbackend.php:1918 ajaxbackend.php:2057
+#: ajaxbackend.php:259 ajaxbackend.php:289 ajaxbackend.php:457
+#: ajaxbackend.php:801 ajaxbackend.php:842 ajaxbackend.php:1084
+#: ajaxbackend.php:1395 ajaxbackend.php:1445 ajaxbackend.php:1464
+#: ajaxbackend.php:1710 ajaxbackend.php:1775 ajaxbackend.php:1785
+#: ajaxbackend.php:1943 ajaxbackend.php:2082
 msgid "success"
 msgstr "gelukt"
 
-#: ajaxbackend.php:330
+#: ajaxbackend.php:324
 msgid "Successfully deleted selected subscribers."
 msgstr "geselecteerde ingeschreven leden succesvol verwijderd."
 
-#: ajaxbackend.php:351
+#: ajaxbackend.php:367
 msgid "Error: \"options\" request parameter was empty or not defined."
 msgstr "Fout: \"options\" verzoek parameter was leeg of niet gedefinieerd"
 
-#: ajaxbackend.php:356
+#: ajaxbackend.php:378
 msgid "Options were successfully saved."
 msgstr "Opties zijn succesvol opgeslagen."
 
-#: ajaxbackend.php:624 ajaxbackend.php:875 ajaxbackend.php:902
-#: ajaxbackend.php:930 ajaxbackend.php:962 ajaxbackend.php:995
-#: ajaxbackend.php:1091 ajaxbackend.php:1121 ajaxbackend.php:1702
-#: ajaxbackend.php:1793 ajaxbackend.php:2441
+#: ajaxbackend.php:646 ajaxbackend.php:897 ajaxbackend.php:924
+#: ajaxbackend.php:952 ajaxbackend.php:984 ajaxbackend.php:1017
+#: ajaxbackend.php:1113 ajaxbackend.php:1143 ajaxbackend.php:1727
+#: ajaxbackend.php:1818 ajaxbackend.php:2443
 msgid "Saved"
 msgstr "Opgeslagen"
 
-#: ajaxbackend.php:658
+#: ajaxbackend.php:680
 msgid "Your email was successfully queued for sending."
 msgstr "Je email is succesvol in de wachtrij geplaatst."
 
-#: ajaxbackend.php:815 ajaxbackend.php:838
+#: ajaxbackend.php:837 ajaxbackend.php:860
 msgid "Template does not have a \"%s\" property."
 msgstr "Sjabloon heeft geen \"%s\" eigenschap."
 
-#: ajaxbackend.php:1034
+#: ajaxbackend.php:1056
 msgid "You have successfully deleted %d template."
 msgid_plural "You have successfully deleted %d templates."
 msgstr[0] "je hebt succesvol het %d sjabloon verwijderd."
 msgstr[1] "je hebt succesvol %d sjablonen verwijderd."
 
-#: ajaxbackend.php:1176 ajaxbackend.php:1716
+#: ajaxbackend.php:1198 ajaxbackend.php:1741
 msgid "Your email is successfully scheduled."
 msgstr "Je email is succesvol ingepland."
 
-#: ajaxbackend.php:1183
+#: ajaxbackend.php:1205
 msgid "Unrecognized \"send\" parameter - %s"
 msgstr "Niet herkende \"send\" parameter -%s"
 
-#: ajaxbackend.php:1235
+#: ajaxbackend.php:1257
 msgid "Emails were successfully unsubscribed."
 msgstr "Emails zijn succesvol uitgeschreven"
 
-#: ajaxbackend.php:1298 ajaxbackend.php:2184
+#: ajaxbackend.php:1320 ajaxbackend.php:2209
 msgid "Bad email address"
 msgstr "Verkeerd emailadres"
 
-#: ajaxbackend.php:1388
+#: ajaxbackend.php:1410
 msgid "Please select a file to import"
 msgstr "Selecteer een import-bestand alsjeblieft"
 
-#: ajaxbackend.php:1393
+#: ajaxbackend.php:1415
 msgid "Imported %d subscriber. Make sure you send him confirmation email."
 msgid_plural ""
 "Imported %d subscribers. Make sure you send them confirmation email."
 msgstr[0] "%d lid geïmporteerd. Zorg ervoor dat je hem een bevestigingsmail stuurt."
 msgstr[1] "%d leden geïmporteerd. Zorg ervoor dat je een bevestigingsmail stuurt."
 
-#: ajaxbackend.php:1440 views/subscribers.php:85
+#: ajaxbackend.php:1462 views/subscribers.php:85
 msgid "IP Address"
 msgstr "IP Adres"
 
-#: ajaxbackend.php:1463
+#: ajaxbackend.php:1482
 msgid "Imported %d template."
 msgid_plural "Imported %d templates."
 msgstr[0] "%d sjabloon geïmporteerd."
 msgstr[1] "%d sjablonen geïmporteerd."
 
-#: ajaxbackend.php:1517
+#: ajaxbackend.php:1542
 msgid "Selected emails were successfully resumed"
 msgstr "Geselecteerde emails zijn succesvol hervat"
 
-#: ajaxbackend.php:1571 ajaxbackend.php:1660
+#: ajaxbackend.php:1596 ajaxbackend.php:1685
 msgid "\"entType\" parameter value \"%s\" should be \"email\" or \"template\"."
 msgstr "\"entType\" parameter waarde \"%s\" moet zijn \"email\" of \"template\"."
 
-#: ajaxbackend.php:1644
+#: ajaxbackend.php:1669
 msgid "Posts block successfully compiled"
 msgstr "Posts blokkering succesvol samengesteld"
 
-#: ajaxbackend.php:1656
+#: ajaxbackend.php:1681
 msgid ""
 "\"postTemplateType\" parameter value \"%s\" should be \"post_content\", "
 "\"post_excerpt\" or \"fancy_excerpt\"."
 msgstr "\"postTemplateType\" parameter waarde \"%s\" moet zijn \"post_content\", \"post_excerpt\" of \"fancy_excerpt\"."
 
-#: ajaxbackend.php:1671
+#: ajaxbackend.php:1696
 msgid "Posts block successfully updated"
 msgstr "Posts blokkering succesvol bijgewerkt"
 
-#: ajaxbackend.php:1720
+#: ajaxbackend.php:1745
 msgid "ReConfirmation system email template is not found."
 msgstr "Herbevestigings systeem email sjabloon is niet gevonden."
 
-#: ajaxbackend.php:1806
+#: ajaxbackend.php:1831
 msgid "List with the name \"%s\" already exists."
 msgstr "Lijst met de naam \"%s\" bestaat al."
 
 #. translators: email property
-#: ajaxbackend.php:1811 views/addedit_email.php:65 views/mailbox.php:108
+#: ajaxbackend.php:1836 views/addedit_email.php:65 views/mailbox.php:108
 msgid "Created"
 msgstr "Gemaakt"
 
-#: ajaxbackend.php:1875
+#: ajaxbackend.php:1900
 msgid ""
 "Test email was sent to %s and subscriber with this email was created in "
 "\"%s\" list."
 msgstr "Test email is verzonden aan %s en lid met dit mailadres is aangemaakt in lijst \"%s\"."
 
-#: ajaxbackend.php:1959
+#: ajaxbackend.php:1984
 msgid "Wrong \"type\" parameter. Must be \"csv\" or \"template\""
 msgstr "Verkeerde \"type\" parameter. Moet zijn \"csv\" of \"template\""
 
-#: ajaxbackend.php:2207 ajaxbackend.php:2225 ajaxbackend.php:2230
-#: ajaxbackend.php:2235 ajaxbackend.php:2241
+#: ajaxbackend.php:2232 ajaxbackend.php:2250 ajaxbackend.php:2255
+#: ajaxbackend.php:2260 ajaxbackend.php:2266
 msgid "Success"
 msgstr "Gelukt"
 
-#: ajaxbackend.php:2209
+#: ajaxbackend.php:2234
 msgid "Translation not found"
 msgstr "Vertaling niet gevonden"
 
-#: ajaxbackend.php:2311 ajaxbackend.php:2312 ajaxbackend.php:2313
+#: ajaxbackend.php:2313 ajaxbackend.php:2314 ajaxbackend.php:2315
+#: classes/class.newsmanAPI.php:525 classes/class.newsmanAPI.php:526
+#: classes/class.newsmanAPI.php:527
 msgid "Unknown"
 msgstr "Onbekend"
 
-#: ajaxbackend.php:2446
+#: ajaxbackend.php:2448
 msgid "Subscriber with email %s already exists."
 msgstr "Lid met het mailadres %s bestaat al."
 
-#: api.php:128
+#: classes/class.newsmanAPI.php:127
 msgid "Subscriber added"
 msgstr "Lid toegevoegd"
 
-#: api.php:133
+#: classes/class.newsmanAPI.php:132
 msgid "The email \"%s\" is already subscribed but not yet confirmed."
 msgstr "Het mailadres \"%s\" is al ingeschreven maar nog niet bevestigd."
 
-#: api.php:138
+#: classes/class.newsmanAPI.php:137
 msgid "The email \"%s\" is already subscribed and confirmed."
 msgstr "Het mailadres \"%s\" is al ingeschreven en bevestigd."
 
-#: api.php:143
+#: classes/class.newsmanAPI.php:142
 msgid "The email \"%s\" is already already in the database but unsubscribed."
 msgstr "Het mailadres \"%s\" zit al in de database, maar is uitgeschreven."
 
-#: api.php:164
+#: classes/class.newsmanAPI.php:163
 msgid "Bad email address format \"%s\"."
 msgstr "Verkeerd emailadres formaat \"%s\"."
 
-#: api.php:374
+#: classes/class.newsmanAPI.php:641
 msgid "Successfully unsubscribed."
 msgstr "Succesvol uitgeschreven."
 
-#: class.an-sub-details.php:50
+#: classes/class.newsmanAnSubDetails.php:46
 msgid "There's no action '%s'"
 msgstr "Er bestaat geen actie '%s'"
 
-#: class.analytics.php:70 class.analytics.php:129
+#: classes/class.newsmanAnalytics.php:64
+#: classes/class.newsmanAnalytics.php:123
 msgid "Email with ID \"%d\" is not found"
 msgstr "Email met ID \"%d\" is niet gevonden"
 
-#: class.analytics.php:81 class.analytics.php:140
+#: classes/class.newsmanAnalytics.php:75
+#: classes/class.newsmanAnalytics.php:134
 msgid "Subscriber with id \"%s\" is not found."
 msgstr "Lid met id \"%s\" is niet gevonden."
 
 #. translators: Default subscription form
-#: class.form.php:62 core.php:251
+#: classes/class.newsmanForm.php:59 core.php:232
 msgid "Subscribe"
 msgstr "Inschrijven"
 
-#: class.form.php:136 class.form.php:170 class.form.php:191 class.form.php:211
-#: class.form.php:228 class.form.php:261 class.form.php:292 core.php:1197
-#: views/list.php:69 views/list.php:91 views/list.php:108 views/list.php:194
-#: views/list.php:231
+#: classes/class.newsmanForm.php:135 classes/class.newsmanForm.php:169
+#: classes/class.newsmanForm.php:190 classes/class.newsmanForm.php:210
+#: classes/class.newsmanForm.php:227 classes/class.newsmanForm.php:260
+#: classes/class.newsmanForm.php:291 core.php:1186 views/list.php:69
+#: views/list.php:91 views/list.php:108 views/list.php:194 views/list.php:231
 msgid "Required"
 msgstr "Verplicht"
 
-#: class.form.php:341
+#: classes/class.newsmanForm.php:340
 msgid ""
 "Spam submission detected. Please contact the site administrator and describe"
 " the problem."
 msgstr "Spam inschrijven gevonden. Neem aub contact op met de site administrator en omschrijf het probleem."
 
-#: class.form.php:341 core.php:1178 core.php:1206
+#: classes/class.newsmanForm.php:340 core.php:1167 core.php:1195
 msgid "Error"
 msgstr "Fout"
 
-#: class.list.php:53
+#: classes/class.newsmanList.php:47
 msgid "Cannot find free unique list ID. Recursive operations limit exceeded."
 msgstr "Kan het uniek lijst ID niet vinden. Repeterende handeling overschrijd de limiet."
 
-#: class.list.php:67
+#: classes/class.newsmanList.php:61
 msgid "\"name\" field could not be empty."
 msgstr "\"name\" veld kan niet leeg zijn."
 
-#: class.utils.php:40
+#: classes/class.newsmanUtils.php:36
 msgid "Already Subscribed and Verified"
 msgstr "Reeds Ingeschreven en Geverifieerd"
 
-#: class.utils.php:46
+#: classes/class.newsmanUtils.php:42
 msgid "Bad email address format"
 msgstr "Verkeerde emailadres opbouw"
 
-#: class.utils.php:52
+#: classes/class.newsmanUtils.php:48
 msgid "Confirmation Required"
 msgstr "Bevestiging verplicht"
 
-#: class.utils.php:58
+#: classes/class.newsmanUtils.php:54
 msgid "Confirmation Successful"
 msgstr "Bevestiging Succesvol"
 
-#: class.utils.php:64
+#: classes/class.newsmanUtils.php:60
 msgid "Subscription not yet confirmed"
 msgstr "Inschrijving nog niet bevestigd"
 
-#: class.utils.php:70
+#: classes/class.newsmanUtils.php:66
 msgid "Successfully unsubscribed"
 msgstr "Succesvol uitgeschreven"
 
-#: class.utils.php:76 migration.php:186
+#: classes/class.newsmanUtils.php:72 migration.php:180
 msgid "Please confirm your unsubscribe decision"
 msgstr "Bevestig je beslissing om uit te schrijven"
 
-#: class.utils.php:889
+#: classes/class.newsmanUtils.php:887
 msgid "Add new..."
 msgstr "Voeg nieuwe toe..."
 
-#: class.utils.php:1068 class.utils.php:1119 core.php:1664 core.php:1677
+#: classes/class.newsmanUtils.php:1068 classes/class.newsmanUtils.php:1121
+#: core.php:1690 core.php:1703
 msgid "Enter Subject Here"
 msgstr "Vul hier onderwerp in"
 
-#: class.utils.php:1260 core.php:1250 core.php:2078
+#: classes/class.newsmanUtils.php:1262 core.php:1239 core.php:2135
 msgid "Copy"
 msgstr "Kopiëren"
 
-#: class.utils.php:1573
+#: classes/class.newsmanUtils.php:1622
 msgid "Administrator notification - new subscriber"
 msgstr "Administrator melding - nieuwe inschrijving"
 
-#: class.utils.php:1578
+#: classes/class.newsmanUtils.php:1627
 msgid "Administrator notification - user unsubscribed"
 msgstr "Administrator melding - lid uitgeschreven"
 
-#: class.utils.php:1583
+#: classes/class.newsmanUtils.php:1632
 msgid "Subscription confirmation"
 msgstr "Inschrijvingsbevestiging"
 
-#: class.utils.php:1588
+#: classes/class.newsmanUtils.php:1637
 msgid "Unsubscribe notification"
 msgstr "Uitschrijvingsbevestiging"
 
-#: class.utils.php:1593
+#: classes/class.newsmanUtils.php:1642
 msgid "Welcome letter, thanks for subscribing"
 msgstr "Welkomstbrief, bedankt voor inschrijving"
 
-#: class.utils.php:1598 migration.php:218
+#: classes/class.newsmanUtils.php:1647 migration.php:212
 msgid "Unsubscribe confirmation"
 msgstr "Uitschrijf bevestiging"
 
-#: class.utils.php:1603 migration.php:301
+#: classes/class.newsmanUtils.php:1652 migration.php:295
 msgid "Re-subscription confirmation"
 msgstr "Herinschrijvingsbevestiging"
 
-#: core.php:27 core.php:2169
+#: core.php:13 core.php:2281
 msgid "Every minute"
 msgstr "Elke minuut"
 
 #. translators: Default subscription form
-#: core.php:241
+#: core.php:222
 msgid "Subscription"
 msgstr "Inschrijving"
 
 #. translators: Default subscription form
-#: core.php:243
+#: core.php:224
 msgid "Enter your primary email address to get our free newsletter."
 msgstr "Vul je primaire emailadres in om onze gratis nieuwsbrief te ontvangen"
 
 #. translators: Default subscription form
-#: core.php:245 views/subscribers.php:237 views/subscribers.php:245
+#: core.php:226 views/subscribers.php:237 views/subscribers.php:245
 #: views/subscribers.php:253 views/subscribers.php:261
 #: views/subscribers.php:269
 msgid "First Name"
 msgstr "Voornaam"
 
 #. translators: Default subscription form
-#: core.php:247 views/subscribers.php:238 views/subscribers.php:246
+#: core.php:228 views/subscribers.php:238 views/subscribers.php:246
 #: views/subscribers.php:254 views/subscribers.php:262
 #: views/subscribers.php:270
 msgid "Last Name"
 msgstr "Achternaam"
 
 #. translators: Default subscription form
-#: core.php:249 views/list.php:279 views/subscribers.php:83
+#: core.php:230 views/list.php:279 views/subscribers.php:83
 msgid "Email"
 msgstr "Email"
 
 #. translators: Default subscription form
-#: core.php:253
+#: core.php:234
 msgid ""
 "You can leave the list at any time. Removal instructions are included in "
 "each message."
 msgstr "Je kan de lijst ieder moment verlaten. Uitschrijvingsinstructies staan in ieder bericht"
 
-#: core.php:270 core.php:1773
+#: core.php:251 core.php:1790
 msgid "Upgrade to Pro"
 msgstr "Upgrade naar Pro"
 
-#: core.php:273
+#: core.php:254
 msgid "Sent %d of %d emails."
 msgstr "%d van %d emails verzonden."
 
-#: core.php:274
+#: core.php:255
 msgid ""
 "You reached the subscribers limit of the Lite version. %s to resume sending."
 msgstr "Je hebt de limiet van leden bereikt van de Lite versie. %s om verzenden te hervatten."
 
-#: core.php:406
+#: core.php:386
 msgid ""
 "\"Post has no excerpt. Write something yourself or use fancy_excerpt "
 "option\""
 msgstr "\"post heeft geen fragment. Schrijf zelf iets of gebruik de optie mooi fragment\""
 
-#: core.php:642
+#: core.php:630
 msgid "Your link seems to be broken."
 msgstr "Je link lijkt kapot te zijn"
 
-#: core.php:648
+#: core.php:636
 msgid "List with the unique code \"%s\" is not found"
 msgstr "Lijst met de unieke code \"%s\" is niet gevonden"
 
-#: core.php:654
+#: core.php:642
 msgid "Subscriber with the unique code \"%s\" is not found"
 msgstr "Lid met de unieke code \"%s\" is niet gevonden"
 
-#: core.php:755
+#: core.php:743
 msgid "Unique email id is missing in request."
 msgstr "Uniek email id is niet gevonden in het verzoek."
 
-#: core.php:760
+#: core.php:748
 msgid "Email with unique code %s is not found."
 msgstr "Email met de unieke code \"%s\" is niet gevonde"
 
-#: core.php:1022 core.php:1271
+#: core.php:1011 core.php:1262
 msgid "Please fill all the required fields."
 msgstr "Vul aub alle verplichte velden in."
 
-#: core.php:1023 core.php:1272
+#: core.php:1012 core.php:1263
 msgid "Please check your email address."
 msgstr "Controleer aub je emailadres."
 
-#: core.php:1165
+#: core.php:1154
 msgid ""
 "Full Email Statistics & Click Tracking available in <a href=\"%s\">the Pro "
 "version</a>"
 msgstr "Volledige Emailstatistieken &  beschikbaar in <a href=\"%s\">de Pro versie</a>"
 
-#: core.php:1177
+#: core.php:1166
 msgid "Error: "
 msgstr "Fout:"
 
-#: core.php:1179
+#: core.php:1168
 msgid "Done"
 msgstr "Klaar"
 
-#: core.php:1180
+#: core.php:1169
 msgid "Please select emails which you want to stop sending of."
 msgstr "Selecteer aub de emails waarvan je het verzenden wilt stoppen"
 
-#: core.php:1181
+#: core.php:1170
 msgid "You have successfully stopped sending of selected emails."
 msgstr "Je hebt het verzenden van de geselecteerde emails succesvol gestopt."
 
-#: core.php:1182
+#: core.php:1171
 msgid "Please mark subscribers which you want to unsubscribe."
 msgstr "Selecteer aub de leden die je wilt uitschrijven."
 
-#: core.php:1183
+#: core.php:1172
 msgid "You have successfully unsubscribed selected subscribers."
 msgstr "Je hebt de geselecteerde leden succesvol uitgeschreven."
 
-#: core.php:1184
+#: core.php:1173
 msgid "Please mark subscribers which you want to delete."
 msgstr "Selecteer aub de leden die je wilt verwijderen"
 
-#: core.php:1185
+#: core.php:1174
 msgid "You have successfully deleted selected subscribers."
 msgstr "Je hebt de geselecteerde leden succesvol verwijderd."
 
-#: core.php:1186
+#: core.php:1175
 msgid "Please mark subscribers to change."
 msgstr "Selecteer aub de leden om te wijzigen"
 
-#: core.php:1187
+#: core.php:1176
 msgid "You have successfully changed status of selected subscribers."
 msgstr "Je hebt de status van de geslecteerde leden succesvol veranderd."
 
-#: core.php:1188
+#: core.php:1177
 msgid "Please mark subscribers which you want to send confirmation to."
 msgstr "Selecteer de leden aub die je een bevestiging wilt zenden"
 
-#: core.php:1189
+#: core.php:1178
 msgid "You have successfully send confirmation emails."
 msgstr "Je hebt succesvol de bevestigingsmails verzonden"
 
-#: core.php:1190
+#: core.php:1179
 msgid "All subscribers (#)"
 msgstr "Alle leden (#)"
 
-#: core.php:1191
+#: core.php:1180
 msgid "Confirmed (#)"
 msgstr "Bevestigd (#)"
 
-#: core.php:1192
+#: core.php:1181
 msgid "Unconfirmed (#)"
 msgstr "Niet bevestigd (#)"
 
-#: core.php:1193
+#: core.php:1182
 msgid "Unsubscribed (#)"
 msgstr "Uitgeschreven (#)"
 
-#: core.php:1194
+#: core.php:1183
 msgid "You have no subscribers yet."
 msgstr "Je hebt nog geen leden"
 
-#: core.php:1195 views/mailbox-email.php:113
+#: core.php:1184 views/mailbox-email.php:113
 msgid "Sending"
 msgstr "Verzonden"
 
-#: core.php:1196
+#: core.php:1185
 msgid "Check me"
 msgstr "Controleer me"
 
-#: core.php:1198
+#: core.php:1187
 msgid "Choose an option"
 msgstr "Kies een optie"
 
-#: core.php:1199
+#: core.php:1188
 msgid "new option 1"
 msgstr "Nieuwe optie 1"
 
-#: core.php:1200
+#: core.php:1189
 msgid "Untitled"
 msgstr "Geen titel"
 
-#: core.php:1201 views/addedit_email.php:71
+#: core.php:1190 views/addedit_email.php:71
 msgid "You have no emails yet."
 msgstr "Je hebt nog geen emails."
 
-#: core.php:1202
+#: core.php:1191
 msgid "You have no forms, yet"
 msgstr "Je hebt nog geen formulieren."
 
 #. translators: mailbox view link
-#: core.php:1203 core.php:1234 views/addedit_email.php:17 views/mailbox.php:24
+#: core.php:1192 core.php:1223 views/addedit_email.php:17 views/mailbox.php:24
 msgid "Sent"
 msgstr "Verzonden"
 
 #. translators: mailbox view link
-#: core.php:1204 core.php:1232 views/addedit_email.php:16 views/mailbox.php:23
+#: core.php:1193 core.php:1221 views/addedit_email.php:16 views/mailbox.php:23
 msgid "Pending"
 msgstr "In afwachting van"
 
-#: core.php:1205
+#: core.php:1194
 msgid "Draft"
 msgstr "Concept"
 
-#: core.php:1207
+#: core.php:1196
 msgid "Sending..."
 msgstr "Verzonden..."
 
-#: core.php:1208
+#: core.php:1197
 msgid "Stopped"
 msgstr "Gestopt"
 
-#: core.php:1209
+#: core.php:1198
 msgid "Scheduled on"
 msgstr "Ingepland op"
 
-#: core.php:1210
+#: core.php:1199
 msgid "You don't have any templates yet."
 msgstr "Je hebt nog geen sjablonen."
 
-#: core.php:1211
+#: core.php:1200
 msgid "Create one?"
 msgstr "één maken?"
 
-#: core.php:1212
+#: core.php:1201
 msgid "Please mark the emails which you want to delete."
 msgstr "Selecteer aub de emails die je wilt verwijderen"
 
-#: core.php:1213
+#: core.php:1202
 msgid "You have successfully deleted selected emails."
 msgstr "Je hebt succesvol de geselecteerde emails verwijderd."
 
-#: core.php:1214
+#: core.php:1203
 msgid "Please mark the templates which you want to delete."
 msgstr "Selecteer aub de sjablonen die je wilt verwijderen."
 
-#: core.php:1215
+#: core.php:1204
 msgid "Please mark the forms which you want to delete."
 msgstr "Selecteer aub de formulieren die je wilt verwijderen"
 
-#: core.php:1216
+#: core.php:1205
 msgid "You have no templates yet."
 msgstr "Je hebt nog geen sjablonen"
 
-#: core.php:1217
+#: core.php:1206
 msgid "All emails (#)"
 msgstr "Alle emails (#)"
 
-#: core.php:1218
+#: core.php:1207
 msgid "In progress (#)"
 msgstr "in uitvoering (#)"
 
-#: core.php:1219
+#: core.php:1208
 msgid "Pending (#)"
 msgstr "Onbeslist (#)"
 
-#: core.php:1220
+#: core.php:1209
 msgid "Sent (#)"
 msgstr "Verzonden (#)"
 
-#: core.php:1221 views/mailbox-email.php:114 views/mailbox-email.php:119
+#: core.php:1210 views/mailbox-email.php:114 views/mailbox-email.php:119
 msgid "Resume"
 msgstr "Hervatten"
 
-#: core.php:1222
+#: core.php:1211
 msgid "Please fill the \"To:\" field."
 msgstr "Vul het veld \"To:\" in aub."
 
-#: core.php:1223
+#: core.php:1212
 msgid "Please select emails first."
 msgstr "Selecteer emails eerst aub."
 
-#: core.php:1224
+#: core.php:1213
 msgid "Please select"
 msgstr "Selecteer aub"
 
 #. translators: mailbox view link
-#: core.php:1226 views/addedit_email.php:14 views/mailbox.php:20
+#: core.php:1215 views/addedit_email.php:14 views/mailbox.php:20
 msgid "All emails"
 msgstr "Alle emails"
 
 #. translators: mailbox view link
-#: core.php:1228 views/addedit_email.php:15 views/mailbox.php:22
+#: core.php:1217 views/addedit_email.php:15 views/mailbox.php:22
 msgid "In progress"
 msgstr "in uitvoering"
 
 #. translators: mailbox view link
-#: core.php:1230 views/mailbox.php:21
+#: core.php:1219 views/mailbox.php:21
 msgid "Drafts"
 msgstr "Concepten"
 
-#: core.php:1235
+#: core.php:1224
 msgid "Sent %d of %d emails"
 msgstr "%d van %d emails verzonden"
 
-#: core.php:1236
+#: core.php:1225
 msgid "Status: "
 msgstr "Status:"
 
-#: core.php:1237
+#: core.php:1226
 msgid "Email Errors"
 msgstr "Email fouten"
 
-#: core.php:1238
+#: core.php:1227
 msgid "Email Address"
 msgstr "Emailadres"
 
-#: core.php:1239
+#: core.php:1228
 msgid "Error Message"
 msgstr "Foutmelding"
 
-#: core.php:1240 views/forms.php:31 views/mailbox-email.php:166
+#: core.php:1229 views/forms.php:31 views/mailbox-email.php:166
 #: views/mailbox.php:116 views/subscribers.php:92 views/templates.php:64
 #: views/templates.php:80 views/templates.php:96 views/templates.php:184
 msgid "Loading..."
 msgstr "Laden..."
 
-#: core.php:1241 newsman-widget.php:51
+#: core.php:1230 newsman-widget.php:49
 msgid "List:"
 msgstr "Lijst:"
 
-#: core.php:1242
+#: core.php:1231
 msgid "Bug report"
 msgstr "Fouten rapport"
 
-#: core.php:1243
+#: core.php:1232
 msgid "Load more..."
 msgstr "Laad meer..."
 
-#: core.php:1244
+#: core.php:1233
 msgid "Sorry, no posts matched your criteria."
 msgstr "Sorry, Geen posten voldoen aan je criteria."
 
-#: core.php:1245
+#: core.php:1234
 msgid ""
 "Warning! You are close to the limit of %d subscribers you can send emails to"
 " in the Lite version of the plugin. Please, <a href=\"%s\">upgrade to the "
 "Pro version</a> to send emails without limitations."
 msgstr "Waarschuwing! je zit dicht tegen de limiet van %d leden die je mails kan sturen in de Lite versie van de plugin, <a href=\"%s\">Upgrade naar de Pro versie</a> aub om zonder limieten te versturen."
 
-#: core.php:1246
+#: core.php:1235
 msgid ""
 "Warning! You exceeded the limit of %d subscribers you can send emails to in "
 "the Lite version of the plugin. Please, <a href=\"%s\">upgrade to the Pro "
@@ -710,372 +717,411 @@ msgid ""
 msgstr "Waarschuwing! Je hebt de limiet van %d leden overschreden die je mails kan sturen in de Lite versie van de plugin, <a href=\"%s\">Upgrade naar de Pro versie</a> aub om zonder limieten te versturen."
 
 #. translators: lists and forms table header
-#: core.php:1247 views/forms.php:23 views/list.php:67 views/list.php:86
+#: core.php:1236 views/forms.php:23 views/list.php:67 views/list.php:86
 #: views/list.php:106 views/list.php:141 views/list.php:192 views/list.php:229
 #: views/templates.php:59 views/templates.php:75 views/templates.php:91
 msgid "Name"
 msgstr "Naam"
 
-#: core.php:1248
+#: core.php:1237
 msgid "Edit Form"
 msgstr "Bewerk Formulier"
 
-#: core.php:1249 views/list.php:257
+#: core.php:1238 views/list.php:257
 msgid "View Subscribers"
 msgstr "Bekijk leden"
 
-#: core.php:1251
+#: core.php:1240 core.php:1271
 msgid "Edit"
 msgstr "Bewerk"
 
-#: core.php:1252 views/addedit_email.php:39 views/addedit_email.php:102
-#: views/forms.php:15 views/forms.php:70 views/mailbox.php:46
-#: views/mailbox.php:149 views/subscribers.php:57 views/subscribers.php:148
-#: views/templates.php:29 views/templates.php:135 views/templates.php:150
+#: core.php:1241 core.php:1273 views/addedit_email.php:39
+#: views/addedit_email.php:102 views/forms.php:15 views/forms.php:70
+#: views/mailbox.php:46 views/mailbox.php:149 views/subscribers.php:57
+#: views/subscribers.php:147 views/templates.php:29 views/templates.php:135
+#: views/templates.php:150
 msgid "Delete"
 msgstr "Verwijder"
 
-#: core.php:1253
+#: core.php:1242
 msgid "Export"
 msgstr "Exporteren"
 
-#: core.php:1254
+#: core.php:1243
 msgid "Restore"
 msgstr "Hertel"
 
-#: core.php:1255
+#: core.php:1244
 msgid "Default System Templates"
 msgstr "Standaard Systeem Sjablonen"
 
-#: core.php:1256
+#: core.php:1245
 msgid "System Template. Cannot be deleted."
 msgstr "Systeem Sjabloon. Kan niet verwijderd worden."
 
-#: core.php:1257
+#: core.php:1246
 msgid "Insert Posts"
 msgstr "Voeg Posts in"
 
-#: core.php:1258
+#: core.php:1247
 msgid "Post(s) selected: %d"
 msgstr "Geselecteerde Post(s): %d"
 
-#: core.php:1259
+#: core.php:1248
 msgid "Select categories"
 msgstr "Geselecteerde categorieën"
 
-#: core.php:1260
+#: core.php:1249
 msgid "# of # categories selected"
 msgstr "# van # categorieën geselecteerd"
 
-#: core.php:1261
+#: core.php:1250
 msgid "Select author(s)"
 msgstr "Geselecteerde auteur(s)"
 
-#: core.php:1262
+#: core.php:1251
 msgid "# of # authors selected"
 msgstr "# van # auteurs geselecteerd"
 
-#: core.php:1263 views/list.php:348 views/subscribers.php:117
+#: core.php:1252 views/list.php:348 views/subscribers.php:117
 msgid "Save"
 msgstr "Bewaar"
 
-#: core.php:1264
+#: core.php:1253
 msgid "Saved at"
 msgstr "Bewaard op"
 
-#: core.php:1266
+#: core.php:1255
+msgid ""
+"Bounce Handler has %d blocked domains. Some of recipients might be skipped "
+"during sending."
+msgstr "Bounce verwerker heeft %d domeinen geblokkeerd. sommige van de ontvangers worden misschien overgeslagen tijdens het verzenden."
+
+#: core.php:1257
 msgid "View in browser"
 msgstr "Bekijk in browser"
 
-#: core.php:1268
+#: core.php:1259
 msgid "View Stats"
 msgstr "Bekijk statistieken"
 
-#: core.php:1273
+#: core.php:1264
 msgid "Are you sure you want to restore stock template?"
 msgstr "Weet je zeker dat je een voorraad sjabloon wilt herstellen?"
 
+#: core.php:1268
+msgid "No subject"
+msgstr "Geen onderwerp"
+
+#: core.php:1269 views/mailbox.php:45
+msgid "Start"
+msgstr "Start"
+
+#: core.php:1270 views/mailbox.php:44
+msgid "Stop"
+msgstr "Stop"
+
+#: core.php:1272
+msgid "Duplicate"
+msgstr "Dubbel"
+
+#: core.php:1274
+msgid "sent"
+msgstr "verzonden"
+
 #: core.php:1275
+msgid "opens"
+msgstr "geopend"
+
+#: core.php:1276
+msgid "clicks"
+msgstr "Kliks"
+
+#: core.php:1277
+msgid "unsubscribes"
+msgstr "uitschrijvingen"
+
+#: core.php:1282
 msgid "Subscribe notification email sent to the administrator."
 msgstr "Inschrijvingsnotificatiemail verzonden aan de beheerder"
 
-#: core.php:1276
+#: core.php:1283
 msgid "Unsubscribe notification email sent to the administrator."
 msgstr "Uitschrijvingsnotificaitemailverzonden aan de beheerder."
 
-#: core.php:1277
+#: core.php:1284
 msgid "Email with the confirmation link sent to the user upon subscription."
 msgstr "Email met de bevestigingslink in aan de inschrijver verzonden ter bevestiging."
 
-#: core.php:1278
+#: core.php:1285
 msgid ""
 "Email sent to the user that confirms that his email address was "
 "unsubscribed."
 msgstr "Email verzonden aan de gebruikers om te bevestigen dat het emailadres is uitgeschreven"
 
-#: core.php:1279
+#: core.php:1286
 msgid "Welcome message sent after the subscriber confirms his subscription."
 msgstr "Welkomstboodschap verzonden na bevestiging van de inschrijving door de gebruiker."
 
-#: core.php:1280
+#: core.php:1287
 msgid "Email with a link to confirm the subscriber’s decision to unsubscribe."
 msgstr "Email met een link om de keuze van een lid tot uitschrijving te bevestigen "
 
-#: core.php:1281
+#: core.php:1288
 msgid ""
 "Email with a link to re-confirm the subscription that is sent to ALL "
 "\"unconfirmed\" subscribers on the list."
 msgstr "Email met een link voor herbevestiging die verzonden is aan ALLE \"onbevestigde\" inschrijvers op de lijst."
 
-#: core.php:1387
+#: core.php:1395
 msgid "Cannot unsubscribe email. Subscriber with unique code %s is not found."
 msgstr "Kan email niet uitschrijven. Lid met unieke code %s is niet gevonden."
 
-#: core.php:1676
+#: core.php:1702
 msgid "Untitled templates"
 msgstr "Sjablonen zonder titel"
 
-#: core.php:1687
+#: core.php:1713
 msgid "Alternative Plain Text Body"
 msgstr "Alternatieve Gewone Tekst Body"
 
-#: core.php:1705
+#: core.php:1731
 msgid "WPNewsman Lite"
 msgstr "WPNewsman Lite"
 
-#: core.php:1718 core.php:1719 views/addedit_email.php:5 views/mailbox.php:9
+#: core.php:1744 core.php:1745 views/addedit_email.php:5 views/mailbox.php:9
 msgid "Mailbox"
 msgstr "Mailbox"
 
-#: core.php:1736 core.php:1737 views/forms.php:5
+#: core.php:1753 core.php:1754 views/forms.php:5
 msgid "Lists and Forms"
 msgstr "Lijsten en Formulieren"
 
-#: core.php:1745 core.php:1746 views/templates.php:5
+#: core.php:1762 core.php:1763 views/templates.php:5
 msgid "Email Templates"
 msgstr "Emailsjablonen"
 
-#: core.php:1754 core.php:1755 views/options.php:6
+#: core.php:1771 core.php:1772 views/options.php:6
 msgid "Settings"
 msgstr "Instellingen"
 
-#: core.php:1764 core.php:1765 views/debug-log.php:11
+#: core.php:1781 core.php:1782 views/debug-log.php:11
 msgid "Debug Log"
 msgstr "Debug Log"
 
-#: core.php:1802
+#: core.php:1846
 msgid "Excerpt for external forms"
 msgstr "Uitreksel voor externe formulieren"
 
-#: core.php:2108
+#: core.php:2039 core.php:2969
+msgid "You are not authorized to access this resource."
+msgstr "Je hebt geen toegang om deze bron te benaderen."
+
+#: core.php:2165
 msgctxt "Action Page"
 msgid "Action Pages"
 msgstr "Aktie Pagina's"
 
-#: core.php:2109
+#: core.php:2166
 msgctxt "Action Page"
 msgid "Action Page"
 msgstr "Aktie Pagina"
 
-#: core.php:2110
+#: core.php:2167
 msgctxt "Action Page"
 msgid "Add New"
 msgstr "Nieuwe Toevoegen"
 
-#: core.php:2111
+#: core.php:2168
 msgctxt "Action Page"
 msgid "Add New Action Page"
 msgstr "Nieuwe Aktie Pagina Toevoegen"
 
-#: core.php:2112
+#: core.php:2169
 msgctxt "Action Page"
 msgid "Edit Action Page"
 msgstr "Aktie Pagina Bewerken"
 
-#: core.php:2113
+#: core.php:2170
 msgctxt "Action Page"
 msgid "New Action Page"
 msgstr "Nieuwe Aktie Pagina"
 
-#: core.php:2114
+#: core.php:2171
 msgctxt "Action Page"
 msgid "View Action Page"
 msgstr "Bekijk Aktie Pagina"
 
-#: core.php:2115
+#: core.php:2172
 msgctxt "Action Page"
 msgid "Search Action Pages"
 msgstr "Zoek Aktie Pagina"
 
-#: core.php:2116
+#: core.php:2173
 msgid "Nothing found"
 msgstr "Niets gevonden"
 
-#: core.php:2117
+#: core.php:2174
 msgid "Nothing found in the Trash"
 msgstr "Niets gevonden in de Prullenbak"
 
-#: core.php:2339 core.php:2415
+#: core.php:2451 core.php:2527
 msgid "Error: Email template not found"
 msgstr "Fout: Email sjabloon niet gevonden"
 
-#: core.php:2360
+#: core.php:2472
 msgid "Error: Email not found"
 msgstr "Fout: Email niet gevonden"
 
-#: core.php:2471
+#: core.php:2583
 msgid "G-Lock WPNewsman"
 msgstr "G-Lock WPNewsman"
 
-#: core.php:2509
+#: core.php:2621
 msgid "G-Lock WPNewsman subscription summary"
 msgstr "G-Lock WPNewsman inschrijvingen samenvatting"
 
-#: core.php:2510
+#: core.php:2622
 msgid "Manage Forms and Lists"
 msgstr "Beheer Formulieren en Lijsten"
 
-#: core.php:2524 views/list.php:265
+#: core.php:2636 views/list.php:265
 msgid "List name"
 msgstr "Lijstnaam"
 
-#: core.php:2525
+#: core.php:2637
 msgid "Total confirmed"
 msgstr "Totaal bevestigd"
 
-#: core.php:2526
+#: core.php:2638
 msgid "Total unconfirmed"
 msgstr "Totaal onbevestigd"
 
-#: core.php:2527
+#: core.php:2639
 msgid "Total unsubscribed"
 msgstr "Totaal uitgeschreven"
 
-#: core.php:2568
+#: core.php:2680
 msgid "Post Template"
 msgstr "Post Sjabloon"
 
-#: core.php:2574
+#: core.php:2686
 msgid "Click here"
 msgstr "Klik hier"
 
-#: core.php:2577
+#: core.php:2689
 msgid ""
 "You can use the \"Newsman\" menu button on the editor's toolbar to insert "
 "the unsubscribe link and social profile links into the message."
 msgstr "Je kan de \"Newsman\" menu knop gebruiken om op de bewerkers toolbar de uitschrijflink en Social link naar profielen in het bericht toe te voegen. "
 
-#: core.php:2578
+#: core.php:2690
 msgid "%s for more shortcode macros supported by WPNewsman."
 msgstr "%s voor meer shortcode macros die door WPNewsman ondersteund worden"
 
-#: core.php:2768
+#: core.php:2880
 msgid "List: "
 msgstr "Lijst:"
 
-#: core.php:2780
+#: core.php:2892
 msgid "Page Template"
 msgstr "Pagina Sjabloon"
 
-#: core.php:2782
+#: core.php:2894
 msgid "Default Template"
 msgstr "Standaard Sjabloon"
 
-#: core.php:2857
-msgid "You are not authorized to access this resource."
-msgstr "Je hebt geen toegang om deze bron te benaderen."
-
-#: core.php:2872
+#: core.php:2984
 msgid "Please, provide correct \"listId\" parameter."
 msgstr "Geef aub de juiste \"listId\" parameter."
 
-#: frmGetPosts.php:16
+#: frmGetPosts.php:12
 msgid "Post"
 msgstr "Post"
 
-#: frmGetPosts.php:17
+#: frmGetPosts.php:13
 msgid "Page"
 msgstr "Pagina"
 
-#: frmGetPosts.php:18
+#: frmGetPosts.php:14
 msgid "Attachment"
 msgstr "Bijlage"
 
-#: frmGetPosts.php:19
+#: frmGetPosts.php:15
 msgid "Action Page"
 msgstr "Aktiepagina"
 
-#: frmGetPosts.php:111
+#: frmGetPosts.php:107
 msgid "Search..."
 msgstr "Zoeken..."
 
-#: frmGetPosts.php:117 frmGetPosts.php:202
+#: frmGetPosts.php:113 frmGetPosts.php:198
 msgid "Post type:"
 msgstr "Soort post:"
 
-#: frmGetPosts.php:131 frmGetPosts.php:214
+#: frmGetPosts.php:127 frmGetPosts.php:210
 msgid "Show private posts"
 msgstr "Laat privé posts zien"
 
-#: frmGetPosts.php:135 frmGetPosts.php:216
+#: frmGetPosts.php:131 frmGetPosts.php:212
 msgid "Categories:"
 msgstr "Categorieen:"
 
-#: frmGetPosts.php:151 frmGetPosts.php:228
+#: frmGetPosts.php:147 frmGetPosts.php:224
 msgid "Show thumbnails placeholders"
 msgstr "Laat thumbnail plaatshouder zien"
 
-#: frmGetPosts.php:156 frmGetPosts.php:230
+#: frmGetPosts.php:152 frmGetPosts.php:226
 msgid "Authors:"
 msgstr "Auteurs:"
 
-#: frmGetPosts.php:175 frmGetPosts.php:241
+#: frmGetPosts.php:171 frmGetPosts.php:237
 msgid "Use content:"
 msgstr "Gebruik inhoud:"
 
-#: frmGetPosts.php:179 frmGetPosts.php:243
+#: frmGetPosts.php:175 frmGetPosts.php:239
 msgid "Full post"
 msgstr "Volledige Post"
 
-#: frmGetPosts.php:180 frmGetPosts.php:244
+#: frmGetPosts.php:176 frmGetPosts.php:240
 msgid "Excerpt"
 msgstr "Uitreksel"
 
-#: frmGetPosts.php:181 frmGetPosts.php:245
+#: frmGetPosts.php:177 frmGetPosts.php:241
 msgid "Fancy excerpt"
 msgstr "Mooi uittreksel "
 
-#: frmGetPosts.php:189 frmGetPosts.php:249
+#: frmGetPosts.php:185 frmGetPosts.php:245
 msgid "Select post(s) for last:"
 msgstr "Selecteer post(s) van de laatste:"
 
-#: frmGetPosts.php:191 frmGetPosts.php:251 views/options.php:107
+#: frmGetPosts.php:187 frmGetPosts.php:247 views/options.php:115
 msgid "Day"
 msgstr "Dag"
 
-#: frmGetPosts.php:192 frmGetPosts.php:252
+#: frmGetPosts.php:188 frmGetPosts.php:248
 msgid "Week"
 msgstr "Week"
 
-#: frmGetPosts.php:193 frmGetPosts.php:253
+#: frmGetPosts.php:189 frmGetPosts.php:249
 msgid "Month"
 msgstr "Maand"
 
-#: frmGetPosts.php:195 frmGetPosts.php:255
+#: frmGetPosts.php:191 frmGetPosts.php:251
 msgid "Clear Selection"
 msgstr "Wis Selectie"
 
-#: newsman-widget.php:8
+#: newsman-widget.php:6
 msgid "WPNewsman Subscription form for your newsletters"
 msgstr "WPNewsman inschrijfformulier voor je nieuwsbrieven"
 
-#: newsman-widget.php:10
+#: newsman-widget.php:8
 msgid "WPNewsman Subscription Form"
 msgstr "WPNewsman inschrijfformulier"
 
 #: views/_an_fs_method.php:3 views/_an_locale_changed.php:4
 #: views/_an_w3tc_configured.php:3 views/_an_wp_cron_error.php:4
-#: views/subscribers.php:171
+#: views/subscribers.php:170
 msgid "Warning!"
 msgstr "Waarschuwing"
 
@@ -1133,10 +1179,10 @@ msgid ""
 "There was a problem spawning a call to the WP-Cron system on your site. This"
 " means email sending on your site may not work. The problem was:<br "
 "/><strong>%s</strong>. In order to fix the problem you can enable pokeback "
-"mode. This will options will make calls to our server and back to yours. No "
-"sensitive data will be shared with our server. <a "
-"href=\"http://wpnewsman.com\">Learn more</a>"
-msgstr "er was een probleem met het aanroepen van het WP-Cron systeem op je site. Dit betekend dat het versturen van mail op je site misschien niet werkt. Het probleem was: <br /><strong>%s</strong>. om het probleem op te lossen kan je de pokeback modus aanzetten. Deze optie maakt oproepen naar onze server en terug naar de jouwe. Er wordt geen gevoelige data gedeeld met onze server. <a href=\"http://wpnewsman.com\">Leer meer</a>"
+"mode. Plugin will make calls to our server and back to yours. No sensitive "
+"data will be shared with our server. <a href=\"http://wpnewsman.com\">Learn "
+"more</a>"
+msgstr "Er was een probleem met het aanroepen van het WP-Cron systeem op je site. Dit betekend dat het versturen van mail op je site misschien niet werkt. Het probleem was: <br /><strong>%s</strong>. om het probleem op te lossen kan je de pokeback modus aanzetten. Deze optie maakt oproepen naar onze server en terug naar de jouwe. Er wordt geen gevoelige data gedeeld met onze server. <a href=\"http://wpnewsman.com\">Leer meer</a>"
 
 #: views/_an_wp_cron_error.php:7
 msgid "Enable Pokeback mode"
@@ -1154,8 +1200,9 @@ msgstr "Informatie!"
 msgid ""
 "The pokeback mode is enabled on your site. WPNewsman make http request to "
 "our server and back. No sensitive data from your website is shared with our "
-"server. <a href=\"#\">Learn more...</a>"
-msgstr "De Pokback mode is aangezet op je site. WPNewsman maakt http verzoeken naar onze server en terug. Er wordt geen gevoelige data gedeeld met onze server. <a href=\"#\">Lees meer...</a>"
+"server. <a href=\"http://support.glocksoft.net/kb/articles/90-messages-are-"
+"always-pending-and-not-sent\" target=\"_blank\">Learn more...</a>"
+msgstr "De pokeback mode staat aan op je site. WPNewsman stuurt http verzoeken naar onze server en terug. Er wordt geen gevoelige data gedeeld met onze server. <a href=\"http://support.glocksoft.net/kb/articles/90-messages-are-always-pending-and-not-sent\" target=\"_blank\">Leer meer...</a>"
 
 #: views/_footer.php:8
 msgid "Debug Messages"
@@ -1181,8 +1228,8 @@ msgstr "Verzend Bug rapport"
 #: views/addedit_email.php:115 views/forms.php:55 views/forms.php:69
 #: views/mailbox-email.php:125 views/mailbox.php:134 views/mailbox.php:148
 #: views/mailbox.php:162 views/mailbox.php:177 views/mailbox.php:190
-#: views/options.php:225 views/subscribers.php:131 views/subscribers.php:147
-#: views/subscribers.php:163 views/subscribers.php:191
+#: views/options.php:235 views/subscribers.php:131 views/subscribers.php:146
+#: views/subscribers.php:162 views/subscribers.php:190
 #: views/subscribers.php:313 views/subscribers.php:333
 #: views/subscribers.php:348 views/templates.php:119 views/templates.php:134
 #: views/templates.php:149 views/templates.php:165 views/templates.php:191
@@ -1243,9 +1290,9 @@ msgstr "Status"
 
 #: views/addedit_email.php:81 views/addedit_email.php:95
 #: views/addedit_email.php:109 views/forms.php:63 views/mailbox.php:128
-#: views/mailbox.php:142 views/mailbox.php:156 views/options.php:219
+#: views/mailbox.php:142 views/mailbox.php:156 views/options.php:229
 #: views/subscribers.php:124 views/subscribers.php:139
-#: views/subscribers.php:155 views/subscribers.php:185 views/templates.php:113
+#: views/subscribers.php:154 views/subscribers.php:184 views/templates.php:113
 #: views/templates.php:127 views/templates.php:143 views/templates.php:159
 msgid "Please, confirm..."
 msgstr "Bevestig aub..."
@@ -1260,16 +1307,16 @@ msgstr "Weet je zeker dat je de geselecteerde mensen wil uitschrijven?"
 msgid "Unsubscribe"
 msgstr "Uitschrijven"
 
-#: views/addedit_email.php:98 views/subscribers.php:142
+#: views/addedit_email.php:98
 msgid "Are you sure you want to delete selected subscribers?"
 msgstr "Weet je zeker dat je de geselecteerde leden wil verwijderen?"
 
-#: views/addedit_email.php:112 views/mailbox.php:159 views/subscribers.php:158
+#: views/addedit_email.php:112 views/mailbox.php:159 views/subscribers.php:157
 #: views/templates.php:162
 msgid "Are you sure you want to change status of selected subscribers to %s?"
 msgstr "Weet je zeker dat je de status van de geselecteerde leden naar %s wil veranderen?"
 
-#: views/addedit_email.php:116 views/mailbox.php:163 views/subscribers.php:164
+#: views/addedit_email.php:116 views/mailbox.php:163 views/subscribers.php:163
 #: views/templates.php:166
 msgid "Change"
 msgstr "Verander"
@@ -1565,7 +1612,7 @@ msgid "Schedule sending on"
 msgstr "Plan verzending op"
 
 #: views/mailbox-email.php:119 views/mailbox-email.php:169
-#: views/subscribers.php:192
+#: views/subscribers.php:191
 msgid "Send"
 msgstr "Verstuur"
 
@@ -1615,7 +1662,7 @@ msgid "Sending email..."
 msgstr "Email versturen..."
 
 #: views/mailbox-email.php:168 views/subscribers.php:116
-#: views/subscribers.php:177
+#: views/subscribers.php:176
 msgid "Cancel"
 msgstr "Annuleren"
 
@@ -1634,14 +1681,6 @@ msgstr "Snel Bericht"
 #: views/mailbox.php:42
 msgid "Compose from Message"
 msgstr "Stel samen uit Bericht"
-
-#: views/mailbox.php:44
-msgid "Stop"
-msgstr "Stop"
-
-#: views/mailbox.php:45
-msgid "Start"
-msgstr "Start"
 
 #. translators: email property
 #: views/mailbox.php:110
@@ -1670,7 +1709,7 @@ msgid "General"
 msgstr "Algemeen"
 
 #. translators: Options page tab title
-#: views/options.php:19 views/options.php:76
+#: views/options.php:19 views/options.php:84
 msgid "Email Settings"
 msgstr "Email instellingen"
 
@@ -1685,7 +1724,7 @@ msgid "API"
 msgstr "API"
 
 #. translators: Options page tab title
-#: views/options.php:25 views/options.php:193
+#: views/options.php:25 views/options.php:203
 msgid "Uninstallation"
 msgstr "De-installatie"
 
@@ -1727,11 +1766,19 @@ msgstr "Gebruik PokeBack mode (maakt beveiligde oproepen naar onze server en ter
 msgid "Social profiles links"
 msgstr "Social profiel linken"
 
-#: views/options.php:62
+#: views/options.php:59
+msgid "Advanced"
+msgstr "Geavanceerd"
+
+#: views/options.php:60
+msgid "Enable debug mode. ( Warning! This may slowdown your website. )"
+msgstr "Zet debug mode aan. (Waarschuwing! dit kan de site trager maken.)"
+
+#: views/options.php:70
 msgid "Important!"
 msgstr "Belangrijk!"
 
-#: views/options.php:63
+#: views/options.php:71
 msgid ""
 "If your site doesn't get visitors, the WordPress task scheduler will not "
 "run. This typically delays sending. If you suffer from delayed or "
@@ -1741,146 +1788,146 @@ msgid ""
 "cron-work\">this tutorial</a>."
 msgstr "Als je site geen bezoekers krijgt, dan loopt de Wordpress taakplanner niet. Dit vertraagd juist de verzending. Als je last hebt van vertraagde of inconsistente verzending, stel dan een cron-job in op je server of gebruik een gratis cron-service als beschreven in <a href=\"http://support.glocksoft.net/kb/articles/69-how-to-make-wordpress-cron-work\">deze tutorial</a>."
 
-#: views/options.php:65
+#: views/options.php:73
 msgid "Your blog's wp-cron URL:"
 msgstr "Je blogs wp-cron URL:"
 
-#: views/options.php:77
+#: views/options.php:85
 msgid "From Name:"
 msgstr "Van Naam:"
 
-#: views/options.php:80
+#: views/options.php:88
 msgid "From Email:"
 msgstr "Van Email:"
 
-#: views/options.php:83
+#: views/options.php:91
 msgid "Return Email Address:"
 msgstr "Antwoord Emailadres:"
 
-#: views/options.php:86
+#: views/options.php:94
 msgid "Email Address for Admin Notifications:"
 msgstr "Emailadres voor Admin Notificaties:"
 
-#: views/options.php:90
+#: views/options.php:98
 msgid "Send Welcome Message"
 msgstr "Verstuur Welkomst Bericht"
 
-#: views/options.php:91
+#: views/options.php:99
 msgid "Send Unsubscribe Notification"
 msgstr "Verstuur Uitschrijf Bericht"
 
-#: views/options.php:92
+#: views/options.php:100
 msgid "Send Subscribe/Unsubscribe Event Notifications to Admin"
 msgstr "Stuur Inschrijf/Uitschrijf Actie Notificaties naar Admin"
 
-#: views/options.php:102
+#: views/options.php:110
 msgid "Email Delivery Settings"
 msgstr "Email Verstuurinstellingen"
 
-#: views/options.php:106
+#: views/options.php:114
 msgid "Throttling"
 msgstr "Smoren"
 
-#: views/options.php:107
+#: views/options.php:115
 msgid "Limit sending to "
 msgstr "Beperk verzenden naar"
 
-#: views/options.php:107
+#: views/options.php:115
 msgid "emails per"
 msgstr "emails per"
 
-#: views/options.php:107
+#: views/options.php:115
 msgid "Minute"
 msgstr "Minuut"
 
-#: views/options.php:107
+#: views/options.php:115
 msgid "Hour"
 msgstr "Uur"
 
-#: views/options.php:114
+#: views/options.php:122
 msgid "Advice!"
 msgstr "Advies!"
 
-#: views/options.php:114
+#: views/options.php:122
 msgid " We strongly recommend that you use custom SMTP server option."
 msgstr "We adviseren sterk dat je de SMTP server op maat optie gebruikt"
 
-#: views/options.php:115
+#: views/options.php:123
 msgid "Use PHP Mail"
 msgstr "Gebruik PHP Mail"
 
-#: views/options.php:116
+#: views/options.php:124
 msgid "Use Sendmail Directly (*nix only)"
 msgstr "Gebruik Seinmail Direct (*nix alleen)"
 
-#: views/options.php:117
+#: views/options.php:125
 msgid "Use Custom SMTP Server"
 msgstr "Gebruik SMTP Server op maat"
 
-#: views/options.php:122
+#: views/options.php:130
 msgid "Load GMail Settings"
 msgstr "Laad GMail Instellingen"
 
-#: views/options.php:123
+#: views/options.php:131
 msgid "Load Amazon SES SMTP Settings"
 msgstr "Laad Amazon SES SMTP Instellingen"
 
-#: views/options.php:127
+#: views/options.php:135
 msgid "Hostname:"
 msgstr "Hostnaam:"
 
-#: views/options.php:130
+#: views/options.php:138
 msgid "Username:"
 msgstr "Gebruikersnaam:"
 
-#: views/options.php:133
+#: views/options.php:141
 msgid "Password:"
 msgstr "Wachtwoord:"
 
-#: views/options.php:136
+#: views/options.php:144
 msgid "Port:"
 msgstr "Port:"
 
-#: views/options.php:140
+#: views/options.php:148
 msgid "Secure Connection"
 msgstr "Beveiligde Verbinding"
 
-#: views/options.php:142
+#: views/options.php:150
 msgid "Don't Use"
 msgstr "Gebruik Niet:"
 
-#: views/options.php:143
+#: views/options.php:151
 msgid "Use Start TLS"
 msgstr "Gebruik Start TLS"
 
-#: views/options.php:144
+#: views/options.php:152
 msgid "Use SSL"
 msgstr "Gebruik SSL"
 
-#: views/options.php:150
+#: views/options.php:158
 msgid "Test your settings:"
 msgstr "Test je instellingen:"
 
-#: views/options.php:153
+#: views/options.php:161
 msgid "Send Test Email"
 msgstr "Verstuur Test Email"
 
-#: views/options.php:161
+#: views/options.php:169
 msgid "Have an Amazon SES account?"
 msgstr "Heb je een Amazon SES account?"
 
-#: views/options.php:162
+#: views/options.php:170
 msgid ""
 "Take a look at our article on <a href=\"http://www.glocksoft.com/email-"
 "marketing-software/how-to-use-amazon-ses-smtp-interface-to-send-"
 "emails/\">how to use Amazon SES SMTP interface</a>."
 msgstr "Kijk eens naar ons artikel over <a href=\"http://www.glocksoft.com/email-marketing-software/how-to-use-amazon-ses-smtp-interface-to-send-emails/\">hoe gebruik je de Amazon SES SMTP interface</a>."
 
-#: views/options.php:166
+#: views/options.php:174
 msgid "Need Professional SMTP Server?"
 msgstr "Een Professionele SMTP Server Nodig?"
 
-#: views/options.php:167
+#: views/options.php:175
 msgid ""
 "While you can use any SMTP service with our Plugin, we have partnered with "
 "SMTP.com, one of the best SMTP providers on the Internet to offer you a Free"
@@ -1888,42 +1935,52 @@ msgid ""
 "href=\"http://www.smtp.com/glocksoft\">http://www.smtp.com/glocksoft</a>."
 msgstr "Je kan natuurlijk elke SMTP service gebruiken met onze Plugin, maar we hebben een partnership met SMTP.com, één van de beste SMTP providers op internet om je een gratis SMTP account aan te bieden. Je kan een gratis 28 dagen test-account krijgen op <a href=\"http://www.smtp.com/glocksoft\">http://www.smtp.com/glocksoft</a>."
 
-#: views/options.php:176
+#: views/options.php:184
 msgid "API key"
 msgstr "API sleutel"
 
-#: views/options.php:179
+#: views/options.php:187
 msgid "API endpoint"
 msgstr "API eindpunt"
 
-#: views/options.php:185
+#: views/options.php:193
 msgid "API description"
 msgstr "API beschrijving"
 
-#: views/options.php:197
+#: views/options.php:195
+msgid "API integration"
+msgstr "API integratie"
+
+#: views/options.php:196
+msgid ""
+"<a href=\"%s\" target=\"_blank\">Check out our guide</a> on how to send "
+"emails to WPNewsman subscribers lists from G-Lock EasyMail7."
+msgstr "<a href=\"%s\" target=\"_blank\">Bekijk onze handleiding</a> om te zien hoe je mails kan sturen naar WPNewsman lijsten van G-Lock EasyMail7."
+
+#: views/options.php:207
 msgid "Delete subscribers' lists during uninstallation"
 msgstr "Verwijder ledenlijst tijdens de-installatie"
 
-#: views/options.php:198
+#: views/options.php:208
 msgid ""
 "Checking this option will remove all the subscribers' data during the plugin"
 " uninstallation. Be careful, there is no undo."
 msgstr "Door deze optie aan te vinken verwijder je alle ledendata tijdens de de-installtie van de plugin. Let op, je kan het niet ongedaan maken."
 
-#: views/options.php:200
+#: views/options.php:210
 msgid "Uninstall now"
 msgstr "De-installeer nu"
 
-#: views/options.php:212
+#: views/options.php:222
 msgid "Update Options"
 msgstr "Werk Opties bij"
 
-#: views/options.php:222
+#: views/options.php:232
 msgid ""
 "Are you sure you want to uninstall WPNewsman Plugin and all of its settings?"
 msgstr "Weet je zeker dat je de WPNewsman Plugin en alle instellingen wilt de-installeren?"
 
-#: views/options.php:226
+#: views/options.php:236
 msgid "Uninstall"
 msgstr "De-installeer"
 
@@ -1994,13 +2051,13 @@ msgstr "Onze Pro licentie is beschikbaar per domein of een enkel subdomein. Lees
 msgid "Upgrade to Pro for $%d/year"
 msgstr "Upgrade naar Pro voor $%d/jaar"
 
-#: views/pro.php:26
+#: views/pro.php:25
 msgid ""
 "or get special <a "
-"href=\"https://www.iportis.com/buynow.php?pid=wpnewsmanpro&noshop=1&qty=3\">3-site"
-" discounted license for $%s</a> <br> To activate the PRO version, you'll "
-"need to download an extra plugin WPNewsman Pro Extension."
-msgstr "of krijg de speciale <a href=\"https://www.iportis.com/buynow.php?pid=wpnewsmanpro&noshop=1&qty=3\">3-site kortingslicentie voor $%s</a> <br> om de Pro versie te activeren moet je de extra plugin downloaden, de WPNewsman Pro Extension."
+"href=\"https://secure.avangate.com/order/checkout.php?PRODS=4630229&QTY=3&CART=1&CLEAN_CART=1&ADDITIONAL_site_address[4630229]=%s\">3-site"
+" discounted license for $%s</a> <br><br> To activate the PRO version, you'll"
+" need to download an extra plugin WPNewsman Pro Extension."
+msgstr "of krijg de speciale  <a href=\"https://secure.avangate.com/order/checkout.php?PRODS=4630229&QTY=3&CART=1&CLEAN_CART=1&ADDITIONAL_site_address[4630229]=%s\">3-site kortingslicentie voor $%s.</a> <br> Om de Pro versie te activeren moet je de extra plugin downloaden, de WPNewsman Pro Extension."
 
 #: views/subscribers.php:20
 msgid "Manage Subscribers"
@@ -2066,45 +2123,55 @@ msgstr "Formulier Data"
 msgid "Unsubscribe all"
 msgstr "Alles Uitschrijven"
 
-#: views/subscribers.php:145 views/subscribers.php:146
+#: views/subscribers.php:142
+msgid "Are you sure you want to delete %s selected subscribers?"
+msgstr "Weet je zeker dat je de %s geselecteerde inschrijvers wilt verwijderen?"
+
+#: views/subscribers.php:145
 msgid "Delete all"
 msgstr "Alles Verwijderen"
 
-#: views/subscribers.php:161 views/subscribers.php:162
+#: views/subscribers.php:160 views/subscribers.php:161
 msgid "Change all"
 msgstr "Alles Wijzigen"
 
-#: views/subscribers.php:174
+#: views/subscribers.php:173
 msgid ""
 "This action will send re-subscribe request <strong>to all unconfirmed "
 "subscribers</strong> in the list."
 msgstr "Deze actie stuurt een her-inschrijf verzoek <strong>naar alle onbevestigde inschrijvers</strong> op de lijst."
 
-#: views/subscribers.php:178
+#: views/subscribers.php:177
 msgid "Send re-subscribe request"
 msgstr "Verstuur her-inschrijf verzoek"
 
-#: views/subscribers.php:188
+#: views/subscribers.php:187
 msgid ""
 "Are you sure you want to re-send confirmation emails to selected "
 "subscribers?"
 msgstr "Weet je zeker dat je opnieuw een bevestigingsmail wilt sturen naar geselecteerde inschrijvers"
 
-#: views/subscribers.php:199
+#: views/subscribers.php:198
 msgid " list:"
 msgstr "Lijst:"
 
-#: views/subscribers.php:204
+#: views/subscribers.php:203
 msgid "Uploaded files"
 msgstr "Ge-uploade Bestanden"
 
-#: views/subscribers.php:207
+#: views/subscribers.php:206
 msgid "Import options"
 msgstr "Import opties"
 
-#: views/subscribers.php:215
+#: views/subscribers.php:214
 msgid "Please select a file to import."
 msgstr "Selecteer een bestand om te importeren aub"
+
+#: views/subscribers.php:215
+msgid ""
+"Remember - a fully confirmed opted-in list is important.<br> It is a general"
+" prerequisite for sustainable e-mail deliverability and conversion rates."
+msgstr "Let op - een volledig bevestigde opt-in lijst is belangrijk. <br> Het is een algemene voorwaarde voor duurzame mailaflevering en conversie ratio's."
 
 #: views/subscribers.php:223
 msgid " Skip first row"
@@ -2200,49 +2267,49 @@ msgstr "Sjabloon bestandsnaam"
 msgid "Get more templates"
 msgstr "Verkrijg meer sjablonen"
 
-#: widget-wpml.php:10
+#: widget-wpml.php:8
 msgid "WPNewsman multilanguage subscription form for your newsletters"
 msgstr "WPNewsman meertalig inschrijfformulier voor je nieuwsbrieven"
 
-#: widget-wpml.php:13
+#: widget-wpml.php:11
 msgid "WPNewsman Subscription Multilanguage Form"
 msgstr "WPNewsman Inschrijving Meertalig Formulier "
 
-#: workers/class.mailer.php:163
+#: workers/class.newsmanMailerWorker.php:176
 msgid "Bad Email Address"
 msgstr "Verkeerd Emailadres"
 
-#: workers/class.mailer.php:178
+#: workers/class.newsmanMailerWorker.php:191
 msgid ""
 "Too many consecutive errors. Please check your mail delivery settings and "
 "make sure you can send a test email. Last SMTP error: "
 msgstr "Teveel opvolgende fouten. Controleer aub de email afleverinstellingen en zorg ervoor dat je een testemail kan versturen. Laatste SMTP fout:"
 
-#: workers/class.mailer.php:204
+#: workers/class.newsmanMailerWorker.php:218
 msgid "No \"confirmed\" subscribers found in the selected list(s)."
 msgstr "geen \"bevestigde\" leden gevonden in de geselecteerde lijst(en)."
 
-#: wpnewsman.php:140
+#: wpnewsman.php:149
 msgid "PHP version >= 5.3"
 msgstr "PHP Versie >= 5.3"
 
-#: wpnewsman.php:141
+#: wpnewsman.php:150
 msgid "You have PHP %s installed."
 msgstr "Je hebt PHP %s geïnstalleerd."
 
-#: wpnewsman.php:149
+#: wpnewsman.php:158
 msgid "Single-site mode"
 msgstr "Single-site modus"
 
-#: wpnewsman.php:150
+#: wpnewsman.php:159
 msgid "Doesn't work in MultiSite setup."
 msgstr "Werkt niet in MultiSite opzet."
 
-#: wpnewsman.php:157
+#: wpnewsman.php:166
 msgid "MCrypt library"
 msgstr "MCrypt bibliotheek"
 
-#: wpnewsman.php:158
+#: wpnewsman.php:167
 msgid ""
 "MCrypt library is required to securely store your passwords in the database."
 " Read <a href=\"http://php.net/manual/en/mcrypt.setup.php\">how to "
@@ -2250,11 +2317,11 @@ msgid ""
 " hosting."
 msgstr "Crypt bibliotheek is nodig om je wachtwoorden veilig op te slaan in de database. Lees <a href=\"http://php.net/manual/en/mcrypt.setup.php\">hoe te installeren/configureren</a> of neem contact op met je hostingprovider als je op gedeelde hosting zit."
 
-#: wpnewsman.php:165
+#: wpnewsman.php:174
 msgid "MBString extension"
 msgstr "MBString extensie"
 
-#: wpnewsman.php:166
+#: wpnewsman.php:175
 msgid ""
 "MBString extension is required for correct processing of non unicode "
 "characters. Read <a "
@@ -2263,21 +2330,21 @@ msgid ""
 " hosting."
 msgstr "MBString extensie is nodig voor de correcte verwerking van niet-unicode karakters. Lees <a href=\"http://www.php.net/manual/en/mbstring.installation.php\">hoe te installeren/configureren</a> of neem contact op met je hostingprovider als je op gedeelde hosting zit."
 
-#: wpnewsman.php:182
+#: wpnewsman.php:191
 msgid "Direct filesystem access"
 msgstr "Direct bestandssysteem toegang"
 
-#: wpnewsman.php:183
+#: wpnewsman.php:192
 msgid ""
 "Since version 1.5.7 direct access to the filesystem is required. Make sure "
 "that the uploads directory is writable by the web server%s."
 msgstr "Sinds versie 1.5.7 is direct toegang tot het bestandssysteem nodig. Zorg ervoor dat de uploads map schrijfbaar is door de webserver%s."
 
-#: wpnewsman.php:190
+#: wpnewsman.php:199
 msgid "Safe mode is turned off"
 msgstr "Veilige modus is uit."
 
-#: wpnewsman.php:191
+#: wpnewsman.php:200
 msgid ""
 "Safe mode is deprecated in PHP and not supported by the plugin.(Set "
 "safe_mode = Off in php.ini. See <a "
@@ -2285,11 +2352,11 @@ msgid ""
 "php.net</a>)"
 msgstr "safe mode is afgekeurd in PHP en niet ondersteund door de plugin. (Zet safe_mode = Off in php.ini. Zie <a href=\"http://www.php.net/manual/en/features.safe-mode.php\">Safe Mode op php.net</a>)"
 
-#: wpnewsman.php:199
+#: wpnewsman.php:208
 msgid "bcmath or gmp extension is loaded"
 msgstr "bcmath of gmp extensie is geladen"
 
-#: wpnewsman.php:200
+#: wpnewsman.php:209
 msgid ""
 "Since version 1.7.0 either <b>bcmath</b> or <b>gmp</b> PHP module is "
 "required for the plugin to work. According to PHP documentation "

@@ -141,7 +141,7 @@ class newsmanWorkerManager {
 				$worker->fork($params);
 			}
 		}
-		do_actions('newsman_poke_workers');
+		do_action('newsman_poke_workers');
 	}
 
 	private function enableWorkersCheck() {

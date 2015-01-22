@@ -3,7 +3,7 @@
 Plugin Name: G-Lock WPNewsman Lite
 Plugin URI: http://wpnewsman.com
 Description: You get simple yet powerful newsletter solution for WordPress. Now you can easily add double optin subscription forms in widgets, articles and pages, import and manage your lists, create and send beautiful newsletters directly from your WordPress site. You get complete freedom and a lower cost compared to Email Service Providers. Free yourself from paying for expensive email campaigns. WPNewsman plugin updated regularly with new features.
-Version: 1.8.7
+Version: 1.8.8
 Author: Alex Ladyga - G-Lock Software
 Author URI: http://www.glocksoft.com
 */
@@ -31,7 +31,7 @@ function newsman_ensure_correct_path($path) {
 }
 
 define('NEWSMAN', 'wpnewsman');
-define('NEWSMAN_VERSION', '1.8.7');
+define('NEWSMAN_VERSION', '1.8.8');
 
 define('NEWSMAN_MU_BUNDLED_VERSION', '1.0.0');
 

@@ -1263,6 +1263,19 @@ class newsman {
 						'pleaseCheckYourEmailAddress' => __('Please check your email address.', NEWSMAN),
 						'areYouSureYouWantToRestoreStockTemplate' => __('Are you sure you want to restore stock template?', NEWSMAN),
 
+						// mailbox table strings
+
+						'mbNoSubject' => __('No subject', NEWSMAN),
+						'mbStart' => __('Start', NEWSMAN),
+						'mbStop' => __('Stop', NEWSMAN),
+						'mbEdit' => __('Edit', NEWSMAN),
+						'mbDuplicate' => __('Duplicate', NEWSMAN),
+						'mbDelete' => __('Delete', NEWSMAN),
+						'mbSent' => __('sent', NEWSMAN),
+						'mbOpens' => __('opens', NEWSMAN),
+						'mbClicks' => __('clicks', NEWSMAN),
+						'mbUnsubscribes' => __('unsubscribes', NEWSMAN),
+
 						'NEWSMAN_ET_ADMIN_SUB_NOTIFICATION' => __('Subscribe notification email sent to the administrator.', NEWSMAN),
 						'NEWSMAN_ET_ADMIN_UNSUB_NOTIFICATION' => __('Unsubscribe notification email sent to the administrator.', NEWSMAN),
 						'NEWSMAN_ET_CONFIRMATION' => __('Email with the confirmation link sent to the user upon subscription.', NEWSMAN),
@@ -2052,9 +2065,6 @@ class newsman {
 		// checking for external form request
 
 		if ( isset($_REQUEST['uid']) && preg_match('/wpnewsman(\-newsletters|)\/form/', $_SERVER['REQUEST_URI']) ) {
-			require_once(NEWSMAN_CLASSES_PATH.DIRECTORY_SEPARATOR."class.form.php");
-			require_once(NEWSMAN_CLASSES_PATH.DIRECTORY_SEPARATOR."class.list.php");
-
 			include('views/ext-form.php');
 			exit();
 		}
