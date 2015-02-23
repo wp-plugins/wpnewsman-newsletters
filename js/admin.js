@@ -253,6 +253,24 @@ var NEWSMAN_HTML_TO_TEXT = (function(){
 
 jQuery(function($){
 
+	window.newsmanStopWorker = function() {
+
+		var workerId = prompt('Please enter worker ID', '');
+
+		if ( !workerId ) { return; }
+
+		$.ajax({
+			type: 'POST',
+			url: ajaxurl,
+			data: {
+				action: 'newsmanAjStopWorker',
+				id: workerId
+			}
+		}).done(function(data){
+			showMessage(data.msg, 'success');
+		}).fail(NEWSMAN.ajaxFailHandler);
+	};
+
 	$(document).on('click', '[data-dismiss="newsman-admin-notification"]', function(e){
 		$(this).closest('.newsman-admin-notification').animate({ height: 'toggle', opacity: 'toggle' }, 'slow');
 	});
@@ -265,6 +283,10 @@ jQuery(function($){
 				}
 		);
 	};	
+
+	if ( typeof NEWSMAN_LOCALE !== 'undefined' ) {
+		moment.locale(NEWSMAN_LOCALE.substr(0,2));
+	}
 
 	/******* Pagination widget ********/
 
@@ -950,6 +972,7 @@ jQuery(function($){
 			}
 
 			function optToArr(obj, p) {
+				p = p || [];
 				for ( var name in obj ) {
 					if ( isObject(obj[name]) ) {
 						optToArr(obj[name], p.concat([name]));
@@ -959,29 +982,42 @@ jQuery(function($){
 				}
 			}
 
-			optToArr(opts, ['newsman']);
+			optToArr(opts);
 
-			var name, el, cb, f = 'val';
+			var pathName, name, el, xtraEl, xtraElAttr, cb, f = 'val';
 
-			for ( name in o ) {
+			for ( pathName in o ) {
+				name = 'newsman-'+pathName;
 				f = 'val';
-				if ( typeof o[name] === 'boolean' ) {
+				if ( typeof o[pathName] === 'boolean' ) {
 					cb = $('input[name="'+name+'"]'); 
 
-					cb.prop('checked', !!o[name]);
-					
+					cb.prop('checked', !!o[pathName]);					
 				} else {
 					var radios = $('input[name="'+name+'"]').filter('[type="radio"]').prop('checked', false).length;
 					if ( radios ) {
-						$('input[name="'+name+'"]').filter('input[value="'+o[name]+'"]').prop('checked', true);
+						$('input[name="'+name+'"]').filter('input[value="'+o[pathName]+'"]').prop('checked', true);
 					} else {
-						$('input[name="'+name+'"], textarea[name="'+name+'"], select[name="'+name+'"]').not('[type="radio"]').val(o[name]);
+						$('input[name="'+name+'"], textarea[name="'+name+'"], select[name="'+name+'"]').not('[type="radio"]').val(o[pathName]);
 						$('input[name="'+name+'"]').filter('[type="hidden"]').change();
-					}
-					
-				}
-				
+
+						// newsman-bind-option="apiKey" newsman-attr="data-clipboard-text"
+						xtraEl = $('[newsman-bind-option="'+pathName+'"]');
+						if ( xtraEl[0] ) {
+							xtraElAttr = xtraEl.attr('newsman-attr');
+							if ( xtraElAttr ) {
+								xtraEl.attr( xtraElAttr, o[pathName] );
+							}
+						}
+					}					
+				}				
 			}
+
+			
+
+			$('button[data-clipboard-text]').each(function(i, el){
+				new ZeroClipboard(el);
+			});
 
 			if ( NEWSMAN.refreshMDO ) {
 				NEWSMAN.refreshMDO();	
@@ -2899,9 +2935,11 @@ jQuery(function($){
 			saveEntity();
 		});
 
-		function sendEmail() {
+		function sendEmail(done) {
+			done = done || function(){};
 
 			if ( !sendValidation.validate() ) {
+				done();
 				return;
 			}
 
@@ -2922,7 +2960,11 @@ jQuery(function($){
 							window.location = data.redirect;
 						}					
 					});
-				}).fail(NEWSMAN.ajaxFailHandler);
+					done();
+				}).fail(function(jqXHR, status, msg){
+					done(new Error(status+': '+msg));
+					NEWSMAN.ajaxFailHandler.apply(NEWSMAN.ajaxFailHandler, arguments);
+				});
 
 			});
 		}
@@ -2996,9 +3038,18 @@ jQuery(function($){
 			$('#newsman-schedule').prop('checked', true);
 		});
 
-		$('#newsman-send').click(function(){
+		var sendBtn = $('#newsman-send');
+
+		sendBtn.click(function(){
+			sendBtn.attr('disabled', 'disabled');
+			$('<img src="'+NEWSMAN_PLUGIN_URL+'/img/loading-grn.gif">').prependTo(sendBtn);
 			NEWSMAN.editor.setMode('wysiwyg');
-			sendEmail();
+			sendEmail(function(err){
+				$('img', sendBtn).remove();
+				if ( !err ) {
+					sendBtn.removeAttr('disabled');
+				}
+			});
 		});
 	});
 

@@ -1,0 +1,2436 @@
+# Copyright (C) 2015 G-Lock WPNewsman Lite
+# This file is distributed under the same license as the G-Lock WPNewsman Lite package.
+# Translators:
+# patricia <vovoaki@gmail.com>, 2015
+# patricia <vovoaki@gmail.com>, 2015
+# Victorio Guimaraes <victorio@obsequentia.com.br>, 2013
+msgid ""
+msgstr ""
+"Project-Id-Version: G-Lock WPNewsman Plugin for WordPress\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/wpnewsman\n"
+"POT-Creation-Date: 2015-02-20 08:20:04+00:00\n"
+"PO-Revision-Date: 2015-02-20 08:46+0000\n"
+"Last-Translator: Dmitry Vladyko <seocombat@gmail.com>\n"
+"Language-Team: Portuguese (Brazil) (http://www.transifex.com/projects/p/g-lock-wpnewsman/language/pt_BR/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: pt_BR\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: ajaxbackend.php:82 classes/class.newsmanAPI.php:93
+msgid "required parameter \"%s\" is missing in the request"
+msgstr "não foi incluído o parâmetro \"%s\" na requisição "
+
+#. translators: subscriber type
+#. translators: lists and forms table header
+#: ajaxbackend.php:92 core.php:1171 views/forms.php:24
+#: views/subscribers.php:31
+msgid "Confirmed"
+msgstr "Confirmado"
+
+#. translators: subscriber type
+#. translators: lists and forms table header
+#: ajaxbackend.php:93 core.php:1169 views/forms.php:25
+#: views/subscribers.php:32
+msgid "Unconfirmed"
+msgstr "Não confirmado"
+
+#. translators: subscriber type
+#. translators: lists and forms table header
+#: ajaxbackend.php:94 core.php:1173 views/forms.php:26
+#: views/subscribers.php:33
+msgid "Unsubscribed"
+msgstr "Não assinante"
+
+#: ajaxbackend.php:101
+msgid "Cannot edit email. Email with id \"%s\" is not found."
+msgstr "Não foi possível editar o email. Email com id \"%s\" não encontrado."
+
+#: ajaxbackend.php:105
+msgid "Cannot edit email. Email with id \"%s\" cannot be written."
+msgstr "Não foi possível editar o email. Email com id \"%s\" não pode ser escrito."
+
+#: ajaxbackend.php:109
+msgid "Email does not have a \"%s\" property."
+msgstr "Email \"%s\", não possui propriedades."
+
+#: ajaxbackend.php:114
+msgid "Cannot edit template. Template with id \"%s\" is not found."
+msgstr "Não posso editar o template. Template com id \"%s\" não encontrado."
+
+#: ajaxbackend.php:119
+msgid "Cannot edit template. Template with id \"%s\" cannot be written."
+msgstr "Não se pode editar o modelo. Modelo com identificação\"%s\" não pode ser escrito."
+
+#: ajaxbackend.php:123 ajaxbackend.php:1331 classes/class.newsmanAPI.php:154
+#: classes/class.newsmanAPI.php:327 classes/class.newsmanAPI.php:612
+#: classes/class.newsmanAPI.php:631 classes/class.newsmanAnalytics.php:69
+#: classes/class.newsmanAnalytics.php:128 core.php:3023
+msgid "List with id \"%s\" is not found."
+msgstr "Não foi possível encontrar lista com id \"%s\"."
+
+#: ajaxbackend.php:180
+msgid "WPNEWSMAN Bug Report from %s"
+msgstr "WPNEWSMAN BUG reporte de %s "
+
+#: ajaxbackend.php:191
+msgid "Bug report was sent to %s."
+msgstr "Reporte de Bug foi enviado a %s."
+
+#: ajaxbackend.php:226
+msgid "Your SMTP settings are correct"
+msgstr "Sua configuração SMTP está correta."
+
+#: ajaxbackend.php:227
+msgid ""
+" If you read this message, your SMTP settings in the G-Lock WPNewsman plugin"
+" are correct"
+msgstr "Se você leu esta mensagem a configuração do SMTP, no plugin G-Lock WPNewsman está correta."
+
+#: ajaxbackend.php:235 ajaxbackend.php:1888
+msgid "Test email was sent to %s."
+msgstr "Email teste foi enviado para %s"
+
+#: ajaxbackend.php:261 ajaxbackend.php:291 ajaxbackend.php:459
+#: ajaxbackend.php:803 ajaxbackend.php:843 ajaxbackend.php:1067
+#: ajaxbackend.php:1373 ajaxbackend.php:1423 ajaxbackend.php:1441
+#: ajaxbackend.php:1702 ajaxbackend.php:1764 ajaxbackend.php:1774
+#: ajaxbackend.php:1930 ajaxbackend.php:2069
+msgid "success"
+msgstr "sucesso"
+
+#: ajaxbackend.php:326
+msgid "Successfully deleted selected subscribers."
+msgstr "Assinantes foram deletados com sucesso. "
+
+#: ajaxbackend.php:369
+msgid "Error: \"options\" request parameter was empty or not defined."
+msgstr "Erro: \"opções\" Parâmetro requerido estava vazio ou não foi definido. "
+
+#: ajaxbackend.php:380
+msgid "Options were successfully saved."
+msgstr "Opções foram salvas com sucesso."
+
+#: ajaxbackend.php:648 ajaxbackend.php:896 ajaxbackend.php:922
+#: ajaxbackend.php:946 ajaxbackend.php:975 ajaxbackend.php:1005
+#: ajaxbackend.php:1095 ajaxbackend.php:1124 ajaxbackend.php:1717
+#: ajaxbackend.php:1807 ajaxbackend.php:2430
+msgid "Saved"
+msgstr "Gravado"
+
+#: ajaxbackend.php:682
+msgid "Your email was successfully queued for sending."
+msgstr "Seu email está na fila para envío."
+
+#: ajaxbackend.php:838 ajaxbackend.php:861
+msgid "Template does not have a \"%s\" property."
+msgstr "Template não possui a propriedade \"%s\""
+
+#: ajaxbackend.php:1040
+msgid "You have successfully deleted %d template."
+msgid_plural "You have successfully deleted %d templates."
+msgstr[0] "%d templates foram deletados com sucesso."
+msgstr[1] "%d templates foram deletados com sucesso."
+
+#: ajaxbackend.php:1178 ajaxbackend.php:1730
+msgid "Your email is successfully scheduled."
+msgstr "Seu email foi agendado."
+
+#: ajaxbackend.php:1185
+msgid "Unrecognized \"send\" parameter - %s"
+msgstr "Parâmetro de \"enviar\" não reconhecido -%s"
+
+#: ajaxbackend.php:1236
+msgid "Emails were successfully unsubscribed."
+msgstr "Inscrições de emails foram canceladas com sucesso. "
+
+#: ajaxbackend.php:1298 ajaxbackend.php:2196
+msgid "Bad email address"
+msgstr "Endereço de email ruim"
+
+#: ajaxbackend.php:1388
+msgid "Please select a file to import"
+msgstr "Por favor selecione um arquivo para importar"
+
+#: ajaxbackend.php:1393
+msgid "Imported %d subscriber. Make sure you send him confirmation email."
+msgid_plural ""
+"Imported %d subscribers. Make sure you send them confirmation email."
+msgstr[0] "Inscrições importadas %s. Certifique-se de enviar-lhes e-mail de confirmação."
+msgstr[1] "Inscrições importadas %s. Certifique-se de enviar-lhes e-mail de confirmação."
+
+#: ajaxbackend.php:1439 views/subscribers.php:85
+msgid "IP Address"
+msgstr "Endereço de IP"
+
+#: ajaxbackend.php:1458
+msgid "Imported %d template."
+msgid_plural "Imported %d templates."
+msgstr[0] "Temas importados %d."
+msgstr[1] "Temas importados %d."
+
+#: ajaxbackend.php:1538
+msgid "Selected emails were successfully resumed"
+msgstr "Emails selecionados foram resumidos com sucesso."
+
+#: ajaxbackend.php:1592 ajaxbackend.php:1679
+msgid "\"entType\" parameter value \"%s\" should be \"email\" or \"template\"."
+msgstr "\"entType\" "
+
+#: ajaxbackend.php:1665
+msgid "Posts block successfully compiled"
+msgstr "Bloco de posts foram compilados."
+
+#: ajaxbackend.php:1675
+msgid ""
+"\"postTemplateType\" parameter value \"%s\" should be \"post_content\", "
+"\"post_excerpt\" or \"fancy_excerpt\"."
+msgstr "\"postTemplateType\" Valor de parâmetro \"%s\" deve ser \"post_content\", \"post_excerpt\" or \"fancy_excerpt\"."
+
+#: ajaxbackend.php:1690
+msgid "Posts block successfully updated"
+msgstr "Bloco de posts forma atualizados."
+
+#: ajaxbackend.php:1734
+msgid "ReConfirmation system email template is not found."
+msgstr "Re-confirmação de sistema do tema do email não foi encontrada."
+
+#: ajaxbackend.php:1818
+msgid "List with the name \"%s\" already exists."
+msgstr "Lista com o nome \"%s\" já existe."
+
+#. translators: email property
+#: ajaxbackend.php:1823 views/addedit_email.php:65 views/mailbox.php:108
+msgid "Created"
+msgstr "Criado."
+
+#: ajaxbackend.php:1887
+msgid ""
+"Test email was sent to %s and subscriber with this email was created in "
+"\"%s\" list."
+msgstr "E-mail de teste foi enviado para % s e assinante com este e-mail foi criado em lista de \"% s\" ."
+
+#: ajaxbackend.php:1971
+msgid "Wrong \"type\" parameter. Must be \"csv\" or \"template\""
+msgstr "Parâmetro \"type\" errado. Deve ser \"csv\" ou \"template\""
+
+#: ajaxbackend.php:2219 ajaxbackend.php:2237 ajaxbackend.php:2242
+#: ajaxbackend.php:2247 ajaxbackend.php:2253 ajaxbackend.php:2623
+#: ajaxbackend.php:2635 ajaxbackend.php:2644
+msgid "Success"
+msgstr "com sucesso"
+
+#: ajaxbackend.php:2221
+msgid "Translation not found"
+msgstr "Tradução não encontrada"
+
+#: ajaxbackend.php:2300 ajaxbackend.php:2301 ajaxbackend.php:2302
+#: classes/class.newsmanAPI.php:525 classes/class.newsmanAPI.php:526
+#: classes/class.newsmanAPI.php:527
+msgid "Unknown"
+msgstr "Desconhecido"
+
+#: ajaxbackend.php:2435
+msgid "Subscriber with email %s already exists."
+msgstr "Assinante com email %s ja existe."
+
+#: ajaxbackend.php:2447
+msgid "Required parameter \"code\" is not defined."
+msgstr ""
+
+#: ajaxbackend.php:2467
+msgid "Your license key is valid. Pro functionality is unlocked."
+msgstr ""
+
+#: ajaxbackend.php:2472
+msgid ""
+"Your license key is invalid. Please make sure you copied it in full and if "
+"this error still occurs, please write us at <a "
+"href=\"mailto:support@glocksoft.com\">support@glocksoft.com</a>."
+msgstr ""
+
+#: ajaxbackend.php:2483
+msgid "Required parameter \"%s\" is not defined."
+msgstr ""
+
+#: ajaxbackend.php:2490
+msgid "Your connection settings are correct"
+msgstr ""
+
+#: ajaxbackend.php:2526
+msgid "Starting bounce handler"
+msgstr ""
+
+#: ajaxbackend.php:2546
+msgid "Bounce handler stopped"
+msgstr ""
+
+#: ajaxbackend.php:2632
+msgid "Parameter \"domainId\" could not be empty"
+msgstr ""
+
+#: ajaxbackend.php:2637 ajaxbackend.php:2646
+msgid "Some error occured: %s"
+msgstr ""
+
+#: classes/class.newsmanAPI.php:127
+msgid "Subscriber added"
+msgstr "Assinante adicionado"
+
+#: classes/class.newsmanAPI.php:132
+msgid "The email \"%s\" is already subscribed but not yet confirmed."
+msgstr "O email\"%s\" foi inscrito mas ainda não foi confirmado."
+
+#: classes/class.newsmanAPI.php:137
+msgid "The email \"%s\" is already subscribed and confirmed."
+msgstr "O email \"%s\" ja foi inscrito e confirmado."
+
+#: classes/class.newsmanAPI.php:142
+msgid "The email \"%s\" is already already in the database but unsubscribed."
+msgstr "O email \"%s\" ja está no banco de dados mas inscrição cancelada."
+
+#: classes/class.newsmanAPI.php:163
+msgid "Bad email address format \"%s\"."
+msgstr "Formato\"%s\" de email ruim."
+
+#: classes/class.newsmanAPI.php:641
+msgid "Successfully unsubscribed."
+msgstr "Inscrição foi cancelada com sucesso."
+
+#: classes/class.newsmanAnSubDetails.php:46
+msgid "There's no action '%s'"
+msgstr "Não há ação'%s'"
+
+#: classes/class.newsmanAnalytics.php:64
+#: classes/class.newsmanAnalytics.php:123
+msgid "Email with ID \"%d\" is not found"
+msgstr "Email com ID\"%d\" não foi encontrado"
+
+#: classes/class.newsmanAnalytics.php:75
+#: classes/class.newsmanAnalytics.php:134
+msgid "Subscriber with id \"%s\" is not found."
+msgstr "Assinante com ID\"%d\" não foi encontrado."
+
+#: classes/class.newsmanBouncedHandler.php:392
+msgid "Unsubscribed by Bounce Handler"
+msgstr ""
+
+#. translators: Default subscription form
+#: classes/class.newsmanForm.php:59 core.php:240
+msgid "Subscribe"
+msgstr "Assinado."
+
+#: classes/class.newsmanForm.php:135 classes/class.newsmanForm.php:169
+#: classes/class.newsmanForm.php:190 classes/class.newsmanForm.php:210
+#: classes/class.newsmanForm.php:227 classes/class.newsmanForm.php:260
+#: classes/class.newsmanForm.php:291 core.php:1194 views/list.php:69
+#: views/list.php:91 views/list.php:108 views/list.php:194 views/list.php:231
+msgid "Required"
+msgstr "Requerido."
+
+#: classes/class.newsmanForm.php:340
+msgid ""
+"Spam submission detected. Please contact the site administrator and describe"
+" the problem."
+msgstr "Inscrição de spam detectada. Por favor entre em contato com o administrador do site e explique o problema."
+
+#: classes/class.newsmanForm.php:340 core.php:1175 core.php:1203
+msgid "Error"
+msgstr "Erro"
+
+#: classes/class.newsmanList.php:47
+msgid "Cannot find free unique list ID. Recursive operations limit exceeded."
+msgstr "A gratuita lista distinta ID não foi encontrada. Operações recursiva excederam limites."
+
+#: classes/class.newsmanList.php:61
+msgid "\"name\" field could not be empty."
+msgstr "campo \"name\" não pode estar vazio."
+
+#: classes/class.newsmanUtils.php:36
+msgid "Already Subscribed and Verified"
+msgstr "Já foi inscrito e verificado"
+
+#: classes/class.newsmanUtils.php:42
+msgid "Bad email address format"
+msgstr "Formato de endereço de email ruim"
+
+#: classes/class.newsmanUtils.php:48
+msgid "Confirmation Required"
+msgstr "Confirmaçāo Requerida"
+
+#: classes/class.newsmanUtils.php:54
+msgid "Confirmation Successful"
+msgstr "Confirmação com Suscesso"
+
+#: classes/class.newsmanUtils.php:60
+msgid "Subscription not yet confirmed"
+msgstr "Inscrição não foi confirmada ainda"
+
+#: classes/class.newsmanUtils.php:66
+msgid "Successfully unsubscribed"
+msgstr "Inscrição foi cancelada com sucesso"
+
+#: classes/class.newsmanUtils.php:72 migration.php:180
+msgid "Please confirm your unsubscribe decision"
+msgstr "Por favor confirme sua decisão de cancelar a sua inscrição"
+
+#: classes/class.newsmanUtils.php:889
+msgid "Add new..."
+msgstr "Adicionar novo..."
+
+#: classes/class.newsmanUtils.php:1070 classes/class.newsmanUtils.php:1123
+#: core.php:1695 core.php:1708
+msgid "Enter Subject Here"
+msgstr "Entre o assunto"
+
+#: classes/class.newsmanUtils.php:1264 core.php:1247 core.php:2169
+msgid "Copy"
+msgstr "Copiar"
+
+#: classes/class.newsmanUtils.php:1624
+msgid "Administrator notification - new subscriber"
+msgstr "Notificação administrador- novo assinante"
+
+#: classes/class.newsmanUtils.php:1629
+msgid "Administrator notification - user unsubscribed"
+msgstr "Notificação administrador- Assinante cancelou inscrição"
+
+#: classes/class.newsmanUtils.php:1634
+msgid "Subscription confirmation"
+msgstr "Confirmação de inscrição "
+
+#: classes/class.newsmanUtils.php:1639
+msgid "Unsubscribe notification"
+msgstr "Notificação de cancelar inscrição"
+
+#: classes/class.newsmanUtils.php:1644
+msgid "Welcome letter, thanks for subscribing"
+msgstr "Carta de boas vindas, obrigada por se inscrever"
+
+#: classes/class.newsmanUtils.php:1649 migration.php:212
+msgid "Unsubscribe confirmation"
+msgstr "Confirmação de inscrição cancelada"
+
+#: classes/class.newsmanUtils.php:1654 migration.php:295
+msgid "Re-subscription confirmation"
+msgstr "Confirmação de re-inscrição "
+
+#: core.php:15 core.php:2315
+msgid "Every minute"
+msgstr "a cada minuto"
+
+#. translators: Default subscription form
+#: core.php:230
+msgid "Subscription"
+msgstr "Inscrição "
+
+#. translators: Default subscription form
+#: core.php:232
+msgid "Enter your primary email address to get our free newsletter."
+msgstr "Insira o seu endereço de email principal para receber o nosso boletim informativo."
+
+#. translators: Default subscription form
+#: core.php:234 views/subscribers.php:237 views/subscribers.php:245
+#: views/subscribers.php:253 views/subscribers.php:261
+#: views/subscribers.php:269
+msgid "First Name"
+msgstr "Primeiro Nome"
+
+#. translators: Default subscription form
+#: core.php:236 views/subscribers.php:238 views/subscribers.php:246
+#: views/subscribers.php:254 views/subscribers.php:262
+#: views/subscribers.php:270
+msgid "Last Name"
+msgstr "Sobrenome"
+
+#. translators: Default subscription form
+#: core.php:238 views/list.php:279 views/subscribers.php:83
+msgid "Email"
+msgstr "Email"
+
+#. translators: Default subscription form
+#: core.php:242
+msgid ""
+"You can leave the list at any time. Removal instructions are included in "
+"each message."
+msgstr "Você pode se retirar dessa lista a qualquer momento. Instruções para retirar-se estão incluídas em cada mensagem  "
+
+#: core.php:259 core.php:1795
+msgid "Upgrade to Pro"
+msgstr "Atualizar para Pro"
+
+#: core.php:262
+msgid "Sent %d of %d emails."
+msgstr "Emails %d of %d enviados."
+
+#: core.php:263
+msgid ""
+"You reached the subscribers limit of the Lite version. %s to resume sending."
+msgstr "Você alcançou o limite de inscrições para a versão Lite. %s para resumir o envio."
+
+#: core.php:394
+msgid ""
+"\"Post has no excerpt. Write something yourself or use fancy_excerpt "
+"option\""
+msgstr "\"O post não tem excerto. Escreva algo você mesmo ou use fancy_excerpt option\""
+
+#: core.php:638
+msgid "Your link seems to be broken."
+msgstr "Seu link parece estar com uma falha."
+
+#: core.php:644
+msgid "List with the unique code \"%s\" is not found"
+msgstr "A lista com o código diferenciado \"%s\" não foi encontrada"
+
+#: core.php:650
+msgid "Subscriber with the unique code \"%s\" is not found"
+msgstr "Assinante com o código diferenciado \"%s\" não foi encontrado"
+
+#: core.php:751
+msgid "Unique email id is missing in request."
+msgstr "Esta faltando o requerido Email id diferenciado. "
+
+#: core.php:756
+msgid "Email with unique code %s is not found."
+msgstr "Email com diferenciado código \"%s\" não foi encontrado."
+
+#: core.php:1019 core.php:1270
+msgid "Please fill all the required fields."
+msgstr "Por favor preencha todos os espaços ."
+
+#: core.php:1020 core.php:1271
+msgid "Please check your email address."
+msgstr "Por favor verifique seu endereço de email."
+
+#: core.php:1162
+msgid ""
+"Full Email Statistics & Click Tracking available in <a href=\"%s\">the Pro "
+"version</a>"
+msgstr "Estatística de email completo & clique Acompanhando disponível na <a href=\"%s\"> versão Pro </a>"
+
+#: core.php:1174
+msgid "Error: "
+msgstr "Erro:"
+
+#: core.php:1176
+msgid "Done"
+msgstr "Feito"
+
+#: core.php:1177
+msgid "Please select emails which you want to stop sending of."
+msgstr "Por favor selecione os email que você quer para de mandar de."
+
+#: core.php:1178
+msgid "You have successfully stopped sending of selected emails."
+msgstr "Você parou com sucesso o envio de emails selecionados. "
+
+#: core.php:1179
+msgid "Please mark subscribers which you want to unsubscribe."
+msgstr "Por favor marque os assinantes dos quais você quer cancelar a inscrição. "
+
+#: core.php:1180
+msgid "You have successfully unsubscribed selected subscribers."
+msgstr "Assinantes selecionados foram deletados com sucesso."
+
+#: core.php:1181
+msgid "Please mark subscribers which you want to delete."
+msgstr "Por favor marque os assinantes que você quer deletar."
+
+#: core.php:1182
+msgid "You have successfully deleted selected subscribers."
+msgstr "Assinantes foram deletados com sucesso."
+
+#: core.php:1183
+msgid "Please mark subscribers to change."
+msgstr "Por favor marque os assinantes para mudar."
+
+#: core.php:1184
+msgid "You have successfully changed status of selected subscribers."
+msgstr "Status de assinantes foram mudados com sucesso."
+
+#: core.php:1185
+msgid "Please mark subscribers which you want to send confirmation to."
+msgstr "Por favor marque assinantes que você quer mandar a confirmação."
+
+#: core.php:1186
+msgid "You have successfully send confirmation emails."
+msgstr "Você enviou o email de confirmação com sucesso."
+
+#: core.php:1187
+msgid "All subscribers (#)"
+msgstr "Todos os assinantes(#)"
+
+#: core.php:1188
+msgid "Confirmed (#)"
+msgstr "Confirmado(#)"
+
+#: core.php:1189
+msgid "Unconfirmed (#)"
+msgstr "não confirmado(#)"
+
+#: core.php:1190
+msgid "Unsubscribed (#)"
+msgstr "Removidos (#)"
+
+#: core.php:1191
+msgid "You have no subscribers yet."
+msgstr "Você ainda não tem nenhum assinante."
+
+#: core.php:1192 views/mailbox-email.php:113
+msgid "Sending"
+msgstr "Enviando"
+
+#: core.php:1193
+msgid "Check me"
+msgstr "Marque aqui"
+
+#: core.php:1195
+msgid "Choose an option"
+msgstr "Escolha uma opção "
+
+#: core.php:1196
+msgid "new option 1"
+msgstr "nova opção 1"
+
+#: core.php:1197
+msgid "Untitled"
+msgstr "Sem título"
+
+#: core.php:1198 views/addedit_email.php:71
+msgid "You have no emails yet."
+msgstr "Você ainda não tem nenhum email."
+
+#: core.php:1199
+msgid "You have no forms, yet"
+msgstr "Você ainda não tem nenhum formulário "
+
+#. translators: mailbox view link
+#: core.php:1200 core.php:1231 views/addedit_email.php:17 views/mailbox.php:24
+msgid "Sent"
+msgstr "Enviado "
+
+#. translators: mailbox view link
+#: core.php:1201 core.php:1229 views/addedit_email.php:16 views/mailbox.php:23
+msgid "Pending"
+msgstr "Pendente"
+
+#: core.php:1202
+msgid "Draft"
+msgstr "Rascunho"
+
+#: core.php:1204
+msgid "Sending..."
+msgstr "Enviando..."
+
+#: core.php:1205
+msgid "Stopped"
+msgstr "Parado"
+
+#: core.php:1206
+msgid "Scheduled on"
+msgstr "Programado para"
+
+#: core.php:1207
+msgid "You don't have any templates yet."
+msgstr "Você ainda não tem nenhum modelo."
+
+#: core.php:1208
+msgid "Create one?"
+msgstr "Criar Um?"
+
+#: core.php:1209
+msgid "Please mark the emails which you want to delete."
+msgstr "Por favor selecione os emails que você quer deletar."
+
+#: core.php:1210
+msgid "You have successfully deleted selected emails."
+msgstr "Você deletou os emails selecionados com sucesso."
+
+#: core.php:1211
+msgid "Please mark the templates which you want to delete."
+msgstr "Por favor selecione os modelos que você que deletar."
+
+#: core.php:1212
+msgid "Please mark the forms which you want to delete."
+msgstr "Por favor selecione os formulários que você quer deletar."
+
+#: core.php:1213
+msgid "You have no templates yet."
+msgstr "Você ainda não tem nenhum modelo."
+
+#: core.php:1214
+msgid "All emails (#)"
+msgstr "Todos os emails(#)"
+
+#: core.php:1215
+msgid "In progress (#)"
+msgstr "Em progresso (#)"
+
+#: core.php:1216
+msgid "Pending (#)"
+msgstr "Pendente (#)"
+
+#: core.php:1217
+msgid "Sent (#)"
+msgstr "Enviado (#)"
+
+#: core.php:1218 views/mailbox-email.php:114 views/mailbox-email.php:119
+msgid "Resume"
+msgstr "Resumir"
+
+#: core.php:1219
+msgid "Please fill the \"To:\" field."
+msgstr "Por favor preencha os espaço\" To:\"."
+
+#: core.php:1220
+msgid "Please select emails first."
+msgstr "Por favor selecione os emails primeiro."
+
+#: core.php:1221
+msgid "Please select"
+msgstr "Por favor selecione"
+
+#. translators: mailbox view link
+#: core.php:1223 views/addedit_email.php:14 views/mailbox.php:20
+msgid "All emails"
+msgstr "Todos os emails"
+
+#. translators: mailbox view link
+#: core.php:1225 views/addedit_email.php:15 views/mailbox.php:22
+msgid "In progress"
+msgstr "Em progresso"
+
+#. translators: mailbox view link
+#: core.php:1227 views/mailbox.php:21
+msgid "Drafts"
+msgstr "Rascunhos"
+
+#: core.php:1232
+msgid "Sent %d of %d emails"
+msgstr "Emails %d of %d enviados"
+
+#: core.php:1233
+msgid "Status: "
+msgstr "Estado:"
+
+#: core.php:1234
+msgid "Email Errors"
+msgstr "Emails Incorretos"
+
+#: core.php:1235
+msgid "Email Address"
+msgstr "Endereços de Emails"
+
+#: core.php:1236
+msgid "Error Message"
+msgstr "Mensagem de Erro"
+
+#: core.php:1237 views/forms.php:31 views/mailbox-email.php:166
+#: views/mailbox.php:116 views/subscribers.php:92 views/templates.php:64
+#: views/templates.php:80 views/templates.php:96 views/templates.php:184
+msgid "Loading..."
+msgstr "Carregando..."
+
+#: core.php:1238 newsman-widget.php:49
+msgid "List:"
+msgstr "Listar"
+
+#: core.php:1239
+msgid "Bug report"
+msgstr "Relatório de Falhas"
+
+#: core.php:1240
+msgid "Load more..."
+msgstr "Carregar mais..."
+
+#: core.php:1241
+msgid "Sorry, no posts matched your criteria."
+msgstr "Desculpe, nenhum dos posts corresponde ao seu critério"
+
+#: core.php:1242
+msgid ""
+"Warning! You are close to the limit of %d subscribers you can send emails to"
+" in the Lite version of the plugin. Please, <a href=\"%s\">upgrade to the "
+"Pro version</a> to send emails without limitations."
+msgstr "Aviso! Voce está quase ultrapassando o limite de %d assinantes que voce pode enviar emails na versão Lite do plugin. Por favor, <a href=\"%s\"> atualize para versão Pro </a> para enviar emails sem limitações."
+
+#: core.php:1243
+msgid ""
+"Warning! You exceeded the limit of %d subscribers you can send emails to in "
+"the Lite version of the plugin. Please, <a href=\"%s\">upgrade to the Pro "
+"version</a> to send emails without limitations."
+msgstr "Aviso! Você excedeu o limite de % d assinantes que você pode enviar emails na versão Lite do plugin. Por favor , <a href=\"%s\"> atualizar para a versão Pro </a> para enviar e-mails sem limitações."
+
+#. translators: lists and forms table header
+#: core.php:1244 views/forms.php:23 views/list.php:67 views/list.php:86
+#: views/list.php:106 views/list.php:141 views/list.php:192 views/list.php:229
+#: views/templates.php:59 views/templates.php:75 views/templates.php:91
+msgid "Name"
+msgstr "Nome"
+
+#: core.php:1245
+msgid "Edit Form"
+msgstr "Editar Formato"
+
+#: core.php:1246 views/list.php:257
+msgid "View Subscribers"
+msgstr "Visualizar Assinantes"
+
+#: core.php:1248 core.php:1279
+msgid "Edit"
+msgstr "Editar"
+
+#: core.php:1249 core.php:1281 views/addedit_email.php:39
+#: views/addedit_email.php:102 views/forms.php:15 views/forms.php:70
+#: views/mailbox.php:46 views/mailbox.php:149 views/subscribers.php:57
+#: views/subscribers.php:147 views/templates.php:29 views/templates.php:135
+#: views/templates.php:150
+msgid "Delete"
+msgstr "Excluir"
+
+#: core.php:1250
+msgid "Export"
+msgstr "Exportar"
+
+#: core.php:1251
+msgid "Restore"
+msgstr "Restaurar"
+
+#: core.php:1252
+msgid "Default System Templates"
+msgstr "Modelos Padrão do Sistema"
+
+#: core.php:1253
+msgid "System Template. Cannot be deleted."
+msgstr "Modelo do Sistema. Não pode ser excluído."
+
+#: core.php:1254
+msgid "Insert Posts"
+msgstr "Inserir Posts"
+
+#: core.php:1255
+msgid "Post(s) selected: %d"
+msgstr "Post(s) selecionados: %d"
+
+#: core.php:1256
+msgid "Select categories"
+msgstr "Categorias selecionadas"
+
+#: core.php:1257
+msgid "# of # categories selected"
+msgstr "# de # categorias selecionadas"
+
+#: core.php:1258
+msgid "Select author(s)"
+msgstr "Autor(es) selecionado(s)"
+
+#: core.php:1259
+msgid "# of # authors selected"
+msgstr "# de # autores selecionados"
+
+#: core.php:1260 views/list.php:348 views/subscribers.php:117
+msgid "Save"
+msgstr "Salvar"
+
+#: core.php:1261
+msgid "Saved at"
+msgstr "Salvo em"
+
+#: core.php:1263
+msgid ""
+"Bounce Handler has %d blocked domains. Some of recipients might be skipped "
+"during sending."
+msgstr "O Marcador %d bloqueou os domínios. Alguns dos destinatários podem ter sido omitidos durante o envio."
+
+#: core.php:1265
+msgid "View in browser"
+msgstr "Veja no navegador"
+
+#: core.php:1267
+msgid "View Stats"
+msgstr "Veja as Estatísticas"
+
+#: core.php:1272
+msgid "Are you sure you want to restore stock template?"
+msgstr "Tem certeza de que quer restaurar o stock template?"
+
+#: core.php:1276
+msgid "No subject"
+msgstr "Sem assunto"
+
+#: core.php:1277 views/mailbox.php:45
+msgid "Start"
+msgstr "Iniciar"
+
+#: core.php:1278 views/mailbox.php:44
+msgid "Stop"
+msgstr "Parar"
+
+#: core.php:1280
+msgid "Duplicate"
+msgstr "Duplicar"
+
+#: core.php:1282
+msgid "sent"
+msgstr "enviar"
+
+#: core.php:1283
+msgid "opens"
+msgstr "Abrir"
+
+#: core.php:1284
+msgid "clicks"
+msgstr "clicks"
+
+#: core.php:1285
+msgid "unsubscribes"
+msgstr "cancelar o envio"
+
+#: core.php:1287
+msgid "Subscribe notification email sent to the administrator."
+msgstr "Assinar email de notificação enviado para o administrador"
+
+#: core.php:1288
+msgid "Unsubscribe notification email sent to the administrator."
+msgstr "Cancelar o envio do email de notificação do administrador"
+
+#: core.php:1289
+msgid "Email with the confirmation link sent to the user upon subscription."
+msgstr "Email com o link de confirmação enviado para o usuário que assinou."
+
+#: core.php:1290
+msgid ""
+"Email sent to the user that confirms that his email address was "
+"unsubscribed."
+msgstr "Email enviado para o usuário que confirmou que seu endereço eletrônico teve a assinatura cancelada."
+
+#: core.php:1291
+msgid "Welcome message sent after the subscriber confirms his subscription."
+msgstr "Mensagem de boas vindas enviada após um assinante confirmar sua assinatura."
+
+#: core.php:1292
+msgid "Email with a link to confirm the subscriber’s decision to unsubscribe."
+msgstr "Email com um link para confirmar a decisão de um assinante de cancelar a sua assinatura."
+
+#: core.php:1293
+msgid ""
+"Email with a link to re-confirm the subscription that is sent to ALL "
+"\"unconfirmed\" subscribers on the list."
+msgstr "Email com um link para reconfirmar a assinatura que é enviado para TODOS os assinantes \"não confirmados\" da lista."
+
+#: core.php:1400
+msgid "Cannot unsubscribe email. Subscriber with unique code %s is not found."
+msgstr "O email não pôde ter sua assinatura cancelada. Assinante com código %s não encontrado."
+
+#: core.php:1707
+msgid "Untitled templates"
+msgstr "Template sem título"
+
+#: core.php:1718
+msgid "Alternative Plain Text Body"
+msgstr "Corpo de Texto Simples Alternativo"
+
+#: core.php:1736
+msgid "WPNewsman Lite"
+msgstr "WPNewsman Lite"
+
+#: core.php:1749 core.php:1750 views/addedit_email.php:5 views/mailbox.php:9
+msgid "Mailbox"
+msgstr "Caixa Postal"
+
+#: core.php:1758 core.php:1759 views/forms.php:5
+msgid "Lists and Forms"
+msgstr "Listas e Formulários"
+
+#: core.php:1767 core.php:1768 views/templates.php:5
+msgid "Email Templates"
+msgstr "Modelos de Emails"
+
+#: core.php:1776 core.php:1777 views/options.php:6
+msgid "Settings"
+msgstr "Ajustes"
+
+#: core.php:1786 core.php:1787 views/debug-log.php:11
+msgid "Debug Log"
+msgstr "Log para limpar"
+
+#: core.php:1851
+msgid "Excerpt for external forms"
+msgstr "Trecho para inserir formulários externos"
+
+#: core.php:2073 core.php:3003
+msgid "You are not authorized to access this resource."
+msgstr "Você não possui autorização para acessar este recurso."
+
+#: core.php:2199
+msgctxt "Action Page"
+msgid "Action Pages"
+msgstr "Páginas de ação"
+
+#: core.php:2200
+msgctxt "Action Page"
+msgid "Action Page"
+msgstr "Página de ação"
+
+#: core.php:2201
+msgctxt "Action Page"
+msgid "Add New"
+msgstr "Adicionar novo"
+
+#: core.php:2202
+msgctxt "Action Page"
+msgid "Add New Action Page"
+msgstr "Adicionar Nova Página de Ação"
+
+#: core.php:2203
+msgctxt "Action Page"
+msgid "Edit Action Page"
+msgstr "Editar Página de Ação"
+
+#: core.php:2204
+msgctxt "Action Page"
+msgid "New Action Page"
+msgstr "Nova Página de Ação"
+
+#: core.php:2205
+msgctxt "Action Page"
+msgid "View Action Page"
+msgstr "Visualizar Página de Ação"
+
+#: core.php:2206
+msgctxt "Action Page"
+msgid "Search Action Pages"
+msgstr "Buscar Páginas de Ação"
+
+#: core.php:2207
+msgid "Nothing found"
+msgstr "Não encontrado"
+
+#: core.php:2208
+msgid "Nothing found in the Trash"
+msgstr "Nada encontrado no Lixo"
+
+#: core.php:2485 core.php:2561
+msgid "Error: Email template not found"
+msgstr "Erro: Modelo de email não encontrado"
+
+#: core.php:2506
+msgid "Error: Email not found"
+msgstr "Erro: Email não encontrado"
+
+#: core.php:2617
+msgid "G-Lock WPNewsman"
+msgstr "G-Lock WPNewsman"
+
+#: core.php:2655
+msgid "G-Lock WPNewsman subscription summary"
+msgstr "Sumário de assinatura G-Lock WPNewsman"
+
+#: core.php:2656
+msgid "Manage Forms and Lists"
+msgstr "Gerenciar Formulários e Listas"
+
+#: core.php:2670 views/list.php:265
+msgid "List name"
+msgstr "Aliste o nome"
+
+#: core.php:2671
+msgid "Total confirmed"
+msgstr "Total confirmado"
+
+#: core.php:2672
+msgid "Total unconfirmed"
+msgstr "Total não confirmado"
+
+#: core.php:2673
+msgid "Total unsubscribed"
+msgstr "Total de assinantes que cancelaram"
+
+#: core.php:2714
+msgid "Post Template"
+msgstr "Modelo para Post"
+
+#: core.php:2720
+msgid "Click here"
+msgstr "Click aqui"
+
+#: core.php:2723
+msgid ""
+"You can use the \"Newsman\" menu button on the editor's toolbar to insert "
+"the unsubscribe link and social profile links into the message."
+msgstr "Voce pode usar o botão de menu \"Newsman\" na barra de ferramentas do editor para inserir o link de cancelamento da assinatura e o link do perfil social na mensagem."
+
+#: core.php:2724
+msgid "%s for more shortcode macros supported by WPNewsman."
+msgstr "%s para mais shortcode macros compatíveis com WPNewsman. "
+
+#: core.php:2914
+msgid "List: "
+msgstr "Listar:"
+
+#: core.php:2926
+msgid "Page Template"
+msgstr "Template de página"
+
+#: core.php:2928
+msgid "Default Template"
+msgstr "Template Padrão"
+
+#: core.php:3018
+msgid "Please, provide correct \"listId\" parameter."
+msgstr "Por favor, entre com o parâmetro \"listld\" correto."
+
+#: frmGetPosts.php:12
+msgid "Post"
+msgstr "Post"
+
+#: frmGetPosts.php:13
+msgid "Page"
+msgstr "Página"
+
+#: frmGetPosts.php:14
+msgid "Attachment"
+msgstr "Anexo"
+
+#: frmGetPosts.php:15
+msgid "Action Page"
+msgstr "Página de Ação"
+
+#: frmGetPosts.php:107
+msgid "Search..."
+msgstr "Busca..."
+
+#: frmGetPosts.php:113 frmGetPosts.php:198
+msgid "Post type:"
+msgstr "Tipo de Post"
+
+#: frmGetPosts.php:127 frmGetPosts.php:210
+msgid "Show private posts"
+msgstr "Mostrar posts privados"
+
+#: frmGetPosts.php:131 frmGetPosts.php:212
+msgid "Categories:"
+msgstr "Categorias:"
+
+#: frmGetPosts.php:147 frmGetPosts.php:224
+msgid "Show thumbnails placeholders"
+msgstr "Mostrar o lugar reservado para thumbnails"
+
+#: frmGetPosts.php:152 frmGetPosts.php:226
+msgid "Authors:"
+msgstr "Autores:"
+
+#: frmGetPosts.php:171 frmGetPosts.php:237
+msgid "Use content:"
+msgstr "Conteúdo:"
+
+#: frmGetPosts.php:175 frmGetPosts.php:239
+msgid "Full post"
+msgstr "Post completo"
+
+#: frmGetPosts.php:176 frmGetPosts.php:240
+msgid "Excerpt"
+msgstr "Sumário"
+
+#: frmGetPosts.php:177 frmGetPosts.php:241
+msgid "Fancy excerpt"
+msgstr "Sumário Chamativo"
+
+#: frmGetPosts.php:185 frmGetPosts.php:245
+msgid "Select post(s) for last:"
+msgstr "Selecionar post{s} pelo último"
+
+#: frmGetPosts.php:187 frmGetPosts.php:247 views/options.php:115
+msgid "Day"
+msgstr "Dia"
+
+#: frmGetPosts.php:188 frmGetPosts.php:248
+msgid "Week"
+msgstr "Semana"
+
+#: frmGetPosts.php:189 frmGetPosts.php:249
+msgid "Month"
+msgstr "Mes"
+
+#: frmGetPosts.php:191 frmGetPosts.php:251
+msgid "Clear Selection"
+msgstr "Limpar Seleção"
+
+#: newsman-widget.php:6
+msgid "WPNewsman Subscription form for your newsletters"
+msgstr "Formulário de Assinatura WPNewsman para seus boletins"
+
+#: newsman-widget.php:8
+msgid "WPNewsman Subscription Form"
+msgstr "Formulário de Assinatura WPNewsman"
+
+#: views/_an_fs_method.php:3 views/_an_locale_changed.php:4
+#: views/_an_w3tc_configured.php:3 views/_an_wp_cron_error.php:4
+#: views/subscribers.php:170
+msgid "Warning!"
+msgstr "Alerta!"
+
+#: views/_an_fs_method.php:4
+msgid ""
+"Your blog configuration uses \"%s\" WP_Filesystem API which is not supported"
+" by the WPNewsman plugin. Some features such as the import of subscribers "
+"and import/installation of email templates may not work. Please, consider "
+"switching the wordpress configuration to use direct file system access."
+msgstr "A configuração de seu blog utiliza \"%s\" WP_Filesystem API que não é compatível com o plugin  WPNewsman. Algumas funçōes tais como a importação de assinantes e a importação/instalação de templates de emails podem não funcionar. Por favor, considere a alteração das configuraçōes do wordpress para usar o acesso direto ao sistema de arquivos."
+
+#. translators: Replace the name of the language with the one you are
+#. translating to
+#: views/_an_locale_changed.php:5
+msgid ""
+"You switched your blog to a new locale %s. Would you also like to replace "
+"the action pages and system email templates with English default versions?"
+msgstr "Voce mudou seu blog para um novo local %s. "
+
+#: views/_an_locale_changed.php:7
+msgid ""
+"Yes, please replace my action pages and system email templates with "
+"translated default versions."
+msgstr "Sim, Por favor substitua minhas páginas de ações e sistema de email modelos com a versão padrão traduzida."
+
+#. translators: Replace the name of the language with the one you are
+#. translating to
+#: views/_an_locale_changed.php:8
+msgid ""
+"No, I already translated them myself. Just take a note they are in English."
+msgstr "Não, eu já traduzi eu mesmo. Somente observe que estão em Português."
+
+#: views/_an_locale_changed.php:10
+msgid "Let me choose."
+msgstr "Deixe com que eu escolha."
+
+#: views/_an_locale_changed.php:12
+msgid "Replace action pages"
+msgstr "Substitua páginas de ação"
+
+#: views/_an_locale_changed.php:13
+msgid "Replace email templates"
+msgstr "Substitua modelos de emails"
+
+#: views/_an_locale_changed.php:16
+msgid "Do nothing, I'm just checking"
+msgstr "Não faça nada, eu somente estou analisando "
+
+#: views/_an_locale_changed.php:18
+msgid "Proceed"
+msgstr "Prosseguir"
+
+#: views/_an_wp_cron_error.php:5
+msgid ""
+"There was a problem spawning a call to the WP-Cron system on your site. This"
+" means email sending on your site may not work. The problem was:<br "
+"/><strong>%s</strong>. In order to fix the problem you can enable pokeback "
+"mode. Plugin will make calls to our server and back to yours. No sensitive "
+"data will be shared with our server. <a href=\"http://wpnewsman.com\">Learn "
+"more</a>"
+msgstr "Ocorreu um problema gerando uma chamada ao sistema WP-Cron do seu site.\nIsso significa que enviar emails do seu site talvez não funcione. O problema era:<br /><strong>%s</strong>.  Para concertar o problema você você pode ativar o modo de pokeback. Plugin irá fazer chamadas para o nosso servidor e de volta para o seu. Dados sensíveis não serão compartilhados com o nosso servidor . <a href=\"http://wpnewsman.com\">Learn more</a>"
+
+#: views/_an_wp_cron_error.php:7
+msgid "Enable Pokeback mode"
+msgstr "Ativar o modo de pokeback"
+
+#: views/_an_wp_cron_error.php:8 views/_an_wpcron_alternative_mode.php:7
+msgid "Dismiss"
+msgstr "Demitir"
+
+#: views/_an_wpcron_alternative_mode.php:4
+msgid "Information!"
+msgstr "Informação!"
+
+#: views/_an_wpcron_alternative_mode.php:5
+msgid ""
+"The pokeback mode is enabled on your site. WPNewsman make http request to "
+"our server and back. No sensitive data from your website is shared with our "
+"server. <a href=\"http://support.glocksoft.net/kb/articles/90-messages-are-"
+"always-pending-and-not-sent\" target=\"_blank\">Learn more...</a>"
+msgstr "O modo de pokeback esta ativo no seu site. WPnewsman fez o requerimento http para o nosso servidor e vice versa. Nenhum dado sensível foi compartilhado com o nosso servidor. <a href=\"http://support.glocksoft.net/kb/articles/90-messages-are-always-pending-and-not-sent\" target=\"_blank\">Learn more...</a>"
+
+#: views/_footer.php:8
+msgid "Debug Messages"
+msgstr "Debug mensagens "
+
+#: views/_footer.php:11
+msgid "Raw response"
+msgstr "Resposta Raw"
+
+#: views/_footer.php:13
+msgid "Additional info"
+msgstr "Informação adicional "
+
+#: views/_footer.php:15
+msgid "Note: you can remove all sensitive data before sending bug report."
+msgstr "Notificação: Você pode remover todos dados sensíveis  antes de mandar o reporte de bug."
+
+#: views/_footer.php:18
+msgid "Send Bug Report"
+msgstr "Enviar reporte de bug"
+
+#: views/_footer.php:19 views/addedit_email.php:87 views/addedit_email.php:101
+#: views/addedit_email.php:115 views/forms.php:55 views/forms.php:69
+#: views/mailbox-email.php:125 views/mailbox.php:134 views/mailbox.php:148
+#: views/mailbox.php:162 views/mailbox.php:177 views/mailbox.php:190
+#: views/options.php:238 views/subscribers.php:131 views/subscribers.php:146
+#: views/subscribers.php:162 views/subscribers.php:190
+#: views/subscribers.php:313 views/subscribers.php:333
+#: views/subscribers.php:348 views/templates.php:119 views/templates.php:134
+#: views/templates.php:149 views/templates.php:165 views/templates.php:191
+#: views/templates.php:220
+msgid "Close"
+msgstr "Fechar"
+
+#: views/_footer.php:30
+msgid "Rate (%s) WPNewsman on %s to help their creators make it better"
+msgstr "Taxa(%s) WPNewsman no %s ajuda os criadores melhorarem"
+
+#: views/_footer.php:32
+msgid "Documentation"
+msgstr "Documentação"
+
+#: views/_footer.php:32
+msgid "Request feature"
+msgstr "Solicitar recurso"
+
+#: views/_footer.php:32
+msgid "Thanks!"
+msgstr "Obrigada!"
+
+#: views/_footer.php:32
+msgid "WPNewsman: "
+msgstr "WPNewsman: "
+
+#: views/addedit_email.php:7 views/mailbox.php:12 views/subscribers.php:23
+msgid "Search"
+msgstr "Buscar"
+
+#: views/addedit_email.php:19 views/subscribers.php:35 views/templates.php:10
+msgid "Remove Search Filter"
+msgstr "Remover filtro de busca"
+
+#: views/addedit_email.php:28 views/mailbox.php:33
+msgid "Compose"
+msgstr "Compor"
+
+#: views/addedit_email.php:40 views/mailbox.php:47
+msgid "Resend Confirmation Request"
+msgstr "Reenviar confirmaçāo Requerida"
+
+#. translators: email property
+#: views/addedit_email.php:63 views/mailbox.php:106
+msgid "Subject"
+msgstr "Assunto "
+
+#. translators: email property
+#: views/addedit_email.php:64 views/mailbox.php:107
+msgid "To"
+msgstr "Para"
+
+#. translators: email property
+#: views/addedit_email.php:66 views/mailbox.php:109 views/subscribers.php:86
+msgid "Status"
+msgstr "Status"
+
+#: views/addedit_email.php:81 views/addedit_email.php:95
+#: views/addedit_email.php:109 views/forms.php:63 views/mailbox.php:128
+#: views/mailbox.php:142 views/mailbox.php:156 views/options.php:232
+#: views/subscribers.php:124 views/subscribers.php:139
+#: views/subscribers.php:154 views/subscribers.php:184 views/templates.php:113
+#: views/templates.php:127 views/templates.php:143 views/templates.php:159
+msgid "Please, confirm..."
+msgstr "Por favor, confirme..."
+
+#: views/addedit_email.php:84 views/mailbox.php:131 views/subscribers.php:127
+#: views/templates.php:116
+msgid "Are you sure you want to unsubscribe selected people?"
+msgstr "Tem certeza de que quer deletar assinantes selecionados?"
+
+#: views/addedit_email.php:88 views/mailbox.php:135 views/subscribers.php:45
+#: views/subscribers.php:132 views/subscribers.php:332 views/templates.php:120
+msgid "Unsubscribe"
+msgstr "Cancelar a inscrição"
+
+#: views/addedit_email.php:98
+msgid "Are you sure you want to delete selected subscribers?"
+msgstr "Tem certeza de que quer deletar assinantes selecionados? "
+
+#: views/addedit_email.php:112 views/mailbox.php:159 views/subscribers.php:157
+#: views/templates.php:162
+msgid "Are you sure you want to change status of selected subscribers to %s?"
+msgstr "Tem certeza de que quer mudar os status de assinantes selecionados a %s?"
+
+#: views/addedit_email.php:116 views/mailbox.php:163 views/subscribers.php:163
+#: views/templates.php:166
+msgid "Change"
+msgstr "Mudar"
+
+#: views/forms.php:14 views/forms.php:41
+msgid "New List"
+msgstr "Lista nova"
+
+#: views/forms.php:46 views/mailbox-email.php:80
+msgid "Name:"
+msgstr "Nome:"
+
+#: views/forms.php:49
+msgid "Please enter the name of a form"
+msgstr "Por favor insira o nome do formulário "
+
+#: views/forms.php:56 views/subscribers.php:347
+msgid "Create"
+msgstr "Criar"
+
+#: views/forms.php:66
+msgid ""
+"Are you sure you want to delete selected forms and subscribers lists? This "
+"operation cannot be undone!"
+msgstr "Tem certeza de que você quer deletar lista de assinantes e formulários selecionados? Essa operação não pode ser revertida!  "
+
+#: views/list.php:9 views/list.php:303
+msgid "Form options"
+msgstr "Formulário de opções"
+
+#: views/list.php:10 views/list.php:304
+msgid "Use inline labels"
+msgstr "Use etiquetas em linha "
+
+#: views/list.php:24 views/list.php:42 views/list.php:66 views/list.php:84
+#: views/list.php:105 views/list.php:123 views/list.php:140 views/list.php:191
+#: views/list.php:228
+msgid "Field options"
+msgstr "Campos de opções"
+
+#: views/list.php:25
+msgid "Title"
+msgstr "Título "
+
+#: views/list.php:43
+msgid "HTML content"
+msgstr "Conteúdo HTML"
+
+#: views/list.php:88
+msgid "Content"
+msgstr "Conteúdo"
+
+#: views/list.php:144
+msgid "Size"
+msgstr "Tamanho"
+
+#: views/list.php:146
+msgid "Mini"
+msgstr "Miniatura "
+
+#: views/list.php:147
+msgid "Small"
+msgstr "Pequeno"
+
+#: views/list.php:148
+msgid "Medium"
+msgstr "Médio "
+
+#: views/list.php:149
+msgid "Large"
+msgstr "Grande"
+
+#: views/list.php:152
+msgid "Color"
+msgstr "Cor"
+
+#: views/list.php:154
+msgid "Gray"
+msgstr "Cinza"
+
+#: views/list.php:155
+msgid "Pink"
+msgstr "Rosa"
+
+#: views/list.php:156
+msgid "Blue"
+msgstr "Azul"
+
+#: views/list.php:157
+msgid "Green"
+msgstr "Verde"
+
+#: views/list.php:158
+msgid "Turquoise"
+msgstr "Turqueza"
+
+#: views/list.php:159
+msgid "Black"
+msgstr "Preto"
+
+#: views/list.php:160
+msgid "Dark Gray"
+msgstr "Cinza Escuro"
+
+#: views/list.php:161
+msgid "Yellow"
+msgstr "Amarelo"
+
+#: views/list.php:162
+msgid "Purple"
+msgstr "Roxo"
+
+#: views/list.php:163
+msgid "Dark blue"
+msgstr "Azul escuro"
+
+#: views/list.php:166
+msgid "Style"
+msgstr "Estilo"
+
+#: views/list.php:168
+msgid "None ( Theme native )"
+msgstr "Nenhum(Tema nativo)"
+
+#: views/list.php:169
+msgid "Brick"
+msgstr "Tijolo"
+
+#: views/list.php:170
+msgid "Rounded"
+msgstr "Arredondado"
+
+#: views/list.php:171
+msgid "Pill"
+msgstr "Pílula "
+
+#: views/list.php:196
+msgid "Radio options"
+msgstr "Opções do rádio"
+
+#: views/list.php:198 views/list.php:235
+msgid "Add"
+msgstr "Adicionar"
+
+#: views/list.php:200 views/list.php:237
+msgid "New option"
+msgstr "Nova opção "
+
+#: views/list.php:202
+msgid "Genders"
+msgstr "Sexos"
+
+#: views/list.php:207 views/list.php:245
+msgid "Double click to edit"
+msgstr "Clique duas vezes para editar "
+
+#: views/list.php:233
+msgid "Select options"
+msgstr "Selecionar opções"
+
+#: views/list.php:239
+msgid "Countries"
+msgstr "Países"
+
+#: views/list.php:240
+msgid "States"
+msgstr "Estados"
+
+#: views/list.php:257
+msgid "Edit subscribers list"
+msgstr "Editar lista de assinantes"
+
+#: views/list.php:266
+msgid "List Name"
+msgstr "Lista de nomes"
+
+#: views/list.php:273
+msgid "Form Builder"
+msgstr "Formulário do construtor"
+
+#: views/list.php:275
+msgid "Add Field"
+msgstr "Adicionar Espaço"
+
+#: views/list.php:277
+msgid "Text"
+msgstr "Texto"
+
+#: views/list.php:278
+msgid "Textarea"
+msgstr "Area de texto"
+
+#: views/list.php:280
+msgid "Checkbox"
+msgstr "Caixa de seleção"
+
+#: views/list.php:281
+msgid "Radio buttons"
+msgstr "Botões de rádio"
+
+#: views/list.php:282
+msgid "Dropdown menu"
+msgstr "Menu suspenso"
+
+#: views/list.php:283
+msgid "Form title"
+msgstr "Título do Formulário"
+
+#: views/list.php:284
+msgid "HTML"
+msgstr "HTML"
+
+#: views/list.php:287
+msgid "Load Default Form"
+msgstr "Carregar Formulário Padrão"
+
+#: views/list.php:311
+msgid "Field shortcode"
+msgstr "Shortcode campo"
+
+#: views/list.php:324
+msgid "This form on external sites? Sure!"
+msgstr "Esse Formulário em sites de fora? Com certeza!"
+
+#: views/list.php:325
+msgid "Copy the code below and paste it into any other site that you have."
+msgstr "Copie o código abaixo e cole em qualquer outro site que você tiver."
+
+#: views/list.php:327
+msgid "Custom CSS for external form."
+msgstr "CSS personalizado para formulário externo."
+
+#: views/list.php:328
+msgid "This CSS will only affect the external form"
+msgstr "Esse CSS somente afetará o formulário externo"
+
+#: views/list.php:332
+msgid "Here are the unsubscribe links"
+msgstr "Aqui estão os links dos assinantes deletados"
+
+#: views/list.php:333
+msgid "if your are using 3rd party software to send emails:"
+msgstr "Se você está usando algum outro software para enviar e-mails :"
+
+#: views/list.php:334
+msgid "Link to instant unsubscribe:"
+msgstr "Link para cancelar inscrição instantaneamente."
+
+#: views/list.php:337
+msgid ""
+"You must replace the %s with the value of the ucode field of the exported "
+"subscribers list."
+msgstr "Você deve substituir o % s com o valor do campo ucode da lista de inscritos exportados."
+
+#: views/list.php:339
+msgid "One more thing,"
+msgstr "Mais uma coisa,"
+
+#: views/list.php:340
+msgid "you can put this form inside any post content with this short-code:"
+msgstr "você pode colocar esse formulário dentro de qualquer conteúdo do post com esse short-code:"
+
+#: views/list.php:342
+msgid "and you can make it horizontal with this shortcode"
+msgstr "e você pode torná-lo horizontal com este shortcode"
+
+#: views/mailbox-email.php:49
+msgid "Edit email"
+msgstr "Editar email"
+
+#: views/mailbox-email.php:51
+msgid "Edit template"
+msgstr "Editar modelo"
+
+#: views/mailbox-email.php:66
+msgid "To:"
+msgstr "Para:"
+
+#: views/mailbox-email.php:91
+msgid "Subject:"
+msgstr "Assunto:"
+
+#: views/mailbox-email.php:106
+msgid "Email Analytics"
+msgstr "Email Analytics "
+
+#: views/mailbox-email.php:114
+msgid "Send immediately"
+msgstr "Enviar imediatamente"
+
+#: views/mailbox-email.php:115
+msgid "Schedule sending on"
+msgstr "Programado para enviar no"
+
+#: views/mailbox-email.php:119 views/mailbox-email.php:169
+#: views/subscribers.php:191
+msgid "Send"
+msgstr "Enviar"
+
+#: views/mailbox-email.php:122 views/mailbox-email.php:155
+msgid "Send test email"
+msgstr "Enviar email de teste"
+
+#: views/mailbox-email.php:128
+msgid "Email particles"
+msgstr "Partículas de email"
+
+#: views/mailbox-email.php:128
+msgid "Template particles"
+msgstr "Partículas de modelo"
+
+#: views/mailbox-email.php:129
+msgid "Edit Post Template"
+msgstr "Editar modelo para Post"
+
+#: views/mailbox-email.php:130
+msgid "Edit Post Divider Template"
+msgstr "Editar divisor de Post modelo"
+
+#: views/mailbox-email.php:134
+msgid "Publish this email"
+msgstr "Publicar esse email"
+
+#: views/mailbox-email.php:135
+msgid ""
+"You can make the email to be accessible by other people on the web with <a "
+"href=\"%s\">this link</a>. Shortcodes for the subscriber's data do not work "
+"in the published email. It's a good idea to hide unsubscribe links with <a "
+"target=\"_blank\" href=\"http://wpnewsman.com/documentation/short-codes-for-"
+"email-messages/#conditional-pair-shortcodes\">conditional shortcodes</a>"
+msgstr "Você pode fazer o e-mail para ser acessível por outras pessoas na web com  <a href=\"%s\">this link</a>. Shortcodes para os dados do assinante não funcionam no e-mail publicado. É uma boa idéia para esconder links de cancelamento de inscrição com  <a target=\"_blank\" href=\"http://wpnewsman.com/documentation/short-codes-for-email-messages/#conditional-pair-shortcodes\">conditional shortcodes</a>"
+
+#: views/mailbox-email.php:138
+msgid "WPNewsman Shortcodes"
+msgstr "WPNewsman Shortcodes "
+
+#: views/mailbox-email.php:160
+msgid "Email address:"
+msgstr "Endereço de Email"
+
+#: views/mailbox-email.php:166
+msgid "Sending email..."
+msgstr "Enviando email"
+
+#: views/mailbox-email.php:168 views/subscribers.php:116
+#: views/subscribers.php:176
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: views/mailbox.php:11 views/subscribers.php:22
+msgid "Clear"
+msgstr "Limpar"
+
+#: views/mailbox.php:37
+msgid "From Template"
+msgstr "Do Modelo"
+
+#: views/mailbox.php:38
+msgid "Quick Message"
+msgstr "Mensagem Rápida"
+
+#: views/mailbox.php:42
+msgid "Compose from Message"
+msgstr "Compor da menssagem"
+
+#. translators: email property
+#: views/mailbox.php:110
+msgid "Public URL"
+msgstr "Publicar URL"
+
+#: views/mailbox.php:111
+msgid "Status message"
+msgstr "Status da menssagem"
+
+#: views/mailbox.php:145
+msgid "Are you sure you want to delete selected emails?"
+msgstr "Tem certeza de que quer deletar email selecionados? "
+
+#: views/mailbox.php:170
+msgid "Select template:"
+msgstr "Selecionar modelo:"
+
+#: views/mailbox.php:184
+msgid "Sending log"
+msgstr "Enviando log"
+
+#. translators: Options page tab title
+#: views/options.php:17
+msgid "General"
+msgstr "Geral   "
+
+#. translators: Options page tab title
+#: views/options.php:19 views/options.php:84
+msgid "Email Settings"
+msgstr "Configurações de email"
+
+#. translators: Options page tab title
+#: views/options.php:21
+msgid "Delivery Settings"
+msgstr "Configurações de Entrega"
+
+#. translators: Options page tab title
+#: views/options.php:23
+msgid "API"
+msgstr "API "
+
+#. translators: Options page tab title
+#: views/options.php:25 views/options.php:206
+msgid "Uninstallation"
+msgstr "Desinstalação"
+
+#: views/options.php:34
+msgid "Delete subscribers who didn't confirm their subscription within 7 days"
+msgstr "Excluir assinantes que não confirmarem a sua inscrição dentro de 7 dias"
+
+#: views/options.php:35
+msgid "Use double opt-out procedure"
+msgstr "Use procedimento duplo opt -out "
+
+#: views/options.php:37
+msgid "Plugin statistics on the dashboard"
+msgstr "Estatísticas Plugin no painel de instrumentos"
+
+#: views/options.php:38
+msgid "Do not show"
+msgstr "Não mostrar"
+
+#: views/options.php:39
+msgid "Show in the activity box (Right Now)"
+msgstr "Mostrar na caixa de atividade (Agora mesmo)"
+
+#: views/options.php:40
+msgid "Show in the separate widget"
+msgstr "Mostrar no widget separado "
+
+#: views/options.php:44
+msgid "PokeBack mode"
+msgstr "Modo PokeBack "
+
+#: views/options.php:45
+msgid ""
+"Use PokeBack mode ( will make secure calls to our web server and back. No "
+"sensitive data is shared with our server)."
+msgstr "Use o modo PokeBack ( irá fazer chamadas seguras para o nosso servidor web. Dados sensíveis não serão compartilhados com o nosso servidor ) "
+
+#: views/options.php:48
+msgid "Social profiles links"
+msgstr "Links de perfil social"
+
+#: views/options.php:59
+msgid "Advanced"
+msgstr "Avançado"
+
+#: views/options.php:60
+msgid "Enable debug mode. ( Warning! This may slowdown your website. )"
+msgstr "Ativar o modo de depuração . ( Atenção ! Este procedimento pode desacelerar seu site. )"
+
+#: views/options.php:70
+msgid "Important!"
+msgstr "Importante!"
+
+#: views/options.php:71
+msgid ""
+"If your site doesn't get visitors, the WordPress task scheduler will not "
+"run. This typically delays sending. If you suffer from delayed or "
+"inconsistent sending, setup a cron job on your server or use a free cron "
+"service as described in <a "
+"href=\"http://support.glocksoft.net/kb/articles/69-how-to-make-wordpress-"
+"cron-work\">this tutorial</a>."
+msgstr "Se o seu site não receber os visitantes , o agendador de tarefas WordPress não será executado. Isso normalmente atrasa envio . Se você perceber  atraso ou inconsistente envio , configure um trabalho de cron no seu servidor ou utilize um serviço cron grátis como descrito em <a href=\"http://support.glocksoft.net/kb/articles/69-how-to-make-wordpress-cron-work\">this tutorial</a>."
+
+#: views/options.php:73
+msgid "Your blog's wp-cron URL:"
+msgstr "O wp-cron URL do seu blog: "
+
+#: views/options.php:85
+msgid "From Name:"
+msgstr "De Nome:"
+
+#: views/options.php:88
+msgid "From Email:"
+msgstr "De Email:"
+
+#: views/options.php:91
+msgid "Return Email Address:"
+msgstr "Retorno de endereço de mail:"
+
+#: views/options.php:94
+msgid "Email Address for Admin Notifications:"
+msgstr "Endereço de email para Notificações para o administrador  :"
+
+#: views/options.php:98
+msgid "Send Welcome Message"
+msgstr "Enviar mensagem de boas vindas"
+
+#: views/options.php:99
+msgid "Send Unsubscribe Notification"
+msgstr "Enviar notificação de inscrição cancelada"
+
+#: views/options.php:100
+msgid "Send Subscribe/Unsubscribe Event Notifications to Admin"
+msgstr "Enviar Assinar / Cancelar notificações para o administrador "
+
+#: views/options.php:110
+msgid "Email Delivery Settings"
+msgstr "Configurações de Entrega de emails"
+
+#: views/options.php:114
+msgid "Throttling"
+msgstr "Sufocando "
+
+#: views/options.php:115
+msgid "Limit sending to "
+msgstr "Limite de envio para"
+
+#: views/options.php:115
+msgid "emails per"
+msgstr "emails por"
+
+#: views/options.php:115
+msgid "Minute"
+msgstr "Minuto"
+
+#: views/options.php:115
+msgid "Hour"
+msgstr "Hora"
+
+#: views/options.php:122
+msgid "Advice!"
+msgstr "Conselho!"
+
+#: views/options.php:122
+msgid " We strongly recommend that you use custom SMTP server option."
+msgstr "Nós recomendamos que você use a opção personalizada do servidor SMTP."
+
+#: views/options.php:123
+msgid "Use PHP Mail"
+msgstr "Use PHP Mail"
+
+#: views/options.php:124
+msgid "Use Sendmail Directly (*nix only)"
+msgstr "Use Sendmail Diretamente ( * nix only)"
+
+#: views/options.php:125
+msgid "Use Custom SMTP Server"
+msgstr "Use Servidor SMTP Personalizado"
+
+#: views/options.php:130
+msgid "Load GMail Settings"
+msgstr "Carregar Configurações do GMail"
+
+#: views/options.php:131
+msgid "Load Amazon SES SMTP Settings"
+msgstr "Carregar Configurações SES SMTP do Amazon "
+
+#: views/options.php:135
+msgid "Hostname:"
+msgstr "Hostname:"
+
+#: views/options.php:138
+msgid "Username:"
+msgstr "Nome do Usuário:"
+
+#: views/options.php:141
+msgid "Password:"
+msgstr "Senha:"
+
+#: views/options.php:144
+msgid "Port:"
+msgstr "Porta:"
+
+#: views/options.php:148
+msgid "Secure Connection"
+msgstr "Conexão segura"
+
+#: views/options.php:150
+msgid "Don't Use"
+msgstr "Não use"
+
+#: views/options.php:151
+msgid "Use Start TLS"
+msgstr "Use Start TLS"
+
+#: views/options.php:152
+msgid "Use SSL"
+msgstr "Use SSL"
+
+#: views/options.php:158
+msgid "Test your settings:"
+msgstr "Testar suas configuraçōes:"
+
+#: views/options.php:161
+msgid "Send Test Email"
+msgstr "Enviar email de teste"
+
+#: views/options.php:169
+msgid "Have an Amazon SES account?"
+msgstr "Possui uma conta Amazon SES?"
+
+#: views/options.php:170
+msgid ""
+"Take a look at our article on <a href=\"http://www.glocksoft.com/email-"
+"marketing-software/how-to-use-amazon-ses-smtp-interface-to-send-"
+"emails/\">how to use Amazon SES SMTP interface</a>."
+msgstr "Dê uma olhada em nosso artigo sobre<a href=\"http://www.glocksoft.com/email-marketing-software/how-to-use-amazon-ses-smtp-interface-to-send-emails/\"> Como usar o Amazon SES SMTP interface</a>."
+
+#: views/options.php:174
+msgid "Need Professional SMTP Server?"
+msgstr "Precisa de um servidor SMTP Profissional?"
+
+#: views/options.php:175
+msgid ""
+"While you can use any SMTP service with our Plugin, we have partnered with "
+"SMTP.com, one of the best SMTP providers on the Internet to offer you a Free"
+" smtp account. You can get a Free 28-day trial account on <a "
+"href=\"http://www.smtp.com/glocksoft\">http://www.smtp.com/glocksoft</a>."
+msgstr "Embora você possa usar qualquer serviço SMTP com nosso Plugin, fizemos uma parceria com SMTP.com , um dos melhores provedores de SMTP na Internet para oferecer-lhe uma conta de SMTP gratuito . Você pode obter uma conta de teste gratuito de 28 dias aqui <a href=\"http://www.smtp.com/glocksoft\">http://www.smtp.com/glocksoft</a>."
+
+#: views/options.php:184
+msgid "API key"
+msgstr "Tecla API"
+
+#: views/options.php:189
+msgid "API endpoint"
+msgstr "API ponto final"
+
+#: views/options.php:196
+msgid "API description"
+msgstr "Descrição API"
+
+#: views/options.php:198
+msgid "API integration"
+msgstr "Integração API"
+
+#: views/options.php:199
+msgid ""
+"<a href=\"%s\" target=\"_blank\">Check out our guide</a> on how to send "
+"emails to WPNewsman subscribers lists from G-Lock EasyMail7."
+msgstr "<a href=\"%s\" target=\"_blank\">Check out our guide</a>sobre como enviar emails para listas de assinantes WPNewsman do G -Lock EasyMail7 ."
+
+#: views/options.php:210
+msgid "Delete subscribers' lists during uninstallation"
+msgstr "Excluir listas de assinantes durante a desinstalação"
+
+#: views/options.php:211
+msgid ""
+"Checking this option will remove all the subscribers' data during the plugin"
+" uninstallation. Be careful, there is no undo."
+msgstr "Marcar esta opção irá remover todos os dados dos assinantes durante a desinstalação do plugin. Tenha cuidado, não há como desfazer ."
+
+#: views/options.php:213
+msgid "Uninstall now"
+msgstr "Desinstalar agora"
+
+#: views/options.php:225
+msgid "Update Options"
+msgstr "Atualizar opções"
+
+#: views/options.php:235
+msgid ""
+"Are you sure you want to uninstall WPNewsman Plugin and all of its settings?"
+msgstr "Tem certeza de que deseja desinstalar WPNewsman Plugin e todas as suas configurações?"
+
+#: views/options.php:239
+msgid "Uninstall"
+msgstr "Desinstalar"
+
+#: views/pro.php:3
+msgid "Top 5 Reasons to Upgrade to WPNewsman Pro"
+msgstr "Top 5 razões para Atualizar para WPNewsman Pro"
+
+#: views/pro.php:7
+msgid ""
+"WPNewsman Pro is a significant upgrade over WPNewsman Lite that will allow "
+"you to:"
+msgstr "WPNewsman Pro é uma atualização significativa sobre WPNewsman Lite que lhe permitirá:"
+
+#: views/pro.php:9
+msgid ""
+"<strong>Send to unlimited number of subscribers</strong> (vs. 2000 "
+"subscribers in the Lite version) using Amazon SES SMTP settings and enjoy "
+"high deliverability rate like big email service providers."
+msgstr "<strong>Envie para ilimitado número de assinantes</strong> (vs. 2000 assinantes na versão Lite) usando Amazon SES SMTP configurações e desfrute da alta taxa de entregabilidade como grandes fornecedores de serviços de e-mail ."
+
+#: views/pro.php:10
+msgid ""
+"<strong>Automatically process bounced emails</strong> after each mailing and"
+" maintain your list clean and verified -- you protect your IP from being "
+"blacklisted for continuous sending to invalid email addresses."
+msgstr "<strong>Automaticamente processa emails retornados</strong> depois de cada envio e mantenha sua lista limpa e verificada--protege o seu IP de ser posto para contínuo envio de endereços inválidos ."
+
+#: views/pro.php:11
+msgid ""
+"<strong>Get FULL email statistics for ultimate campaign tracking</strong>. "
+"It is very important to track open rates and CTR (clickthroughs) of your "
+"email campaigns. See which messages get a higher response and optimize your "
+"email campaigns for each of your subscriber segment. Play with subjects, "
+"layouts, call-to-actions and text and you will create the perfect campaign "
+"which will inevitably lead to sales."
+msgstr "<strong>Obtenha estatísticas de email completo para rastrear melhor sua campanha</strong>. É muito importante rastrear as taxas de abertura e cliques ( CTR ) de suas campanhas de email . Veja quais mensagens obter uma maior resposta e otimizar suas campanhas de email para cada um de seus assinantes. Configurar assuntos, layouts , call- to-actions e texto você vai criar a campanha perfeita, que conduzirá inevitavelmente a vendas."
+
+#: views/pro.php:12
+msgid ""
+"<strong>Merge Google Analytics or Piwik remote tracking into links</strong>."
+" Find out which of your visitors came to your site via your newsletters. "
+"Campaign tracking in Piwik or Google Analytics lets you track how efficient "
+"various marketing campaigns are in bringing visitors to your website "
+"(visits, page views, etc.), how well these visitors convert and how much "
+"revenue they generate."
+msgstr "<strong>Unir Google Analytics ou Piwik remote tracking em links</strong>.Saiba quais de seus visitantes chegaram ao seu site através de suas newsletter. Monitoramento de campanha em Piwik ou Google Analytics permite que você acompanhe o quão eficiente diversas campanhas de marketing estão trazendo visitantes para o seu site ( visitas, páginas vistas , etc.), bem como os visitantes e quanta revenue que eles geram."
+
+#: views/pro.php:13
+msgid ""
+"<strong>Get the top priority customer support</strong>. We provide great "
+"documentation and support for everybody but the users of WPNewsman Pro jump "
+"the queue and get priority help. Visit our support site <a "
+"href=\"http://support.glocksoft.net\" "
+"target=\"_blank\">http://support.glocksoft.net</a>"
+msgstr "<strong>Obtenha a nossa ajuda com prioridade </strong>. Nós fornecemos grande documentação e suporte para todos, mas os usuários de WPNewsman Pro tem prioridade. Visite nosso site de suporte <a href=\"http://support.glocksoft.net\" target=\"_blank\">http://support.glocksoft.net</a>"
+
+#: views/pro.php:16
+msgid "License & Terms"
+msgstr "Licença e Termos"
+
+#: views/pro.php:17
+msgid ""
+"Our Pro license is available per domain or single sub domain. Read Our <a "
+"href=\"http://wpnewsman.com/terms-conditions/\">Terms and Conditions</a>."
+msgstr "Nossa licença Pro está disponível por domínio ou sub-domínio único . Leia Nossos <a href=\"http://wpnewsman.com/terms-conditions/\">Termos e Condições</a>."
+
+#: views/pro.php:23
+msgid "Upgrade to Pro for $%d/year"
+msgstr "Atualizar para Pro por $%d/ano"
+
+#: views/pro.php:25
+msgid ""
+"or get special <a "
+"href=\"https://secure.avangate.com/order/checkout.php?PRODS=4630229&QTY=3&CART=1&CLEAN_CART=1&ADDITIONAL_site_address[4630229]=%s\">3-site"
+" discounted license for $%s</a> <br><br> To activate the PRO version, you'll"
+" need to download an extra plugin WPNewsman Pro Extension."
+msgstr "ou esse especial<a href=\"https://secure.avangate.com/order/checkout.php?PRODS=4630229&QTY=3&CART=1&CLEAN_CART=1&ADDITIONAL_site_address[4630229]=%s\">3-site desconto na licença por $%s</a> <br><br> Para ativar a versão PRO, Você vai precisar download um plugin extra WPNewsman Pro Extension."
+
+#: views/subscribers.php:20
+msgid "Manage Subscribers"
+msgstr "Administrar Assinantes"
+
+#: views/subscribers.php:20
+msgid "Form & List options"
+msgstr "Opções de formulários e Listas "
+
+#: views/subscribers.php:30
+msgid "All Subscribers"
+msgstr "Todos os Assinantes"
+
+#: views/subscribers.php:50
+msgid "Bulk unsubscribe"
+msgstr "Cancelar inscrição em massa"
+
+#: views/subscribers.php:52
+msgid "Change to Unconfirmed"
+msgstr "Mudar para não confirmado"
+
+#: views/subscribers.php:53
+msgid "Change to Confirmed"
+msgstr "Mudar para Confirmado"
+
+#: views/subscribers.php:56 views/subscribers.php:102
+msgid "Add Subscriber"
+msgstr "Adicionar Assinante"
+
+#: views/subscribers.php:59
+msgid "Export to CSV"
+msgstr "Exportar para CSV"
+
+#: views/subscribers.php:60
+msgid "Import from CSV"
+msgstr "Importar de CSV"
+
+#: views/subscribers.php:61
+msgid "Validate email addresses"
+msgstr "Validar os endereços de email"
+
+#: views/subscribers.php:67
+msgid "Send request"
+msgstr "Enviar pedido"
+
+#: views/subscribers.php:72
+msgid "Send Re-Subscribe Request"
+msgstr "Enviar Requerimento de Re-inscrição"
+
+#: views/subscribers.php:73
+msgid "Resend Confirmation request"
+msgstr "Reenviar confirmaçāo Requerida"
+
+#: views/subscribers.php:84
+msgid "Date"
+msgstr "Data"
+
+#: views/subscribers.php:87
+msgid "Form Data"
+msgstr "Formulário de Dados"
+
+#: views/subscribers.php:130
+msgid "Unsubscribe all"
+msgstr "Cancelar a inscrição de todos"
+
+#: views/subscribers.php:142
+msgid "Are you sure you want to delete %s selected subscribers?"
+msgstr "Tem certeza de que você quer deletar %s assinantes selecionados? "
+
+#: views/subscribers.php:145
+msgid "Delete all"
+msgstr "Deletar todos"
+
+#: views/subscribers.php:160 views/subscribers.php:161
+msgid "Change all"
+msgstr "Mudar todos"
+
+#: views/subscribers.php:173
+msgid ""
+"This action will send re-subscribe request <strong>to all unconfirmed "
+"subscribers</strong> in the list."
+msgstr "Essa ação irá enviar pedido de reinscrição <strong>Para todos os assinantes não confirmados</strong> na lista."
+
+#: views/subscribers.php:177
+msgid "Send re-subscribe request"
+msgstr "Enviar pedido de reinscrição "
+
+#: views/subscribers.php:187
+msgid ""
+"Are you sure you want to re-send confirmation emails to selected "
+"subscribers?"
+msgstr "Tem certeza de que você quer re-enviar emails de confirmação a assinantes selecionados? "
+
+#: views/subscribers.php:198
+msgid " list:"
+msgstr "Lista:"
+
+#: views/subscribers.php:203
+msgid "Uploaded files"
+msgstr "Arquivos importados"
+
+#: views/subscribers.php:206
+msgid "Import options"
+msgstr "Importar opções "
+
+#: views/subscribers.php:214
+msgid "Please select a file to import."
+msgstr "Selecione um arquivo para importar."
+
+#: views/subscribers.php:215
+msgid ""
+"Remember - a fully confirmed opted-in list is important.<br> It is a general"
+" prerequisite for sustainable e-mail deliverability and conversion rates."
+msgstr "Lembre-se - uma lista opted-in totalmente confirmada é importante <br> É um pré-requisito geral para a entregabilidade de email de conversão sustentáveis. ."
+
+#: views/subscribers.php:223
+msgid " Skip first row"
+msgstr "Pule a primeira linha"
+
+#: views/subscribers.php:236 views/subscribers.php:244
+#: views/subscribers.php:252 views/subscribers.php:260
+#: views/subscribers.php:268
+msgid "email"
+msgstr "Email"
+
+#: views/subscribers.php:305
+msgid "Please enable JavaScript to use file uploader."
+msgstr "Por favor ative o JavaScript para usar o carregador de arquivo."
+
+#: views/subscribers.php:311 views/templates.php:190
+msgid "Upload a file"
+msgstr "Carregar arquivo"
+
+#: views/subscribers.php:312 views/templates.php:192
+msgid "Import"
+msgstr "Importar"
+
+#: views/subscribers.php:320
+msgid "Bulk unsubscribe:"
+msgstr "Cancelar inscrição em massa:"
+
+#: views/subscribers.php:324
+msgid ""
+"Enter an email addresses which you want to unsubscribe. Place each email on "
+"a separate row."
+msgstr "Insira um endereço de email que você deseja cancelar Inscrição. Coloque cada email em uma linha separada."
+
+#: views/subscribers.php:331
+msgid " Unsubscribe from all lists"
+msgstr "Cancelar inscrição de todas as listas"
+
+#: views/subscribers.php:341
+msgid "Add new list:"
+msgstr "Adicionar lista nova:"
+
+#: views/templates.php:16
+msgid "New Template"
+msgstr "Modelo Novo"
+
+#: views/templates.php:20
+msgid "Install New Templates"
+msgstr "Instalar Modelos Novos"
+
+#: views/templates.php:24
+msgid "From Templates Store..."
+msgstr "Da loja de Modelos..."
+
+#: views/templates.php:25
+msgid "From File..."
+msgstr "De Arquivo..."
+
+#: views/templates.php:43
+msgid "My Templates"
+msgstr "Meus Modelos"
+
+#: views/templates.php:46
+msgid "System Templates"
+msgstr "Sistema de Modelos"
+
+#: views/templates.php:130
+msgid ""
+"Some of selected templates have resources shared with other email templates "
+"or emails."
+msgstr "Alguns dos modelos selecionados têm recursos compartilhados com outros modelos de email ou emails ."
+
+#: views/templates.php:131
+msgid "Are you sure you want to delete selected templates?"
+msgstr "Tem certeza de que você quer deletar modelos selecionados? "
+
+#: views/templates.php:136
+msgid "Delete with resources"
+msgstr "Deletar com recursos"
+
+#: views/templates.php:146
+msgid "Are you sure you want to delete this template?"
+msgstr "Tem certeza de que você quer deletar este modelo? "
+
+#: views/templates.php:173
+msgid "Import Template"
+msgstr "Importar modelo"
+
+#: views/templates.php:179
+msgid "Template file name"
+msgstr "Nome do arquivo modelo"
+
+#: views/templates.php:200
+msgid "Get more templates"
+msgstr "Veja mais modelos "
+
+#: widget-wpml.php:8
+msgid "WPNewsman multilanguage subscription form for your newsletters"
+msgstr "WPNewsman Formulário de inscrição multilinguagem para as suas newsletter"
+
+#: widget-wpml.php:11
+msgid "WPNewsman Subscription Multilanguage Form"
+msgstr "WPNewsman Formulário de inscrição multilinguagem "
+
+#: workers/class.newsmanMailerWorker.php:179
+msgid "Bad Email Address"
+msgstr "Endereço de email ruim"
+
+#: workers/class.newsmanMailerWorker.php:191
+msgid ""
+"Too many consecutive errors. Please check your mail delivery settings and "
+"make sure you can send a test email. Last SMTP error: "
+msgstr "Muitos erros consecutivos. Por favor revise as configurações de envio de email e tenha certeza que você enviou o email de teste. Último erro SMTP: "
+
+#: workers/class.newsmanMailerWorker.php:218
+msgid "No \"confirmed\" subscribers found in the selected list(s)."
+msgstr "Não foram confirmadas \"confirmed\" assinaturas da lista(s)."
+
+#: wpnewsman.php:154
+msgid "PHP version >= 5.3"
+msgstr "Versão PHP >= 5.3"
+
+#: wpnewsman.php:155
+msgid "You have PHP %s installed."
+msgstr "Você tem PHP % s instalado."
+
+#: wpnewsman.php:163
+msgid "Single-site mode"
+msgstr "Modo de site único"
+
+#: wpnewsman.php:164
+msgid "Doesn't work in MultiSite setup."
+msgstr "Não funciona na configuração MultiSite."
+
+#: wpnewsman.php:171
+msgid "MCrypt library"
+msgstr "Biblioteca MCrypt"
+
+#: wpnewsman.php:172
+msgid ""
+"MCrypt library is required to securely store your passwords in the database."
+" Read <a href=\"http://php.net/manual/en/mcrypt.setup.php\">how to "
+"Install/Configure</a> or contact your hosting provider if you're on a shared"
+" hosting."
+msgstr "Biblioteca MCrypt é necessário para armazenar de forma segura suas senhas no banco de dados. Leia <a href=\"http://php.net/manual/en/mcrypt.setup.php\">how to Install/Configure</a> ou entre em contato com o seu provedor de hospedagem se você estiver em uma hospedagem compartilhada "
+
+#: wpnewsman.php:179
+msgid "MBString extension"
+msgstr "Extensão MBString"
+
+#: wpnewsman.php:180
+msgid ""
+"MBString extension is required for correct processing of non unicode "
+"characters. Read <a "
+"href=\"http://www.php.net/manual/en/mbstring.installation.php\">how to "
+"Install/Configure</a> or contact your hosting provider if you're on a shared"
+" hosting."
+msgstr "Extensão MBSTRING é necessário para o processamento correto de caracteres não-Unicode . Leia <a href=\"http://www.php.net/manual/en/mbstring.installation.php\">how to Install/Configure</a>  ou entre em contato com o seu provedor de hospedagem se você estiver em uma hospedagem compartilhada ."
+
+#: wpnewsman.php:196
+msgid "Direct filesystem access"
+msgstr "Acesso direto ao sistema de arquivo"
+
+#: wpnewsman.php:197
+msgid ""
+"Since version 1.5.7 direct access to the filesystem is required. Make sure "
+"that the uploads directory is writable by the web server%s."
+msgstr "Desde a versão 1.5.7 acesso direto ao sistema de arquivo é requerido. Certifique-se de que o diretório de uploads é escrito pelo servidor web % s. "
+
+#: wpnewsman.php:204
+msgid "Safe mode is turned off"
+msgstr "Modo seguro está desligado"
+
+#: wpnewsman.php:205
+msgid ""
+"Safe mode is deprecated in PHP and not supported by the plugin.(Set "
+"safe_mode = Off in php.ini. See <a "
+"href=\"http://www.php.net/manual/en/features.safe-mode.php\">Safe Mode on "
+"php.net</a>)"
+msgstr "O modo de segurança é preterido em PHP e não suportado pelo plugin.(Set safe_mode = Off in php.ini. See <a href=\"http://www.php.net/manual/en/features.safe-mode.php\">Safe Mode on php.net</a>)"
+
+#: wpnewsman.php:213
+msgid "bcmath or gmp extension is loaded"
+msgstr "bcmath ou extensão gmp está carregado"
+
+#: wpnewsman.php:214
+msgid ""
+"Since version 1.7.0 either <b>bcmath</b> or <b>gmp</b> PHP module is "
+"required for the plugin to work. According to PHP documentation "
+"<b>bcmath</b> should pre installed since PHP 4.0.4."
+msgstr "Desde a versão 1.7.0 qualquer <b>bcmath</b> ou <b>gmp</b> módulo  PHP é necessário para o plugin funcionar. De acordo com a documentação PHP <b>bcmath</b> deve ser pré-instalado desde PHP 4.0.4."
+
+#. Plugin Name of the plugin/theme
+msgid "G-Lock WPNewsman Lite"
+msgstr "G-Lock WPNewsman Lite"
+
+#. Plugin URI of the plugin/theme
+msgid "http://wpnewsman.com"
+msgstr "http://wpnewsman.com"
+
+#. Description of the plugin/theme
+msgid ""
+"You get simple yet powerful newsletter solution for WordPress. Now you can "
+"easily add double optin subscription forms in widgets, articles and pages, "
+"import and manage your lists, create and send beautiful newsletters directly"
+" from your WordPress site. You get complete freedom and a lower cost "
+"compared to Email Service Providers. Free yourself from paying for expensive"
+" email campaigns. WPNewsman plugin updated regularly with new features."
+msgstr "Você terá a solução simples mas poderosa de newsletter para WordPress. Agora você pode facilmente adicionar formulário de subscrição double optin em widgets, artigos e páginas, importar e gerenciar suas listas, criar e enviar belos boletins diretamente de seu site WordPress. Você terá toda a liberdade e um custo muito menor em comparação com Provedores de Serviços de Email . Liberte-se do pagamento de campanhas de e-mail caros . WPNewsman plug-in atualiza-se regularmente com novas funcionalidades."
+
+#. Author of the plugin/theme
+msgid "Alex Ladyga - G-Lock Software"
+msgstr "Alex Ladyga - Software G-Lock"
+
+#. Author URI of the plugin/theme
+msgid "http://www.glocksoft.com"
+msgstr "http://www.glocksoft.com"

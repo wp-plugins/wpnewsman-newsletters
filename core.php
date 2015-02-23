@@ -9,6 +9,8 @@ global $newsman_checklist;
 global $newsman_error_message;
 global $newsman_success_message;
 
+do_action('wpnewsman_add_ajax_handlers');
+
 function wpnewsmanFilterSchedules($schedules) {
 	$schedules['1min'] = array('interval' => 60, 'display' => __('Every minute', NEWSMAN) );
 
@@ -37,6 +39,8 @@ function wpnewsman_loadstring() {
 
 	load_textdomain($domain, WP_LANG_DIR.'/wpnewsman/'.$domain.'-'.$loc.'.mo');
 	load_plugin_textdomain($domain, FALSE, dirname(plugin_basename(NEWSMAN_PLUGIN_MAINFILE)).'/languages/');	
+
+	do_action('wpnewsman_load_strings');
 }
 add_action('plugins_loaded', 'wpnewsman_loadstring');
 
@@ -84,7 +88,7 @@ class newsman {
 
 		if ( !defined('NEWSMAN_DEBUG') ) {
 			define('NEWSMAN_DEBUG', $this->options->get('debug'));
-		}			
+		}
 
 		$this->utils = newsmanUtils::getInstance();
 		$this->mailman = newsmanMailMan::getInstance();
@@ -96,7 +100,6 @@ class newsman {
 		$newsman_success_message = '';
 
 		add_action('init', array($this, 'onInit'));
-		add_action('newsman_poke_workers', array($this, 'onPokeWorkers'));
 
 		add_action('admin_enqueue_scripts', array($this, 'onAdminEnqueueScripts'), 99);
 
@@ -129,6 +132,7 @@ class newsman {
 			add_action('widgets_init', array($this, 'onWidgetsInit') );	
 		}	
 
+
 		// schedule event
 		add_action('newsman_mailman_event', array($this, 'mailman'));
 		add_action("wp_insert_post", array($this, "onInsertPost"), 10, 2);
@@ -145,6 +149,7 @@ class newsman {
 
 		add_filter('the_content', array($this, 'pre_content_message'));
 
+
 		if ( function_exists('add_shortcode') ) {
 			add_shortcode('newsman-form', array($this, 'shortCode'));
 			add_shortcode('newsman', array($this, 'newsmanShortCode'));
@@ -155,13 +160,15 @@ class newsman {
 			add_shortcode('newsman_in_email', array($this, 'newsmanShortCodeNotOnWeb'));
 			add_shortcode('newsman_has_thumbnail', array($this, 'newsmanShortCodeHasThumbnail'));
 			add_shortcode('newsman_no_thumbnail', array($this, 'newsmanShortCodeNoThumbnail'));
-		}		
+		}
 
 		add_action('do_meta_boxes', array($this, 'reAddExcerptMetabox'), 10, 3);
 
 		add_action('save_post', array($this, 'save_ap_template'), 10, 2);
 
 		add_filter('single_template', array($this, 'set_custom_template_for_action_page'));
+
+		do_action('wpnewsman_add_actions');
 
 	}
 
@@ -255,7 +262,7 @@ class newsman {
 			$email->msg .= '<br>'.sprintf( __('You reached the subscribers limit of the Lite version. %s to resume sending.', NEWSMAN), $upgradeLink);
 			$email->status = 'stopped';
 			$email->save();
-			return null;
+			return false;
 		}
 
 		return $t;
@@ -1027,7 +1034,7 @@ class newsman {
 					wp_enqueue_script('jquery-ui-datepicker', array('jquery'));					
 					//wp_enqueue_script('jquery-ui-draggable', array('jquery'));
 
-					wp_enqueue_script('newsman_momentjs', NEWSMAN_PLUGIN_URL.'/js/moment-with-langs.min.js', array(), NEWSMAN_VERSION);
+					wp_enqueue_script('newsman_momentjs', NEWSMAN_PLUGIN_URL.'/js/moment-with-locales.min.js', array(), NEWSMAN_VERSION);
 
 					wp_enqueue_style('jquery-tipsy-css', NEWSMAN_PLUGIN_URL.'/css/tipsy.css');
 					wp_enqueue_script('jquery-tipsy', NEWSMAN_PLUGIN_URL.'/js/jquery.tipsy.js', array('jquery'));
@@ -1612,7 +1619,15 @@ class newsman {
 
 		//newsmanBlockedDomain::count();
 
-		echo '<script>
+		echo "<script>
+			var attr = document.head.parentNode.attributes.getNamedItem('dir'),
+				textDir = attr && attr.value === 'rtl' ? 'rtl' : 'ltr';
+
+			document.head.parentNode.className += ' newsman-dir-'+textDir;
+		</script>";
+
+		echo '<script>			
+			NEWSMAN_LOCALE = "'.get_locale().'";
 			NEWSMAN_BLOCKED_DOMAINS = '.$blockedDomainsCount.';
 			NEWSMAN_PLUGIN_URL = "'.NEWSMAN_PLUGIN_URL.'";
 			NEWSMAN_BLOG_ADMIN_URL = "'.NEWSMAN_BLOG_ADMIN_URL.'";
@@ -1885,6 +1900,8 @@ class newsman {
 		$locks = newsmanLocks::getInstance();
 		$locks->clearLocks();
 
+		$this->wm->clearWorkers();
+
 		$this->ensureEnvironment();
 		$this->install();
 
@@ -2020,6 +2037,35 @@ class newsman {
 
 	public function onInit($activation = false) {
 		new newsmanAJAX();
+		do_action('wpnewsman_init_ajax');
+
+		// if ( !empty($_POST) ) {
+		// 	echo "POST REQUEST";
+		// 	print_r($_POST);
+		// 	exit();
+		// }
+
+		if ( isset( $_REQUEST['newsman_worker_fork'] ) && !empty($_REQUEST['newsman_worker_fork']) ) {
+			$this->utils->log('[onProWorkersReady] $_REQUEST["newsman_worker_fork"] %s', isset($_REQUEST['newsman_worker_fork']) ? $_REQUEST['newsman_worker_fork'] : '');			
+
+			define('NEWSMAN_WORKER', true);
+			
+			$workerClass = $_REQUEST['newsman_worker_fork'];
+
+			if ( !class_exists($workerClass) ) {
+				$this->utils->log("requested worker class ".htmlentities($workerClass)." does not exist");
+				die("requested worker class ".htmlentities($workerClass)." does not exist");
+			}
+
+			if ( !isset($_REQUEST['workerId']) ) {
+				$this->utils->log('workerId parameter is not defiend in the query');
+				die('workerId parameter is not defiend in the query');
+			}
+
+			$worker = new $workerClass($_REQUEST['workerId']);
+			$worker->run();
+			exit();
+		}		
 
 		if ( preg_match('/'.NEWSMAN_PLUGIN_DIRNAME.'\/api.php/i', $_SERVER['REQUEST_URI'] ) ) {
 			new newsmanAPI();
@@ -2037,7 +2083,7 @@ class newsman {
 			}
 		}
 
-		if ( preg_match('/wpnewsman-pokeback\/(run-scheduled|run-bounced-handler|mailman)/i', $_SERVER['REQUEST_URI'], $matches) ) {
+		if ( preg_match('/wpnewsman-pokeback\/(run-scheduled|run-bounced-handler|mailman|check-workers)/i', $_SERVER['REQUEST_URI'], $matches) ) {
 			$this->utils->log('wpnewsman-pokeback %s', $matches[1]);	
 			switch ( $matches[1] ) {
 				case 'run-scheduled':
@@ -2057,6 +2103,9 @@ class newsman {
 					break;
 				case 'mailman':
 					$this->mailman();
+					break;
+				case 'check-workers':
+					$this->wm->pokeWorkers();
 					break;
 			}
 			exit();
@@ -2266,10 +2315,6 @@ class newsman {
 				}			
 			}
 		}
-	}
-
-	public function onPokeWorkers() {
-		$this->mailman->checkEmailsQueue();
 	}
 
 	// filters
@@ -2996,13 +3041,109 @@ class newsman {
 			'fileName' => $fileName,
 			'type' => $type
 		));
-	}
+	}	
 
 	/*		DEBUG 		*/
 
 	public function echoDebugLog() {		
 		echo htmlentities($this->utils->readLog());
 	}
+
+	/* 		P 		*/
+
+	public function getSelfDomain() {
+		if ( preg_match('/\w+:\/\/(?:www\.|)([^\/\:]+)/i', get_bloginfo('url'), $matches) ) {
+			$domain = $matches[1];
+		}
+		return $domain;
+	}
+
+	public function pbSchedule() {
+		$pokebackSrvUrl = WPNEWSMAN_POKEBACK_URL.'/schedule/?'.http_build_query(array(
+			'key' => $this->options->get('pokebackKey'),
+			'url' => get_bloginfo('wpurl').'/wpnewsman-pokeback/run-bounced-handler/',
+			'time' => 'every 1 hour'
+		));
+
+		$r = wp_remote_get(
+			$pokebackSrvUrl,
+			array(
+				'timeout' => 0.01,
+				'blocking' => false
+			)
+		);
+	}
+
+	public function pbUnschedule() {
+		// unschedlue
+		$pokebackSrvUrl = WPNEWSMAN_POKEBACK_URL.'/unschedule/?'.http_build_query(array(
+			'key' => $this->options->get('pokebackKey'),
+			'url' => get_bloginfo('wpurl').'/wpnewsman-pokeback/run-bounced-handler/',
+			'time' => 'every 1 hour'
+		));
+
+		$r = wp_remote_get(
+			$pokebackSrvUrl,
+			array(
+				'timeout' => 0.01,
+				'blocking' => false
+			)
+		);		
+	}	
+
+	public function runBouncedHandler() {
+		newsmanBounceHandlerWorker::fork(array(
+			'worker_lock' => 'bounce_handler'
+		));
+	}
+
+	public function unpackGeoIpDB($filePath) {
+		$u = newsmanUtils::getInstance();
+
+		$extractDir = dirname($filePath); // .../wp-content/uploads/newsman/geoip
+
+		$dbFilename = basename($filePath, '.gz');
+		$dbFilePath = $extractDir.DIRECTORY_SEPARATOR.$dbFilename;
+
+		if ( function_exists('request_filesystem_credentials') ) {
+			$newsman_wpfs_creds = request_filesystem_credentials(NEWSMAN_BLOG_ADMIN_URL, '', false, false, null);	
+			WP_Filesystem($newsman_wpfs_creds);
+
+			if ( $newsman_wpfs_creds['connection_type'] == 'ftp' ) {
+				$extractDir = $u->getRelativePath(ABSPATH, $extractDir);
+			}
+		}
+
+		$res = $this->ungzipFile($filePath, $extractDir);
+
+		if ( is_wp_error($res) ) {
+			$u->log('[unpackGeoIpDB] Error: %s', $res->get_error_message());
+			return $res;
+		}
+
+		if ( $res === true ) {
+			unlink($filePath);
+			return $dbFilePath;
+		}
+
+		return $res;
+	}	
+
+	private function ungzipFile($filePath, $extractDir) {
+		$extractedFilename = basename($filePath, '.gz');
+		$extractedFilePath = $extractDir.DIRECTORY_SEPARATOR.$extractedFilename;
+
+		$buffReadSize = 256*1024; // 256kb
+
+		$gz = gzopen ( $filePath, 'r' );
+		$fn = fopen($extractedFilePath, 'w+');
+		while ( !gzeof($gz) ) {
+			fwrite($fn, gzread($gz, $buffReadSize));
+		}
+		fclose($fn);    	
+    	gzclose($gz);		
+    	return true;
+	}	
 }
 
 if ( !function_exists('nwsmn_echo_option') ) {

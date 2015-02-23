@@ -498,3 +498,83 @@ $newsman_changes[] = array(
 	'introduced_in' => $u->versionToNum('1.7.7-alpha-1'),
 	'func' => 'newsman_migration_check_api_key'
 );
+
+
+function newsman_migration_add_columns_to_sentlog() {
+	global $wpdb;
+	$sl = newsmanSentlog::getInstance();
+	$tbl = $sl->tableName;
+
+	try {
+		$sql = "ALTER IGNORE TABLE $tbl ENGINE=InnoDB";
+		$wpdb->query($sql);
+	} catch ( Exception $e ) {
+	}
+
+	try {	
+		$sql = "ALTER IGNORE TABLE $tbl ADD COLUMN `status` TINYINT(1) unsigned NOT NULL DEFAULT 0";
+		$res = $wpdb->query($sql);	
+	} catch ( Exception $e ) {
+	}
+
+	try {
+		$sql = "ALTER IGNORE TABLE $tbl ADD UNIQUE( `emailId`, `listId`, `recipientId`);";
+		$res = $wpdb->query($sql);
+	} catch ( Exception $e ) {
+	}
+
+}
+$newsman_changes[] = array(
+	'introduced_in' => $u->versionToNum('1.8.9-beta-2'),
+	'func' => 'newsman_migration_add_columns_to_sentlog',
+	'repeat' => true
+);
+
+function newsman_stop_all_pending_emails() {
+	$emails = newsmanEmail::findAll('status = "pending"');
+
+	foreach ($emails as $email) {
+		$email->status = 'stopped';
+		$email->save();
+	}		
+}
+$newsman_changes[] = array(
+	'introduced_in' => $u->versionToNum('1.8.9-beta-5'),
+	'func' => 'newsman_stop_all_pending_emails'
+);
+
+
+function newsman_add_index_to_blocked_domains() {
+	global $wpdb;
+
+	$tbl = newsmanBlockedDomain::getTableName();
+
+	$sql = "ALTER TABLE `$tbl` ADD INDEX domain ( `domain` )";
+	$wpdb->query($sql);
+}
+$newsman_changes[] = array(
+	'introduced_in' => $u->versionToNum('1.8.9-beta-7'),
+	'func' => 'newsman_add_index_to_blocked_domains'
+);
+
+
+function newsman_migration_cleanup_incorrect_sentlog_records() {
+	global $wpdb;
+
+	$u = newsmanUtils::getInstance();
+
+	$sl = newsmanSentlog::getInstance();
+	$tbl = $sl->tableName;
+
+	$sql = "DELETE FROM $tbl WHERE recipientAddr = '' AND status = 0";
+	$u->log('newsman_migration_cleanup_incorrect_sentlog_records: '.$sql);
+	$wpdb->query($sql);
+}
+$newsman_changes[] = array(
+	'introduced_in' => $u->versionToNum('1.8.9-beta-11'),
+	'func' => 'newsman_migration_cleanup_incorrect_sentlog_records',
+	'repeat' => true
+);
+
+
+

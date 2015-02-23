@@ -10,7 +10,9 @@ class newsmanWorker extends newsmanWorkerBase {
 	var $ts = null;
 	var $ttl = 0;
 	var $stoptime = 0;
-	var $wm = null;
+	var $wm = null;	
+	var $respawnonexit = false;
+	var $isRespawnedWorker = false;
 
 	var $pm_iv = null;
 
@@ -31,29 +33,9 @@ class newsmanWorker extends newsmanWorkerBase {
 		$o = newsmanOptions::getInstance();
 		$this->secret = $o->get('secret');
 
-/*/
-		if ( defined('NEWSMAN_WORKER') ) {
-			if ( isset($_REQUEST['_wpnonce']) ) {
+		$this->isRespawnedWorker = isset($_REQUEST['respawn']) && $_REQUEST['respawn'] == '1';
 
-				$this->u->log('[newsmanWorker] checking  nonce...');
-
-				$nonce = $_REQUEST['_wpnonce'];
-
-				if ( !$this->u->verifyNonce($nonce) ) {
-					$this->u->log('[newsmanWorker] Error: bad nonce %s', $nonce);
-					die('0');
-				}
-
-			} else {
-				$this->u->log('[newsmanWorker] checking secret...');
-				if ( !$newsmanAdmin && $_REQUEST['secret'] !== $this->secret ) {
-					$this->u->log('[newsmanWorker] secret check failed!');
-					die('0');
-				}
-			}			
-		}	
-//*/
-
+		$this->u->log('[ isRespawnedWorker ]: '.var_export($this->isRespawnedWorker, true));
 
 		@ini_set('max_execution_time',0);
 		@ini_set('default_socket_timeout',10);
@@ -61,10 +43,12 @@ class newsmanWorker extends newsmanWorkerBase {
 
 		//we set a stoppage time to avoid broken process
 		$timeToLive = ini_get('max_execution_time');
-		if(!empty($timeToLive)){
-			$this->ttl = $timeToLive;
-			$this->stoptime = time()+$timeToLive-4;
+		if ( empty($timeToLive) ) {
+			$timeToLive = defined('NEWSMAN_WORKER_TTL') ? NEWSMAN_WORKER_TTL : 120; // 120 sec is a default ttl
 		}		
+
+		$this->ttl = $timeToLive;
+		$this->stoptime = time()+$timeToLive-4;
 
 		$this->wm = newsmanWorkerManager::getInstance();
 	}
@@ -114,6 +98,10 @@ class newsmanWorker extends newsmanWorkerBase {
 
 		$this->processMessages();
 		$this->clearTimestamp();
+
+		if ( $this->respawnonexit ) {
+			$this->fork(array_merge($_REQUEST, array( 'respawn' => '1' )));			
+		}
 	}
 
 	/*******************************************************
@@ -130,7 +118,12 @@ class newsmanWorker extends newsmanWorkerBase {
 		$t->deleteTS($this->workerId);
 	}
 
-	public function processMessages() {
+	public function processMessages() {		
+		if ( !$this->stopped && time() >= $this->stoptime ) {
+			$this->u->log('[newsman worker] stoptime %s', $this->stoptime);
+			$this->respawnonexit = true;
+			$this->stop();
+		}
 
 		$u = newsmanUtils::getInstance();
 		//$u->log('[newsmanWorker processMessages]');
@@ -172,14 +165,16 @@ class newsmanWorker extends newsmanWorkerBase {
 	 * STATIC functions                                    *
 	 *******************************************************/
 
-	static function fork($params = array()) {
+	static function fork($params = null) {
+		if ( $params == null ) {
+			$params = $_REQUEST;
+		}
 		$o = newsmanOptions::getInstance();
 		$secret = $o->get('secret');
 
 		$u = newsmanUtils::getInstance();
 
-		//$workerURL = NEWSMAN_PLUGIN_URL.'/wpnewsman-worker-fork';
-		$workerURL = NEWSMAN_BLOG_ADMIN_URL.'admin.php?page=newsman-settings';
+		$workerURL = NEWSMAN_PLUGIN_URL.'/wpnewsman-worker-fork';
 		
 		$params['newsman_worker_fork'] = get_called_class();
 		$params['workerId'] = sprintf( '%x', time() ).rand(1,100);
@@ -199,12 +194,12 @@ class newsmanWorker extends newsmanWorkerBase {
 			// adding nonce
 			$params['_wpnonce'] = $u->createNonce();
 
-			$workerURL = get_bloginfo('wpurl').'?'.http_build_query($params);
+			$workerURL = $workerURL.'?'.http_build_query($params);
 
 			$pokebackSrvUrl = WPNEWSMAN_POKEBACK_URL.'/poke/?'.http_build_query(array(
 				'url' => $workerURL,
 				'key' => $o->get('pokebackKey'),
-				'pokeMethod' => 'GET'
+				'pokeMethod' => 'POST'
 			));
 
 			$u->log('CALLING '.$pokebackSrvUrl);

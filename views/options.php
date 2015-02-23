@@ -183,10 +183,13 @@
 					<div class="span8">
 						<h3 style="margin-bottom: 5px;"><?php _e('API key', NEWSMAN); ?></h3>
 						<input type="text" name="newsman-apiKey" style="width: 320px" readonly="readonly">
+						<button type="button" class="btn btn-small" newsman-bind-option="apiKey" newsman-attr="data-clipboard-text" data-clipboard-text="Copy Me!" title="Click to copy API Key to clipboard.">Copy</button>
+    
 							
 						<h3 style="margin-bottom: 5px;"><?php _e('API endpoint', NEWSMAN); ?></h3>
-						<p><code><?php echo NEWSMAN_PLUGIN_URL;?>/api.php</code></p>
-							
+						<p><code><?php echo NEWSMAN_PLUGIN_URL;?>/api.php</code>
+							<button type="button" class="btn btn-small" data-clipboard-text="<?php echo NEWSMAN_PLUGIN_URL;?>/api.php" title="Click to copy API endpoint to clipboard.">Copy</button>    
+						</p>
 					</div>
 					<div class="span4">
 						<!--   			 Info column  			 -->

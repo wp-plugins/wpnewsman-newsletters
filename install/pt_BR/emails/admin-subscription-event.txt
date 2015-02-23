@@ -1,0 +1,12 @@
+Um contato foi adicionado à sua lista de emails [newsman wp="blogname"]
+--- plain ---
+Um contato foi adicionado à sua lista de emails. Os detalhes do contato aparecem abaixo:
+
+[newsman sub="*"]
+--
+[newsman wp="url"]/wp-admin/ -> WPNewsman -> Settings
+--- html ---
+<p>Um contato foi adicionado à sua lista de emails. Os detalhes do contato aparecem abaixo:</p>
+<ul>[newsman sub="*" tag="li"]</ul>
+<p>--</p>
+<p><a href="[newsman wp='url']/wp-admin/">[newsman wp="url"]/wp-admin/</a> -> WPNewsman -> Settings</p>

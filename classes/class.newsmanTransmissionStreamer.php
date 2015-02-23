@@ -121,15 +121,37 @@ class newsmanTransmissionStreamer {
 		return $g->prepareTransmission($t, $email);
 	}
 
-	function getTransmission() {
+	// function getTransmission() {
+	// 	if ( !count($this->buffer) ) {
+	// 		$this->fillBuffer();
+	// 	}
+	// 	$t = array_pop($this->buffer);
 
-		if ( !count($this->buffer) ) {
-			$this->fillBuffer();
+	// 	$t = $this->applyFilter($t, $this->email);
+	// 	return $t;
+	// }
+
+	function getTransmission() {
+		if ( !$this->currentList ) { // getting next list from the "To:" field
+			$this->currentList = array_shift($this->to);
+			if ( $this->currentList ) {
+				$this->currentList = trim($this->currentList);
+			} else {
+				// nothing left, empty buffer
+				return NULL;
+			}
 		}
 
-		$t = array_pop($this->buffer);
-		$t = $this->applyFilter($t, $this->email);
+		// list name
+		$t = $this->sl->getSinglePendingFromList($this->email->id, $this->currentList);
 
+		$t = $this->applyFilter($t, $this->email);
+		if ( $t === false ) { return null; }
+
+		if ( !$t ) { // buffer is empty, no data left in this list, switching to another
+			$this->currentList = null;
+			return $this->getTransmission();
+		}
 		return $t;
 	}
 

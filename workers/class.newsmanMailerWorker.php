@@ -127,15 +127,37 @@ class newsmanMailerWorker extends newsmanWorker {
 		$email->p_html = $u->processAssetsURLs($email->p_html, $email->assetsURL);
 		$email->p_html = $u->compileThumbnails($email->p_html);
 
+		$u->log('[launchSender] processing messages');
 		$this->processMessages();
 
+		$u->log('[launchSender] getTransmissions while loop');
 		while ( $t = $tStreamer->getTransmission() ) {
 
+			$u->log('[launchSender] got transmission');
 			$this->processMessages();
 
 			if ( $this->stopped ) { // checks with file_exists(), IO operation
 				break;
 			}
+
+			$u->log('[launchSender] setting transmission status to SENDING');
+			$t->setStaus(NEWSMAN_TS_SENDING);
+
+			// TODO: check BH list
+
+			$addrArr = explode('@', $t->email);
+			$domain = $addrArr[1];
+
+			$u->log('[launchSender] checking blocked domain list...');
+			$blockedDomain = newsmanBlockedDomain::findOne('domain = %s', array($domain));
+
+			if ( $blockedDomain ) {
+				$u->log('[launchSender] domain is blocked by BH');
+				$t->setError(NEWSMAN_ERR_DOMAIN_BLOCKED_BY_BH, 'Domain blocked by BH');
+				continue;
+			}
+
+			$u->log('[launchSender] domain is no blocked. continue sending');
 
 			$newsman_current_list = $t->list;
 
@@ -159,27 +181,25 @@ class newsmanMailerWorker extends newsmanWorker {
 				$errorsCount = 0;
 				$email->incSent();
 
-				$t->done($email->id);
+				$t->setStaus(NEWSMAN_TS_SENT);
 			} else {
 
 				if ( strpos($r, 'SMTP Error: Could not connect to SMTP host') !== false ) {
 					$lastError = $r;
 					$hasErrors = true;
 					$errorStop = true;
+					$t->setError(NEWSMAN_ERR_CANNOT_CONNECT_TO_HOST, $r);
 					break;
 				}
 
 				$u->log('Sending to '.$t->email.': Server response: '.$r);
 				if ( strpos($r, 'Invalid address') !== false ) {
-					$t->errorCode = NEWSMAN_ERR_INVALID_EMAIL_ADDR;	
+					$t->setError(NEWSMAN_ERR_INVALID_EMAIL_ADDR, $r);
 					// unsubscribe
 					$u->unsubscribeFromLists($t->email, __('Bad Email Address', NEWSMAN), true);
 				} else {
-					$t->errorCode = NEWSMAN_ERR_TEMP_ERROR;
+					$t->setError(NEWSMAN_ERR_TEMP_ERROR, $r);
 				}
-				
-				$t->statusMsg = $r;
-				$t->done($email->id);
 
 				$errorsCount += 1;
 				$hasErrors = true;
@@ -193,12 +213,12 @@ class newsmanMailerWorker extends newsmanWorker {
 				break;
 			}
 
-			$elapsed = (time() - $start)* 1000; // time that sending email took in ms
+			$elapsed = (time() - $start) * 1000; // time that sending email took in ms
 
 			if ( $throttlingTimeout > 0 ) {
-				$t = $throttlingTimeout - $elapsed; // how much time we've left to wait				
-				if ( $t > 0 ) {
-					$this->wait($t);
+				$tme = $throttlingTimeout - $elapsed; // how much time we've left to wait				
+				if ( $tme > 0 ) {
+					$this->wait($tme);
 				}
 			}
 			$ts = microtime(true);

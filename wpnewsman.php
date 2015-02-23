@@ -3,7 +3,7 @@
 Plugin Name: G-Lock WPNewsman Lite
 Plugin URI: http://wpnewsman.com
 Description: You get simple yet powerful newsletter solution for WordPress. Now you can easily add double optin subscription forms in widgets, articles and pages, import and manage your lists, create and send beautiful newsletters directly from your WordPress site. You get complete freedom and a lower cost compared to Email Service Providers. Free yourself from paying for expensive email campaigns. WPNewsman plugin updated regularly with new features.
-Version: 1.8.8
+Version: 1.8.9
 Author: Alex Ladyga - G-Lock Software
 Author URI: http://www.glocksoft.com
 */
@@ -25,15 +25,15 @@ Author URI: http://www.glocksoft.com
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-// litte helper function to bring some windows love 
+// litte helper function to bring some windows love
 function newsman_ensure_correct_path($path) {
 	return preg_replace('/[\\\\\/]+/', DIRECTORY_SEPARATOR, $path);
 }
 
 define('NEWSMAN', 'wpnewsman');
-define('NEWSMAN_VERSION', '1.8.8');
+define('NEWSMAN_VERSION', '1.8.9');
 
-define('NEWSMAN_MU_BUNDLED_VERSION', '1.0.0');
+define('NEWSMAN_MU_BUNDLED_VERSION', '1.0.5');
 
 if ( preg_match('/.*?\.dev$/i', $_SERVER['HTTP_HOST']) ) {
 	define('NEWSMAN_DEV_HOST', true);
@@ -69,8 +69,19 @@ define('NEWSMAN_ET_UNSUBSCRIBE_CONFIRMATION', 7);
 define('NEWSMAN_ET_RECONFIRM', 8);
 
 define('NEWSMAN_SS_UNCONFIRMED', 0);
-define('NEWSMAN_SS_CONFIRMED', 1); 
+define('NEWSMAN_SS_CONFIRMED', 1);
 define('NEWSMAN_SS_UNSUBSCRIBED', 2);
+
+// transmission statuses
+define('NEWSMAN_TS_SENDING', 1);
+define('NEWSMAN_TS_SENT', 2);
+define('NEWSMAN_TS_ERROR', 3);
+
+define('NEWSMAN_ERR_INVALID_EMAIL_ADDR', 10);
+define('NEWSMAN_ERR_TEMP_ERROR', 1);
+define('NEWSMAN_ERR_CANNOT_CONNECT_TO_HOST', 2);
+define('NEWSMAN_ERR_DOMAIN_BLOCKED_BY_BH', 3);
+
 
 if ( strpos($_SERVER['REQUEST_URI'], 'frmGetPosts.php') !== false && !defined('INSERT_POSTS_FRAME') ) {
 	define('INSERT_POSTS_FRAME', true);
@@ -86,7 +97,7 @@ function newsmanStopActivation() {
 		<style>
 			.nesman-label {
 				background: whiteSmoke;
-				border: 1px solid #DFDFDF;				
+				border: 1px solid #DFDFDF;
 				-moz-border-radius: 3px;
 				-webkit-border-radius: 3px;
 				border-radius: 3px;
@@ -98,17 +109,17 @@ function newsmanStopActivation() {
 			}
 			.newsman-label-passed {
 				color: green;
-			} 
+			}
 			.newsman-label-failed {
 				color: red;
 			}
 			.newsman-label-help {
 				color: gray;
 				font-style: italic;
-			} 			
+			}
 		</style>
 		<div class="error">
-			
+
 			<h3>Error: G-Lock WPNewsman compatibility check failed, the plugin cannot be activated.</h3>
 			<p>Please, fix the issues below and try again.</p>
 			<ul>
@@ -123,12 +134,12 @@ function newsmanStopActivation() {
 						}
 						echo '<li><span class="nesman-label '.$class.'">'.$lbl.'</span> '.$check['name'].' (<span class="newsman-label-help">'.$check['help'].'</span>)</li>';
 					}
-				?>				
+				?>
 			</ul>
 		</div>
 	<?php
 	deactivate_plugins(NEWSMAN_PLUGIN_PATHNAME);
-	unset($_GET['activate']); // to disable "Plugin activated" message					
+	unset($_GET['activate']); // to disable "Plugin activated" message
 
 }
 
@@ -140,7 +151,7 @@ function newsmanCheckCompatibility() {
 
 	// 0. PHP version
 	$v = explode('.', phpversion());
-	for ($i=0; $i < count($v); $i++) { 
+	for ($i=0; $i < count($v); $i++) {
 		$v[$i] = intval($v[$i]);
 	}
 
@@ -190,10 +201,10 @@ function newsmanCheckCompatibility() {
 			'passed' => is_writable($ud),
 			'name' => __('Direct filesystem access', NEWSMAN),
 			'help' => sprintf(__('Since version 1.5.7 direct access to the filesystem is required. Make sure that the uploads directory is writable by the web server%s.', NEWSMAN), $cur_user)
-		);	
+		);
 	}
 
-	// 5. Safe Mode check 
+	// 5. Safe Mode check
 	$newsman_checklist[] = array(
 		'passed' => !ini_get('safe_mode'),
 		'name' => __('Safe mode is turned off', NEWSMAN),
@@ -209,7 +220,7 @@ function newsmanCheckCompatibility() {
 		'help' => __('Since version 1.7.0 either <b>bcmath</b> or <b>gmp</b> PHP module is required for the plugin to work. According to PHP documentation <b>bcmath</b> should pre installed since PHP 4.0.4.', NEWSMAN)
 	);
 
-	/// ----	
+	/// ----
 
 
 
@@ -230,8 +241,8 @@ function wpnewsmanActivationHook() {
 	if ( newsmanCheckCompatibility() ) {
 		require_once(__DIR__.DIRECTORY_SEPARATOR."core.php");
 		$n = newsman::getInstance();
-		$n->onActivate();		
-		
+		$n->onActivate();
+
 	}
 }
 
@@ -244,11 +255,11 @@ function wpnewsmanDeactivationHook() {
 }
 
 if ( newsmanCheckCompatibility() ) {
-	require_once(__DIR__.DIRECTORY_SEPARATOR."core.php");	
+	require_once(__DIR__.DIRECTORY_SEPARATOR."core.php");
 	$n = newsman::getInstance();
-	newsman_register_worker('newsmanMailerWorker');	
+	newsman_register_worker('newsmanMailerWorker');
+	newsman_register_worker('newsmanBounceHandlerWorker');
 }
 
 register_activation_hook( NEWSMAN_PLUGIN_MAINFILE, 'wpnewsmanActivationHook');
 register_deactivation_hook( NEWSMAN_PLUGIN_MAINFILE, 'wpnewsmanDeactivationHook' );
-

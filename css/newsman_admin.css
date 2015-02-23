@@ -17,8 +17,12 @@ input[type="text"], input[type="password"], input[type="number"], input[type="se
 	padding-bottom: 0;
 }
 
-#wpcontent {
+.newsman-dir-ltr #wpcontent {
 	margin-right: 20px;
+}
+
+.newsman-dir-rtl #wpcontent {
+	margin-left: 20px;
 }
 
 #datepicker {
@@ -253,7 +257,7 @@ div.blank-row {
 	margin: 0 0 8px 0;
 	padding: 0;
 	font-size: 13px;
-	float: left;
+	/*float: left;*/
 }
 
 .wp_bootstrap .radio-links li {
@@ -1363,10 +1367,9 @@ input.newsman-field-options-radio-opt-input {
 	margin-top: 0;
 }
 
-.newsman-admin-notification > button.close {
+/*.newsman-admin-notification > button.close {
 	position: static !important;
-}
-
+}*/
 .newsman-admin-notification .button-group  {
 	margin: 1em 0;
 }
@@ -1395,6 +1398,13 @@ input.newsman-field-options-radio-opt-input {
 
 #newsman-loc-mig-custom-opts {
 	opacity: 0.5;	
+}
+
+#newsman-send img {
+	margin-right: 0.5em;
+	display: inline-block;
+	vertical-align: middle;
+	margin-top: -2px;	
 }
 
 /*********************************/
@@ -2070,3 +2080,22 @@ input.newsman-field-options-radio-opt-input {
 #wpbody .wp_bootstrap p {
 	font-size: inherit;
 }
+
+
+#newsman-email-search-form {
+	display: inline-block;
+}
+
+html.newsman-dir-ltr #newsman-email-search-form {
+	float: right;
+}
+
+html.newsman-dir-rtl #newsman-email-search-form {
+	float: left;
+}
+
+
+html.newsman-dir-ltr .newsman-tbl-controls .newsman-pagination { text-align: right; }
+html.newsman-dir-rtl .newsman-tbl-controls .newsman-pagination { text-align: left; }
+
+

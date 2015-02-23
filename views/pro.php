@@ -20,9 +20,9 @@
 			<?php do_action('newsman_exta_code_form'); ?>
 			<?php else : ?>
 			<div>
-				<div style="float: left;"><a target="_blank" href="https://secure.avangate.com/order/checkout.php?PRODS=4630229&amp;QTY=1&amp;CART=1&amp;CLEAN_CART=1&amp;ADDITIONAL_site_address[4630229]=<?php echo $domain; ?>" class="btn btn-warning btn-large"><?php echo sprintf( __('Upgrade to Pro for $%d/year', NEWSMAN), 29); ?></a></div>
+				<div style="float: left;"><a target="_blank" href="https://secure.avangate.com/order/checkout.php?PRODS=4630229&amp;QTY=1&amp;CART=1&amp;CLEAN_CART=1&amp;ADDITIONAL_site_address[4630229]=<?php echo $domain; ?>" class="btn btn-warning btn-large"><?php echo sprintf( __('Upgrade to Pro for $%d/year', NEWSMAN), 49); ?></a></div>
 			</div><br>
-			<div style="margin-top: 25px;"><?php echo sprintf( __('or get special <a href="https://secure.avangate.com/order/checkout.php?PRODS=4630229&QTY=3&CART=1&CLEAN_CART=1&ADDITIONAL_site_address[4630229]=%s">3-site discounted license for $%s</a> <br><br> To activate the PRO version, you\'ll need to download an extra plugin WPNewsman Pro Extension.', NEWSMAN), $domain, 69 );?></div>
+			<div style="margin-top: 25px;"><?php echo sprintf( __('or get special <a href="https://secure.avangate.com/order/checkout.php?PRODS=4630229&QTY=3&CART=1&CLEAN_CART=1&ADDITIONAL_site_address[4630229]=%s">3-site discounted license for $%s</a> <br><br> To activate the PRO version, you\'ll need to download an extra plugin WPNewsman Pro Extension.', NEWSMAN), $domain, 89 );?></div>
 			<?php endif; ?>
 		</div>
 	</div>

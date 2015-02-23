@@ -72,6 +72,14 @@ class newsmanEmail extends newsmanStorable {
 			$u->log('[email::save] New number of recipients %s ', $this->recipients);
 		}
 
+		$sl = newsmanSentlog::getInstance();
+		$sl->clearBrokenRecipients($this->id);
+		if ( is_array($this->to) && count($this->to) > 0 ) {
+			foreach ($this->to as $listName) {
+				$sl->initEmailRecipients($this->id, $listName);
+			}
+		}
+
 		$this->html = $this->cleanupTechnicalStyle($this->html);
 		$this->p_html = $this->cleanupTechnicalStyle($this->p_html);
 

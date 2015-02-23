@@ -13,6 +13,7 @@ class newsmanEmailTransmission {
 	var $recipientId;
 
 	var $list;
+	var $id;
 
 	var $statusMsg = '';
 
@@ -20,7 +21,8 @@ class newsmanEmailTransmission {
 
 	var $data = array();
 
-	public function __construct($recipientAddr, $recipientId = null, $list = null) {
+	public function __construct($trId, $recipientAddr, $recipientId = null, $list = null) {
+		$this->id = $trId;
 		$this->recipientAddr = $recipientAddr;
 		$this->recipientId = $recipientId;
 		$this->list = $list;
@@ -40,22 +42,27 @@ class newsmanEmailTransmission {
 		return $this->data;
 	}
 
-	public function done($emailId) {
+	public function setError($errorCode, $errorMsg) {
 		global $wpdb;
 
 		$tableName = $wpdb->prefix . "newsman_sentlog";
 
-		$sql = "INSERT INTO $tableName (emailId, listId, recipientId, recipientAddr, statusMsg, errorCode) 
-							VALUES(%d, %d, %d, %s, %s, %d)";
+		$sql = "UPDATE `$tableName` SET `errorCode` = %d, `statusMsg` = %s, `status`= %d WHERE id = %d";
 
-		if ( $this->recipientId && $this->list ) {
-			$sql = $wpdb->prepare($sql, $emailId, $this->list->id, $this->recipientId, '', $this->statusMsg, $this->errorCode);
-		} else {
-			$sql = $wpdb->prepare($sql, $emailId, 0, 0, $this->recipientAddr, $this->statusMsg, $this->errorCode);
-		}		
+		return $wpdb->query( $wpdb->prepare($sql, array($errorCode, $errorMsg, NEWSMAN_TS_ERROR, $this->id)) );		
+	}
 
-		$res = $wpdb->query($sql);
-		return $res;
+	public function setStaus($status) {
+		global $wpdb;
+
+		$tableName = $wpdb->prefix . "newsman_sentlog";
+
+		$sql = "UPDATE `$tableName` SET `status` = %d WHERE id = %s";
+		return $wpdb->query( $wpdb->prepare($sql, array($status, $this->id)) );
+	}
+
+	public function done() {
+		return $this->setStaus(NEWSMAN_TS_SENT);
 	}
 
 }

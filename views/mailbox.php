@@ -6,7 +6,7 @@
 <div class="wrap wp_bootstrap">
 	<?php include("_header.php"); ?>
 	<div class="page-header">
-		<h2><?php _e('Mailbox', NEWSMAN); ?>   <form id="newsman-email-search-form" class="form-search" style="display: inline-block; float: right;">
+		<h2><?php _e('Mailbox', NEWSMAN); ?>   <form id="newsman-email-search-form" class="form-search">
 			<input id="newsman-email-search" type="text" class="input-medium search-query">
 			<button id="newsman-email-search-clear" type="button" style="display:none;" class="btn"><?php _e('Clear', NEWSMAN); ?></button>
 			<button id="newsman-email-search-btn" type="submit" class="btn"><?php _e('Search', NEWSMAN); ?></button>
@@ -27,31 +27,46 @@
 	</div>
 
 	<div class="newsman-tbl-controls row">
+	<?php
+		$toolbar = '
 		<div class="span7">
 			<div class="btn-group">
 				<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-					<i class="icon-pencil"></i> <?php _e('Compose', NEWSMAN); ?>
+					<i class="icon-pencil"></i> '.__('Compose', NEWSMAN).'
 					<span class="caret"></span>
 				</a>
 				<ul class="dropdown-menu">
-					<li><a id="btn-compose" href="<?php echo get_bloginfo("wpurl"); ?>/wp-admin/admin.php?page=newsman-mailbox&amp;action=compose-from-tpl"><i class="icon-pencil"></i> <?php _e('From Template', NEWSMAN); ?></a></li>
-					<li><a href="<?php echo get_bloginfo("wpurl"); ?>/wp-admin/admin.php?page=newsman-mailbox&amp;action=compose"><i class="icon-font"></i> <?php _e('Quick Message', NEWSMAN); ?></a></li>
+					<li><a id="btn-compose" href="'.get_bloginfo("wpurl").'/wp-admin/admin.php?page=newsman-mailbox&amp;action=compose-from-tpl"><i class="icon-pencil"></i> '.__('From Template', NEWSMAN).'</a></li>
+					<li><a href="'.get_bloginfo("wpurl").'/wp-admin/admin.php?page=newsman-mailbox&amp;action=compose"><i class="icon-font"></i> '.__('Quick Message', NEWSMAN).'</a></li>
 				</ul>
 			</div>			
 
-			<button id="newsman-btn-compose-from-msg" type="button" class="btn btn-primary" style="display: none;"><?php _e('Compose from Message', NEWSMAN); ?></button>
+			<button id="newsman-btn-compose-from-msg" type="button" class="btn btn-primary" style="display: none;">'.__('Compose from Message', NEWSMAN).'</button>
 
-			<button id="newsman-btn-stop" type="button" class="btn"><i class="icon icon-stop"></i> <?php _e('Stop', NEWSMAN); ?></button>
-			<button id="newsman-btn-start" type="button" class="btn"><i class="icon icon-play"></i> <?php _e('Start', NEWSMAN); ?></button>
-			<button id="newsman-btn-delete" style="margin: 0 3px;" type="button" class="btn btn-danger"><i class="icon icon-white icon-trash"></i> <?php _e('Delete', NEWSMAN); ?></button>
-			<button id="newsman-btn-reconfirm" style="margin: 0 3px 0 2em; display: none;" type="button" class="btn"><?php _e('Resend Confirmation Request', NEWSMAN); ?></button>			
+			<button id="newsman-btn-stop" type="button" class="btn"><i class="icon icon-stop"></i> '.__('Stop', NEWSMAN).'</button>
+			<button id="newsman-btn-start" type="button" class="btn"><i class="icon icon-play"></i> '.__('Start', NEWSMAN).'</button>
+			<button id="newsman-btn-delete" style="margin: 0 3px;" type="button" class="btn btn-danger"><i class="icon icon-white icon-trash"></i> '.__('Delete', NEWSMAN).'</button>
+			<button id="newsman-btn-reconfirm" style="margin: 0 3px 0 2em; display: none;" type="button" class="btn">'.__('Resend Confirmation Request', NEWSMAN).'</button>			
 		</div>
-		<div class="span5" style="text-align: right;">
-			<div class="pagination" style="display: none;">
-				<ul>
-				</ul>
+		';
+
+		$pagination = '
+			<div class="span5 newsman-pagination">
+				<div class="pagination" style="display: none;">
+					<ul>
+					</ul>
+				</div>
 			</div>
-		</div>
+		';
+
+		if ( is_rtl() ) {
+			echo $pagination;
+			echo $toolbar;
+		} else {
+			echo $toolbar;
+			echo $pagination;
+		}
+	?>
 	</div>
 
 	<div class="row-fluid">

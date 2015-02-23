@@ -322,9 +322,11 @@ class newsmanUtils {
 	}
 
 	public function logMemUsage($comment = '') {
-		$mu_unreal = memory_get_peak_usage(false)/1024/1024;
-		$mu_real = memory_get_peak_usage(true)/1024/1024;
-		$this->log("Mem usage(unreal/real): ".$mu_unreal." / ".$mu_real." MiB,  ".$comment);
+		if ( defined('NEWSMAN_LOG_MEM_USAGE') && NEWSMAN_LOG_MEM_USAGE == 1 )  {
+			$mu_unreal = memory_get_peak_usage(false)/1024/1024;
+			$mu_real = memory_get_peak_usage(true)/1024/1024;
+			$this->log("Mem usage(unreal/real): ".$mu_unreal." / ".$mu_real." MiB,  ".$comment);
+		}
 	}
 
 	public function readLog() {

@@ -55,7 +55,8 @@ class newsmanLocks {
 	public function lock($name) {
 		$sql = "INSERT INTO $this->table(`name`, `locked`) VALUES (\"$name\", 1) ON DUPLICATE KEY UPDATE locked=1";
 		$res = $this->db->query($sql);
-
+		// 1 - new row inserted
+		// 2 - row updated
 		return $res === 1;
 	}
 

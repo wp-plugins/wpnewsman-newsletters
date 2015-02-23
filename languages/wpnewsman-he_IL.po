@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: G-Lock WPNewsman Plugin for WordPress\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/wpnewsman\n"
-"POT-Creation-Date: 2015-01-22 07:26:46+00:00\n"
-"PO-Revision-Date: 2015-01-22 10:54+0000\n"
-"Last-Translator: Motty Golan\n"
+"POT-Creation-Date: 2015-02-20 08:20:04+00:00\n"
+"PO-Revision-Date: 2015-02-20 08:46+0000\n"
+"Last-Translator: Dmitry Vladyko <seocombat@gmail.com>\n"
 "Language-Team: Hebrew (http://www.transifex.com/projects/p/g-lock-wpnewsman/language/he/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,221 +18,261 @@ msgstr ""
 "Language: he\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ajaxbackend.php:80 classes/class.newsmanAPI.php:93
+#: ajaxbackend.php:82 classes/class.newsmanAPI.php:93
 msgid "required parameter \"%s\" is missing in the request"
 msgstr "הפרמטר נדרש \"%s\" חסר בתוך הבקשה"
 
 #. translators: subscriber type
 #. translators: lists and forms table header
-#: ajaxbackend.php:90 core.php:1163 views/forms.php:24
+#: ajaxbackend.php:92 core.php:1171 views/forms.php:24
 #: views/subscribers.php:31
 msgid "Confirmed"
 msgstr "מאושר"
 
 #. translators: subscriber type
 #. translators: lists and forms table header
-#: ajaxbackend.php:91 core.php:1161 views/forms.php:25
+#: ajaxbackend.php:93 core.php:1169 views/forms.php:25
 #: views/subscribers.php:32
 msgid "Unconfirmed"
 msgstr "לא מאושר"
 
 #. translators: subscriber type
 #. translators: lists and forms table header
-#: ajaxbackend.php:92 core.php:1165 views/forms.php:26
+#: ajaxbackend.php:94 core.php:1173 views/forms.php:26
 #: views/subscribers.php:33
 msgid "Unsubscribed"
 msgstr "בטל רישום"
 
-#: ajaxbackend.php:99
+#: ajaxbackend.php:101
 msgid "Cannot edit email. Email with id \"%s\" is not found."
 msgstr "לא ניתן לערוך דואר אלקטרוני. דואר אלקטרוני עם מזהה \"%s\" לא נמצא."
 
-#: ajaxbackend.php:103
+#: ajaxbackend.php:105
 msgid "Cannot edit email. Email with id \"%s\" cannot be written."
 msgstr "לא ניתן לערוך דואר אלקטרוני. דואר אלקטרוני עם מזהה \"%s\" לא נמצא."
 
-#: ajaxbackend.php:107
+#: ajaxbackend.php:109
 msgid "Email does not have a \"%s\" property."
 msgstr "בדואר האלקטרוני מאפיין  \"%s\" חסר"
 
-#: ajaxbackend.php:112
+#: ajaxbackend.php:114
 msgid "Cannot edit template. Template with id \"%s\" is not found."
 msgstr "לא ניתן לערוך תבנית. תבנית עם \"%s\" לא נמצאה."
 
-#: ajaxbackend.php:117
+#: ajaxbackend.php:119
 msgid "Cannot edit template. Template with id \"%s\" cannot be written."
 msgstr "לא ניתן לערוך תבנית. תבנית עם זיהוי  \"%s\" לא ניתנת לדריסה."
 
-#: ajaxbackend.php:121 ajaxbackend.php:1353 classes/class.newsmanAPI.php:154
+#: ajaxbackend.php:123 ajaxbackend.php:1331 classes/class.newsmanAPI.php:154
 #: classes/class.newsmanAPI.php:327 classes/class.newsmanAPI.php:612
 #: classes/class.newsmanAPI.php:631 classes/class.newsmanAnalytics.php:69
-#: classes/class.newsmanAnalytics.php:128 core.php:2989
+#: classes/class.newsmanAnalytics.php:128 core.php:3023
 msgid "List with id \"%s\" is not found."
 msgstr "רשימה עם מזהה \"%s\" לא נמצאה."
 
-#: ajaxbackend.php:178
+#: ajaxbackend.php:180
 msgid "WPNEWSMAN Bug Report from %s"
 msgstr "דווח על תקלת WPNEWSMAN %s"
 
-#: ajaxbackend.php:189
+#: ajaxbackend.php:191
 msgid "Bug report was sent to %s."
 msgstr "דיווח הבאג נשלח %s"
 
-#: ajaxbackend.php:224
+#: ajaxbackend.php:226
 msgid "Your SMTP settings are correct"
 msgstr "הגדרות SMTP שלך נכונות"
 
-#: ajaxbackend.php:225
+#: ajaxbackend.php:227
 msgid ""
 " If you read this message, your SMTP settings in the G-Lock WPNewsman plugin"
 " are correct"
 msgstr " אם אתה קורא הודעה זו, הגדרות SMTP שלך בתוסף G-Lock WPNewsman נכונות"
 
-#: ajaxbackend.php:233 ajaxbackend.php:1901
+#: ajaxbackend.php:235 ajaxbackend.php:1888
 msgid "Test email was sent to %s."
 msgstr "דואר אלקטרוני בדיקה נשלח אל : %s"
 
-#: ajaxbackend.php:259 ajaxbackend.php:289 ajaxbackend.php:457
-#: ajaxbackend.php:801 ajaxbackend.php:842 ajaxbackend.php:1084
-#: ajaxbackend.php:1395 ajaxbackend.php:1445 ajaxbackend.php:1464
-#: ajaxbackend.php:1710 ajaxbackend.php:1775 ajaxbackend.php:1785
-#: ajaxbackend.php:1943 ajaxbackend.php:2082
+#: ajaxbackend.php:261 ajaxbackend.php:291 ajaxbackend.php:459
+#: ajaxbackend.php:803 ajaxbackend.php:843 ajaxbackend.php:1067
+#: ajaxbackend.php:1373 ajaxbackend.php:1423 ajaxbackend.php:1441
+#: ajaxbackend.php:1702 ajaxbackend.php:1764 ajaxbackend.php:1774
+#: ajaxbackend.php:1930 ajaxbackend.php:2069
 msgid "success"
 msgstr "הצלחה"
 
-#: ajaxbackend.php:324
+#: ajaxbackend.php:326
 msgid "Successfully deleted selected subscribers."
-msgstr "נמחקו בהצלחה המנויים שנבחרו"
+msgstr "המנויים שבחרת נמחקו בהצלחה"
 
-#: ajaxbackend.php:367
+#: ajaxbackend.php:369
 msgid "Error: \"options\" request parameter was empty or not defined."
 msgstr "שגיאה: \"options\" הפרמטר בבקשה היה ריק או שאינו מוגדר."
 
-#: ajaxbackend.php:378
+#: ajaxbackend.php:380
 msgid "Options were successfully saved."
 msgstr "אפשרויות נשמרו בהצלחה."
 
-#: ajaxbackend.php:646 ajaxbackend.php:897 ajaxbackend.php:924
-#: ajaxbackend.php:952 ajaxbackend.php:984 ajaxbackend.php:1017
-#: ajaxbackend.php:1113 ajaxbackend.php:1143 ajaxbackend.php:1727
-#: ajaxbackend.php:1818 ajaxbackend.php:2443
+#: ajaxbackend.php:648 ajaxbackend.php:896 ajaxbackend.php:922
+#: ajaxbackend.php:946 ajaxbackend.php:975 ajaxbackend.php:1005
+#: ajaxbackend.php:1095 ajaxbackend.php:1124 ajaxbackend.php:1717
+#: ajaxbackend.php:1807 ajaxbackend.php:2430
 msgid "Saved"
 msgstr "נשמר"
 
-#: ajaxbackend.php:680
+#: ajaxbackend.php:682
 msgid "Your email was successfully queued for sending."
 msgstr "הדואר האלקטרוני שלך הועבר בהצלחה לתור לשליחה."
 
-#: ajaxbackend.php:837 ajaxbackend.php:860
+#: ajaxbackend.php:838 ajaxbackend.php:861
 msgid "Template does not have a \"%s\" property."
 msgstr "לתבנית אין מאפיין  \"%s\" ."
 
-#: ajaxbackend.php:1056
+#: ajaxbackend.php:1040
 msgid "You have successfully deleted %d template."
 msgid_plural "You have successfully deleted %d templates."
 msgstr[0] "מחקת בהצלחה את תבנית %d"
-msgstr[1] "Vous avez supprimé les modèles %d avec succès."
+msgstr[1] "מחקת בהצלחה %d תבניות."
 
-#: ajaxbackend.php:1198 ajaxbackend.php:1741
+#: ajaxbackend.php:1178 ajaxbackend.php:1730
 msgid "Your email is successfully scheduled."
 msgstr "הדואר האלקטרוני שלך תוזמן בהצלחה."
 
-#: ajaxbackend.php:1205
+#: ajaxbackend.php:1185
 msgid "Unrecognized \"send\" parameter - %s"
 msgstr "פרמטר  \"send\" לא מוכר - %s"
 
-#: ajaxbackend.php:1257
+#: ajaxbackend.php:1236
 msgid "Emails were successfully unsubscribed."
 msgstr "המנוי הוסר בהצלחה עבור הודעות דואר אלקטרוני"
 
-#: ajaxbackend.php:1320 ajaxbackend.php:2209
+#: ajaxbackend.php:1298 ajaxbackend.php:2196
 msgid "Bad email address"
 msgstr "כתובת הדואר אלקטרוני לא תקינה"
 
-#: ajaxbackend.php:1410
+#: ajaxbackend.php:1388
 msgid "Please select a file to import"
 msgstr "אנא בחר קובץ ליבוא"
 
-#: ajaxbackend.php:1415
+#: ajaxbackend.php:1393
 msgid "Imported %d subscriber. Make sure you send him confirmation email."
 msgid_plural ""
 "Imported %d subscribers. Make sure you send them confirmation email."
 msgstr[0] "מנוי יובא %d. ודא שאתה שולח אליו דואר אלקטרוני לאישור."
 msgstr[1] "מספר המנויים שייובאו d%. ודא לשלוח אליהם הודעת דואר אלקטרוני לאישור"
 
-#: ajaxbackend.php:1462 views/subscribers.php:85
+#: ajaxbackend.php:1439 views/subscribers.php:85
 msgid "IP Address"
 msgstr "כתובת IP"
 
-#: ajaxbackend.php:1482
+#: ajaxbackend.php:1458
 msgid "Imported %d template."
 msgid_plural "Imported %d templates."
 msgstr[0] "תבנית יובאו %d."
 msgstr[1] "מספר תבניות שיובאו %d"
 
-#: ajaxbackend.php:1542
+#: ajaxbackend.php:1538
 msgid "Selected emails were successfully resumed"
 msgstr "המיילים הנבחרים חודשו בהצלחה"
 
-#: ajaxbackend.php:1596 ajaxbackend.php:1685
+#: ajaxbackend.php:1592 ajaxbackend.php:1679
 msgid "\"entType\" parameter value \"%s\" should be \"email\" or \"template\"."
 msgstr "\"entType\" ערך פרמטר  \"%s\" צריך להיות \"email\" או \"template\"."
 
-#: ajaxbackend.php:1669
+#: ajaxbackend.php:1665
 msgid "Posts block successfully compiled"
 msgstr "חסימת פוסטים עברו הידור בהצלחה"
 
-#: ajaxbackend.php:1681
+#: ajaxbackend.php:1675
 msgid ""
 "\"postTemplateType\" parameter value \"%s\" should be \"post_content\", "
 "\"post_excerpt\" or \"fancy_excerpt\"."
 msgstr "\"postTemplateType\" הערך \"%s\" should be \"post_content\", \"post_excerpt\" or \"fancy_excerpt\"."
 
-#: ajaxbackend.php:1696
+#: ajaxbackend.php:1690
 msgid "Posts block successfully updated"
 msgstr "חסימת פוסטים עברו הידור בהצלחה"
 
-#: ajaxbackend.php:1745
+#: ajaxbackend.php:1734
 msgid "ReConfirmation system email template is not found."
 msgstr "דואר אלקטרוני ובו תבנית המערכת לאישור מחודש לא נמצאה"
 
-#: ajaxbackend.php:1831
+#: ajaxbackend.php:1818
 msgid "List with the name \"%s\" already exists."
 msgstr "רשימה עם השם \"%s\" כבר קיימת."
 
 #. translators: email property
-#: ajaxbackend.php:1836 views/addedit_email.php:65 views/mailbox.php:108
+#: ajaxbackend.php:1823 views/addedit_email.php:65 views/mailbox.php:108
 msgid "Created"
 msgstr "נוצר"
 
-#: ajaxbackend.php:1900
+#: ajaxbackend.php:1887
 msgid ""
 "Test email was sent to %s and subscriber with this email was created in "
 "\"%s\" list."
 msgstr "דואר אלקטרוני לבדיקה נשלח אל %s ומנוי עם דואר אלקטרוני זה הצטרף לרשימה  \"%s\". "
 
-#: ajaxbackend.php:1984
+#: ajaxbackend.php:1971
 msgid "Wrong \"type\" parameter. Must be \"csv\" or \"template\""
-msgstr "פרמטר שגוי"
+msgstr "סוג פרמטר שגוי. חייב להיות מסוג CSV או Template"
 
-#: ajaxbackend.php:2232 ajaxbackend.php:2250 ajaxbackend.php:2255
-#: ajaxbackend.php:2260 ajaxbackend.php:2266
+#: ajaxbackend.php:2219 ajaxbackend.php:2237 ajaxbackend.php:2242
+#: ajaxbackend.php:2247 ajaxbackend.php:2253 ajaxbackend.php:2623
+#: ajaxbackend.php:2635 ajaxbackend.php:2644
 msgid "Success"
 msgstr "הצלחה"
 
-#: ajaxbackend.php:2234
+#: ajaxbackend.php:2221
 msgid "Translation not found"
 msgstr "תרגום לא נמצא"
 
-#: ajaxbackend.php:2313 ajaxbackend.php:2314 ajaxbackend.php:2315
+#: ajaxbackend.php:2300 ajaxbackend.php:2301 ajaxbackend.php:2302
 #: classes/class.newsmanAPI.php:525 classes/class.newsmanAPI.php:526
 #: classes/class.newsmanAPI.php:527
 msgid "Unknown"
 msgstr "לא ידוע"
 
-#: ajaxbackend.php:2448
+#: ajaxbackend.php:2435
 msgid "Subscriber with email %s already exists."
 msgstr "מנוי עם הדואר אלקטרוני %s כבר קיים."
+
+#: ajaxbackend.php:2447
+msgid "Required parameter \"code\" is not defined."
+msgstr ""
+
+#: ajaxbackend.php:2467
+msgid "Your license key is valid. Pro functionality is unlocked."
+msgstr ""
+
+#: ajaxbackend.php:2472
+msgid ""
+"Your license key is invalid. Please make sure you copied it in full and if "
+"this error still occurs, please write us at <a "
+"href=\"mailto:support@glocksoft.com\">support@glocksoft.com</a>."
+msgstr ""
+
+#: ajaxbackend.php:2483
+msgid "Required parameter \"%s\" is not defined."
+msgstr ""
+
+#: ajaxbackend.php:2490
+msgid "Your connection settings are correct"
+msgstr ""
+
+#: ajaxbackend.php:2526
+msgid "Starting bounce handler"
+msgstr ""
+
+#: ajaxbackend.php:2546
+msgid "Bounce handler stopped"
+msgstr ""
+
+#: ajaxbackend.php:2632
+msgid "Parameter \"domainId\" could not be empty"
+msgstr ""
+
+#: ajaxbackend.php:2637 ajaxbackend.php:2646
+msgid "Some error occured: %s"
+msgstr ""
 
 #: classes/class.newsmanAPI.php:127
 msgid "Subscriber added"
@@ -272,15 +312,19 @@ msgstr "לא אותר דואר אלקטרוני עם זיהוי  \"%d\""
 msgid "Subscriber with id \"%s\" is not found."
 msgstr "מנוי עם זיהוי  \"%s\"  לא נמצא"
 
+#: classes/class.newsmanBouncedHandler.php:392
+msgid "Unsubscribed by Bounce Handler"
+msgstr ""
+
 #. translators: Default subscription form
-#: classes/class.newsmanForm.php:59 core.php:232
+#: classes/class.newsmanForm.php:59 core.php:240
 msgid "Subscribe"
 msgstr "הרשם"
 
 #: classes/class.newsmanForm.php:135 classes/class.newsmanForm.php:169
 #: classes/class.newsmanForm.php:190 classes/class.newsmanForm.php:210
 #: classes/class.newsmanForm.php:227 classes/class.newsmanForm.php:260
-#: classes/class.newsmanForm.php:291 core.php:1186 views/list.php:69
+#: classes/class.newsmanForm.php:291 core.php:1194 views/list.php:69
 #: views/list.php:91 views/list.php:108 views/list.php:194 views/list.php:231
 msgid "Required"
 msgstr "חובה"
@@ -291,7 +335,7 @@ msgid ""
 " the problem."
 msgstr "זוהתה שליחת ספאם (דואר זבל). אנא צור קשר עם מנהל האתר ותאר לו את הבעיה."
 
-#: classes/class.newsmanForm.php:340 core.php:1167 core.php:1195
+#: classes/class.newsmanForm.php:340 core.php:1175 core.php:1203
 msgid "Error"
 msgstr "שגיאה"
 
@@ -329,389 +373,389 @@ msgstr "הסרת המנוי הצליחה"
 
 #: classes/class.newsmanUtils.php:72 migration.php:180
 msgid "Please confirm your unsubscribe decision"
-msgstr "אנא אשר ההחלטתך לביטול המנוי שלך"
+msgstr "נא בבקשה אשר ההחלטתך לביטול המנוי שלך"
 
-#: classes/class.newsmanUtils.php:887
+#: classes/class.newsmanUtils.php:889
 msgid "Add new..."
 msgstr "הוסף חדש..."
 
-#: classes/class.newsmanUtils.php:1068 classes/class.newsmanUtils.php:1121
-#: core.php:1690 core.php:1703
+#: classes/class.newsmanUtils.php:1070 classes/class.newsmanUtils.php:1123
+#: core.php:1695 core.php:1708
 msgid "Enter Subject Here"
 msgstr "הזן נושא כאן"
 
-#: classes/class.newsmanUtils.php:1262 core.php:1239 core.php:2135
+#: classes/class.newsmanUtils.php:1264 core.php:1247 core.php:2169
 msgid "Copy"
 msgstr "העתק"
 
-#: classes/class.newsmanUtils.php:1622
+#: classes/class.newsmanUtils.php:1624
 msgid "Administrator notification - new subscriber"
 msgstr "הודעת מנהל - מנוי חדש"
 
-#: classes/class.newsmanUtils.php:1627
+#: classes/class.newsmanUtils.php:1629
 msgid "Administrator notification - user unsubscribed"
 msgstr "הודעת מנהל - המשתמש ביטל את המינוי"
 
-#: classes/class.newsmanUtils.php:1632
+#: classes/class.newsmanUtils.php:1634
 msgid "Subscription confirmation"
 msgstr "אישור המנוי"
 
-#: classes/class.newsmanUtils.php:1637
+#: classes/class.newsmanUtils.php:1639
 msgid "Unsubscribe notification"
 msgstr "הודעת ביטול מנוי"
 
-#: classes/class.newsmanUtils.php:1642
+#: classes/class.newsmanUtils.php:1644
 msgid "Welcome letter, thanks for subscribing"
 msgstr "מכתב ברוך הבא, תודה לך על הרשמתך"
 
-#: classes/class.newsmanUtils.php:1647 migration.php:212
+#: classes/class.newsmanUtils.php:1649 migration.php:212
 msgid "Unsubscribe confirmation"
 msgstr "אישור ביטול מנוי"
 
-#: classes/class.newsmanUtils.php:1652 migration.php:295
+#: classes/class.newsmanUtils.php:1654 migration.php:295
 msgid "Re-subscription confirmation"
 msgstr "אישור רישום המנוי מחדש "
 
-#: core.php:13 core.php:2281
+#: core.php:15 core.php:2315
 msgid "Every minute"
 msgstr "כל דקה"
 
 #. translators: Default subscription form
-#: core.php:222
+#: core.php:230
 msgid "Subscription"
 msgstr "הרשמה"
 
 #. translators: Default subscription form
-#: core.php:224
+#: core.php:232
 msgid "Enter your primary email address to get our free newsletter."
 msgstr "הזן את כתובת הדואר אלקטרוני הראשית שלך כדי לקבל הודעות מאיתנו בחינם."
 
 #. translators: Default subscription form
-#: core.php:226 views/subscribers.php:237 views/subscribers.php:245
+#: core.php:234 views/subscribers.php:237 views/subscribers.php:245
 #: views/subscribers.php:253 views/subscribers.php:261
 #: views/subscribers.php:269
 msgid "First Name"
 msgstr "שם פרטי"
 
 #. translators: Default subscription form
-#: core.php:228 views/subscribers.php:238 views/subscribers.php:246
+#: core.php:236 views/subscribers.php:238 views/subscribers.php:246
 #: views/subscribers.php:254 views/subscribers.php:262
 #: views/subscribers.php:270
 msgid "Last Name"
 msgstr "שם משפחה"
 
 #. translators: Default subscription form
-#: core.php:230 views/list.php:279 views/subscribers.php:83
+#: core.php:238 views/list.php:279 views/subscribers.php:83
 msgid "Email"
 msgstr "דואר אלקטרוני"
 
 #. translators: Default subscription form
-#: core.php:234
+#: core.php:242
 msgid ""
 "You can leave the list at any time. Removal instructions are included in "
 "each message."
 msgstr "אתה יכול לעזוב את הרשימה בכל עת. הוראות הסרה כלולות בכל הודעה."
 
-#: core.php:251 core.php:1790
+#: core.php:259 core.php:1795
 msgid "Upgrade to Pro"
 msgstr "שדרג לגרסה - Pro"
 
-#: core.php:254
+#: core.php:262
 msgid "Sent %d of %d emails."
 msgstr "נשלחו %d מתוך %d הודעות דואר אלקטרוני"
 
-#: core.php:255
+#: core.php:263
 msgid ""
 "You reached the subscribers limit of the Lite version. %s to resume sending."
-msgstr "אתה הגעת למגבלה של מנויים לגרסה של הלייט. %s לחדש שליחה."
+msgstr "הגעת למגבלה של מנויים של גרסאת הלייט. %s לחידוש שליחה."
 
-#: core.php:386
+#: core.php:394
 msgid ""
 "\"Post has no excerpt. Write something yourself or use fancy_excerpt "
 "option\""
 msgstr "\"יש הודעה לא קטע. כתוב משהו בעצמך או להשתמש אפשרות fancy_excerpt\""
 
-#: core.php:630
+#: core.php:638
 msgid "Your link seems to be broken."
 msgstr "הקישור שלך נראה לא תקין."
 
-#: core.php:636
+#: core.php:644
 msgid "List with the unique code \"%s\" is not found"
 msgstr "רשימה עם קוד יחודי \"%s\" לא נמצאה"
 
-#: core.php:642
+#: core.php:650
 msgid "Subscriber with the unique code \"%s\" is not found"
 msgstr "מנוי עם קוד \"%s\" לא נמצא"
 
-#: core.php:743
+#: core.php:751
 msgid "Unique email id is missing in request."
-msgstr "הדואר האלקטרוני עם הזיהוי הייחודי חסר בבקשה."
+msgstr "הדואר האלקטרוני עם הזיהוי הייחודי חסר בפניה."
 
-#: core.php:748
+#: core.php:756
 msgid "Email with unique code %s is not found."
 msgstr "הודעת דואר אלקטרוני עם קוד \"%s\" לא נמצא"
 
-#: core.php:1011 core.php:1262
+#: core.php:1019 core.php:1270
 msgid "Please fill all the required fields."
 msgstr "אנא מלא את כל השדות הדרושים."
 
-#: core.php:1012 core.php:1263
+#: core.php:1020 core.php:1271
 msgid "Please check your email address."
 msgstr "בדוק את כתובת הדואר אלקטרוני שלך."
 
-#: core.php:1154
+#: core.php:1162
 msgid ""
 "Full Email Statistics & Click Tracking available in <a href=\"%s\">the Pro "
 "version</a>"
 msgstr "סטיסיטקה מלאה של הודעות דואר אלקטרוני ומעקב קליקים זמינה ב <a href=\"%s\">the גרסאת פרו</a>"
 
-#: core.php:1166
+#: core.php:1174
 msgid "Error: "
 msgstr "שגיאה: "
 
-#: core.php:1168
+#: core.php:1176
 msgid "Done"
 msgstr "בוצע"
 
-#: core.php:1169
+#: core.php:1177
 msgid "Please select emails which you want to stop sending of."
-msgstr "אנא בחר מיילים שאתה רוצה להפסיק לשלוח ל."
+msgstr "אנא בחר מיילים שרצונך להפסיק לשלוח ל."
 
-#: core.php:1170
+#: core.php:1178
 msgid "You have successfully stopped sending of selected emails."
-msgstr "עצרת בהצלחת את שליחת הודעות דואר אלקטרוני שנבחרו"
+msgstr "עצרת בהצלחת שליחת הודעות דואר אלקטרוני שנבחרו"
 
-#: core.php:1171
+#: core.php:1179
 msgid "Please mark subscribers which you want to unsubscribe."
 msgstr "נא לסמן מנויים שאתה רוצה לבטל להם את המנוי."
 
-#: core.php:1172
+#: core.php:1180
 msgid "You have successfully unsubscribed selected subscribers."
 msgstr "בטלת את המינוי בהצלחה למנויים שנבחרו."
 
-#: core.php:1173
+#: core.php:1181
 msgid "Please mark subscribers which you want to delete."
 msgstr "נא סמן מנויים שרצונך למחוק."
 
-#: core.php:1174
+#: core.php:1182
 msgid "You have successfully deleted selected subscribers."
 msgstr "מחקת בהצלחה את המנויים שנבחרו"
 
-#: core.php:1175
+#: core.php:1183
 msgid "Please mark subscribers to change."
 msgstr "נא לסמן מנויים לשינוי."
 
-#: core.php:1176
+#: core.php:1184
 msgid "You have successfully changed status of selected subscribers."
 msgstr "שינית בהצלחה את הסטאטוס של המנויים שנבחרו"
 
-#: core.php:1177
+#: core.php:1185
 msgid "Please mark subscribers which you want to send confirmation to."
 msgstr "נא סמן מנויים שאתה רוצה לשלוח להם אישורים."
 
-#: core.php:1178
+#: core.php:1186
 msgid "You have successfully send confirmation emails."
 msgstr "שלחת בהצלחה דואר אלקטרוני לאישור מינויים."
 
-#: core.php:1179
+#: core.php:1187
 msgid "All subscribers (#)"
 msgstr "כל המנויים (#)"
 
-#: core.php:1180
+#: core.php:1188
 msgid "Confirmed (#)"
 msgstr "אושרו (#)"
 
-#: core.php:1181
+#: core.php:1189
 msgid "Unconfirmed (#)"
 msgstr "לא אושרו (#)"
 
-#: core.php:1182
+#: core.php:1190
 msgid "Unsubscribed (#)"
 msgstr "הוסרו (#)"
 
-#: core.php:1183
+#: core.php:1191
 msgid "You have no subscribers yet."
 msgstr "אין לך עדיין מנויים."
 
-#: core.php:1184 views/mailbox-email.php:113
+#: core.php:1192 views/mailbox-email.php:113
 msgid "Sending"
 msgstr "שולח"
 
-#: core.php:1185
+#: core.php:1193
 msgid "Check me"
 msgstr "בדוק אותי"
 
-#: core.php:1187
+#: core.php:1195
 msgid "Choose an option"
 msgstr "בחר אופציה"
 
-#: core.php:1188
+#: core.php:1196
 msgid "new option 1"
 msgstr "אפשרות חדשה 1"
 
-#: core.php:1189
+#: core.php:1197
 msgid "Untitled"
 msgstr "ללא כותרת"
 
-#: core.php:1190 views/addedit_email.php:71
+#: core.php:1198 views/addedit_email.php:71
 msgid "You have no emails yet."
 msgstr "אין לך הודעות דואר אלקטרוני עדיין."
 
-#: core.php:1191
+#: core.php:1199
 msgid "You have no forms, yet"
 msgstr "אין לך טפסים עדיין"
 
 #. translators: mailbox view link
-#: core.php:1192 core.php:1223 views/addedit_email.php:17 views/mailbox.php:24
+#: core.php:1200 core.php:1231 views/addedit_email.php:17 views/mailbox.php:24
 msgid "Sent"
 msgstr "נשלח"
 
 #. translators: mailbox view link
-#: core.php:1193 core.php:1221 views/addedit_email.php:16 views/mailbox.php:23
+#: core.php:1201 core.php:1229 views/addedit_email.php:16 views/mailbox.php:23
 msgid "Pending"
 msgstr "ממתין"
 
-#: core.php:1194
+#: core.php:1202
 msgid "Draft"
 msgstr "טיוטה"
 
-#: core.php:1196
+#: core.php:1204
 msgid "Sending..."
 msgstr "שולח..."
 
-#: core.php:1197
+#: core.php:1205
 msgid "Stopped"
 msgstr "נעצר"
 
-#: core.php:1198
+#: core.php:1206
 msgid "Scheduled on"
 msgstr "תוזמן ל"
 
-#: core.php:1199
+#: core.php:1207
 msgid "You don't have any templates yet."
 msgstr "אין לך עדיין אף תבנית."
 
-#: core.php:1200
+#: core.php:1208
 msgid "Create one?"
 msgstr "צור אחד?"
 
-#: core.php:1201
+#: core.php:1209
 msgid "Please mark the emails which you want to delete."
 msgstr "נא סמן הודעות דואר אלקטרוני שברצונך למחוק."
 
-#: core.php:1202
+#: core.php:1210
 msgid "You have successfully deleted selected emails."
 msgstr "מחקת בהצלחה את הודעות הדואר אלקטרוני שנבחרו"
 
-#: core.php:1203
+#: core.php:1211
 msgid "Please mark the templates which you want to delete."
 msgstr "נא סמן את התבניות שברצונך למחוק."
 
-#: core.php:1204
+#: core.php:1212
 msgid "Please mark the forms which you want to delete."
 msgstr "נא סמן את הטפסים שברצונך למחוק."
 
-#: core.php:1205
+#: core.php:1213
 msgid "You have no templates yet."
 msgstr "אין לך עדיין תבניות."
 
-#: core.php:1206
+#: core.php:1214
 msgid "All emails (#)"
 msgstr "כל הודעות הדואר האלקטרוני (#)"
 
-#: core.php:1207
+#: core.php:1215
 msgid "In progress (#)"
 msgstr "בהתקדמות (#)"
 
-#: core.php:1208
+#: core.php:1216
 msgid "Pending (#)"
 msgstr "בהמתנה (#)"
 
-#: core.php:1209
+#: core.php:1217
 msgid "Sent (#)"
 msgstr "נשלחו (#)"
 
-#: core.php:1210 views/mailbox-email.php:114 views/mailbox-email.php:119
+#: core.php:1218 views/mailbox-email.php:114 views/mailbox-email.php:119
 msgid "Resume"
 msgstr "המשך"
 
-#: core.php:1211
+#: core.php:1219
 msgid "Please fill the \"To:\" field."
 msgstr "אנא מלא את שדה  \"To:\"."
 
-#: core.php:1212
+#: core.php:1220
 msgid "Please select emails first."
 msgstr "קודם בחר הודעות דואר אלקטרוני"
 
-#: core.php:1213
+#: core.php:1221
 msgid "Please select"
 msgstr "אנא בחר"
 
 #. translators: mailbox view link
-#: core.php:1215 views/addedit_email.php:14 views/mailbox.php:20
+#: core.php:1223 views/addedit_email.php:14 views/mailbox.php:20
 msgid "All emails"
 msgstr "כל הודעות הדואר אלקטרוני"
 
 #. translators: mailbox view link
-#: core.php:1217 views/addedit_email.php:15 views/mailbox.php:22
+#: core.php:1225 views/addedit_email.php:15 views/mailbox.php:22
 msgid "In progress"
 msgstr "בהתקדמות"
 
 #. translators: mailbox view link
-#: core.php:1219 views/mailbox.php:21
+#: core.php:1227 views/mailbox.php:21
 msgid "Drafts"
 msgstr "טיוטות"
 
-#: core.php:1224
+#: core.php:1232
 msgid "Sent %d of %d emails"
 msgstr "נשלחו %d מתוך %d מיילים"
 
-#: core.php:1225
+#: core.php:1233
 msgid "Status: "
 msgstr "מצב: "
 
-#: core.php:1226
+#: core.php:1234
 msgid "Email Errors"
 msgstr "שגיאות דואר אלקטרוני"
 
-#: core.php:1227
+#: core.php:1235
 msgid "Email Address"
 msgstr "כתובת דואר אלקטרוני"
 
-#: core.php:1228
+#: core.php:1236
 msgid "Error Message"
 msgstr "הודעת שגיאה"
 
-#: core.php:1229 views/forms.php:31 views/mailbox-email.php:166
+#: core.php:1237 views/forms.php:31 views/mailbox-email.php:166
 #: views/mailbox.php:116 views/subscribers.php:92 views/templates.php:64
 #: views/templates.php:80 views/templates.php:96 views/templates.php:184
 msgid "Loading..."
 msgstr "טוען..."
 
-#: core.php:1230 newsman-widget.php:49
+#: core.php:1238 newsman-widget.php:49
 msgid "List:"
 msgstr "רשימה: "
 
-#: core.php:1231
+#: core.php:1239
 msgid "Bug report"
 msgstr "שלח דווח על באג"
 
-#: core.php:1232
+#: core.php:1240
 msgid "Load more..."
 msgstr "טען עוד ..."
 
-#: core.php:1233
+#: core.php:1241
 msgid "Sorry, no posts matched your criteria."
 msgstr "מצטערים, אין הודעות פוסטים תואמים לקריטריונים שלך."
 
-#: core.php:1234
+#: core.php:1242
 msgid ""
 "Warning! You are close to the limit of %d subscribers you can send emails to"
 " in the Lite version of the plugin. Please, <a href=\"%s\">upgrade to the "
 "Pro version</a> to send emails without limitations."
 msgstr "אזהרה!  חרגת מהמגבלה של %d המנויים אליהם ניתן לשלוח הודעות דואר אלקטרוני בגרסה לייט של התוסף. אנא, <a href=\"%s\">upgrade to the Pro version</a> שדרג לגרסה Pro כדי לשלוח מיילים ללא הגבלה."
 
-#: core.php:1235
+#: core.php:1243
 msgid ""
 "Warning! You exceeded the limit of %d subscribers you can send emails to in "
 "the Lite version of the plugin. Please, <a href=\"%s\">upgrade to the Pro "
@@ -719,25 +763,25 @@ msgid ""
 msgstr "אזהרה!  חרגת מהמגבלה של %d המנויים אליהם ניתן לשלוח הודעות דואר אלקטרוני בגרסה לייט של התוסף. אנא, <a href=\"%s\">upgrade to the Pro version</a> שדרג לגרסה Pro כדי לשלוח מיילים ללא הגבלה."
 
 #. translators: lists and forms table header
-#: core.php:1236 views/forms.php:23 views/list.php:67 views/list.php:86
+#: core.php:1244 views/forms.php:23 views/list.php:67 views/list.php:86
 #: views/list.php:106 views/list.php:141 views/list.php:192 views/list.php:229
 #: views/templates.php:59 views/templates.php:75 views/templates.php:91
 msgid "Name"
 msgstr "שם"
 
-#: core.php:1237
+#: core.php:1245
 msgid "Edit Form"
 msgstr "ערוך טופס"
 
-#: core.php:1238 views/list.php:257
+#: core.php:1246 views/list.php:257
 msgid "View Subscribers"
 msgstr "הצג מנויים"
 
-#: core.php:1240 core.php:1271
+#: core.php:1248 core.php:1279
 msgid "Edit"
 msgstr "ערוך"
 
-#: core.php:1241 core.php:1273 views/addedit_email.php:39
+#: core.php:1249 core.php:1281 views/addedit_email.php:39
 #: views/addedit_email.php:102 views/forms.php:15 views/forms.php:70
 #: views/mailbox.php:46 views/mailbox.php:149 views/subscribers.php:57
 #: views/subscribers.php:147 views/templates.php:29 views/templates.php:135
@@ -745,295 +789,295 @@ msgstr "ערוך"
 msgid "Delete"
 msgstr "מחק"
 
-#: core.php:1242
+#: core.php:1250
 msgid "Export"
-msgstr "יצוא"
+msgstr "ייצא"
 
-#: core.php:1243
+#: core.php:1251
 msgid "Restore"
 msgstr "שחזר"
 
-#: core.php:1244
+#: core.php:1252
 msgid "Default System Templates"
-msgstr "בתניות ברירת מחדל של המערכת"
+msgstr "תבניות ברירת מחדל של המערכת"
 
-#: core.php:1245
+#: core.php:1253
 msgid "System Template. Cannot be deleted."
 msgstr "תבנית מערכת. לא ניתן למחוק אותה."
 
-#: core.php:1246
+#: core.php:1254
 msgid "Insert Posts"
 msgstr "הוסף פוסטים"
 
-#: core.php:1247
+#: core.php:1255
 msgid "Post(s) selected: %d"
 msgstr "הודעה נבחרת: %d"
 
-#: core.php:1248
+#: core.php:1256
 msgid "Select categories"
-msgstr "בחרו קטגוריות"
+msgstr "בחר קטגוריות"
 
-#: core.php:1249
+#: core.php:1257
 msgid "# of # categories selected"
 msgstr "# של # קטגוריות נבחרים"
 
-#: core.php:1250
+#: core.php:1258
 msgid "Select author(s)"
 msgstr "בחר מחבר(ים)"
 
-#: core.php:1251
+#: core.php:1259
 msgid "# of # authors selected"
 msgstr "# של # סופרים נבחרים"
 
-#: core.php:1252 views/list.php:348 views/subscribers.php:117
+#: core.php:1260 views/list.php:348 views/subscribers.php:117
 msgid "Save"
 msgstr "שמור"
 
-#: core.php:1253
+#: core.php:1261
 msgid "Saved at"
 msgstr "נשמר בשם"
 
-#: core.php:1255
+#: core.php:1263
 msgid ""
 "Bounce Handler has %d blocked domains. Some of recipients might be skipped "
 "during sending."
 msgstr "למטפל ה  Bounce יש  %d מתחמים חסומים. עלול לדלג על חלק מהמכותבים במהלך שליחה."
 
-#: core.php:1257
+#: core.php:1265
 msgid "View in browser"
 msgstr "הצג בדפדפן"
 
-#: core.php:1259
+#: core.php:1267
 msgid "View Stats"
 msgstr "צפה בסטטיסטיקה"
 
-#: core.php:1264
+#: core.php:1272
 msgid "Are you sure you want to restore stock template?"
 msgstr "האם אתה בטוח ברצונך למחוק את תבנית הסטוק?"
 
-#: core.php:1268
+#: core.php:1276
 msgid "No subject"
 msgstr "חסר נושא"
 
-#: core.php:1269 views/mailbox.php:45
+#: core.php:1277 views/mailbox.php:45
 msgid "Start"
 msgstr "התחל"
 
-#: core.php:1270 views/mailbox.php:44
+#: core.php:1278 views/mailbox.php:44
 msgid "Stop"
-msgstr "להפסיק"
+msgstr "עצור"
 
-#: core.php:1272
+#: core.php:1280
 msgid "Duplicate"
-msgstr "כפולים"
+msgstr "שכפל"
 
-#: core.php:1274
+#: core.php:1282
 msgid "sent"
 msgstr "נשלח"
 
-#: core.php:1275
+#: core.php:1283
 msgid "opens"
 msgstr "פתוח"
 
-#: core.php:1276
+#: core.php:1284
 msgid "clicks"
 msgstr "קליקים"
 
-#: core.php:1277
+#: core.php:1285
 msgid "unsubscribes"
 msgstr "מנויים שהוסרו"
 
-#: core.php:1282
+#: core.php:1287
 msgid "Subscribe notification email sent to the administrator."
 msgstr "הודעת הרישום נשלחה למנהל המערכת"
 
-#: core.php:1283
+#: core.php:1288
 msgid "Unsubscribe notification email sent to the administrator."
 msgstr "הודעות ביטול הרישום נשלחה למנהל המערכת"
 
-#: core.php:1284
+#: core.php:1289
 msgid "Email with the confirmation link sent to the user upon subscription."
 msgstr "דואר אלקטרוני עם הקישור לאישור נשלח למשתמש בעת ההרשמה."
 
-#: core.php:1285
+#: core.php:1290
 msgid ""
 "Email sent to the user that confirms that his email address was "
 "unsubscribed."
 msgstr "נשלח דואר אלקטרוני למשתמש המאשר הסרת כתובת הדואר האלקטרוני שלו."
 
-#: core.php:1286
+#: core.php:1291
 msgid "Welcome message sent after the subscriber confirms his subscription."
 msgstr "הודעת ברוך הבא נשלחה לאחר שהמנוי אישר את המנוי שלו."
 
-#: core.php:1287
+#: core.php:1292
 msgid "Email with a link to confirm the subscriber’s decision to unsubscribe."
 msgstr "דואר אלקטרוני עם קישור לאישור ההחלטה של ​​המנוי לביטול המנוי."
 
-#: core.php:1288
+#: core.php:1293
 msgid ""
 "Email with a link to re-confirm the subscription that is sent to ALL "
 "\"unconfirmed\" subscribers on the list."
 msgstr "הודעת דואר אלקטרוני עם קישור לאישור מחדש של המנוי אשר נשלח לכל \"unconfirmed\"  המנויים ברשימה"
 
-#: core.php:1395
+#: core.php:1400
 msgid "Cannot unsubscribe email. Subscriber with unique code %s is not found."
 msgstr "לא יכול לבטל את המנוי בדואר אלקטרוני. מנוי עם קוד הייחודי %s לא נמצא."
 
-#: core.php:1702
+#: core.php:1707
 msgid "Untitled templates"
 msgstr "תבניות Untitled"
 
-#: core.php:1713
+#: core.php:1718
 msgid "Alternative Plain Text Body"
 msgstr "גוף טקסט רגיל אלטרנטיבי"
 
-#: core.php:1731
+#: core.php:1736
 msgid "WPNewsman Lite"
 msgstr "WPNewsman Lite"
 
-#: core.php:1744 core.php:1745 views/addedit_email.php:5 views/mailbox.php:9
+#: core.php:1749 core.php:1750 views/addedit_email.php:5 views/mailbox.php:9
 msgid "Mailbox"
 msgstr "תיבת דואר"
 
-#: core.php:1753 core.php:1754 views/forms.php:5
+#: core.php:1758 core.php:1759 views/forms.php:5
 msgid "Lists and Forms"
 msgstr "רשימות וטפסים"
 
-#: core.php:1762 core.php:1763 views/templates.php:5
+#: core.php:1767 core.php:1768 views/templates.php:5
 msgid "Email Templates"
 msgstr "תבניות דואר אלקטרוני"
 
-#: core.php:1771 core.php:1772 views/options.php:6
+#: core.php:1776 core.php:1777 views/options.php:6
 msgid "Settings"
 msgstr "הגדרות"
 
-#: core.php:1781 core.php:1782 views/debug-log.php:11
+#: core.php:1786 core.php:1787 views/debug-log.php:11
 msgid "Debug Log"
 msgstr "לוג של הדיבאג"
 
-#: core.php:1846
+#: core.php:1851
 msgid "Excerpt for external forms"
 msgstr "קטע לטפסים חיצוניים"
 
-#: core.php:2039 core.php:2969
+#: core.php:2073 core.php:3003
 msgid "You are not authorized to access this resource."
 msgstr "אין לך הרשאה לגשת למשאב זה."
 
-#: core.php:2165
+#: core.php:2199
 msgctxt "Action Page"
 msgid "Action Pages"
 msgstr "דפי פעולה"
 
-#: core.php:2166
+#: core.php:2200
 msgctxt "Action Page"
 msgid "Action Page"
 msgstr "דפי פעולה"
 
-#: core.php:2167
+#: core.php:2201
 msgctxt "Action Page"
 msgid "Add New"
 msgstr "הוסף חדש"
 
-#: core.php:2168
+#: core.php:2202
 msgctxt "Action Page"
 msgid "Add New Action Page"
 msgstr "הוסף דף פעולה"
 
-#: core.php:2169
+#: core.php:2203
 msgctxt "Action Page"
 msgid "Edit Action Page"
 msgstr "עריכת פעולה דף"
 
-#: core.php:2170
+#: core.php:2204
 msgctxt "Action Page"
 msgid "New Action Page"
 msgstr "דף פעולה חדש"
 
-#: core.php:2171
+#: core.php:2205
 msgctxt "Action Page"
 msgid "View Action Page"
 msgstr "צפה בפעולת דף"
 
-#: core.php:2172
+#: core.php:2206
 msgctxt "Action Page"
 msgid "Search Action Pages"
 msgstr "חיפוש פעולה עמודים"
 
-#: core.php:2173
+#: core.php:2207
 msgid "Nothing found"
 msgstr "שום דבר לא נמצא"
 
-#: core.php:2174
+#: core.php:2208
 msgid "Nothing found in the Trash"
 msgstr "שום דבר לא נמצא באשפה"
 
-#: core.php:2451 core.php:2527
+#: core.php:2485 core.php:2561
 msgid "Error: Email template not found"
 msgstr "שגיאה: תבנית דואר אלקטרוני לא נמצאה"
 
-#: core.php:2472
+#: core.php:2506
 msgid "Error: Email not found"
 msgstr "שגיאה: דואר אלקטרוני לא נמצא"
 
-#: core.php:2583
+#: core.php:2617
 msgid "G-Lock WPNewsman"
 msgstr "G-Lock WPNewsman"
 
-#: core.php:2621
+#: core.php:2655
 msgid "G-Lock WPNewsman subscription summary"
 msgstr "סיכום מנויים G-Lock WPNewsman"
 
-#: core.php:2622
+#: core.php:2656
 msgid "Manage Forms and Lists"
 msgstr "נהל טפסים ורשימות"
 
-#: core.php:2636 views/list.php:265
+#: core.php:2670 views/list.php:265
 msgid "List name"
 msgstr "שם רשימה"
 
-#: core.php:2637
+#: core.php:2671
 msgid "Total confirmed"
 msgstr "סך הכול אושרו"
 
-#: core.php:2638
+#: core.php:2672
 msgid "Total unconfirmed"
 msgstr "סך הכול לא אושרו"
 
-#: core.php:2639
+#: core.php:2673
 msgid "Total unsubscribed"
 msgstr "סך הכול הוסרו"
 
-#: core.php:2680
+#: core.php:2714
 msgid "Post Template"
 msgstr "תבנית פוסט"
 
-#: core.php:2686
+#: core.php:2720
 msgid "Click here"
 msgstr "לחץ כאן"
 
-#: core.php:2689
+#: core.php:2723
 msgid ""
 "You can use the \"Newsman\" menu button on the editor's toolbar to insert "
 "the unsubscribe link and social profile links into the message."
 msgstr "אתה יכול להשתמש בלחצן תפריט  \"Newsman\" הנמצא בסרגל הכלים של העורך כדי להכניס את קישורי להסרת המנוי ולפרופיל החברתי בהודעה."
 
-#: core.php:2690
+#: core.php:2724
 msgid "%s for more shortcode macros supported by WPNewsman."
 msgstr "%s לעוד פקודות מאקרו קוד-מקוצר הנתמכות על ידי WPNewsman."
 
-#: core.php:2880
+#: core.php:2914
 msgid "List: "
 msgstr "רשימה: "
 
-#: core.php:2892
+#: core.php:2926
 msgid "Page Template"
 msgstr "תבנית דף"
 
-#: core.php:2894
+#: core.php:2928
 msgid "Default Template"
 msgstr "תבנית ברירת המחדל"
 
-#: core.php:2984
+#: core.php:3018
 msgid "Please, provide correct \"listId\" parameter."
 msgstr "אנא ספק פרמטר נכון עבור  \"listId\""
 
@@ -1091,7 +1135,7 @@ msgstr "קטע"
 
 #: frmGetPosts.php:177 frmGetPosts.php:241
 msgid "Fancy excerpt"
-msgstr "קטע פנסי"
+msgstr "קטע פאנסי"
 
 #: frmGetPosts.php:185 frmGetPosts.php:245
 msgid "Select post(s) for last:"
@@ -1212,7 +1256,7 @@ msgstr "הודעות Debug"
 
 #: views/_footer.php:11
 msgid "Raw response"
-msgstr "תגובת גלם"
+msgstr "תגובה בסיסית"
 
 #: views/_footer.php:13
 msgid "Additional info"
@@ -1224,13 +1268,13 @@ msgstr "הערה: אתה יכול להסיר את כל הנתונים הרגיש
 
 #: views/_footer.php:18
 msgid "Send Bug Report"
-msgstr "שלח דווח על באג"
+msgstr "שלח דווח באג"
 
 #: views/_footer.php:19 views/addedit_email.php:87 views/addedit_email.php:101
 #: views/addedit_email.php:115 views/forms.php:55 views/forms.php:69
 #: views/mailbox-email.php:125 views/mailbox.php:134 views/mailbox.php:148
 #: views/mailbox.php:162 views/mailbox.php:177 views/mailbox.php:190
-#: views/options.php:235 views/subscribers.php:131 views/subscribers.php:146
+#: views/options.php:238 views/subscribers.php:131 views/subscribers.php:146
 #: views/subscribers.php:162 views/subscribers.php:190
 #: views/subscribers.php:313 views/subscribers.php:333
 #: views/subscribers.php:348 views/templates.php:119 views/templates.php:134
@@ -1241,7 +1285,7 @@ msgstr "סגור"
 
 #: views/_footer.php:30
 msgid "Rate (%s) WPNewsman on %s to help their creators make it better"
-msgstr "הערך (%s)  WPNewsman (%s) בנושא s% כדי לעזור למפתחים שלנו לעשות את זה טוב יותר"
+msgstr "הוסף את הציון שלך לתוסף (חמישה כוכבים כמובן!)  %s  WPNewsman ב %s כדי לסייע למפתחים שלנו להמשיך לשפר ולשכלל מוצר זה בעתיד"
 
 #: views/_footer.php:32
 msgid "Documentation"
@@ -1292,7 +1336,7 @@ msgstr "סטאטוס"
 
 #: views/addedit_email.php:81 views/addedit_email.php:95
 #: views/addedit_email.php:109 views/forms.php:63 views/mailbox.php:128
-#: views/mailbox.php:142 views/mailbox.php:156 views/options.php:229
+#: views/mailbox.php:142 views/mailbox.php:156 views/options.php:232
 #: views/subscribers.php:124 views/subscribers.php:139
 #: views/subscribers.php:154 views/subscribers.php:184 views/templates.php:113
 #: views/templates.php:127 views/templates.php:143 views/templates.php:159
@@ -1726,7 +1770,7 @@ msgid "API"
 msgstr "API"
 
 #. translators: Options page tab title
-#: views/options.php:25 views/options.php:203
+#: views/options.php:25 views/options.php:206
 msgid "Uninstallation"
 msgstr "הסרת התקנה"
 
@@ -1736,7 +1780,7 @@ msgstr "מחק מנויים שלא אישרו את המינוי שלהם בתו�
 
 #: views/options.php:35
 msgid "Use double opt-out procedure"
-msgstr "השתמש בהליך כפול opt-out"
+msgstr "השתמש בתהליך אישור כפול opt-out"
 
 #: views/options.php:37
 msgid "Plugin statistics on the dashboard"
@@ -1896,11 +1940,11 @@ msgstr "חיבור מאובטח"
 
 #: views/options.php:150
 msgid "Don't Use"
-msgstr "אל תשתמש ב"
+msgstr "אל תשתמש"
 
 #: views/options.php:151
 msgid "Use Start TLS"
-msgstr "השימוש התחל TLS"
+msgstr "השתמש ב Start TLS"
 
 #: views/options.php:152
 msgid "Use SSL"
@@ -1941,48 +1985,48 @@ msgstr "באפשרותך להשתמש בכל שירות SMTP עם התוסף ש�
 msgid "API key"
 msgstr "מפתח API"
 
-#: views/options.php:187
+#: views/options.php:189
 msgid "API endpoint"
 msgstr "נקודת סיום API"
 
-#: views/options.php:193
+#: views/options.php:196
 msgid "API description"
 msgstr "תיאור API"
 
-#: views/options.php:195
+#: views/options.php:198
 msgid "API integration"
 msgstr "אינטגרציה של API"
 
-#: views/options.php:196
+#: views/options.php:199
 msgid ""
 "<a href=\"%s\" target=\"_blank\">Check out our guide</a> on how to send "
 "emails to WPNewsman subscribers lists from G-Lock EasyMail7."
 msgstr " <a href=\"%s\" target=\"_blank\">בדוק את המדריך שלנו</a>G-Lock EasyMail7 בעזרת WPNewsman איך לשלוח הודעות דואר אלקטרוני למנויים של"
 
-#: views/options.php:207
+#: views/options.php:210
 msgid "Delete subscribers' lists during uninstallation"
 msgstr "מחק רשימות המנויים במהלך הסרת התקנה"
 
-#: views/options.php:208
+#: views/options.php:211
 msgid ""
 "Checking this option will remove all the subscribers' data during the plugin"
 " uninstallation. Be careful, there is no undo."
-msgstr "סימון אפשרות זו תסיר את כל הנתונים של המנויים במהלך הסרת ההתקנה התוסף. היזהר, אין ביטול."
+msgstr "סימון אפשרות זו תסיר את כל נתוני המנויים במהלך הסרת ההתקנה של תוסף זה. זהירות! אין אפשרות חזרה!"
 
-#: views/options.php:210
+#: views/options.php:213
 msgid "Uninstall now"
 msgstr "הסר את ההתקנה כעת"
 
-#: views/options.php:222
+#: views/options.php:225
 msgid "Update Options"
-msgstr "אפשרויות עדכון"
+msgstr "שמור שינויים"
 
-#: views/options.php:232
+#: views/options.php:235
 msgid ""
 "Are you sure you want to uninstall WPNewsman Plugin and all of its settings?"
 msgstr "האם אתה בטוח שאתה רוצה להסיר את התקנת WPNewsman Plugin וכל ההגדרות שלו?"
 
-#: views/options.php:236
+#: views/options.php:239
 msgid "Uninstall"
 msgstr "הסר התקנה"
 
@@ -2087,7 +2131,7 @@ msgstr "אישור שינוי"
 
 #: views/subscribers.php:56 views/subscribers.php:102
 msgid "Add Subscriber"
-msgstr "להוסיף מנוי"
+msgstr "הוסף מנוי"
 
 #: views/subscribers.php:59
 msgid "Export to CSV"
@@ -2163,7 +2207,7 @@ msgstr "קבצים שהועלו"
 
 #: views/subscribers.php:206
 msgid "Import options"
-msgstr "אפשרויות יבוא"
+msgstr "אפשרויות ייבוא"
 
 #: views/subscribers.php:214
 msgid "Please select a file to import."
@@ -2205,7 +2249,7 @@ msgstr "ביטול מנוי בתפזורת:"
 msgid ""
 "Enter an email addresses which you want to unsubscribe. Place each email on "
 "a separate row."
-msgstr "הזן את כתובות הדואר אלקטרוני שאתה רוצה לבטל עבורם את המנוי. רשום כל דואר אלקטרוני בשורה נפרדת."
+msgstr "הזן את כתובות הדואר אלקטרוני שאתה רוצה לבטל להם את המנוי. רשום כל דואר אלקטרוני בשורה נפרדת."
 
 #: views/subscribers.php:331
 msgid " Unsubscribe from all lists"
@@ -2277,7 +2321,7 @@ msgstr "טופס מנוי רב לשוני WPNewsman לעלונים שלך"
 msgid "WPNewsman Subscription Multilanguage Form"
 msgstr "טופס רישום רב לשוני להוספת מנוי למערכת WPNewsman"
 
-#: workers/class.newsmanMailerWorker.php:176
+#: workers/class.newsmanMailerWorker.php:179
 msgid "Bad Email Address"
 msgstr "כתובת הדואר אלקטרוני לא תקינה"
 
@@ -2291,27 +2335,27 @@ msgstr "יותר מדי שגיאות ברציפות! אנא בדוק את הגד
 msgid "No \"confirmed\" subscribers found in the selected list(s)."
 msgstr "אין  \"confirmed\" המנויים נמצאים ברשימה שנבחרה."
 
-#: wpnewsman.php:149
+#: wpnewsman.php:154
 msgid "PHP version >= 5.3"
 msgstr "PHP version >= 5.3"
 
-#: wpnewsman.php:150
+#: wpnewsman.php:155
 msgid "You have PHP %s installed."
 msgstr "יש לך גרסא של PHP %s מותקנת."
 
-#: wpnewsman.php:158
+#: wpnewsman.php:163
 msgid "Single-site mode"
 msgstr "מצב אתר יחידי"
 
-#: wpnewsman.php:159
+#: wpnewsman.php:164
 msgid "Doesn't work in MultiSite setup."
 msgstr "לא עובד בהתקנה מרובת אתרים."
 
-#: wpnewsman.php:166
+#: wpnewsman.php:171
 msgid "MCrypt library"
 msgstr "ספריית MCrypt "
 
-#: wpnewsman.php:167
+#: wpnewsman.php:172
 msgid ""
 "MCrypt library is required to securely store your passwords in the database."
 " Read <a href=\"http://php.net/manual/en/mcrypt.setup.php\">how to "
@@ -2319,11 +2363,11 @@ msgid ""
 " hosting."
 msgstr "ספריית MCrypt נדרשה לאחסן בצורה מאובטחת את סיסמאות שלך באתר. צור קשר עם ספק האירוח שלך אם אתה על אירוח משותף."
 
-#: wpnewsman.php:174
+#: wpnewsman.php:179
 msgid "MBString extension"
 msgstr "הארכת MBSTRING"
 
-#: wpnewsman.php:175
+#: wpnewsman.php:180
 msgid ""
 "MBString extension is required for correct processing of non unicode "
 "characters. Read <a "
@@ -2332,21 +2376,21 @@ msgid ""
 " hosting."
 msgstr "הארכת MBSTRING נדרש לעיבוד נכון של תווי Unicode שאינם. קראו <a href=\"http://www.php.net/manual/en/mbstring.installation.php\"> כיצד להתקין </a> / Configure או צור קשר עם ספק האירוח שלך אם אתה על משותף אירוח."
 
-#: wpnewsman.php:191
+#: wpnewsman.php:196
 msgid "Direct filesystem access"
 msgstr "גישה ישירה למערכת הקבצים"
 
-#: wpnewsman.php:192
+#: wpnewsman.php:197
 msgid ""
 "Since version 1.5.7 direct access to the filesystem is required. Make sure "
 "that the uploads directory is writable by the web server%s."
-msgstr "מאז גרסת 1.5.7 גישה ישירה למערכת הקבצים נדרש. ודא שספריית הקבצים ניתנת לכתיבה על ידי שרת האינטרנט %s"
+msgstr "מאז גרסת 1.5.7 נדרשת גישה ישירה למערכת הקבצים. נא וודא שספריית הקבצים ניתנת לכתיבה על ידי שרת האינטרנט %s"
 
-#: wpnewsman.php:199
+#: wpnewsman.php:204
 msgid "Safe mode is turned off"
 msgstr "מצב בטוח כבוי"
 
-#: wpnewsman.php:200
+#: wpnewsman.php:205
 msgid ""
 "Safe mode is deprecated in PHP and not supported by the plugin.(Set "
 "safe_mode = Off in php.ini. See <a "
@@ -2354,11 +2398,11 @@ msgid ""
 "php.net</a>)"
 msgstr "המצב בטוח לא מומלץ לשימוש ב- PHP ואינו נתמך על ידי התוסף. "
 
-#: wpnewsman.php:208
+#: wpnewsman.php:213
 msgid "bcmath or gmp extension is loaded"
 msgstr "bcmath או הארכת GMP היא טעון"
 
-#: wpnewsman.php:209
+#: wpnewsman.php:214
 msgid ""
 "Since version 1.7.0 either <b>bcmath</b> or <b>gmp</b> PHP module is "
 "required for the plugin to work. According to PHP documentation "

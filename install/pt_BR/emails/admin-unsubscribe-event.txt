@@ -1,0 +1,17 @@
+Um contato de sua lista de emails cancelou sua assinatura[newsman wp="url"]
+--- plain ---
+Um contato de sua lista de emails cancelou sua assinatura. Os detalhes desse contato aparecem abaixo:
+
+[newsman sub="*"]
+
+Reason: 
+$u_reason
+
+--
+[newsman wp="url"]/wp-admin/ -> WPNewsman -> Settings
+--- html ---
+<p>Um contato de sua lista de emails cancelou sua assinatura. Os detalhes desse contato aparecem abaixo:</p>
+<ul>[newsman sub="*" tag="li"]</ul>
+&nbsp;
+<p>--</p>
+<p><a href="[newsman wp='url']/wp-admin/">[newsman wp="url"]/wp-admin/</a> -> WPNewsman -> Settings</p>

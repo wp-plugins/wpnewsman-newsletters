@@ -28,9 +28,7 @@ class newsmanWorkerManager {
 		$this->options = newsmanOptions::getInstance();
 
 		//newsman_workers_check_event
-		add_action('newsman_workers_check_event', array($this, 'pokeWorkers'));
-
-		add_action('plugins_loaded', array($this, 'bindEvents'));
+		//add_action('newsman_workers_check_event', array($this, 'pokeWorkers'));
 	}
 
 	// singleton instance 
@@ -42,45 +40,6 @@ class newsmanWorkerManager {
 			self::$instance = new self(); 
 		} 
 		return self::$instance;
-	}
-
-	public function bindEvents() {
-		if ( defined('NEWSMANP') ) {
-			add_action('newsman_pro_workers_ready', array($this, 'onProWorkersReady'));	
-		} else {
-			add_action('init', array($this, 'onProWorkersReady'));	
-		}
-	}
-
-	public function onProWorkersReady() {
-
-		if ( preg_match('/wpnewsman-pokeback\/check-workers/i', $_SERVER['REQUEST_URI']) ) {
-			$this->utils->log('poking workers from pokeback.wpnewsman.com...');
-			$this->pokeWorkers();
-			exit();
-		}		
-
-		if ( isset( $_REQUEST['newsman_worker_fork'] ) && !empty($_REQUEST['newsman_worker_fork']) ) {
-			$this->utils->log('[onProWorkersReady] $_REQUEST["newsman_worker_fork"] %s', isset($_REQUEST['newsman_worker_fork']) ? $_REQUEST['newsman_worker_fork'] : '');			
-
-			define('NEWSMAN_WORKER', true);
-			
-			$workerClass = $_REQUEST['newsman_worker_fork'];
-
-			if ( !class_exists($workerClass) ) {
-				$this->utils->log("requested worker class ".htmlentities($workerClass)." does not exist");
-				die("requested worker class ".htmlentities($workerClass)." does not exist");
-			}
-
-			if ( !isset($_REQUEST['workerId']) ) {
-				$this->utils->log('workerId parameter is not defiend in the query');
-				die('workerId parameter is not defiend in the query');
-			}
-
-			$worker = new $workerClass($_REQUEST['workerId']);
-			$worker->run();
-			exit();
-		}
 	}
 
 	public function addWorker($workerInstance) {
@@ -99,7 +58,7 @@ class newsmanWorkerManager {
 
 		$this->utils->log('[addWorker] newsmanWorkerRecord count %s', $c);
 
-		if ( $c == 1 ) {
+		if ( $c > 1 ) {
 			$this->enableWorkersCheck();
 		}
 	}
@@ -128,6 +87,7 @@ class newsmanWorkerManager {
 
 		foreach ($workersRecords as $wr) {
 			$w = new newsmanWorkerAvatar($wr->workerId);
+
 			$running = $w->isRunning();
 			$u->log('[pokeWorkers] workerPid('.$w->workerId.') -> isAlive: '.var_export($running, true));
 			if ( !$running ) {
@@ -188,4 +148,10 @@ class newsmanWorkerManager {
 			wp_clear_scheduled_hook('newsman_workers_check_event');
 		}
 	}	
+
+	public function clearWorkers() {
+		global $wpdb;
+		$tbl = newsmanWorkerRecord::$table;
+		return $wpdb->query("truncate table $tbl") === 1;
+	}
 }

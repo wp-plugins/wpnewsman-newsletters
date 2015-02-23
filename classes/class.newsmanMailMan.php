@@ -1,8 +1,5 @@
 <?php
 
-define('NEWSMAN_ERR_INVALID_EMAIL_ADDR', 10);
-define('NEWSMAN_ERR_TEMP_ERROR', 1);
-
 class newsmanMailMan {
 
 	var $secret = '';

@@ -10,4 +10,8 @@ class newsmanBlockedDomain extends newsmanStorable {
 		'delistingURL'	=> 'text',
 		'diagnosticCode' => 'text'
 	);
+
+	static $keys = array(
+		'domain' => array( 'cols' => array( 'domain' ) )
+	);	
 }

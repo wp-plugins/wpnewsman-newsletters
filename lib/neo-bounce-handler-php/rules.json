@@ -1,0 +1,926 @@
+[
+	{
+		"matcher": { "headers.Content-type.report-type": "feedback-report" },
+		"flags": { "ARF": true }
+	},
+	{
+		"matcher": { "headers.X-loop": "scomp" },
+		"flags": { "ARF": true }
+	},
+	{
+		"matcher": { "headers.X-hmxmroriginalrecipient": { "$exists": true } },
+		"flags": { "ARF": true, "hotmailFBL": true },
+		"recipientEmail": "@get(headers.X-hmxmroriginalrecipient)"
+	},
+	{
+		"matcher": { "flags.ARF": true },
+		"statusCode": "5.7.1"
+	},
+	{
+		"matcher": { "parts.**.content": "not yet been delivered" },
+		"statusCode": "4.2.0"
+	},
+	{
+		"matcher": { "parts.**.content": "Message will be retried for" },
+		"statusCode": "4.2.0"
+	},
+	{
+		"//": "in German - mailbox is full",
+		"matcher": { "parts.**.content": "Benutzer hat zuviele Mails auf dem Server" },
+		"statusCode": "4.2.2"
+	},
+	{
+		"ruleName": "quota exceeded",
+		"matcher": {
+			"parts.**.content": {
+				"$type": "RegExp",
+				"rx": "max message size exceeded|won't be able to receive this message because it's too large|exceeded storage allocation|mailbox ((is\\s+|)full|quota usage exceeded|size limit exceeded)|over\\s*quota|quota (exceeded|violation)|User has (exhausted allowed storage space|too many messages on the server)|User mailbox exceeds allowed size|mailfolder is full|user has Exceeded|not enough storage space|The user.*(s|)\\s*space has been used up|Status: 4.2.2 \\(Over quota\\)|Message for.*?would exceed mailbox quota",
+				"modifiers": "i"
+			}
+		},
+		"statusCode": "4.2.2"
+	},
+	{
+		"//": "SB: 4.3.2 is a more generic \"defer\"; Kanon added. From Symantec_AntiVirus_for_SMTP_Gateways@uqam.ca Im not sure why Symantec delayed this message, but x.2.x means something to do with the mailbox, which seemed appropriate. x.5.x (protocol) or x.7.x (security) also seem possibly appropriate. It seems a lot of times its x.5.x when it seems to me it should be x.7.x, so maybe x.5.x is standard when mail is rejected due to spam-like characteristics instead of x.7.x like I think it should be.",
+		"matcher": {
+			"parts.**.content": {
+				"$type": "match",
+				"value": ["Delivery attempts will continue to be made for","delivery temporarily suspended","Greylisted for 5 minutes","Greylisting in action","Server busy","server too busy","system load is too high","temporarily deferred","temporarily unavailable","Throttling","too busy to accept mail","too many connections","too many sessions","Too much load","try again later","Try later"]
+			}
+		},
+		"statusCode": "4.3.2"
+	},
+	{
+		"ruleName": "queue-expired",
+		"matcher": {
+			"parts.**.content": {
+				"$type": "RegExp",
+				"rx": "delivery time expired|retry timeout exceeded|queue too long|to help resolve this issue, see DSN code 4.4.7 in Exchange",
+				"modifiers": ""
+			}
+		},
+		"statusCode": "4.4.7"
+	},
+	{
+		"ruleName": "cannot be deliver after long period",
+		"matcher": {
+			"parts.**.content": {
+				"$type": "match",
+				"value": "unable to deliver this message after 10 days"
+			}
+		},
+		"statusCode": "5.4.7"
+	},	
+	{
+		"matcher": {
+			"parts.**.content": {
+				"$type": "RegExp",
+				"rx": "Connection timed out|socket error|No valid hosts",
+				"modifiers": ""
+			}
+		},
+		"statusCode": "4.4.1"
+	},
+	{
+		"ruleName": "user not found",
+		"matcher": {
+			"parts.**.content": {
+				"$type": "RegExp",
+				"rx": "User \\S+ not found",
+				"modifiers": "i"
+			}
+		},
+		"statusCode": "5.1.1"
+	},
+	{
+		"ruleName": "big arr - unknow address",
+		"matcher": {
+			"parts.**.content": {
+				"$type": "imatch",
+				"value": ["delivery to this address is restricted","550 Addresses failed:","Line too long","500  command unrecognized", "not listed in Domino Directory","Failed Recipient","Personne ne répond à cette adresse","550 Disabled","Remote host said: 553 RP:RDN","Unknown address error", "account is locked email bounced", "not a vaild email address", "no valid recipients","554 delivery error:","account has been disabled","account is unavailable","account not found","Address unknown","Address invalid","Address is unknown","Addressee unknown","Addressee invalid","Addressee is unknown","ADDRESS_NOT_FOUND","bad address","Bad destination mailbox address","does not exist","Email Address was not found","Excessive userid unknowns","Invalid account","Invalid address","Invalid or unknown virtual user","Invalid mailbox","Invalid recipient","Mailbox not found","Mailbox unavailable","No mail box available for this user","no mailbox here","No one with that email address here","no such address","no such email address","no such mail drop defined","no such mailbox","no such person at this address","no such recipient","no such user","not a known user","not a valid mailbox","not a valid user","not available","not exists","Recipient address rejected","Recipient not allowed","Recipient not found","Recipient rejected","Recipient unknown","server doesn't handle mail for that user","This account is disabled","This address no longer accepts mail","This email address is not known to this system","Unknown account","Unknown address or alias","Unknown email address","Unknown local part","Unknown or illegal alias","Unknown or illegal user","Unknown recipient","Unknown user","User suspended","user disabled","user doesn't exist in this server","user invalid","user is suspended","user is unknown","user not found","user not known","user unknown","valid RCPT command must precede DATA","was not found in LDAP server","We are sorry but the address is invalid","Unable to find alias user","not found in our email system","is not a valid mailbox","The e-mail address you entered couldn't be found","The recipient's e-mail address was not found in the recipient's e-mail system"]
+			}
+		},
+		"value": -1,
+		"statusCode": "5.1.1"
+	},
+	{
+		"matcher": {
+			"parts.**.content": {
+				"$type": "RegExp",
+				"rx": "Delivery to the following recipients failed[\\s\\S]*?(\\S+@\\S+)",
+				"modifiers": "i"
+			}
+		},
+		"email": "$1",
+		"statusCode": "5.1.1"
+	},
+	{
+		"ruleName": "Domain Directory account error",
+		"matcher": {
+			"parts.**.content": {
+				"$type": "RegExp",
+				"rx": "not unique.\\s+Several matches found in Domino Directory",
+				"modifiers": "i"
+			}
+		},
+		"statusCode": "5.1.1"
+	},
+	{
+		"matcher": {
+			"parts.**.content": {
+				"$type": "RegExp",
+				"rx": "mailbox access for \\S+ refused",
+				"modifiers": "i"
+			}
+		},
+		"statusCode": "5.1.1"
+	},
+	{
+		"matcher": {
+			"parts.**.content": {
+				"$type": "RegExp",
+				"rx": "The following addresses had delivery problems:[\\s\\S]+<(\\S+@\\S+)>\\s+Permanent Failure",
+				"modifiers": "i"
+			}
+		},
+		"email": "$1",
+		"statusCode": "5.1.1"
+	},
+	{
+		"matcher": {
+			"parts.**.content": {
+				"$type": "match",
+				"value": "Remote host said: 601"
+			}
+		},
+		"statusCode": "5.1.1"
+	},
+	{
+		"matcher": {
+			"parts.**.content": {
+				"$type": "match",
+				"value": ["No DNS information was found","The error was: DNS query failed"]
+			}
+		},
+		"statusCode": "5.1.1"
+	},
+	{
+		"ruleName": "delivery-failed-permanently",
+		"matcher": {
+			"parts.**.content": {
+				"$type": "RegExp",
+				"rx": "Delivery to the following recipient\\(s\\) failed permanently:[\\s\\S]*?(\\S+)"
+			}
+		},
+		"email": "$1",
+		"statusCode": "5.1.1"
+	},	
+	{
+		"ruleName": "too-many-hops",
+		"matcher": {
+			"parts.**.content": {
+				"$type": "imatch",
+				"value": ["hop count exceeded","following addresses had permanent fatal errors"]
+			}
+		},
+		"statusCode": "5.4.6"
+	},
+	{
+		"//": "Symantec gateway detected spam",
+		"ruleName": "symantec-catcha-all-trap",
+		"matcher": {
+			"parts.**.content": {
+				"$type": "match",
+				"value": "exceeded max time without delivery"
+			}
+		},
+		"statusCode": "5.7.1"
+	},
+	{
+		"matcher": {
+			"headers.Subject": "Message Not Delivered:  Recipient Not Found"
+		},
+		"statusCode": "5.1.1"
+	},
+	{
+		"//": "Italian responses",
+		"matcher": {
+			"parts.**.content": {
+				"$type": "RegExp",
+				"rx": "destin. Sconosciuto|Destinatario errato|Destinatario sconosciuto o mailbox disatttivata|Indirizzo inesistente",
+				"modifiers": ""
+			}
+		},
+		"statusCode": "5.1.1"
+	},
+	{
+		"//": "Polish responses",
+		"matcher": {
+			"parts.**.content": {
+				"$type": "match",
+				"value": ["nie istnieje","Nie ma takiego konta"]
+			}
+		},
+		"statusCode": "5.1.1"
+	},
+	{
+		"ruleName": "relaying denied",
+		"matcher": {
+			"parts.**.content": {
+				"$type": "imatch",
+				"value": ["not permitted to relay","domain isn't allowed to be relayed","This domain is not hosted here","Relaying denied. Proper authentication required","domain isn't in my list of allowed rcpthosts","Esta casilla ha expirado por falta de uso","host ?name is unknown","hostname is unknown","no relaying allowed","no such domain","not our customer","relay not permitted","Relay access denied","relaying denied","Relaying not allowed","This system is not configured to relay mail","Unable to relay","unrouteable mail domain","we do not relay"]
+			}
+		},
+		"statusCode": "5.1.2"
+	},
+	{
+		"matcher": {
+			"parts.**.content": {
+				"$type": "RegExp",
+				"rx": "Old address no longer valid|recipient no longer on server",
+				"modifiers": ""
+			}
+		},
+		"statusCode": "5.1.6"
+	},
+	{
+		"matcher": { "parts.**.content": "Sender address rejected" },
+		"statusCode": "5.1.8"
+	},
+	{
+		"matcher": {
+			"parts.**.content": {
+				"$type": "match",
+				"value": ["exceeded the rate limit","Local Policy Violation","Mailbox currently suspended","mailbox unavailable","mail can not be delivered","Delivery failed","mail couldn't be delivered","The account or domain may not exist"]
+			}
+		},
+		"value": 2,
+		"statusCode": "5.2.0"
+	},
+	{
+		"matcher": {
+			"parts.**.content": {
+				"$type": "match",
+				"value": ["Account disabled","account has been disabled","Account Inactive","Adressat unbekannt oder Mailbox deaktiviert","Destinataire inconnu ou boite aux lettres desactivee","mail is not currently being accepted for this mailbox","El usuario esta en estado: inactivo","email account that you tried to reach is disabled","inactive user","Mailbox disabled for this recipient","mailbox has been blocked due to inactivity","mailbox is currently unavailable","Mailbox is disabled","Mailbox is inactive","Mailbox Locked or Suspended","mailbox temporarily disabled","Podane konto jest zablokowane administracyjnie lub nieaktywne","Questo indirizzo e' bloccato per inutilizzo","Recipient mailbox was disabled","Domain name not found","550 no mailbox by that name is currently available","550 mailbox is inactive"]
+			}
+		},
+		"statusCode": "5.2.1"
+	},
+	{
+		"matcher": {
+			"parts.**.content": {
+				"$type": "match",
+				"value": ["couldn't find any host named","couldn't find any host by that name","PERM_FAILURE: DNS Error","Temporary lookup failure","unrouteable address","can't connect to","Unable to resolve MX host"]
+			}
+		},
+		"statusCode": "5.4.4"
+	},
+	{
+		"matcher": { "parts.**.content": "Too many hops" },
+		"statusCode": "5.4.6"
+	},
+	{
+		"matcher": {
+			"parts.**.content": {
+				"$type": "RegExp",
+				"rx": "Requested action aborted|retry time not reached for any host after a long failure period|Unrouteable address"
+			}
+		},
+		"statusCode": "5.5.0"
+	},
+	{
+		"matcher": {
+			"parts.**.content": {
+				"$type": "RegExp",
+				"rx": "553 MAIL FROM not matches the address of FROM field in message header"
+			}
+		},
+		"statusCode": "4.7.1",
+		"msg": "One of recipient's servers refuses to accept emails with different MAIL FROM and FROM email addresses"
+	},	
+	{
+		"matcher": { "parts.**.content": "rejecting password protected file attachment" },
+		"statusCode": "5.6.2"
+	},
+	{
+		"matcher": {
+			"parts.**.content": {
+				"$type": "RegExp",
+				"rx": "550 OU-00|550 SC-00"
+			}
+		},
+		"statusCode": "5.7.1",
+		"extraMessage": "Sender is in hotmail's blacklist"
+	},
+	{
+		"matcher": { "parts.**.content": "550 DY-00" },
+		"statusCode": "5.7.1",
+		"extraMessage": "Sender has a dynamic IP address"
+	},
+	{
+		"matcher": {
+			"parts.**.content": {
+				"$type": "match",
+				"value": "sorry, that address is not in my list of allowed recipients; no valid cert for gatewaying"
+			}
+		},
+		"statusCode": "5.7.1"
+	},	
+	{
+		"matcher": {
+			"parts.**.content": {
+				"$type": "RegExp",
+				"rx": "421 4\\.\\d\\.\\d.*?All messages from ((?:\\d{1,3}\\.*){4}) will be permanently deferred; Retrying will NOT succeed\\. See.*?(http(s|):\\/\\/\\S+)"
+			}
+		},
+		"statusCode": "5.7.1",
+		"blockedDomain": "yahoo.com",
+		"senderIP": "$1",
+		"delistingURL": "$2",
+		"type": "blocked-domain",
+		"diagnosticCode": "@get(deliveryReport.parsedContent.Diagnostic-code)|@rx($0)"
+	},
+	{
+		"matcher": {
+			"parts.**.content": {
+				"$type": "RegExp",
+				"rx": "((?:\\d{1,3}\\.*){4}) found on one or more DNSBLs, see.*?(http(s|):\\/\\/\\S+)"				
+			}
+		},
+		"statusCode": "5.7.1",
+		"blockedDomain": "@recipientDomain",
+		"senderIP": "$1",
+		"delistingURL": "$2",
+		"type": "blocked-domain",
+		"diagnosticCode": "@get(deliveryReport.parsedContent.Diagnostic-code)|@rx($0)"
+	},
+	{
+		"ruleName": "gmail-blocked",
+		"matcher": {
+			"parts.**.content": {
+				"$type": "RegExp",
+				"rx": "(A message that you sent has not yet been delivered to one or more of its\\s+recipients after more than 72 hours on the queue.*?\\n)[\\s\\S]*?(Delay reason:[\\s\\S]*?)\\n{2}"
+			}
+		},
+		"statusCode": "5.7.1",
+		"blockedDomain": "@recipientDomain",
+		"type": "blocked-domain",
+		"diagnosticCode": "@rx($2)"
+	},
+	{
+		"ruleName": "gmail-temp-block",
+		"matcher": {
+			"parts.**.content": {
+				"$type": "RegExp",
+				"rx": "Domain .*? has exceeded the max emails per hour .*? allowed.  Message discarded."
+			}
+		},
+		"statusCode": "5.7.1",
+		"blockedDomain": "@recipientDomain",
+		"type": "blocked-domain",
+		"diagnosticCode": "@rx($0)"
+	},	
+	{
+		"ruleName": "suddenlink-blocked",
+		"matcher": {
+			"parts.**.content": {
+				"$type": "RegExp",
+				"rx": "SMTP error from remote mail server after end of data[\\s\\S]*?(Our system[\\s\\S]*?message is[\\s\\S]*?likely unsolicited[\\s\\S]*?more information\\.)"
+			}
+		},
+		"statusCode": "5.7.1",
+		"blockedDomain": "@recipientDomain",
+		"type": "blocked-domain",
+		"diagnosticCode": "@rx($1)"
+	},
+	{
+		"ruleName": "considered spam",
+		"matcher": {
+			"parts.**.content": {
+				"$type": "imatch",
+				"value": ["message does not comply with required standards","Message cannot be accepted, spam rejection","appears to be spam","appears to be unsolicited","Message contains spam","automated process detected unsolicited content","550 REJECT spam","it seems to be a SPAM","is likely unsolicited mail","Sender is on user denylist","broken the antispam rules","Cyberoam Anti Spam Engine has identified this email as a spam","bl.spamcop.net Blocked","spamhaus.org/query", "part of their network is on our block list","IP REPUTATION BAD","sorry, we do not accept emails to","rejected by the antispam software ALTOSPAM","Message filtered due to security policies","rejected by Recurrent Pattern Detection System","Email rejected due to security policies","consider spam","message as spam","classified as spam","Spam Message Rejected","This is a spam mail","looked like spam","looks like spam","Message Refused","mail is considered spam","554 denied","You have been blocked by the recipient","requires that you verify","Access denied","Administrative prohibition - unable to validate recipient","Blacklisted","blocke?d? for spam","conection refused","Connection refused","dial-up or dynamic-ip denied","Domain has received too many bounces","failed several antispam checks","found in a DNS blacklist","IPs blocked","is blocked by","Mail Refused","Message does not pass DomainKeys","Message looks like spam","Message refused by","not allowed access from your location","permanently deferred","Rejected by policy","rejected by Windows Live Hotmail for policy reasons","Rejected for policy reasons","Rejecting banned content","Sorry, looks like spam","spam message discarded","Too many spams from your IP","TRANSACTION FAILED","Transaction rejected","Wiadomosc zostala odrzucona przez system antyspamowy","Delivery to the following recipient failed permanently","Your message was declared Spam","Blocked for abuse","Message blocked due to spam content in the message","550 5.7.1 Mail rejected by policy","554 mail server permanently rejected message","Found Spam in email","Message considered as spam or virus","Mail content denied","550 Administrative prohibition","5.0.0 Spam","Blocked by email filter","Sender denied","Rejected by content scanner","Message rejected because of unacceptable content","5.1.0 Address rejected","identified as being possible spam","Invalid content","Message content contains spam","rejected as spam","category=spam","spam detected","550 Blocked","Email rejected","DT:SPM"]
+			}
+		},
+		"statusCode": "5.7.1",
+		"blockedDomain": "@recipientDomain",
+		"type": "blocked-domain",
+		"diagnosticCode": "@get(deliveryReport.parsedContent.Diagnostic-code)|@match"
+	},
+	{
+		"matcher": {
+			"parts.**.content": {
+				"$type": "match",
+				"value": "blocked using sip.invaluement.local"
+			}
+		},
+		"statusCode": "5.7.1",
+		"blockedDomain": "@recipientDomain",
+		"type": "blocked-domain",
+		"diagnosticCode": "@get(deliveryReport.parsedContent.Diagnostic-code)"
+	},		
+	{
+		"matcher": {
+			"parts.**.content": {
+				"$type": "RegExp",
+				"rx": "was marked .*?as spam"
+			}
+		},
+		"statusCode": "5.7.1"
+	},
+	{
+		"matcher": {
+			"parts.**.content": {
+				"$type": "RegExp",
+				"//rx": "Diagnostic-Code:\\s+550[^\\r\\n]+Poor Reputation Sender",
+				"rx": "Poor Reputation Sender"
+			}
+		},
+		"statusCode": "5.7.1",
+		"type": "blocked-domain",
+		"diagnosticCode": "@get(deliveryReport.parsedContent.Diagnostic-code)"
+	},
+	{	
+		"matcher": {
+			"headers.X-commsvc-sender": {
+				"$type": "RegExp",
+				"rx": "autoresponder",
+				"modifiers": "i"
+			}
+		},
+		"statusCode": "2.0.0",
+		"type": "autoreply"
+	},
+	{	
+		"matcher": {
+			"parts.**.content": {
+				"$type": "RegExp",
+				"rx": "out of\\s+(the|)\\s*office|thank.*?(contacting|writing|reaching)\\s+us.*?email.*?received",
+				"modifiers": "i"
+			}
+		},
+		"statusCode": "2.0.0",
+		"type": "autoreply"
+	},	
+	{	
+		"ruleName": "dummy-auto-reply",
+		"matcher": {
+			"headers.Subject": {
+				"$type": "match",
+				"value": "Automatic reply:"
+			}
+		},
+		"statusCode": "2.0.0",
+		"type": "autoreply"
+	},	
+	{	
+		"matcher": {
+			"headers.Auto-submitted": {
+				"$type": "RegExp",
+				"rx": "auto-replied",
+				"modifiers": "i"
+			}
+		},
+		"value": "-1",
+		"statusCode": "2.0.0",
+		"type": "autoreply"
+	},
+	{
+		"matcher": {
+			"headers.Delivered-to": {
+				"$type": "RegExp",
+				"rx": "Autoresponder",
+				"modifiers": "i"
+			}			
+		},
+		"statusCode": "2.0.0",
+		"type": "autoreply"
+	},
+	{
+		"matcher": {
+			"parts.**.content": {
+				"$type": "RegExp",
+				"rx": "the group you tried to contact(.*?)may not exist|gruppen\\s+du\\s+försökt\\s+kontakta.*?eventuellt\\s+inte\\s+finns"
+			}			
+		},
+		"statusCode": "5.5.0"
+	},
+	{
+		"//": "weird transaction errors",
+		"matcher": {
+			"parts.**.content": {
+				"$type": "RegExp",
+				"rx": "554\\s+\\S+\\s+ESMTP not accepting connections|Diagnostic-Code:\\s+Broken\\s+pipe|554 \\S+ \\*{5}",
+				"modifiers": "i"
+			}
+		},
+		"statusCode": "5.5.4"
+	},
+	{
+		"//": "Sendgrid blocked of pure reputation",
+		"matcher": {
+			"parts.**.content": {
+				"$type": "RegExp",
+				"rx": "Diagnostic-Code:\\s+554.*?You are not allowed to send mail",
+				"modifiers": "i"
+			}
+		},
+		"//statusCode": "Unable to route",
+		"statusCode": "5.7.1",
+		"type": "blocked-domain",
+		"diagnosticCode": "@get(deliveryReport.parsedContent.Diagnostic-code)"
+	},
+	{
+		"matcher": {
+			"deliveryReport.parsedContent.Action": "failed",
+			"deliveryReport.parsedContent.Status": "5.2.1"
+		},
+		"statusCode": "5.2.1",
+		"value": -1
+	},
+	{
+		"//": "Blocked domain",
+		"matcher": {
+			"parts.**.content": {
+				"$type": "RegExp",
+				"rx": "554\\s+(\\S+)\\s+in\\s+Handshake",
+				"modifiers": "i"
+			}
+		},
+		"//statusCode": "Unable to route",
+		"statusCode": "5.4.4",
+		"blockedDomain": "@recipientDomain"
+	},
+	{
+		"matcher": {
+			"parts.**.content": {
+				"$type": "RegExp",
+				"rx": "An address in this message (.*?) is listed on (\\S+). Please organise removal and retry",
+				"modifiers": "i"
+			}
+		},
+		"//statusCode": "spam blocked",
+		"statusCode": "4.7.1",
+		"blockedDomain": "@recipientDomain",
+		"delistingURL": "$2",
+		"type": "blocked-domain",
+		"diagnosticCode": "@get(deliveryReport.parsedContent.Diagnostic-code)"
+	},
+	{
+		"ruleName": "blocked_by_spam_assassin",
+		"matcher": {
+			"parts.**.content": {
+				"$type": "imatch",
+				"value": "X-SA-Report: REJECTED"
+			}
+		},
+		"statusCode": "5.7.1"
+	},	
+	{
+		"matcher": {
+			"parts.**.content": {
+				"$type": "RegExp",
+				"rx": "has a poor reputation on Cloudmark Sender Intelligence.*?(http(s|):\\/\\/\\S+)",
+				"modifiers": "i"
+			}
+		},
+		"//statusCode": "spam blocked",
+		"statusCode": "5.7.1",
+		"type": "blocked-domain",
+		"diagnosticCode": "@get(deliveryReport.parsedContent.Diagnostic-code)",
+		"blockedDomain": "@recipientDomain",
+		"delistingURL": "$1"
+	},
+	{
+		"ruleName:": "conn-refused-1",
+		"matcher": {
+			"parts.**.content": {
+				"$type": "RegExp",
+				"rx": "5\\d{2}.*?Connection from (\\d{1,3}\\.*){4} Refused.*?(http(s|):\\/\\/\\S+)",
+				"modifiers": "i"
+			}
+		},
+		"//statusCode": "spam blocked",
+		"statusCode": "4.7.1",
+		"delistingURL": "$2",
+		"type": "blocked-domain",
+		"diagnosticCode": "@get(deliveryReport.parsedContent.Diagnostic-code)"
+	},
+	{
+		"ruleName:": "Cloudmark1",
+		"matcher": {
+			"parts.**.content": {
+				"$type": "RegExp",
+				"rx": "5.7.1.*?Cloudmark.*?(http(s|):\\/\\/\\S+)",
+				"modifiers": "i"
+			}
+		},
+		"//statusCode": "spam blocked",
+		"statusCode": "4.7.1",
+		"delistingURL": "$2",
+		"type": "blocked-domain",
+		"diagnosticCode": "@get(deliveryReport.parsedContent.Diagnostic-code)"		
+	},
+	{
+		"ruleName": "live-com-transient-1",
+		"matcher": {
+			"parts.**.content": {
+				"$type": "RegExp",
+				"rx": "Unfortunately, some messages from (\\d{1,3}\\.*){4} weren't sent. Please try again. We have limits for how many messages can be sent per hour and per day. You can also refer to (http(s|):\\/\\/\\S+).",
+				"modifiers": "i"
+			}
+		},
+		"statusCode": "4.7.1"
+	},
+	{
+		"ruleName": "transient-2",
+		"matcher": {
+			"parts.**.content": {
+				"$type": "RegExp",
+				"rx": "Domain .*? has exceeded the max emails per hour .*? allowed.\\s+Message will be reattempted later",
+				"modifiers": "i"
+			}
+		},
+		"statusCode": "4.7.1"
+	},
+	{
+		"matcher": {
+			"parts.**.content": {
+				"$type": "RegExp",
+				"rx": "RBL Restriction.*?See\\s+(http(s|):\\/\\/\\S+)",
+				"modifiers": "i"
+			}
+		},
+		"//statusCode": "spam blocked",
+		"statusCode": "4.7.1",
+		"blockedDomain": "@recipientDomain",
+		"delistingURL": "$2",
+		"type": "blocked-domain",
+		"diagnosticCode": "@get(deliveryReport.parsedContent.Diagnostic-code)"
+	},
+	{
+		"matcher": {
+			"parts.**.content": {
+				"$type": "RegExp",
+				"rx": "ERROR: Mail refused - <((?:\\d{1,3}\\.*){4})>.*?(http:\\/\\/\\S+)",
+				"modifiers": "i"
+			}
+		},
+		"//statusCode": "spam blocked",
+		"type": "blocked-domain",
+		"diagnosticCode": "@get(deliveryReport.parsedContent.Diagnostic-code)",
+		"statusCode": "4.7.1",
+		"senderIP": "$1",
+		"delistingURL": "$2"
+	},
+	{
+		"matcher": {
+			"parts.**.content": {
+				"$type": "RegExp",
+				"rx": "554 \\S+ Connections from the sending IP address of: ((?:\\d{1,3}\\.*){4}) are being rejected due to Low SenderBase Reputation score.*?(http:\\/\\/\\S+)",
+				"modifiers": "i"
+			}
+		},
+		"//statusCode": "spam blocked",
+		"statusCode": "4.7.1",
+		"senderIP": "$1",
+		"delistingURL": "$2",
+		"type": "blocked-domain",
+		"diagnosticCode": "@get(deliveryReport.parsedContent.Diagnostic-code)"		
+	},
+	{
+		"matcher": {
+			"parts.**.content": {
+				"$type": "RegExp",
+				"rx": "5\\d{2} Host (\\d{1,3}\\.*){4} is listed on (\\S+)",
+				"modifiers": "i"
+			}
+		},
+		"//statusCode": "spam blocked",
+		"statusCode": "4.7.1",
+		"delistingURL": "$2",
+		"type": "blocked-domain",
+		"diagnosticCode": "@get(deliveryReport.parsedContent.Diagnostic-code)"	
+	},
+	{
+		"matcher": {
+			"parts.**.content": {
+				"$type": "RegExp",
+				"rx": "550 Unable to add (\\S+) because host ((?:\\d{1,3}\\.*){4}) is listed on (\\S+)",
+				"modifiers": "i"
+			}
+		},
+		"//statusCode": "spam blocked",
+		"statusCode": "4.7.1",
+		"senderIP": "$2",
+		"delistingURL": "$3",
+		"type": "blocked-domain",
+		"diagnosticCode": "@get(deliveryReport.parsedContent.Diagnostic-code)"		
+	},
+	{
+		"//": "blocked forever?",
+		"matcher": {
+			"parts.**.content": {
+				"$type": "RegExp",
+				"rx": "access to this mail system.*?has been rejected due to the sending MTA.*?poor reputation.*?contact the intended recipient via alternate means",
+				"modifiers": "i"
+			}
+		},
+		"//statusCode": "spam blocked",
+		"statusCode": "5.7.1",
+		"blockedDomain": "@recipientDomain"
+	},
+	{
+		"//": "blocked forever?",
+		"matcher": {
+			"parts.**.content": {
+				"$type": "RegExp",
+				"rx": "5\\d{2}.*?(\\d{1,3}\\.*){4} blocked\\. Error Code|5\\d{2}.*?Server IP (\\d{1,3}\\.*){4} listed as abusive|5\\d{2}.*?The IP address of your outgoing mailserver has been designated as a source of unwanted e-mail by the global Senderbase system",
+				"modifiers": "i"
+			}
+		},
+		"//statusCode": "spam blocked",
+		"statusCode": "5.7.1"
+	},
+	{
+		"matcher": {
+			"parts.**.content": {
+				"$type": "RegExp",
+				"rx": "501\\s+5.7.1.*?Sender refused by the DNSBL|5\\d{2} Spam detected, message rejected|Your access to this mail system has been rejected due to the sending MTA\\'s reputation|550 #5.7.1 Your access to submit messages to this e-mail system has been rejected.",
+				"modifiers": "i"
+			}
+		},
+		"//statusCode": "spam blocked",
+		"statusCode": "5.7.1"
+	},
+	{
+		"matcher": {
+			"parts.**.content": {
+				"$type": "RegExp",
+				"rx": "554.*?rejected due to suspected spam content|5\\d{2}\\s+5.7.1.*?CSI.*?IP address with a poor reputation",
+				"modifiers": "i"
+			}
+		},
+		"//statusCode": "spam blocked",
+		"statusCode": "5.7.1"
+	},
+	{
+		"matcher": {
+			"parts.**.content": {
+				"$type": "RegExp",
+				"rx": "5\\d{2} Service unavailable.*?host.*?blocked",
+				"modifiers": "i"
+			}
+		},
+		"//statusCode": "spam blocked",
+		"statusCode": "5.7.1"
+	},
+	{
+		"matcher": {
+			"parts.**.content": {
+				"$type": "RegExp",
+				"rx": "(5\\d{2})\\s*Denied",
+				"modifiers": "i"
+			}
+		},
+		"//statusCode": "spam blocked",
+		"statusCode": "5.7.1"
+	},
+	{
+		"matcher": {
+			"parts.**.content": {
+				"$type": "RegExp",
+				"rx": "5\\d{2}.*?Message (was\\s+|)rejected due to (poor reputation|content restrictions)",
+				"modifiers": "i"
+			}
+		},
+		"//statusCode": "spam blocked",
+		"statusCode": "5.7.1"
+	},
+	{
+		"matcher": {
+			"parts.**.content": {
+				"$type": "RegExp",
+				"rx": "554 To contact the RCN Postmaster Group: \\S+ "
+			}
+		},
+		"//statusCode": "spam blocked",
+		"statusCode": "5.7.1"
+	},	
+	{
+		"matcher": {
+			"parts.**.content": {
+				"$type": "RegExp",
+				"rx": "can not receive email any more cause of full space"
+			}
+		},
+		"statusCode": "4.2.2"
+	},
+	{
+		"//":"generic undelived response",
+		"matcher": {
+			"deliveryReport.parsedContent.Status": "4.0.0"
+		},
+		"value": "-1",
+		"statusCode": "4.0.0"
+	},
+	{
+		"//":"protocol error",
+		"matcher": {
+			"deliveryReport.parsedContent.Diagnostic-code": "552 Queue error"
+		},
+		"statusCode": "4.0.0"
+	},
+	{
+		"//":"protocol error",
+		"matcher": {
+			"deliveryReport.parsedContent.Diagnostic-code": {
+				"$type": "RegExp",
+				"rx": "451 4.3.2 Internal error reading data"
+			}
+		},
+		"statusCode": "4.0.0"
+	},
+	{
+		"temp_rule": true,
+		"matcher": {
+			"parts.**.content": {
+				"$type": "RegExp",
+				"rx": "contact has unsubscribed from your mailing list"
+			}
+		},
+		"statusCode": "2.0.0"
+	},
+	{
+		"ruleName": "no_mx_host",
+		"matcher": {
+			"parts.**.content": {
+				"$type": "imatch",
+				"value": "nonexistent domain"
+			}
+		},
+		"statusCode": "5.4.4",
+		"type": "blocked-domain",
+		"diagnosticCode": "@get(deliveryReport.parsedContent.Diagnostic-code)",
+		"blockedDomain": "@recipientDomain"
+	},	
+	{
+		"//": "---------------------------- Recpients email address matchers ------------------------------------",
+		"matcher": {
+			"deliveryReport.parsedContent.Original-recipient.values.1": {
+				"$type": "RegExp",
+				"rx": "^.+$"
+			}
+		},
+		"email": "$0"
+	},
+	{
+		"//": "---------------------------- Recpients email address matchers ------------------------------------",
+		"matcher": {
+			"deliveryReport.parsedContent.Final-recipient.values.1": {
+				"$type": "RegExp",
+				"rx": "^.+$"
+			}
+		},
+		"email": "$0"
+	},	
+	{
+		"matcher": {
+			"parts.**.content": {
+				"$type": "RegExp",
+				"rx": "Original Message.{0,10}\\:[\\s\\S]*?\nTo:.*?<(.*?)>",
+				"modifiers": "i"
+			}
+		},
+		"email": "$1"
+	},
+	{
+		"matcher": {
+			"parts.**.content": {
+				"$type": "RegExp",
+				"rx": "Failed Recipient:\\s+(\\S+)",
+				"modifiers": "i"
+			}
+		},
+		"email": "$1"
+	},
+	{
+		"matcher": {
+			"parts.**.content": {
+				"$type": "RegExp",
+				"rx": "This is a copy of the message[\\s\\S]*?\nTo:\\s+(.*?)\n",
+				"modifiers": "i"
+			}
+		},
+		"email": "$1"
+	},
+	{
+		"matcher": {
+			"parts.**.content": {
+				"$type": "RegExp",
+				"rx": "The address to which the message has not yet been delivered is:\\s*(\\S*)",
+				"modifiers": "i"
+			}
+		},
+		"email": "$1"
+	}
+]

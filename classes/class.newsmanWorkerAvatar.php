@@ -7,7 +7,7 @@ class newsmanWorkerAvatar extends newsmanWorkerBase {
 	function __construct($workerId) {
 		parent::__construct();
 
-		$this->workerId = $workerId;		
+		$this->workerId = $workerId;
 		$this->u = newsmanUtils::getInstance();
 	}
 
@@ -29,14 +29,14 @@ class newsmanWorkerAvatar extends newsmanWorkerBase {
 	}
 
 	function _waitForResult($opId) {
-		$totalWait = 10000000; // mks // 10s
-		$count = 0; // 50 * 100 ms = 5s 
+		$totalWait = 15000000; // mks // 10s
+		$count = 0; // 50 * 100 ms = 5s
 		$res = NULL;
 
 		while ( $res === NULL ) {
 			$count += 1;
 			$res = $this->_getOpResult($opId);
-			$s = 200000*$count;
+			$s = 400000*$count;
 			usleep($s); // 100 ms
 			$totalWait -= $s;
 			if ( $totalWait <= 0 ) { break; }
@@ -48,7 +48,7 @@ class newsmanWorkerAvatar extends newsmanWorkerBase {
 		return $res;
 	}
 
-	function _getOpResult($opId) {		
+	function _getOpResult($opId) {
 		$sql = "SELECT `result` from $this->_table WHERE `id` = %d AND `processed` = 1";
 		$sql = $this->_db->prepare($sql, $opId);
 

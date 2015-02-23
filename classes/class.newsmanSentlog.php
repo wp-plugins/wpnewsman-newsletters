@@ -46,11 +46,13 @@ class newsmanSentlog {
 				`recipientId` int(10) unsigned NOT NULL  DEFAULT 0,
 				`recipientAddr` varchar(255) NOT NULL DEFAULT '',
 				`statusMsg` TEXT NOT NULL DEFAULT '',
-				`errorCode` int(10) unsigned NOT NULL  DEFAULT 0,
+				`errorCode` int(10) unsigned NOT NULL DEFAULT 0,
+				`status` TINYINT(1) unsigned NOT NULL DEFAULT 0,
 				PRIMARY KEY  (`id`),
 				KEY (`emailId`,`listId`),
-				KEY (`recipientId`)
-				) CHARSET=utf8";
+				KEY (`recipientId`),
+				UNIQUE KEY (`emailId`,`listId`, `recipientId`)
+				) CHARSET=utf8 ENGINE=InnoDB";
 		$result = $this->db->query($sql);
 	}
 
@@ -59,9 +61,61 @@ class newsmanSentlog {
 		return $this->db->query($sql);
 	}
 
+	public function clearBrokenRecipients($emailId) {
+		$sql = "DELETE FROM `$this->tableName` WHERE `emailId` = %d AND status = 0";		
 
-	public function getPendingFromList($emailId, $listName, $limit = 25) {
+		$this->db->query( $this->db->prepare($sql, intval($emailId)) );
+	}
 
+	public function initEmailRecipients($emailId, $listName) {
+		if ( !is_string($listName) ) {
+			$list = $listName;
+		} else {
+			$ln = $this->u->parseListName($listName);
+			$list = newsmanList::findOne('name = %s', array($ln->name) );
+		}
+
+		if ( !$list ) { return; }
+
+		$sql = "
+			INSERT IGNORE INTO `$this->tableName`(
+			                `emailId`,
+			                `listId`,
+			                `recipientId`,
+			                `recipientAddr`,
+			                `statusMsg`,
+			                `errorCode`,
+			                `status`)
+			    SELECT 
+			        $emailId as emailId,
+			        $list->id as listId,
+			        `$list->tblSubscribers`.`id` as recipientId,
+			        `$list->tblSubscribers`.`email` as recipientAddr,
+			        '' as statusMsg,
+			        0 as errorCode,
+			        0 as status
+			    FROM $list->tblSubscribers 
+			    WHERE 
+			        `$list->tblSubscribers`.`status` = $list->selectionType
+		";
+
+		if ( defined('NEWSMAN_SHOW_INIT_EMAILS_QUERY') ) {
+			 $this->u->log('[initEmailRecipients] SQL: '.$sql);
+		}
+
+		return $this->db->query($sql);
+	}
+
+	private function setSQLWaitTimeout() {
+		$this->db->query('SET @old_wait_timeout := @@session.wait_timeout');
+		$this->db->query('SET @@session.wait_timeout := 60');		
+	}
+
+	private function restoreSQLTimeout() {
+		$this->db->query('SET @@session.wait_timeout := @old_wait_timeout');
+	}
+
+	public function getSinglePendingFromList($emailId, $listName) {
 		$ln = $this->u->parseListName($listName);
 
 		$list = newsmanList::findOne('name = %s', array($ln->name) );
@@ -73,22 +127,163 @@ class newsmanSentlog {
 			die("List with the name $listName is not found");
 		}
 
-		$subs = $list->getPendingBatch($emailId, $limit, $ln->selectionType);	
+		$this->setSQLWaitTimeout();
+		$this->db->query('START TRANSACTION');
 
-		$this->u->log('[getPendingFromList] pending batch length %s', count($subs));
+		try {
+			$trData = $this->db->get_row(
+						$this->db->prepare("
+							SELECT * FROM $this->tableName
+							WHERE 
+								`emailId` = %d AND
+								`status` = 0
+							LIMIT 1
+							FOR UPDATE
+						", $emailId)					
+					);
 
-		$result = array();
+			if ( !$trData ) { 
+				$this->db->query('ROLLBACK');
+				$this->restoreSQLTimeout();
+				return null;
+			}
 
-		foreach ($subs as $sub) {
+			$tr = new newsmanEmailTransmission($trData->id, $trData->recipientAddr, $trData->recipientId, $list);
 
-			$tr = new newsmanEmailTransmission($sub->email, $sub->id, $list);
+			$sub = $list->findSubscriber("id = %d", array($trData->recipientId));
 			$tr->addSubscriberData($sub->toJSON());
+			$this->db->query('COMMIT');
+			$this->restoreSQLTimeout();
 
-			$result[] = $tr;
+			return $tr;
+
+		} catch ( Exception $e ) {			
+			$this->db->query('ROLLBACK');
+			$this->restoreSQLTimeout();
 		}
 
-		return $result;
+		return null;
 	}
+
+	// public function getSinglePendingFromList($emailId, $listName) {
+	// 	$ln = $this->u->parseListName($listName);
+
+	// 	$list = newsmanList::findOne('name = %s', array($ln->name) );
+
+	// 	$list->selectionType = $ln->selectionType;
+
+	// 	if ( !$list ) {
+	// 		$this->u->log('[getPendingFromList] List with the name %s is not found', $listName);
+	// 		die("List with the name $listName is not found");
+	// 	}
+
+	// 	//$subs = $list->getPendingBatch($emailId, $limit, $ln->selectionType);	
+
+	// 	$sql = "
+	// 		INSERT IGNORE INTO `$this->tableName`(
+	// 		                `emailId`,
+	// 		                `listId`,
+	// 		                `recipientId`,
+	// 		                `recipientAddr`,
+	// 		                `statusMsg`,
+	// 		                `errorCode`,
+	// 		                `status`) 
+	// 		    SELECT 
+	// 		        $emailId as emailId,
+	// 		        $list->id as listId,
+	// 		        `$list->tblSubscribers`.`id` as recipientId,
+	// 		        `$list->tblSubscribers`.`email` as recipientAddr,
+	// 		        '' as statusMsg,
+	// 		        0 as errorCode,
+	// 		        0 as status
+	// 		    FROM $list->tblSubscribers
+	// 		    WHERE 
+	// 		        `$list->tblSubscribers`.`status` = $ln->selectionType AND
+	// 		        `$list->tblSubscribers`.`id` > (
+	// 		        	SELECT IFNULL (
+	// 		        		(
+	// 							SELECT `$this->tableName`.`recipientId`
+	// 							FROM `$this->tableName`
+	// 							WHERE 
+	// 								`$this->tableName`.`emailId` = $emailId AND
+	// 								`$this->tableName`.`listId` = $list->id
+	// 							ORDER BY `$this->tableName`.`recipientId` DESC
+	// 							LIMIT 1        			        			
+	// 		        		)
+	// 		        	, 0) as `id`
+	// 		        )
+	// 		    ORDER BY `$list->tblSubscribers`.`id` ASC LIMIT 1
+	// 	";		
+	// 	// 
+	// 	$retries = 5;
+	// 	$done = false;
+
+	// 	while ( !$done && $retries > 0 ) {
+	// 		$this->u->log('['.$retries.'] trying to insert lock...');
+	// 		try {
+	// 			$this->db->query('START TRANSACTION');
+	// 			$res = $this->db->query($sql);
+	// 			$this->db->query('COMMIT');
+	// 			$done = true;	
+	// 		} catch( Exception $e ) {
+	// 			$this->db->query('ROLLBACK');
+	// 			$retries--;
+	// 		}			
+	// 	}
+
+	// 	if ( !$done && $retries <= 0 ) {
+	// 		$this->u->log('ERROR. Failed to get pending from list( deadlocks ).');
+	// 	}
+		
+	// 	//$this->u->log('[getSinglePendingFromList] SQL: %s', $sql);
+	// 	$this->u->log('[getSinglePendingFromList] insert res %s', $res);
+
+	// 	// if inserted
+	// 	if ( $res === 1 ) {
+	// 		$trId = $this->db->insert_id;
+
+	// 		$trData = $this->db->get_row($this->db->prepare("SELECT * FROM `$this->tableName` WHERE id = %d", array($trId)));
+			
+	// 		$tr = new newsmanEmailTransmission($trId, $trData->recipientAddr, $trData->recipientId, $list);
+
+	// 		$sub = $list->findSubscriber("id = %d", array($trData->recipientId));
+
+	// 		$tr->addSubscriberData($sub->toJSON());
+
+	// 		return $tr;
+	// 	}
+	// 	return NULL;
+	// }
+
+	// public function getPendingFromList($emailId, $listName, $limit = 25) {
+
+	// 	$ln = $this->u->parseListName($listName);
+
+	// 	$list = newsmanList::findOne('name = %s', array($ln->name) );
+
+	// 	$list->selectionType = $ln->selectionType;
+
+	// 	if ( !$list ) {
+	// 		$this->u->log('[getPendingFromList] List with the name %s is not found', $listName);
+	// 		die("List with the name $listName is not found");
+	// 	}
+
+	// 	$subs = $list->getPendingBatch($emailId, $limit, $ln->selectionType);	
+
+	// 	$this->u->log('[getPendingFromList] pending batch length %s', count($subs));
+
+	// 	$result = array();
+
+	// 	foreach ($subs as $sub) {
+
+	// 		$tr = new newsmanEmailTransmission($sub->email, $sub->id, $list);
+	// 		$tr->addSubscriberData($sub->toJSON());
+
+	// 		$result[] = $tr;
+	// 	}
+
+	// 	return $result;
+	// }
 
 	public function cleanupTempErrors($listId, $emailId) {
 		global $wpdb;
@@ -203,8 +398,6 @@ class newsmanSentlog {
 
 		if ( $email ) {
 			$lists = $email->getToLists();
-
-			
 
 			foreach ($lists as $list) {
 				$results = array_merge($results, $this->getErrorsForList($emailId, $list));

@@ -1,0 +1,38 @@
+[newsman wp="blogname"]: Por favor, re-confirme sua inscrição
+--- plain ---
+
+
+Olá,
+
+Acabo de transferir meus assinantes de um outro serviço automatizado de emails para meu próprio blog e preciso que você re-confirme sua assinatura para continuar recebendo meus boletins informativos.
+
+CLIQUE NO SEGUINTE URL PARA RECONFIRMAR:
+
+[newsman link="confirmation"]
+
+Caso você não consiga ativar o link com um clique, por favor copie o URL completo e cole em seu navegador para ativá-lo.
+
+Se você não deseja mais receber meus boletins informativos, simplesmente ignore esta mensagem.
+
+Atenciosamente,
+[newsman wp="blogname"]
+
+--
+Solicitação gerada por:
+IP: [newsman sub="ip"]
+Data: [newsman sub="ts"]
+URL: [newsman wp="url"]
+--- html ---
+<p>Olá,</p>
+<p>IAcabo de transferir meus assinantes de um outro serviço automatizado de emails para meu próprio blog e preciso que você re-confirme sua assinatura para continuar recebendo meus boletins informativos.</p>
+<p>CLIQUE NO SEGUINTE URL PARA RECONFIRMAR:</p>
+<p><a href="[newsman link='confirmation']">[newsman link="confirmation"]</a></p>
+<p>aso você não consiga ativar o link com um clique, por favor copie o URL completo e cole em seu navegador para ativá-lo.</p>
+<p>Se você não deseja mais receber meus boletins informativos, simplesmente ignore esta mensagem.</p>
+<p>&nbsp;</p>
+<p>Atenciosamente,<br>
+	[newsman wp="blogname"]<br>
+	<a href="[newsman wp='url']">[newsman wp="url"]</a></p>
+<p style="font-size: x-small">
+	Solicitação gerada por:<br>
+	IP:&nbsp;[newsman sub="ip"], date:&nbsp;[newsman sub="ts"]</p>
