@@ -34,19 +34,19 @@ class newsmanTransmissionStreamer {
 		// It shouldn't be lots of them, so we don't apply streaming 
 		// here
 
-		foreach ($to as $dest) {
-			$dest = trim($dest);
-			if ( preg_match("/^[^@]*@[^@]*\.[^@]*$/", $dest) ) { 
-				// email
-				$this->plainAddresses[] = $dest;				
-			} else {
-				$this->to[] = $dest;
+		if ( is_array($to) ) {
+			foreach ($to as $dest) {
+				$dest = trim($dest);
+				if ( preg_match("/^[^@]*@[^@]*\.[^@]*$/", $dest) ) { 
+					// email
+					$this->plainAddresses[] = $dest;				
+				} else {
+					$this->to[] = $dest;
+				}
 			}
 		}
 
-		$this->cleanupTempErrors();
-
-		
+		$this->cleanupTempErrors();		
 
 		if ( count($this->plainAddresses) ) {
 			$this->buffer = $this->sl->getPendingByEmails($email->id, $this->plainAddresses);

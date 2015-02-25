@@ -5,11 +5,12 @@ define('WPNEWSMAN_MU_VERSION', '{{WPNEWSMAN_MU_VERSION}}');
 
 define('NEWSMAN_AJAX_REQUEST', isset( $_REQUEST['action'] ) && strpos($_REQUEST['action'], 'newsmanAj') !== false);
 
-if ( isset($_REQUEST['newsman_worker_fork']) || NEWSMAN_AJAX_REQUEST ) {
 	
-	add_filter( 'option_active_plugins', 'wpnewsman_disable_other_plugins' );
+add_filter( 'option_active_plugins', 'wpnewsman_disable_other_plugins' );
 
-	function wpnewsman_disable_other_plugins($plugins) {
+function wpnewsman_disable_other_plugins($plugins) {
+	if ( isset($_REQUEST['newsman_worker_fork']) || NEWSMAN_AJAX_REQUEST ) {
+
 		$whitelist = array(
 			'wpnewsman-pro/wpnewsman-pro.php',
 			'wpnewsman/wpnewsman.php',
@@ -24,4 +25,5 @@ if ( isset($_REQUEST['newsman_worker_fork']) || NEWSMAN_AJAX_REQUEST ) {
 
 		return $whitelisted_plugins;
 	}
+	return $plugins;
 }
