@@ -4,8 +4,12 @@ class newsmanWorkerAvatar extends newsmanWorkerBase {
 
 	var $workerId;
 
-	function __construct($workerId) {
+	var $totalWait;
+
+	function __construct($workerId, $totalOpWaitTime = 15) {
 		parent::__construct();
+
+		$this->totalWait = $totalOpWaitTime * 1000000; //mks - 15 sec
 
 		$this->workerId = $workerId;
 		$this->u = newsmanUtils::getInstance();
@@ -29,7 +33,7 @@ class newsmanWorkerAvatar extends newsmanWorkerBase {
 	}
 
 	function _waitForResult($opId) {
-		$totalWait = 15000000; // mks // 10s
+		$totalWait = $this->totalWait; // mks // 10s
 		$count = 0; // 50 * 100 ms = 5s
 		$res = NULL;
 

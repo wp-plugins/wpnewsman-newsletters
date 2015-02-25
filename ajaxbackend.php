@@ -628,6 +628,7 @@ class newsmanAJAX {
 			$email = new newsmanEmail();	
 		}			
 
+		$email->remeberToField();
 		$email->to = json_decode($to);
 
 		$email->subject = $subj;
@@ -663,6 +664,7 @@ class newsmanAJAX {
 
 		$email = new newsmanEmail();
 
+		$email->remeberToField();
 		$email->to = json_decode($to);
 
 		$email->subject = $subj;
@@ -1053,10 +1055,15 @@ class newsmanAJAX {
 			$emails = newsmanEmail::findAll('`id` in '.$set.' and `status` != "inprogress"');
 		}
 
-		$this->u->log('[ajDeleteEmails]: found %d templates', count($emails));
+		$this->u->log('[ajDeleteEmails]: found %d emails', count($emails));
 
 		foreach ($emails as $eml) {
-			$this->u->tryRemoveTemplateAssets($eml->assetsPath);
+			try {
+				$this->u->tryRemoveTemplateAssets($eml->assetsPath);	
+			} catch ( Exception $e ) {
+				$this->u->log('[ajDeleteEmails] cannot email assets for email with id %s - %s', $eml->id, $e->getMessage());
+			}
+			
 			$eml->remove();
 			$r += 1;
 		}
@@ -1485,8 +1492,6 @@ class newsmanAJAX {
 		
 		$emailIds = $this->param('ids');
 		$EmailIdsArr = preg_split('/[^a-fA-F0-9]/', $emailIds, -1, PREG_SPLIT_NO_EMPTY);
-
-		$u->log('$EmailIdsArr: '.print_r($EmailIdsArr));
 
 		foreach ($EmailIdsArr as $emailId) {
 			$wrs = newsmanWorkerRecord::findAll('workerParams REGEXP \'"email_id":"'.$emailId.'"\'');
@@ -2535,8 +2540,8 @@ class newsmanAJAX {
 
 		// stopping workers
 		foreach ($wrs as $wr) {
-			if ( $wr ) {
-				$w = new newsmanWorkerAvatar($wr->workerId);
+			if ( $wr->workerId ) {
+				$w = new newsmanWorkerAvatar($wr->workerId, 5);
 				$u->log('ajStopBH %s', $wr->workerId);
 				$w->stop();				
 			}

@@ -21,6 +21,16 @@
 		"statusCode": "4.2.0"
 	},
 	{
+		"ruleName": "deferred",
+		"matcher": {
+			"parts.**.content": {
+				"$type": "RegExp",
+				"rx": "<[^<>]+@[^<>]+>... Deferred"
+			}
+		},
+		"statusCode": "4.2.0"
+	},
+	{
 		"matcher": { "parts.**.content": "Message will be retried for" },
 		"statusCode": "4.2.0"
 	},
@@ -34,7 +44,7 @@
 		"matcher": {
 			"parts.**.content": {
 				"$type": "RegExp",
-				"rx": "max message size exceeded|won't be able to receive this message because it's too large|exceeded storage allocation|mailbox ((is\\s+|)full|quota usage exceeded|size limit exceeded)|over\\s*quota|quota (exceeded|violation)|User has (exhausted allowed storage space|too many messages on the server)|User mailbox exceeds allowed size|mailfolder is full|user has Exceeded|not enough storage space|The user.*(s|)\\s*space has been used up|Status: 4.2.2 \\(Over quota\\)|Message for.*?would exceed mailbox quota",
+				"rx": "User mailbox exceeds allowed message count|Mail quota\\s+exceeded|storage allocation exceeded|is over the allowed quota|max message size exceeded|won't be able to receive this message because it's too large|exceeded storage allocation|mailbox ((is\\s+|)full|quota usage exceeded|size limit exceeded)|over\\s*quota|quota (exceeded|violation)|User has (exhausted allowed storage space|too many messages on the server)|User mailbox exceeds allowed size|mailfolder is full|user has Exceeded|not enough storage space|The user.*(s|)\\s*space has been used up|Status: 4.2.2 \\(Over quota\\)|Message for.*?would exceed mailbox quota",
 				"modifiers": "i"
 			}
 		},
@@ -51,11 +61,21 @@
 		"statusCode": "4.3.2"
 	},
 	{
+		"ruleName": "simple delay",
+		"matcher": {
+			"parts.**.content": {
+				"$type": "RegExp",
+				"rx": "Delivery to the following recipient(s|) has been delayed"
+			}
+		},
+		"statusCode": "4.3.2"
+	},
+	{
 		"ruleName": "queue-expired",
 		"matcher": {
 			"parts.**.content": {
 				"$type": "RegExp",
-				"rx": "delivery time expired|retry timeout exceeded|queue too long|to help resolve this issue, see DSN code 4.4.7 in Exchange",
+				"rx": "QUEUE.Expired|delivery time expired|retry timeout exceeded|queue too long|to help resolve this issue, see DSN code 4.4.7 in Exchange",
 				"modifiers": ""
 			}
 		},
@@ -66,7 +86,7 @@
 		"matcher": {
 			"parts.**.content": {
 				"$type": "match",
-				"value": "unable to deliver this message after 10 days"
+				"value": ["unable to deliver this message after 10 days", "Delivery expired (message too old)"]
 			}
 		},
 		"statusCode": "5.4.7"
@@ -86,7 +106,7 @@
 		"matcher": {
 			"parts.**.content": {
 				"$type": "RegExp",
-				"rx": "User \\S+ not found",
+				"rx": "(User \\S+ not found|550.*?@.*?doesn't exist)",
 				"modifiers": "i"
 			}
 		},
@@ -97,7 +117,7 @@
 		"matcher": {
 			"parts.**.content": {
 				"$type": "imatch",
-				"value": ["delivery to this address is restricted","550 Addresses failed:","Line too long","500  command unrecognized", "not listed in Domino Directory","Failed Recipient","Personne ne répond à cette adresse","550 Disabled","Remote host said: 553 RP:RDN","Unknown address error", "account is locked email bounced", "not a vaild email address", "no valid recipients","554 delivery error:","account has been disabled","account is unavailable","account not found","Address unknown","Address invalid","Address is unknown","Addressee unknown","Addressee invalid","Addressee is unknown","ADDRESS_NOT_FOUND","bad address","Bad destination mailbox address","does not exist","Email Address was not found","Excessive userid unknowns","Invalid account","Invalid address","Invalid or unknown virtual user","Invalid mailbox","Invalid recipient","Mailbox not found","Mailbox unavailable","No mail box available for this user","no mailbox here","No one with that email address here","no such address","no such email address","no such mail drop defined","no such mailbox","no such person at this address","no such recipient","no such user","not a known user","not a valid mailbox","not a valid user","not available","not exists","Recipient address rejected","Recipient not allowed","Recipient not found","Recipient rejected","Recipient unknown","server doesn't handle mail for that user","This account is disabled","This address no longer accepts mail","This email address is not known to this system","Unknown account","Unknown address or alias","Unknown email address","Unknown local part","Unknown or illegal alias","Unknown or illegal user","Unknown recipient","Unknown user","User suspended","user disabled","user doesn't exist in this server","user invalid","user is suspended","user is unknown","user not found","user not known","user unknown","valid RCPT command must precede DATA","was not found in LDAP server","We are sorry but the address is invalid","Unable to find alias user","not found in our email system","is not a valid mailbox","The e-mail address you entered couldn't be found","The recipient's e-mail address was not found in the recipient's e-mail system"]
+				"value": ["Sorry. Your message could not be delivered to:","There is no user by that name","mail exchanger not found","Bad destination email address","RESOLVER.ADR.RecipNotFound", "delivery to this address is restricted","550 Addresses failed:","Line too long","500  command unrecognized", "not listed in Domino Directory","Failed Recipient","Personne ne répond à cette adresse","550 Disabled","Remote host said: 553 RP:RDN","Unknown address error", "account is locked email bounced", "not a vaild email address", "no valid recipients","554 delivery error:","account has been disabled","account is unavailable","account not found","Address unknown","Address invalid","Address is unknown","Addressee unknown","Addressee invalid","Addressee is unknown","ADDRESS_NOT_FOUND","bad address","Bad destination mailbox address","does not exist","Email Address was not found","Excessive userid unknowns","Invalid account","Invalid address","Invalid or unknown virtual user","Invalid mailbox","Invalid recipient","Mailbox not found","Mailbox unavailable","No mail box available for this user","no mailbox here","No one with that email address here","no such address","no such email address","no such mail drop defined","no such mailbox","no such person at this address","no such recipient","no such user","not a known user","not a valid mailbox","not a valid user","not available","not exists","Recipient address rejected","Recipient not allowed","Recipient not found","Recipient rejected","Recipient unknown","server doesn't handle mail for that user","This account is disabled","This address no longer accepts mail","This email address is not known to this system","Unknown account","Unknown address or alias","Unknown email address","Unknown local part","Unknown or illegal alias","Unknown or illegal user","Unknown recipient","Unknown user","User suspended","user disabled","user doesn't exist in this server","user invalid","user is suspended","user is unknown","user not found","user not known","user unknown","valid RCPT command must precede DATA","was not found in LDAP server","We are sorry but the address is invalid","Unable to find alias user","not found in our email system","is not a valid mailbox","The e-mail address you entered couldn't be found","The recipient's e-mail address was not found in the recipient's e-mail system"]
 			}
 		},
 		"value": -1,
@@ -186,6 +206,17 @@
 		"statusCode": "5.4.6"
 	},
 	{
+		"ruleName": "too-many-hops 2",
+		"matcher": {
+			"headers.Subject": {
+				"$type": "RegExp",
+				"xrx": "Maximum\\s+hop\\s+count\\s+exceeded",
+				"rx": "DELIVERY FAILURE: Error transferring to 10.52.48.51; Maximum hop count  exceeded.  Message probably in a routing loop."
+			}
+		},
+		"statusCode": "5.4.6"
+	},
+	{
 		"//": "Symantec gateway detected spam",
 		"ruleName": "symantec-catcha-all-trap",
 		"matcher": {
@@ -228,7 +259,7 @@
 		"matcher": {
 			"parts.**.content": {
 				"$type": "imatch",
-				"value": ["not permitted to relay","domain isn't allowed to be relayed","This domain is not hosted here","Relaying denied. Proper authentication required","domain isn't in my list of allowed rcpthosts","Esta casilla ha expirado por falta de uso","host ?name is unknown","hostname is unknown","no relaying allowed","no such domain","not our customer","relay not permitted","Relay access denied","relaying denied","Relaying not allowed","This system is not configured to relay mail","Unable to relay","unrouteable mail domain","we do not relay"]
+				"value": ["unable to connect successfully to the destination mail server","User mailbox is not local","Bad destination host","not permitted to relay","domain isn't allowed to be relayed","This domain is not hosted here","Relaying denied. Proper authentication required","domain isn't in my list of allowed rcpthosts","Esta casilla ha expirado por falta de uso","host ?name is unknown","hostname is unknown","no relaying allowed","no such domain","not our customer","relay not permitted","Relay access denied","relaying denied","Relaying not allowed","This system is not configured to relay mail","Unable to relay","unrouteable mail domain","we do not relay"]
 			}
 		},
 		"statusCode": "5.1.2"
@@ -276,7 +307,12 @@
 		"statusCode": "5.4.4"
 	},
 	{
-		"matcher": { "parts.**.content": "Too many hops" },
+		"matcher": { 
+			"parts.**.content": {
+				"$type": "imatch",
+				"value": "Too many hops"
+			}
+		},
 		"statusCode": "5.4.6"
 	},
 	{
@@ -297,6 +333,36 @@
 		},
 		"statusCode": "4.7.1",
 		"msg": "One of recipient's servers refuses to accept emails with different MAIL FROM and FROM email addresses"
+	},
+	{
+		"ruleName": "Spam Arrest",
+		"matcher": {
+			"parts.**.content": {
+				"$type": "RegExp",
+				"rx": "Your Email to .*? has been blocked!!![\\s\\S]*Spam Arrest"
+			}
+		},
+		"statusCode": "4.7.1"
+	},
+	{
+		"ruleName": "Spam Arrest 2",
+		"matcher": {
+			"parts.**.content": {
+				"$type": "match",
+				"value": "Spam Arrest Sender Verification"
+			}
+		},
+		"statusCode": "4.7.1"
+	},
+	{
+		"ruleName": "Inbox.com Challenge/Response Spam Protection",
+		"matcher": {
+			"parts.**.content": {
+				"$type": "match",
+				"value": "Challenge/Response Spam Protection"
+			}
+		},
+		"statusCode": "4.7.1"
 	},	
 	{
 		"matcher": { "parts.**.content": "rejecting password protected file attachment" },
@@ -316,6 +382,16 @@
 		"matcher": { "parts.**.content": "550 DY-00" },
 		"statusCode": "5.7.1",
 		"extraMessage": "Sender has a dynamic IP address"
+	},
+	{
+		"ruleName": "Microsoft Exchange spam filter",
+		"matcher": { 
+			"parts.**.content": {
+				"$type": "match",
+				"value": "5.7.1 RESOLVER.RST.AuthRequired"
+			} 
+		},
+		"statusCode": "5.7.1"
 	},
 	{
 		"matcher": {
@@ -922,5 +998,81 @@
 			}
 		},
 		"email": "$1"
+	},	
+	{
+		"ruleName": "Generic permanent error",
+		"matcher": {
+			"parts.**.content": {
+				"$type": "RegExp",
+				"rx": "This is a permanent error.[\\s\\S]*The following address failed"
+			}
+		},
+		"statusCode": "5.0.0",
+		"value": -2
+	},
+	{
+		"ruleName": "Simple undelived",
+		"matcher": {
+			"headers.Subject": {
+				"$type": "match",
+				"value": "Returned mail: Unable to deliver mail"
+			}
+		},
+		"statusCode": "5.0.0",
+		"value": -2
+	},
+	{
+		"ruleName": "Domino error",
+		"matcher": {
+			"parts.**.content": {
+				"$type": "match",
+				"value": "Recipient's Domino Directory entry does not specify a valid Notes mail file"
+			}
+		},
+		"statusCode": "5.0.0"
+	},
+	{
+		"ruleName": "Generic transient",
+		"matcher": {
+			"parts.**.content": {
+				"$type": "match",
+				"value": "Delivery will continue to be attempted"
+			}
+		},
+		"statusCode": "4.0.0",
+		"value": -1
+	},
+	{
+		"ruleName": "Requires confirmation",
+		"matcher": {
+			"parts.**.content": {
+				"$type": "match",
+				"value": ["not on my list of approved senders", "only accepts email from people on a list of approved senders"]
+			}
+		},
+		"statusCode": "5.0.0",
+		"value": -1
+	},
+	{
+		"ruleName": "Recipient no longer employeed",
+		"matcher": {
+			"parts.**.content": {
+				"$type": "match",
+				"value": "Please be advised, the intended recipient of this email is no longer employed with us."
+			}
+		},
+		"statusCode": "5.0.0",
+		"value": -1
+	},
+	{
+		"ruleName": "Recipient no longer employeed",
+		"matcher": {
+			"parts.**.content": {
+				"$type": "match",
+				"value": "5.3.0 - Other mail system problem"
+			}
+		},
+		"statusCode": "5.3.0",
+		"value": -1
 	}
 ]

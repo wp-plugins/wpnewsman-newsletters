@@ -515,6 +515,21 @@ class newsmanUtils {
 		}
 	}
 
+	function hasColumn($tableName, $colName) {
+		global $wpdb;
+
+		$sql = "DESCRIBE $tableName";
+		$res = $wpdb->get_results($sql,ARRAY_A);		
+		$found = false;
+		foreach ($res as $row) {
+			if ( $row['Field'] === $colName ) {
+				$found = true;
+				break;
+			}
+		}
+		return $found;
+	}
+
 	function tableExists($tableName) {
 		global $wpdb;
 		return $wpdb->get_var("show tables like '".$tableName."'") === $tableName;
@@ -1138,12 +1153,15 @@ class newsmanUtils {
 		}
 	}	
 
-	public function delTree($dir) { 
-		$files = array_diff(scandir($dir), array('.','..')); 
-		foreach ($files as $file) { 
-			(is_dir($dir.DIRECTORY_SEPARATOR.$file)) ? $this->delTree($dir.DIRECTORY_SEPARATOR.$file) : unlink($dir.DIRECTORY_SEPARATOR.$file);
-		} 
-		return rmdir($dir); 
+	public function delTree($dir) {
+		if ( is_dir($dir) ) {
+			$files = array_diff(scandir($dir), array('.','..')); 
+			foreach ($files as $file) { 
+				(is_dir($dir.DIRECTORY_SEPARATOR.$file)) ? $this->delTree($dir.DIRECTORY_SEPARATOR.$file) : unlink($dir.DIRECTORY_SEPARATOR.$file);
+			} 
+			return rmdir($dir); 			
+		}
+		return false;
 	} 	
 
 	public function assetsDeletable($assetsPath) {
@@ -1372,21 +1390,28 @@ class newsmanUtils {
 		return $codeVersion > $storedVersion;
 	}
 
-	public function runUpdate() {
+	public function runUpdate($doUpdateAction = true) {
 		$updated = false;
 		$codeVersion = $this->versionToNum(NEWSMAN_VERSION);
 		$storedVersion = $this->versionToNum(get_option('newsman_version'));
+
+		$this->installNewsmanMuPlugin();
+
 		if ( $codeVersion > $storedVersion ) {
 			$updated = true;
 			require_once(NEWSMAN_PLUGIN_PATH.DIRECTORY_SEPARATOR."migration.php");
 			if ( function_exists('newsman_do_migration') ) {
-				newsman_do_migration();
+				try {
+					newsman_do_migration();	
+				} catch ( Exception $e ) {
+					$this->log('[MIGRATION] Exception: '.$e->getMessage());
+				}				
 			}			
-			do_action('wpnewsman_update');
+			if ( $doUpdateAction ) {
+				do_action('wpnewsman_update');	
+			}			
 			update_option('newsman_version', NEWSMAN_VERSION);
 		}
-
-		$this->installNewsmanMuPlugin();
 
 		return $updated;
 	}
@@ -1394,6 +1419,7 @@ class newsmanUtils {
 	public function installNewsmanMuPlugin() {
 		// $muBundledVersion = $this->versionToNum(NEWSMAN_MU_BUNDLED_VERSION);
 		// $muInstalledVersion = $this->versionToNum( defined('WPNEWSMAN_MU_VERSION') ? WPNEWSMAN_MU_VERSION : '0.0.0' );
+		$this->log('[installNewsmanMuPlugin]');
 
 		$pluginHeader = <<<NEWSMAN_PLUGIN_HEAD_TEMPLATE
 /*
@@ -1407,20 +1433,31 @@ Author URI: http://www.glocksoft.com
 NEWSMAN_PLUGIN_HEAD_TEMPLATE;
 
 		$muPluginsDir = WP_CONTENT_DIR.DIRECTORY_SEPARATOR.'mu-plugins';
+		$this->log('[installNewsmanMuPlugin] muPluginsDir: %s', $muPluginsDir);
 		if ( !is_dir($muPluginsDir) ) {
+			$this->log('[installNewsmanMuPlugin] making dir');
 			@mkdir($muPluginsDir, 0755, true);
 		}
 		$wpmuPluginFilename = $muPluginsDir.DIRECTORY_SEPARATOR.'wpnewsman-mu.php';
 		$wpmuPluginTpl = file_get_contents(NEWSMAN_PLUGIN_PATH.'/wpnewsman-mu-tpl');
+
+		$this->log('[installNewsmanMuPlugin] wpmuPluginFilename: %s', $wpmuPluginFilename);
+		$this->log('[installNewsmanMuPlugin] wpmuPluginTpl: %s', $wpmuPluginTpl);
 
 		// injecting plugin header
 		$wpmuPluginTpl = str_replace('{{PLUGIN_HEADER}}', $pluginHeader, $wpmuPluginTpl);
 
 		// injecting version
 		$wpmuPluginTpl = str_replace('{{WPNEWSMAN_MU_VERSION}}', NEWSMAN_MU_BUNDLED_VERSION, $wpmuPluginTpl);		
+		try {
+			file_put_contents($wpmuPluginFilename, $wpmuPluginTpl);
+		} catch ( Exception $e ) {
+			$this->log('[installNewsmanMuPlugin] file_put_contents error: %s', $e->getMessage());
+		}
 
-		@file_put_contents($wpmuPluginFilename, $wpmuPluginTpl);
-		return @file_exists($wpmuPluginFilename);
+		$exists = file_exists($wpmuPluginFilename);
+		$this->log('[installNewsmanMuPlugin] file exists: %s', var_export($exists, true));
+		return $exists;
 	}
 
 	public function uninstallNewsmanMuPlugin() {
@@ -1471,10 +1508,13 @@ NEWSMAN_PLUGIN_HEAD_TEMPLATE;
 			} else {
 				$theme = wp_get_theme();
 			}
+
+			if ( $theme && is_object($theme) ) {
+				$data['theme_name'] = $theme->get('Name');
+				$data['theme_version'] = $theme->get('Version');
+				$data['theme_uri'] = $theme->get('AuthorURI');				
+			}
 			
-			$data['theme_name'] = $theme->get('Name');
-			$data['theme_version'] = $theme->get('Version');
-			$data['theme_uri'] = $theme->get('AuthorURI');
 		} else {
 			$theme_data = get_theme_data( newsman_ensure_correct_path(TEMPLATEPATH.DIRECTORY_SEPARATOR.'style.css') );
 			$data['theme_name'] = $theme_data['Name'];

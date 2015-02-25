@@ -3168,23 +3168,39 @@ jQuery(function($){
 			$(document).on('click', '.newsman-email-delete', function(e){
 				e.preventDefault();
 				e.stopPropagation();
-				var emlId = $(e.target).closest('.newsman-email').attr('emlid');
+				$('.newsman-email.checked').removeClass('checked');
+				var emlId = $(e.target).closest('.newsman-email').addClass('checked').attr('emlid');
 				if ( emlId ) {
-					showModal('#newsman-modal-delete', function(mr, xmr){
-						if ( mr === 'ok' ) {							
-							$.ajax({
-								type: 'POST',
-								url: ajaxurl,
-								data: {
-									ids: emlId,
-									action: 'newsmanAjDeleteEmails'
-								}
-							}).done(function(data){
+					showDeleteDialog('#newsman-modal-delete', {
+						messages: {
+							areYouSureYouWantToDeleteXSelectedItems: 'Are you sure you want to delete selected email?',
+							areYouSureYouWantToDeleteXItemsMatchedSearchQSearchQuery: 'Are you sure you want to delete <b>{x}</b> emails matched <b>"{q}"</b> search query?',
+							areYouSureYouWantToDeleteXItems: 'Are you sure you want to delete this email?'
+						},
+						vars: {
+							x: 1,
+							q: ''
+						},
+						getCount: function(done){
+							done(null, 1);
+						},
+						result: function(mr, xmr){
+							if ( mr === 'ok' ) {
+								$.ajax({
+									type: 'POST',
+									url: ajaxurl,
+									data: {
+										ids: emlId,
+										action: 'newsmanAjDeleteEmails'
+									}
+								}).done(function(data){
 
-								showMessage(newsmanL10n.youHaveSuccessfullyDeletedSelectedEmails, 'success');
-								getEmails();
+									showMessage(newsmanL10n.youHaveSuccessfullyDeletedSelectedEmails, 'success');
+									getEmails();
 
-							}).fail(NEWSMAN.ajaxFailHandler);
+								}).fail(NEWSMAN.ajaxFailHandler);
+							}
+							return true;
 						}
 					});
 				}
@@ -3778,24 +3794,37 @@ jQuery(function($){
 				if ( !ids.length ) {
 					showMessage(newsmanL10n.pleaseMarkEmailsForDeletion);
 				} else {
-					showModal('#newsman-modal-delete', function(mr, xmr){
-						if ( mr === 'ok' ) {							
-							$.ajax({
-								type: 'POST',
-								url: ajaxurl,
-								data: {
-									ids: ids+'',
-									all: xmr.all ? '1' : '0',
-									action: 'newsmanAjDeleteEmails'
-								}
-							}).done(function(data){
+					showDeleteDialog('#newsman-modal-delete', {
+						messages: {
+							areYouSureYouWantToDeleteXSelectedItems: 'Are you sure you want to delete <b>{x}</b> selected emails?',
+							areYouSureYouWantToDeleteXItemsMatchedSearchQSearchQuery: 'Are you sure you want to delete <b>{x}</b> emails matched <b>"{q}"</b> search query?',
+							areYouSureYouWantToDeleteXItems: 'Are you sure you want to delete <b>{x}</b> emails?'
+						},
+						vars: {
+							x: ids.length,
+							q: ''
+						},
+						getCount: function(done){
+							done(null, ids.length);
+						},
+						result: function(mr, xmr){
+							if ( mr === 'ok' ) {
+								$.ajax({
+									type: 'POST',
+									url: ajaxurl,
+									data: {
+										ids: ids+'',
+										action: 'newsmanAjDeleteEmails'
+									}
+								}).done(function(data){
 
-								showMessage(newsmanL10n.youHaveSuccessfullyDeletedSelectedEmails, 'success');
-								getEmails();
+									showMessage(newsmanL10n.youHaveSuccessfullyDeletedSelectedEmails, 'success');
+									getEmails();
 
-							}).fail(NEWSMAN.ajaxFailHandler);
+								}).fail(NEWSMAN.ajaxFailHandler);
+							}
+							return true;
 						}
-
 					});
 				}
 			});			

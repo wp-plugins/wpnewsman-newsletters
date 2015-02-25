@@ -688,7 +688,7 @@ class newsmanStorable {
 			}
 
 			if ( !in_array($md['name'], $tblCols) ) { // new column
-				$u->log('[ensureDefinition] on table %s: column %s is missing. Adding column...', static::getTableName(), $td['name']);
+				$u->log('[ensureDefinition] on table %s: column %s is missing. Adding column...', static::getTableName(), $md['name']);
 				static::addColumn($md['name'], $md);
 			}
 		}
@@ -882,7 +882,7 @@ class newsmanStorable {
 		$this->__doLoad__ = true;
 	}
 
-	private function __endLoad__() {
+	public function __endLoad__() {
 		$this->__doLoad__ = false;
 	}
 		

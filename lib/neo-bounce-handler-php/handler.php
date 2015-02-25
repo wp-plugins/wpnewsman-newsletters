@@ -190,6 +190,9 @@ class NBH {
 		$matchedRules = array();
 
 		$hasDebugThisRule = false;
+		if ( !is_array($this->rules) ) {
+			throw new Exception('Rules is not an array. '.var_export($this->rules, true));
+		}
 		foreach ($this->rules as $rule) {
 			$hasDebugThisRule = isset($rule['debugThis']) && $rule['debugThis'];
 		}
@@ -232,7 +235,7 @@ class NBH {
 
 					// $this->log('$v: ');
 					// $this->log(var_export($v, true));
-					// $this->log();
+					//$this->log();
 
 					// $this->log('$matchValue: ');
 					// $this->log(print_r($matchValue, true));
@@ -267,10 +270,15 @@ class NBH {
 								$m++;
 							}
 						} else {
-							$matched = preg_match($regexp, $v, $rxMatchResults);
+							if ( is_object($v) ) {
+								$matched = preg_match($regexp, $v->RAW, $rxMatchResults);
+							} else {
+								$matched = preg_match($regexp, $v, $rxMatchResults);	
+							}
+							
 							if ( $debugRule ) {
-								$this->log('rxMatchResults');
-								$this->log($rxMatchResults);
+								$this->log("rxMatchResults\n");
+								$this->log(var_export($rxMatchResults, true));
 							}
 							if ( $matched ) {
 								$m++;

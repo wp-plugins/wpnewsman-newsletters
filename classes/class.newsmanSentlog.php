@@ -68,6 +68,7 @@ class newsmanSentlog {
 	}
 
 	public function initEmailRecipients($emailId, $listName) {
+		if ( !$emailId ) { return; } 
 		if ( !is_string($listName) ) {
 			$list = $listName;
 		} else {
@@ -75,7 +76,11 @@ class newsmanSentlog {
 			$list = newsmanList::findOne('name = %s', array($ln->name) );
 		}
 
+		// $ln = $this->u->parseListName($listName);
+		// $this->u->log('[getSinglePendingFromList] list name: %s', $ln->name);
 		if ( !$list ) { return; }
+
+		$list->selectionType = $ln->selectionType;
 
 		$sql = "
 			INSERT IGNORE INTO `$this->tableName`(
@@ -119,11 +124,14 @@ class newsmanSentlog {
 		$ln = $this->u->parseListName($listName);
 
 		$list = newsmanList::findOne('name = %s', array($ln->name) );
+		// $this->u->log('[getSinglePendingFromList] list name: %s', $ln->name);
 
 		$list->selectionType = $ln->selectionType;
 
+		// $this->u->log('[getSinglePendingFromList] list selectionType: %s', $ln->selectionType);
+
 		if ( !$list ) {
-			$this->u->log('[getPendingFromList] List with the name %s is not found', $listName);
+			$this->u->log('[getSinglePendingFromList] List with the name %s is not found', $ln->name);
 			die("List with the name $listName is not found");
 		}
 

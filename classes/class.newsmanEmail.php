@@ -52,6 +52,11 @@ class newsmanEmail extends newsmanStorable {
 		$this->created = date('Y-m-d H:i:s');		
 	}
 
+	public function __endLoad__() {
+		parent::__endLoad__();
+		$this->remeberToField();		
+	}	
+
 	function remeberToField() {
 		$this->_oldToField = json_encode($this->to);
 	}
@@ -63,7 +68,7 @@ class newsmanEmail extends newsmanStorable {
 			$this->ucode = $u->base64EncodeU( sha1($this->created.$this->subject.microtime(), true) );
 		}
 
-		if ( $this->_oldToField != $this->to ) {
+		if ( $this->_oldToField != json_encode($this->to) ) {
 			$u = newsmanUtils::getInstance();
 			$u->log('[email::save] To: field changed from %s to %s', $this->_oldToField, json_encode($this->to));
 

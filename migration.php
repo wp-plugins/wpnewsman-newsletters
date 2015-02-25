@@ -457,6 +457,8 @@ $newsman_changes[] = array(
 );
 
 function newsman_migration_recheck_table_definitions() {
+	$u = newsmanUtils::getInstance();
+	$u->log('[migration] newsman_migration_recheck_table_definitions');
 	$g = newsman::getInstance()->ensureEnvironment();
 }
 
@@ -503,6 +505,7 @@ $newsman_changes[] = array(
 function newsman_migration_add_columns_to_sentlog() {
 	global $wpdb;
 	$sl = newsmanSentlog::getInstance();
+	$u = newsmanUtils::getInstance();
 	$tbl = $sl->tableName;
 
 	try {
@@ -512,8 +515,10 @@ function newsman_migration_add_columns_to_sentlog() {
 	}
 
 	try {	
-		$sql = "ALTER IGNORE TABLE $tbl ADD COLUMN `status` TINYINT(1) unsigned NOT NULL DEFAULT 0";
-		$res = $wpdb->query($sql);	
+		if ( !$u->hasColumn($tbl, 'status') ) {
+			$sql = "ALTER IGNORE TABLE $tbl ADD COLUMN `status` TINYINT(1) unsigned NOT NULL DEFAULT 0";
+			$res = $wpdb->query($sql);			
+		}
 	} catch ( Exception $e ) {
 	}
 

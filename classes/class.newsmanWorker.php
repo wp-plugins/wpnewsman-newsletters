@@ -165,6 +165,42 @@ class newsmanWorker extends newsmanWorkerBase {
 	 * STATIC functions                                    *
 	 *******************************************************/
 
+	static function makeRequest($url, $reqOptions) {
+		$u = newsmanUtils::getInstance();
+		
+		$retries = 5;
+		$retryTimeoutSec = 5;
+
+		$reqOptions['method'] = isset($reqOptions['method']) ? $reqOptions['method']  : 'POST';
+
+		while ( $retries > 0 ) {
+			$r = wp_remote_request(
+				$url,
+				$reqOptions
+			);
+			if ( is_wp_error($r)  ) {
+				$u->log('[newsmanWorker::makeRequest] '.print_r($r , true));
+				$httpErrors = $r->errors['http_request_failed'];
+				$shouldRetry = false;
+				foreach ($httpErrors as $err) {
+					if ( $err === 'name lookup timed out' ) {							
+						$shouldRetry = true;
+					}
+				}
+
+				$u->log('[newsmanWorker::makeRequest] Retrying request in %s sec. %s retries left.', $retryTimeoutSec, $retries);
+				if ( !$shouldRetry ) {
+					break;
+				}
+				$retries--;
+				sleep($retryTimeoutSec);
+			} else {
+				break;
+			}				
+		}
+		return $r;
+	}
+
 	static function fork($params = null) {
 		if ( $params == null ) {
 			$params = $_REQUEST;
@@ -183,7 +219,7 @@ class newsmanWorker extends newsmanWorkerBase {
 			$reqOptions = array();	
 		} else {
 			$reqOptions = array(
-				'timeout' => 0.01,
+				'timeout' => 0.1,
 				'blocking' => false				
 			);
 		}		
@@ -204,12 +240,11 @@ class newsmanWorker extends newsmanWorkerBase {
 
 			$u->log('CALLING '.$pokebackSrvUrl);
 
-			$r = wp_remote_get(
-				$pokebackSrvUrl,
-				$reqOptions
-			);
+			$reqOptions['method'] = 'GET';
 
-			$u->log('FORK RES: %s', print_r($r, true));
+			$r = static::makeRequest($pokebackSrvUrl, $reqOptions);
+
+			$u->log('PB FORK RES: %s', print_r($r, true));
 			
 		} else {
 			$u->log('[newsmanWorker::fork] NORMAL MODE');
@@ -221,12 +256,8 @@ class newsmanWorker extends newsmanWorkerBase {
 
 			$reqOptions['body'] = $params;
 
-			$r = wp_remote_post(
-				$workerURL,
-				$reqOptions
-			);
-
-			$u->log('[newsmanWorker::fork] '.print_r($r , true));
+			$r = static::makeRequest($workerURL, $reqOptions);
+			$u->log('FORK RES: %s', print_r($r, true));
 		}
 		return $params['workerId'];
 	}

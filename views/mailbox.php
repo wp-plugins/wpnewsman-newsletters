@@ -151,20 +151,6 @@
 		</div>
 	</div>
 
-	<div class="modal dlg" id="newsman-modal-delete" style="display: none;">
-		<div class="modal-header">
-			<button class="close" data-dismiss="modal">×</button>
-			<h3><?php _e('Please, confirm...', NEWSMAN); ?></h3>
-		</div>
-		<div class="modal-body">
-			<p><?php _e('Are you sure you want to delete selected emails?', NEWSMAN); ?></p>
-		</div>
-		<div class="modal-footer">
-			<a class="btn" mr="cancel"><?php _e('Close', NEWSMAN); ?></a>
-			<a class="btn btn-danger" mr="ok"><?php _e('Delete', NEWSMAN); ?></a>
-		</div>
-	</div>
-
 	<div class="modal" id="newsman-modal-chstatus" style="display: none;">
 		<div class="modal-header">
 			<button class="close" data-dismiss="modal">×</button>

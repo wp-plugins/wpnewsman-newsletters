@@ -1360,8 +1360,12 @@ class newsman {
 		$lists = newsmanList::findAll();
 		foreach ($lists as $list) {
 			if ( $list->name == '_Test' ) { continue; }
-			$sql = "DELETE FROM $list->tblSubscribers WHERE status = ".NEWSMAN_SS_UNCONFIRMED." and DATE_ADD(`ts`, INTERVAL 7 DAY) <= CURDATE()";	
-			$result = $wpdb->query($sql);
+			if ( $this->utils->tableExists($list->tblSubscribers) ) {
+				$sql = "DELETE FROM $list->tblSubscribers WHERE status = ".NEWSMAN_SS_UNCONFIRMED." and DATE_ADD(`ts`, INTERVAL 7 DAY) <= CURDATE()";	
+				$result = $wpdb->query($sql);				
+			} else {
+				$list->remove();
+			}
 		}	
 		
 	}
@@ -1902,7 +1906,9 @@ class newsman {
 
 		$this->wm->clearWorkers();
 
+		$this->utils->log('[onActivate] ensureEnvironment');
 		$this->ensureEnvironment();
+		$this->utils->log('[onActivate] install');
 		$this->install();
 
 		// adding capability
@@ -1911,6 +1917,7 @@ class newsman {
 			$role->add_cap('newsman_wpNewsman');
 		}
 
+		$this->utils->log('[onActivate] onInit');
 		$this->onInit(true);
 		flush_rewrite_rules();
 	}
@@ -1953,7 +1960,7 @@ class newsman {
 
 		$lists = newsmanList::findAll();
 
-		foreach ($lists as $list) {			
+		foreach ($lists as $list) {
 			newsmanStorable::$table = preg_replace('/^'.$this->utils->preg_quote($wpdb->prefix).'/i', '', $list->tblSubscribers);
 			newsmanStorable::$props = array(
 				'id' => 'autoinc',
@@ -1966,7 +1973,7 @@ class newsman {
 				'bounceStatus' => 'text'
 			);
 			newsmanStorable::ensureDefinition();
-		}		
+		}
 
 		newsmanStorable::$table = $nsTable;
 		newsmanStorable::$props = $nsProps;
@@ -2039,6 +2046,13 @@ class newsman {
 		new newsmanAJAX();
 		do_action('wpnewsman_init_ajax');
 
+		if ( isset($_REQUEST['NEWSMAN_FORCE_UPDATE']) ) {
+			if ( current_user_can('manage_options') && current_user_can('newsman_wpNewsman') ) {
+				$this->utils->runUpdate(false);			
+				wp_die('Newsman Forced Update Done');
+			}
+		}
+
 		// if ( !empty($_POST) ) {
 		// 	echo "POST REQUEST";
 		// 	print_r($_POST);
@@ -2084,7 +2098,6 @@ class newsman {
 		}
 
 		if ( preg_match('/wpnewsman-pokeback\/(run-scheduled|run-bounced-handler|mailman|check-workers)/i', $_SERVER['REQUEST_URI'], $matches) ) {
-			$this->utils->log('wpnewsman-pokeback %s', $matches[1]);	
 			switch ( $matches[1] ) {
 				case 'run-scheduled':
 					if ( !isset($_REQUEST['emlucode']) || !$_REQUEST['emlucode'] ) {

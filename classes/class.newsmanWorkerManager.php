@@ -28,7 +28,7 @@ class newsmanWorkerManager {
 		$this->options = newsmanOptions::getInstance();
 
 		//newsman_workers_check_event
-		//add_action('newsman_workers_check_event', array($this, 'pokeWorkers'));
+		add_action('newsman_workers_check_event', array($this, 'pokeWorkers'));
 	}
 
 	// singleton instance 
@@ -152,6 +152,12 @@ class newsmanWorkerManager {
 	public function clearWorkers() {
 		global $wpdb;
 		$tbl = newsmanWorkerRecord::$table;
-		return $wpdb->query("truncate table $tbl") === 1;
+		$this->utils->log('[clearWorkers]');
+		if ( $this->utils->tableExists($tbl) ) {
+			$this->utils->log('[clearWorkers] truncating %s', $tbl);
+			return $wpdb->query("truncate table $tbl") === 1;	
+		} else {
+			$this->utils->log('[clearWorkers] table %s does not exist', $tbl);
+		}
 	}
 }

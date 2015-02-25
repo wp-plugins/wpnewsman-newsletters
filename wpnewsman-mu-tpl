@@ -5,29 +5,8 @@ define('WPNEWSMAN_MU_VERSION', '{{WPNEWSMAN_MU_VERSION}}');
 
 define('NEWSMAN_AJAX_REQUEST', isset( $_REQUEST['action'] ) && strpos($_REQUEST['action'], 'newsmanAj') !== false);
 
-function wpnewsman_ensure_correct_plugins_order($plugins) {
-		$liteId = null;
-		$proId = null;
-
-	foreach ($plugins as $i => $name) {
-		if ( in_array($name, array( 'wpnewsman/wpnewsman.php', 'wpnewsman-newsletters/wpnewsman.php' )) ) {
-			$liteId = $i;
-		} else if ( $name === 'wpnewsman-pro/wpnewsman-pro.php' ) {
-			$proId = $i;
-		}		
-	}
-
-	if ( $liteId !== null && $proId !== null && $proId < $liteId ) {
-		$pro = $plugins[$proId];
-		$plugins[$proId] = $plugins[$liteId];
-		$plugins[$liteId] = $pro;
-	}
-
-	return $plugins;
-}
-
 if ( isset($_REQUEST['newsman_worker_fork']) || NEWSMAN_AJAX_REQUEST ) {
-
+	
 	add_filter( 'option_active_plugins', 'wpnewsman_disable_other_plugins' );
 
 	function wpnewsman_disable_other_plugins($plugins) {
@@ -43,8 +22,6 @@ if ( isset($_REQUEST['newsman_worker_fork']) || NEWSMAN_AJAX_REQUEST ) {
 				$whitelisted_plugins[] = $name;
 		}
 
-		return wpnewsman_ensure_correct_plugins_order($whitelisted_plugins);
+		return $whitelisted_plugins;
 	}
-} else {
-	add_filter( 'option_active_plugins', 'wpnewsman_ensure_correct_plugins_order' );
 }
