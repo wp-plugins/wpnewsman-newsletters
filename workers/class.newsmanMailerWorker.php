@@ -133,22 +133,16 @@ class newsmanMailerWorker extends newsmanWorker {
 		$u->log('[launchSender] getTransmissions while loop');
 		while ( $t = $tStreamer->getTransmission() ) {
 
-			//$u->log('[launchSender] got transmission');
 			$this->processMessages();
 
-			if ( $this->stopped ) { // checks with file_exists(), IO operation
+			if ( $this->stopped ) {
+				$t->setStaus(NEWSMAN_TS_PENDING);
 				break;
 			}
-
-			//$u->log('[launchSender] setting transmission status to SENDING');
-			$t->setStaus(NEWSMAN_TS_SENDING);
-
-			// TODO: check BH list
 
 			$addrArr = explode('@', $t->email);
 			$domain = $addrArr[1];
 
-			//$u->log('[launchSender] checking blocked domain list...');
 			$blockedDomain = newsmanBlockedDomain::findOne('domain = %s', array($domain));
 
 			if ( $blockedDomain ) {
@@ -156,8 +150,6 @@ class newsmanMailerWorker extends newsmanWorker {
 				$t->setError(NEWSMAN_ERR_DOMAIN_BLOCKED_BY_BH, 'Domain blocked by BH');
 				continue;
 			}
-
-			//$u->log('[launchSender] domain is not blocked. continue sending');
 
 			$newsman_current_list = $t->list;
 

@@ -902,9 +902,6 @@ class newsman {
 		$sl = newsmanSentlog::getInstance();
 		$wpdb->query("DROP TABLE IF EXISTS ".$sl->tableName);
 
-		$tstmps = newsmanTimestamps::getInstance();
-		$tstmps->dropTable();
-
 		$pages = $this->options->get('activePages');
 		foreach ($pages as $pageId) {
 			wp_delete_post( $pageId, true );
@@ -1906,6 +1903,9 @@ class newsman {
 
 		$this->wm->clearWorkers();
 
+		// clenup message queue table
+		newsmanWorkerBase::cleanupTable();
+
 		$this->utils->log('[onActivate] ensureEnvironment');
 		$this->ensureEnvironment();
 		$this->utils->log('[onActivate] install');
@@ -1982,6 +1982,20 @@ class newsman {
 	public function onDeactivate() {
 
 		$this->unscheduleEvents();
+		$this->wm->disableWorkersCheck();
+
+
+		$locks = newsmanLocks::getInstance();
+		$locks->clearLocks();
+
+		$this->wm->clearWorkers();
+
+		$emails = newsmanEmail::findAll('status = "pending" OR status = "inprogress"');
+
+		foreach ($emails as $email) {
+			$email->status = 'stopped';
+			$email->save();
+		}
 
 		// removing capability
 		$role = get_role('administrator');

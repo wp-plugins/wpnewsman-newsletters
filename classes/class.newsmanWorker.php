@@ -48,7 +48,7 @@ class newsmanWorker extends newsmanWorkerBase {
 		}		
 
 		$this->ttl = $timeToLive;
-		$this->stoptime = time()+$timeToLive-4;
+		$this->stoptime = time()+$timeToLive-10;
 
 		$this->wm = newsmanWorkerManager::getInstance();
 	}
@@ -97,7 +97,6 @@ class newsmanWorker extends newsmanWorkerBase {
 		}
 
 		$this->processMessages();
-		$this->clearTimestamp();
 
 		if ( $this->respawnonexit ) {
 			$this->fork(array_merge($_REQUEST, array( 'respawn' => '1' )));			
@@ -108,17 +107,8 @@ class newsmanWorker extends newsmanWorkerBase {
 	 * Message Loop Functions	 
 	 *******************************************************/
 
-	public function setTimestamp() {
-		$t = newsmanTimestamps::getInstance();
-		$t->setTS($this->workerId);
-	}
-
-	public function clearTimestamp() {
-		$t = newsmanTimestamps::getInstance();
-		$t->deleteTS($this->workerId);
-	}
-
 	public function processMessages() {		
+
 		if ( !$this->stopped && time() >= $this->stoptime ) {
 			$this->u->log('[newsman worker] stoptime %s', $this->stoptime);
 			$this->respawnonexit = true;
@@ -135,8 +125,6 @@ class newsmanWorker extends newsmanWorkerBase {
 				return;
 			}
 		}
-
-		$this->setTimestamp();
 
 		$sql = "SELECT * FROM $this->_table WHERE `workerId` = %s AND `processed` = 0";
 		$sql = $this->_db->prepare($sql, $this->workerId);
@@ -210,7 +198,7 @@ class newsmanWorker extends newsmanWorkerBase {
 
 		$u = newsmanUtils::getInstance();
 
-		$workerURL = NEWSMAN_PLUGIN_URL.'/wpnewsman-worker-fork';
+		$workerURL = get_bloginfo('wpurl').'/wp-newsman-worker-fork.php';
 		
 		$params['newsman_worker_fork'] = get_called_class();
 		$params['workerId'] = sprintf( '%x', time() ).rand(1,100);

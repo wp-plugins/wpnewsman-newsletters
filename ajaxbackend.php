@@ -818,7 +818,10 @@ class newsmanAJAX {
 			return;
 		}
 
-		$eml->remeberToField();
+		//$eml->remeberToField();
+		if ( $key === 'to' ) {
+			$value = json_decode($value);
+		}
 		$eml->$key = $value;
 		$eml->save();
 		$this->respond(true, 'success');
@@ -1524,6 +1527,10 @@ class newsmanAJAX {
 		$ids = $this->param('ids');
 		$set = $this->u->jsArrToMySQLSet($ids);	
 		
+		if ( $set === '()' ) {
+			return $this->respond(false, __('Cannot resume emails MySQL set for '.$ids.' is empty.', NEWSMAN));
+		}
+
 		$emails = newsmanEmail::findAll('(status = "stopped" OR status = "error") AND id in '.$set);
 
 		foreach ($emails as $email) {

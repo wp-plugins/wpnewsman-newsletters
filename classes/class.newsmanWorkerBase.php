@@ -25,7 +25,7 @@ class newsmanWorkerBase {
 					`result` text NOT NULL DEFAULT '',
 					PRIMARY KEY (`id`),
 							KEY (`workerId`)
-					) CHARSET=utf8";
+					) CHARSET=utf8 ENGINE=InnoDB";
 
 			$result = $this->_db->query($sql);			
 		}
@@ -36,9 +36,18 @@ class newsmanWorkerBase {
 		return $wpdb->query("DROP TABLE IF EXISTS ".$wpdb->prefix."newsman_mqueue");
 	}	
 
-	private function tableExists() {
-		$sql = $this->_db->prepare("show tables like '%s';", $this->_table);
-		return $this->_db->get_var($sql) == $this->_table;
+	static function tableExists() {
+		global $wpdb;
+		$table = $wpdb->prefix."newsman_mqueue";
+		$sql = $wpdb->prepare("show tables like '%s';", $table);
+		return $wpdb->get_var($sql) == $table;
+	}
+
+	static function cleanupTable() {
+		global $wpdb;
+		if ( self::tableExists() ) {
+			return $wpdb->query("TRUNCATE TABLE ".$wpdb->prefix."newsman_mqueue");		
+		}		
 	}
 
 	/**

@@ -37,7 +37,7 @@ class newsmanLocks {
 					`locked` tinyint(1) NOT NULL DEFAULT 0,
 					PRIMARY KEY  (`id`),
 					UNIQUE KEY (`name`)
-					) CHARSET=utf8";
+					) CHARSET=utf8 ENGINE=InnoDB";
 
 			$result = $this->db->query($sql);			
 		}

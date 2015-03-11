@@ -4,22 +4,6 @@
  * Newsman Worker Manager
  */
 
-class newsmanWorkerRecord extends newsmanStorable {
-	static $table = 'newsman_workers';
-	static $props = array(
-		'id' => 'autoinc',
-		'workerId' => 'string',
-		'workerClass' => 'string',
-		'workerParams' => 'text',
-		'started' => 'int',
-		'ttl' => 'int' // in seconds
-	);
-
-	static $keys = array(
-		'workerId' => array( 'cols' => array( 'workerId' ) )
-	);
-}
-
 class newsmanWorkerManager {
 
 	function __construct() {
@@ -58,7 +42,7 @@ class newsmanWorkerManager {
 
 		$this->utils->log('[addWorker] newsmanWorkerRecord count %s', $c);
 
-		if ( $c > 1 ) {
+		if ( $c >= 1 ) {
 			$this->enableWorkersCheck();
 		}
 	}
@@ -90,7 +74,7 @@ class newsmanWorkerManager {
 
 			$running = $w->isRunning();
 			$u->log('[pokeWorkers] workerPid('.$w->workerId.') -> isAlive: '.var_export($running, true));
-			if ( !$running ) {
+			if ( $running === null ) {
 				$workerClass = $wr->workerClass;
 				$u->log('Found dead worker %s(%s). Trying to respawn.', $workerClass, $wr->workerId);
 
@@ -104,9 +88,9 @@ class newsmanWorkerManager {
 		do_action('newsman_poke_workers');
 	}
 
-	private function enableWorkersCheck() {
+	public function enableWorkersCheck() {
 
-		$this->utils->log('[enableWorkersCheck]');
+		$this->utils->log('[enableWorkersCheck] PB: %s', var_export($this->options->get('pokebackMode'), true));
 		if ( $this->options->get('pokebackMode') ) {
 
 			$pokebackSrvUrl = WPNEWSMAN_POKEBACK_URL.'/schedule/?'.http_build_query(array(
@@ -115,21 +99,29 @@ class newsmanWorkerManager {
 				'time' => 'every 1 minute'
 			));
 
+			$this->utils->log('[enableWorkersCheck]: %s', $pokebackSrvUrl);
+
 			$r = wp_remote_get(
 				$pokebackSrvUrl,
 				array(
-					'timeout' => 0.01,
-					'blocking' => false
+					'timeout' => 5,
+					'blocking' => true
 				)
 			);
+
+			$this->utils->log('[enableWorkersCheck]: %s', var_export($r, true));
+
+			return $r['body'] === 'ok';
+
 		} else {
 			if ( !wp_next_scheduled('newsman_workers_check_event') ) {
 				wp_schedule_event( time(), '1min', 'newsman_workers_check_event');
 			}			
+			return true;
 		}
 	}
 
-	private function disableWorkersCheck() {
+	public function disableWorkersCheck() {
 		$this->utils->log('[disableWorkersCheck]');
 		if ( $this->options->get('pokebackMode') ) {		
 			$pokebackSrvUrl = WPNEWSMAN_POKEBACK_URL.'/unschedule/?'.http_build_query(array(
@@ -137,21 +129,30 @@ class newsmanWorkerManager {
 				'url' => get_bloginfo('wpurl').'/wpnewsman-pokeback/check-workers/'
 			));
 
+			$this->utils->log('[disableWorkersCheck]: %s', $pokebackSrvUrl);
+
 			$r = wp_remote_get(
 				$pokebackSrvUrl,
 				array(
-					'timeout' => 0.01,
-					'blocking' => false
+					'timeout' => 5,
+					'blocking' => true
 				)
 			);
+
+			$this->utils->log('[disableWorkersCheck]: %s', var_export($r, true));
+			if ( is_wp_error($r) ) {
+				return false;
+			}
+			return $r['body'] === 'ok';
 		} else {
 			wp_clear_scheduled_hook('newsman_workers_check_event');
+			return true;
 		}
-	}	
+	}
 
 	public function clearWorkers() {
 		global $wpdb;
-		$tbl = newsmanWorkerRecord::$table;
+		$tbl = newsmanWorkerRecord::getTableName();
 		$this->utils->log('[clearWorkers]');
 		if ( $this->utils->tableExists($tbl) ) {
 			$this->utils->log('[clearWorkers] truncating %s', $tbl);

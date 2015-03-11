@@ -98,7 +98,7 @@ class newsmanList extends newsmanStorable {
 					`bounceStatus` TEXT,
 					UNIQUE (`email`),
 					PRIMARY KEY  (`id`)
-					) CHARSET=utf8";
+					) CHARSET=utf8 ENGINE=InnoDB";
 			$result = $wpdb->query($sql);
 		}
 	}

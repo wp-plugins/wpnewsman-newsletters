@@ -1419,7 +1419,9 @@ class newsmanUtils {
 	public function installNewsmanMuPlugin() {
 		// $muBundledVersion = $this->versionToNum(NEWSMAN_MU_BUNDLED_VERSION);
 		// $muInstalledVersion = $this->versionToNum( defined('WPNEWSMAN_MU_VERSION') ? WPNEWSMAN_MU_VERSION : '0.0.0' );
-		$this->log('[installNewsmanMuPlugin]');
+		$skip = defined('NEWSMAN_NO_MU_PLUGIN') && NEWSMAN_NO_MU_PLUGIN;
+		$this->log('[installNewsmanMuPlugin] skip installation '.var_export($skip, true));
+		if ( $skip ) { return false; }
 
 		$pluginHeader = <<<NEWSMAN_PLUGIN_HEAD_TEMPLATE
 /*

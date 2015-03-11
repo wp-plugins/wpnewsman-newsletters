@@ -536,7 +536,7 @@ $newsman_changes[] = array(
 );
 
 function newsman_stop_all_pending_emails() {
-	$emails = newsmanEmail::findAll('status = "pending"');
+	$emails = newsmanEmail::findAll('status = "pending" OR status = "inprogress"');
 
 	foreach ($emails as $email) {
 		$email->status = 'stopped';
@@ -582,4 +582,67 @@ $newsman_changes[] = array(
 );
 
 
+
+function newsman_migration_remove_timestamps_table() {
+	global $wpdb;
+	$table = $wpdb->prefix.'newsman_timestamps';
+	$wpdb->query("DROP TABLE `$table`");		
+}
+
+$newsman_changes[] = array(
+	'introduced_in' => $u->versionToNum('1.8.12-alpha-1'),
+	'func' => 'newsman_migration_remove_timestamps_table'
+);
+
+
+function newsman_migration_convert_all_tables_to_innodb() {
+	global $wpdb;
+	$sql = 'SHOW TABLES LIKE "%_newsman_%"';
+	$rows = $wpdb->get_col($sql);
+	foreach ($rows as $tbl) {
+		try {
+			$sql = "ALTER IGNORE TABLE $tbl ENGINE=InnoDB";
+			$wpdb->query($sql);
+		} catch ( Exception $e ) {
+		}
+	}
+}
+
+$newsman_changes[] = array(
+	'introduced_in' => $u->versionToNum('1.8.12-alpha-1'),
+	'func' => 'newsman_migration_convert_all_tables_to_innodb'
+);
+
+
+function newsman_migration_recreate_sentlog_indexes() {
+	global $wpdb;
+
+	$sql = 'SHOW INDEXES IN `'.$wpdb->prefix.'newsman_sentlog`';
+	$res = $wpdb->get_results($sql, ARRAY_A);
+	if ( is_array($res) ) {
+		foreach ($res as $row) {
+			if ( $row['Key_name'] !== 'PRIMARY' ) {
+				$wpdb->query('DROP INDEX '.$row['Key_name'].' ON `'.$wpdb->prefix.'newsman_sentlog`');
+			}
+		}		
+	}
+
+	$indexes = array(
+		'KEY emailIdIdx (`emailId`)',
+		'KEY emailIdStatusIdx (`emailId`, `status`)',
+		'KEY emailIdListIdIdx (`emailId`,`listId`)',
+		'KEY recipientIdIdx (`recipientId`)',
+		'UNIQUE KEY emailIdListIdRecIdIdx (`emailId`,`listId`, `recipientId`)'
+	);
+
+	foreach ($indexes as $idx) {
+		$sql = 'ALTER IGNORE TABLE `'.$wpdb->prefix.'newsman_sentlog` ADD '.$idx;
+		$wpdb->query($sql);
+	}
+}
+
+$newsman_changes[] = array(
+	'introduced_in' => $u->versionToNum('1.8.12-alpha-1'),
+	'func' => 'newsman_migration_recreate_sentlog_indexes'
+);
 

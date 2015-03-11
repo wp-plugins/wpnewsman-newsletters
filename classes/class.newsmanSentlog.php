@@ -49,11 +49,18 @@ class newsmanSentlog {
 				`errorCode` int(10) unsigned NOT NULL DEFAULT 0,
 				`status` TINYINT(1) unsigned NOT NULL DEFAULT 0,
 				PRIMARY KEY  (`id`),
-				KEY (`emailId`,`listId`),
-				KEY (`recipientId`),
-				UNIQUE KEY (`emailId`,`listId`, `recipientId`)
+				KEY emailIdIdx (`emailId`),
+				KEY emailIdStatusIdx (`emailId`, `status`),
+				KEY emailIdListIdIdx (`emailId`,`listId`),
+				KEY recipientIdIdx (`recipientId`),
+				UNIQUE KEY emailIdListIdRecIdIdx (`emailId`,`listId`, `recipientId`)
 				) CHARSET=utf8 ENGINE=InnoDB";
 		$result = $this->db->query($sql);
+	}
+
+	public function getTotal($emailId) {
+		$sql = $this->db->prepare("select count(*) from $this->tableName where `emailId` = %d", $emailId);
+		return $this->db->get_var($sql);
 	}
 
 	private function dropTable() {
@@ -67,6 +74,13 @@ class newsmanSentlog {
 		$this->db->query( $this->db->prepare($sql, intval($emailId)) );
 	}
 
+	public function deleteForEmail($emailId) {
+		$sql = "DELETE FROM `$this->tableName` WHERE `emailId` = %d";		
+
+		$this->db->query( $this->db->prepare($sql, intval($emailId)) );
+	}
+
+
 	public function initEmailRecipients($emailId, $listName) {
 		if ( !$emailId ) { return; } 
 		if ( !is_string($listName) ) {
@@ -77,7 +91,6 @@ class newsmanSentlog {
 		}
 
 		// $ln = $this->u->parseListName($listName);
-		// $this->u->log('[getSinglePendingFromList] list name: %s', $ln->name);
 		if ( !$list ) { return; }
 
 		$list->selectionType = $ln->selectionType;
@@ -120,6 +133,12 @@ class newsmanSentlog {
 		$this->db->query('SET @@session.wait_timeout := @old_wait_timeout');
 	}
 
+	/**
+	 * Returns a single pending transmission from list
+	 * Returns:
+	 * - Transmission object
+	 * - null - meens no more pendings in the list
+	 */
 	public function getSinglePendingFromList($emailId, $listName) {
 		$ln = $this->u->parseListName($listName);
 
@@ -127,7 +146,6 @@ class newsmanSentlog {
 		// $this->u->log('[getSinglePendingFromList] list name: %s', $ln->name);
 
 		$list->selectionType = $ln->selectionType;
-
 		// $this->u->log('[getSinglePendingFromList] list selectionType: %s', $ln->selectionType);
 
 		if ( !$list ) {
@@ -144,10 +162,11 @@ class newsmanSentlog {
 							SELECT * FROM $this->tableName
 							WHERE 
 								`emailId` = %d AND
+								`listId` = %d AND
 								`status` = 0
 							LIMIT 1
 							FOR UPDATE
-						", $emailId)					
+						", $emailId, $list->id)					
 					);
 
 			if ( !$trData ) { 
@@ -159,11 +178,16 @@ class newsmanSentlog {
 			$tr = new newsmanEmailTransmission($trData->id, $trData->recipientAddr, $trData->recipientId, $list);
 
 			$sub = $list->findSubscriber("id = %d", array($trData->recipientId));
-			$tr->addSubscriberData($sub->toJSON());
+			if ( !$sub ) {
+				$tr->setError(NEWSMAN_ERR_SUBSCRIBER_NOT_FOUND, 'Data for subscriber '.$trData->recipientAddr.' of list '.$listName.' not found.');				
+			} else {
+				$tr->addSubscriberData($sub->toJSON());
+				$tr->setStaus(NEWSMAN_TS_SENDING);
+			}			
 			$this->db->query('COMMIT');
 			$this->restoreSQLTimeout();
 
-			return $tr;
+			return $sub ? $tr : $this->getSinglePendingFromList($emailId, $listName);
 
 		} catch ( Exception $e ) {			
 			$this->db->query('ROLLBACK');
@@ -173,149 +197,87 @@ class newsmanSentlog {
 		return null;
 	}
 
-	// public function getSinglePendingFromList($emailId, $listName) {
-	// 	$ln = $this->u->parseListName($listName);
+	/**
+	 * Returns a single pending transmission for email
+	 * Returns:
+	 * - Transmission object
+	 * - null - meens no more pendings for email
+	 */
+	public function getSinglePendingForEmail($emailId) {
+		$this->setSQLWaitTimeout();
+		$this->db->query('START TRANSACTION');
 
-	// 	$list = newsmanList::findOne('name = %s', array($ln->name) );
+		try {
+			$trData = $this->db->get_row(
+						$this->db->prepare("
+							SELECT * FROM $this->tableName
+							WHERE 
+								`emailId` = %d AND
+								`status` = 0
+							LIMIT 1
+							FOR UPDATE
+						", $emailId)
+					);
 
-	// 	$list->selectionType = $ln->selectionType;
-
-	// 	if ( !$list ) {
-	// 		$this->u->log('[getPendingFromList] List with the name %s is not found', $listName);
-	// 		die("List with the name $listName is not found");
-	// 	}
-
-	// 	//$subs = $list->getPendingBatch($emailId, $limit, $ln->selectionType);	
-
-	// 	$sql = "
-	// 		INSERT IGNORE INTO `$this->tableName`(
-	// 		                `emailId`,
-	// 		                `listId`,
-	// 		                `recipientId`,
-	// 		                `recipientAddr`,
-	// 		                `statusMsg`,
-	// 		                `errorCode`,
-	// 		                `status`) 
-	// 		    SELECT 
-	// 		        $emailId as emailId,
-	// 		        $list->id as listId,
-	// 		        `$list->tblSubscribers`.`id` as recipientId,
-	// 		        `$list->tblSubscribers`.`email` as recipientAddr,
-	// 		        '' as statusMsg,
-	// 		        0 as errorCode,
-	// 		        0 as status
-	// 		    FROM $list->tblSubscribers
-	// 		    WHERE 
-	// 		        `$list->tblSubscribers`.`status` = $ln->selectionType AND
-	// 		        `$list->tblSubscribers`.`id` > (
-	// 		        	SELECT IFNULL (
-	// 		        		(
-	// 							SELECT `$this->tableName`.`recipientId`
-	// 							FROM `$this->tableName`
-	// 							WHERE 
-	// 								`$this->tableName`.`emailId` = $emailId AND
-	// 								`$this->tableName`.`listId` = $list->id
-	// 							ORDER BY `$this->tableName`.`recipientId` DESC
-	// 							LIMIT 1        			        			
-	// 		        		)
-	// 		        	, 0) as `id`
-	// 		        )
-	// 		    ORDER BY `$list->tblSubscribers`.`id` ASC LIMIT 1
-	// 	";		
-	// 	// 
-	// 	$retries = 5;
-	// 	$done = false;
-
-	// 	while ( !$done && $retries > 0 ) {
-	// 		$this->u->log('['.$retries.'] trying to insert lock...');
-	// 		try {
-	// 			$this->db->query('START TRANSACTION');
-	// 			$res = $this->db->query($sql);
-	// 			$this->db->query('COMMIT');
-	// 			$done = true;	
-	// 		} catch( Exception $e ) {
-	// 			$this->db->query('ROLLBACK');
-	// 			$retries--;
-	// 		}			
-	// 	}
-
-	// 	if ( !$done && $retries <= 0 ) {
-	// 		$this->u->log('ERROR. Failed to get pending from list( deadlocks ).');
-	// 	}
-		
-	// 	//$this->u->log('[getSinglePendingFromList] SQL: %s', $sql);
-	// 	$this->u->log('[getSinglePendingFromList] insert res %s', $res);
-
-	// 	// if inserted
-	// 	if ( $res === 1 ) {
-	// 		$trId = $this->db->insert_id;
-
-	// 		$trData = $this->db->get_row($this->db->prepare("SELECT * FROM `$this->tableName` WHERE id = %d", array($trId)));
-			
-	// 		$tr = new newsmanEmailTransmission($trId, $trData->recipientAddr, $trData->recipientId, $list);
-
-	// 		$sub = $list->findSubscriber("id = %d", array($trData->recipientId));
-
-	// 		$tr->addSubscriberData($sub->toJSON());
-
-	// 		return $tr;
-	// 	}
-	// 	return NULL;
-	// }
-
-	// public function getPendingFromList($emailId, $listName, $limit = 25) {
-
-	// 	$ln = $this->u->parseListName($listName);
-
-	// 	$list = newsmanList::findOne('name = %s', array($ln->name) );
-
-	// 	$list->selectionType = $ln->selectionType;
-
-	// 	if ( !$list ) {
-	// 		$this->u->log('[getPendingFromList] List with the name %s is not found', $listName);
-	// 		die("List with the name $listName is not found");
-	// 	}
-
-	// 	$subs = $list->getPendingBatch($emailId, $limit, $ln->selectionType);	
-
-	// 	$this->u->log('[getPendingFromList] pending batch length %s', count($subs));
-
-	// 	$result = array();
-
-	// 	foreach ($subs as $sub) {
-
-	// 		$tr = new newsmanEmailTransmission($sub->email, $sub->id, $list);
-	// 		$tr->addSubscriberData($sub->toJSON());
-
-	// 		$result[] = $tr;
-	// 	}
-
-	// 	return $result;
-	// }
-
-	public function cleanupTempErrors($listId, $emailId) {
-		global $wpdb;
-		$set = '';
-		$listIdsClause = '';
-
-		if ( is_numeric($listId) ) {
-			$listIdsClause = ' = '.$listId;
-		} else if ( is_array($listId) ) {
-			foreach ($listId as $id) {
-				$listIdsClause .= ( !$listIdsClause ) ? 'in (' : ',';
-				$listIdsClause .= $id;
+			if ( !$trData ) { 
+				$this->db->query('ROLLBACK');
+				$this->restoreSQLTimeout();
+				return null;
 			}
-			$listIdsClause .= ')';
-		}		
 
-		$sql = "DELETE FROM $this->tableName WHERE 
+			$list = newsmanList::findOne('id = %d', array($trData->listId) );
+
+			if ( !$list ) {
+				$this->u->log('[getSinglePendingForEmail] Error: List with id %s is not found', $trData->listId);
+			}			
+
+			$tr = new newsmanEmailTransmission($trData->id, $trData->recipientAddr, $trData->recipientId, $list);
+
+			if ( !$list ) {
+				$tr->setError(NEWSMAN_ERR_LIST_NOT_FOUND, 'List with id '.$trData->listId.' is not found.');
+
+				$this->db->query('COMMIT');
+				$this->restoreSQLTimeout();
+
+				return $this->getSinglePendingForEmail($emailId);
+			}
+
+			$sub = $list->findSubscriber("id = %d", array($trData->recipientId));
+			if ( !$sub ) {
+				$tr->setError(NEWSMAN_ERR_SUBSCRIBER_NOT_FOUND, 'Data for subscriber '.$trData->recipientAddr.' of list '.$listName.' not found.');
+			} else {
+				$tr->addSubscriberData($sub->toJSON());
+				$tr->setStaus(NEWSMAN_TS_SENDING);
+			}			
+			$this->db->query('COMMIT');
+			$this->restoreSQLTimeout();
+
+			return $sub ? $tr : $this->getSinglePendingForEmail($emailId);
+
+		} catch ( Exception $e ) {			
+			$this->db->query('ROLLBACK');
+			$this->restoreSQLTimeout();
+		}
+
+		return null;
+	}
+	
+
+	/**
+	 * Resets email transmissions which where initiated with SENDING flag 
+	 * but where abandoned afterwards
+	 */
+	public function resetAbandonedEmails($emailId) {
+		global $wpdb;
+
+		$sql = "UPDATE $this->tableName 
+				SET `status` = 0
+				WHERE 
 					`emailId` = %d AND
-					`listId` $listIdsClause AND
-					`errorCode` > 0 AND
-					`errorCode` <> 10";
+					`status` = 1";
 
 		$sql = $wpdb->prepare($sql, $emailId);
-		$wpdb->query($sql);
+		return $wpdb->query($sql);	
 	}
 
 	public function getPendingByEmails($emailId, $emails) {

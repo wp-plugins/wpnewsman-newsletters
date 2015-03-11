@@ -68,6 +68,17 @@ class newsmanEmail extends newsmanStorable {
 			$this->ucode = $u->base64EncodeU( sha1($this->created.$this->subject.microtime(), true) );
 		}
 
+		$sl = newsmanSentlog::getInstance();
+		$sl->clearBrokenRecipients($this->id);
+
+		$u->log('[email:save] $this->to '.var_export($this->to, true));
+
+		if ( is_array($this->to) && count($this->to) > 0 ) {
+			foreach ($this->to as $listName) {
+				$sl->initEmailRecipients($this->id, $listName);
+			}
+		}
+
 		if ( $this->_oldToField != json_encode($this->to) ) {
 			$u = newsmanUtils::getInstance();
 			$u->log('[email::save] To: field changed from %s to %s', $this->_oldToField, json_encode($this->to));
@@ -75,14 +86,6 @@ class newsmanEmail extends newsmanStorable {
 			$tStreamer = new newsmanTransmissionStreamer($this);
 			$this->recipients = $tStreamer->getTotal();			
 			$u->log('[email::save] New number of recipients %s ', $this->recipients);
-		}
-
-		$sl = newsmanSentlog::getInstance();
-		$sl->clearBrokenRecipients($this->id);
-		if ( is_array($this->to) && count($this->to) > 0 ) {
-			foreach ($this->to as $listName) {
-				$sl->initEmailRecipients($this->id, $listName);
-			}
 		}
 
 		$this->html = $this->cleanupTechnicalStyle($this->html);
@@ -424,6 +427,8 @@ class newsmanEmail extends newsmanStorable {
 		newsmanAnSubDetails::removeAll('emailId = %d', array($this->id));
 		newsmanAnClicks::removeAll('emailId = %d', array($this->id));	
 
+		$sl = newsmanSentlog::getInstance();
+		$sl->deleteForEmail($this->id);
 		parent::remove();
 	}
 

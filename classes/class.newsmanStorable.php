@@ -415,7 +415,7 @@ class newsmanStorable {
 			}
 		}
 
-		$sql .= "\n) CHARSET=utf8";
+		$sql .= "\n) CHARSET=utf8 ENGINE=InnoDB";
 
 		if ( defined('NEWSMAN_DEBUG_EXPOSE_QUERIES') && NEWSMAN_DEBUG_EXPOSE_QUERIES === true ) {
 			$u->log('[createTable] SQL: '.$sql);	
