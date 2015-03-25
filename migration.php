@@ -614,8 +614,10 @@ $newsman_changes[] = array(
 );
 
 
-function newsman_migration_recreate_sentlog_indexes() {
+function newsman_migration_recreate_sentlog_indexes2() {
 	global $wpdb;
+
+	$wpdb->query('set session old_alter_table=1');
 
 	$sql = 'SHOW INDEXES IN `'.$wpdb->prefix.'newsman_sentlog`';
 	$res = $wpdb->get_results($sql, ARRAY_A);
@@ -639,10 +641,12 @@ function newsman_migration_recreate_sentlog_indexes() {
 		$sql = 'ALTER IGNORE TABLE `'.$wpdb->prefix.'newsman_sentlog` ADD '.$idx;
 		$wpdb->query($sql);
 	}
+
+	$wpdb->query('set session old_alter_table=0');
 }
 
 $newsman_changes[] = array(
-	'introduced_in' => $u->versionToNum('1.8.12-alpha-1'),
-	'func' => 'newsman_migration_recreate_sentlog_indexes'
+	'introduced_in' => $u->versionToNum('1.8.13'),
+	'func' => 'newsman_migration_recreate_sentlog_indexes2'
 );
 

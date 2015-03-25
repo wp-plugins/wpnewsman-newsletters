@@ -4,7 +4,7 @@ Donate Link: http://wpnewsman.com/premium-newsletter-plugin-wordpress/
 Tags: wpnewsman, newsletter, newsletters, newsletter signup, newsletter widget, subscribers, post notification, email subscription, email marketing, email, emailing, subscription
 Requires at least: 4.0
 Tested up to: 4.2
-Stable tag: 1.8.12
+Stable tag: 1.8.13
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -49,7 +49,7 @@ WPNewsman plugin updated regularly with new features. Please see the <a href="ht
 
 = Email Marketing Automation Software for Windows® Integration =
 
-To increase email sending speed in times, you can use [G-Lock EasyMail7](http://easymail7.com/?pk_campaign=wordpress "G-Lock EasyMail7"). With EasyMail7 you get a high sending speed and bounce emails management while WPNewsman will handle your online unsubscribe process. [Check out our guide](http://easymail7.com/tutorials/send-emails-to-wpnewsman-subscribers-lists/?pk_campaign=wordpress "Check out our guide") on how to send emails to WPNewsman contact lists from G-Lock EasyMail7.
+To increase email sending speed in times, you can use [G-Lock EasyMail7](http://easymail7.com/?pk_campaign=wordpress "G-Lock EasyMail7"). With EasyMail7 you get a high sending speed and bounce emails management while WPNewsman will handle your online subscribe/unsubscribe process. [Check out our guide](http://easymail7.com/tutorials/send-emails-to-wpnewsman-subscribers-lists/?pk_campaign=wordpress "Check out our guide") on how to send emails to WPNewsman contact lists from G-Lock EasyMail7.
 
 = Translations in your language =
 
@@ -125,6 +125,9 @@ We got a User Feedback page where you can [add or vote for new features](http://
 3. Subscriber management.
 
 == Changelog ==
+
+= 1.8.13 =
+* Fixed bug which might cause sending of duplicate emails on some setups. 
 
 = 1.8.12 =
 * Fixed few bugs in sending workers management.
